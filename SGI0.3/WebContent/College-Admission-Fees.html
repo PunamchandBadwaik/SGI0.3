@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<title>FeeDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description"
+	content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
+<meta name="author" content="Muhammad Usman">
+
+<!-- The styles -->
+<link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
+
+<link href="css/charisma-app.css" rel="stylesheet">
+<link href='bower_components/fullcalendar/dist/fullcalendar.css'
+	rel='stylesheet'>
+<link href='bower_components/fullcalendar/dist/fullcalendar.print.css'
+	rel='stylesheet' media='print'>
+<link href='bower_components/chosen/chosen.min.css' rel='stylesheet'>
+<link href='bower_components/colorbox/example3/colorbox.css'
+	rel='stylesheet'>
+<link href='bower_components/responsive-tables/responsive-tables.css'
+	rel='stylesheet'>
+<link
+	href='bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css'
+	rel='stylesheet'>
+<link href='css/jquery.noty.css' rel='stylesheet'>
+<link href='css/noty_theme_default.css' rel='stylesheet'>
+<link href='css/elfinder.min.css' rel='stylesheet'>
+<link href='css/elfinder.theme.css' rel='stylesheet'>
+<link href='css/jquery.iphone.toggle.css' rel='stylesheet'>
+<link href='css/uploadify.css' rel='stylesheet'>
+<link href='css/animate.min.css' rel='stylesheet'>
+<link href="bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<!-- jQuery -->
+<script src="bower_components/jquery/jquery.min.js"></script>
+
+<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- The fav icon -->
+<link rel="shortcut icon" href="img/favicon.ico">
+
+</head>
+
+<body>
+	<!-- topbar starts -->
+	<div class="navbar navbar-default" role="navigation">
+
+		<div class="navbar-inner">
+			<button type="button" class="navbar-toggle pull-left animated flip">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+
+			<a class="navbar-brand" href="index-College.html"> <img
+				alt="Charisma Logo" src="img/logo20.png" class="hidden-xs" /> <span>Fee
+					Collection Portal</span></a>
+
+			<!-- user dropdown starts -->
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class="glyphicon glyphicon-user"></i><span
+						class="hidden-sm hidden-xs"> <username>(Username)</span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#">Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="logOutUser">Logout</a></li>
+				</ul>
+			</div>
+			<!-- user dropdown ends -->
+
+			<!-- theme selector starts -->
+			<div class="btn-group pull-right theme-container">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class="glyphicon glyphicon-tint"></i><span
+						class="hidden-sm hidden-xs"> </span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" id="themes">
+					<li><a data-value="classic" href="#"><i class="whitespace"></i>
+							Classic</a></li>
+					<li><a data-value="cerulean" href="#"><i
+							class="whitespace"></i> Cerulean</a></li>
+					<li><a data-value="cyborg" href="#"><i class="whitespace"></i>
+							Cyborg</a></li>
+					<li><a data-value="simplex" href="#"><i class="whitespace"></i>
+							Simplex</a></li>
+					<li><a data-value="darkly" href="#"><i class="whitespace"></i>
+							Darkly</a></li>
+					<li><a data-value="lumen" href="#"><i class="whitespace"></i>
+							Lumen</a></li>
+					<li><a data-value="slate" href="#"><i class="whitespace"></i>
+							Slate</a></li>
+					<li><a data-value="spacelab" href="#"><i
+							class="whitespace"></i> Spacelab</a></li>
+					<li><a data-value="united" href="#"><i class="whitespace"></i>
+							United</a></li>
+				</ul>
+			</div>
+			<!-- theme selector ends -->
+			<!-- cart button starts -->
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="College-Payment-Summary.html">Proceed To
+							Checkout</a></li>
+					<li class="divider"></li>
+					<li><a href="#"
+						onclick='window.open("Cart.html", "MyCart", "width=500,height=900")'>View
+							Cart</a></li>
+				</ul>
+				<span class="notification red">2</span>
+			</div>
+			<!-- cart button ends -->
+		</div>
+	</div>
+	<!-- topbar ends -->
+	<div class="ch-container">
+		<div class="row">
+
+			<!-- left menu starts -->
+			<div class="col-sm-2 col-lg-2">
+				<div class="sidebar-nav">
+					<div class="nav-canvas">
+						<div class="nav-sm nav nav-stacked"></div>
+						<ul class="nav nav-pills nav-stacked main-menu">
+							<li class="nav-header">Main</li>
+							<li><a class="ajax-link" href="index-College.html"><i
+									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
+
+							<li class="accordion"><a href="#"><i class="fa fa-inr"></i><span>
+										Initiate Payment</span></a>
+								<ul class="nav nav-pills nav-stacked">
+									<li><a href="College-Admission-Fees.html">Admission
+											Fees</a></li>
+									<li><a href="College-Affiliation-Fees.html">Affiliation
+											Fees</a></li>
+									<li><a href="College-Exam-Fees.html">Examination Fees</a></li>
+								</ul></li>
+							<li><a class="ajax-link" href="College-Payment-History.html"><i
+									class="fa fa-history"></i><span> Payment History</span></a></li>
+							<li><a class="ajax-link" href="College-Fee-Structure.html"><i
+									class="glyphicon glyphicon-list-alt"></i><span> Fee
+										Structure</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!--/span-->
+			<!-- left menu ends -->
+
+			<noscript>
+				<div class="alert alert-block col-md-12">
+					<h4 class="alert-heading">Warning!</h4>
+
+					<p>
+						You need to have <a href="http://en.wikipedia.org/wiki/JavaScript"
+							target="_blank">JavaScript</a> enabled to use this site.
+					</p>
+				</div>
+			</noscript>
+
+			<div id="content" class="col-lg-10 col-sm-10">
+				<!-- content starts -->
+				<div>
+					<ul class="breadcrumb">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Dashboard</a></li>
+					</ul>
+				</div>
+
+
+				<div class="row">
+					<div class="box col-md-12">
+						<div class="box-inner">
+							<div class="box-content row">
+								<div class="col-lg-12 col-md-12">
+									<div class="control-group">
+										<label class="control-label" for="selectError">Select
+											Department</label>
+
+										<div class="controls">
+											<select id="selectDept" onchange="toggleFeeSummary()"
+												data-rel="chosen">
+												<option selected disabled>Select Department</option>
+												<option>PostGraduate</option>
+												<option>UnderGraduate</option>
+
+											</select>
+										</div>
+									</div>
+
+
+								</div>
+
+							</div>
+							<!--row ends-->
+
+
+
+							<!--row ends-->
+						</div>
+					</div>
+				</div>
+				<!---ROW-->
+				<div id="feeSummaryBox" style="display: none">
+					<div class="row">
+						<div class="box col-md-12">
+							<div class="box-inner">
+								<div class="box-header well">
+									<h2>
+										<i class="glyphicon glyphicon-info-sign"></i> Fee Structure
+									</h2>
+
+									<div class="box-icon">
+
+										<a href="#" class="btn btn-minimize btn-round btn-default"><i
+											class="glyphicon glyphicon-chevron-up"></i></a>
+
+									</div>
+								</div>
+								<div class="box-content row">
+									<div class="col-lg-12 col-md-12 animated fadeIn">
+
+										<table
+											class="table table-condensed table-striped table-bordered ">
+											<thead>
+												<tr>
+													<th colspan="5"><center>Present Due</center>
+														<div class="pull-right">
+															<a id="CurrentDueReport"
+																onclick='window.open("University-Report.html", "University Report", "height=1080,width=1920")'
+																href="#"><i class="fa fa-search"></i> Get Detailed
+																Report</a>
+														</div></th>
+													<th></th>
+													<th colspan="5"><center>Past Due</center>
+														<div class="pull-right">
+															<a id="PrevDueReport"
+																onclick='window.open("University-Report.html", "University Report", "height=1080,width=1920")'
+																href="#"><i class="fa fa-search"></i> Get Detailed
+																Report</a>
+														</div></th>
+												</tr>
+												<tr>
+													<th>Select</th>
+													<th>Sr. No.</th>
+													<th>Fee Type</th>
+													<th>Payable Amount</th>
+													<th>Amount To Pay</th>
+													<th></th>
+													<th>Select</th>
+													<th>Sr. No.</th>
+													<th>Fee Type</th>
+													<th>Payable Amount</th>
+													<th>Amount To Pay</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>1</td>
+													<td>Admission Fee</td>
+													<td><i class="fa fa-inr"></i>50000</td>
+													<td><div class="form-group has-success">
+															<input height="5px" type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>1</td>
+													<td>Admission Fee</td>
+													<td><i class="fa fa-inr"></i>20000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>2</td>
+													<td>Registration Fee</td>
+													<td><i class="fa fa-inr"></i>80000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>2</td>
+													<td>Registration Fee</td>
+													<td><i class="fa fa-inr"></i>50000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>3</td>
+													<td>Late Admission Fee</td>
+													<td><i class="fa fa-inr"></i>3000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>3</td>
+													<td>Late Admission Fee</td>
+													<td><i class="fa fa-inr"></i>2000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>4</td>
+													<td>Late Submission Fee</td>
+													<td><i class="fa fa-inr"></i>5000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>4</td>
+													<td>Late Submission Fee</td>
+													<td><i class="fa fa-inr"></i>2000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>5</td>
+													<td>Sports Fee</td>
+													<td><i class="fa fa-inr"></i>7000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>5</td>
+													<td>Sports Fee</td>
+													<td><i class="fa fa-inr"></i>2000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>6</td>
+													<td>Student Welfare Fund Fee</td>
+													<td><i class="fa fa-inr"></i>5800</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>6</td>
+													<td>Student Welfare Fund Fee</td>
+													<td><i class="fa fa-inr"></i>6000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>7</td>
+													<td>NSS Fee</td>
+													<td><i class="fa fa-inr"></i>55000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>7</td>
+													<td>NSS Fee</td>
+													<td><i class="fa fa-inr"></i>20000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>8</td>
+													<td>Helinet Fee</td>
+													<td><i class="fa fa-inr"></i>50000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+													<td></td>
+													<td><input type="checkbox" id="prevDueCheckbox"
+														value=""></td>
+													<td>8</td>
+													<td>Helinet Fee</td>
+													<td><i class="fa fa-inr"></i>20000</td>
+													<td><div class="form-group has-success">
+															<input type="text" class="form-control"
+																id="inputSuccess1">
+														</div></td>
+												</tr>
+												<tr>
+													<td colspan="2"><input type="checkbox"
+														id="prevDueCheckbox" value="">Select All</td>
+
+													<td>Total Present Due</td>
+													<td><i class="fa fa-inr"></i>255800</td>
+													<td><div class="form-group has-success">
+															<input readonly type="text" class="form-control"
+																id="inputSuccess1" value="255800">
+														</div></td>
+													<td></td>
+													<td colspan="2"><input type="checkbox"
+														id="prevDueCheckbox" value="">Select All</td>
+
+													<td>Total Past Due</td>
+													<td><i class="fa fa-inr"></i>142000</td>
+													<td><div class="form-group has-success">
+															<input readonly type="text" class="form-control"
+																id="inputSuccess1" value="142000">
+														</div></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--/row-->
+
+					<div class="row">
+						<div class="box col-md-12">
+							<div class="box-inner">
+
+
+
+								<div class="box-content row">
+									<div class="col-lg-12 col-md-12 animated fadeIn">
+
+
+										<div class=" row">
+											<div class="col-md-4"></div>
+											<div class="form-group has-success col-md-4">
+												<label class="control-label" for="inputSuccess1">Total
+													Amount To Pay</label> <input readonly value="255800" type="text"
+													class="form-control" id="inputSuccess1">
+											</div>
+											<div class="col-md-4"></div>
+											<!-- <form>
+												<div class="col-md-3 col-sm-3 col-xs-6">
+
+													<a data-toggle="tooltip" title="Previous Due"
+														class="well top-block"> <i
+														class="glyphicon glyphicon-user blue"></i>
+														<div>Previous Due</div>
+														<div>
+															<i class="fa fa-inr"></i>100000
+														</div>
+														<div class="checkbox">
+															<label><input type="checkbox"
+																id="prevDueCheckbox" onclick='addPrevDue()' value="">Select</label>
+														</div>
+														<div class="whitespace"></div>
+														<div>
+															<i title="Expand Selection"
+																class="glyphicon glyphicon-chevron-down blue"></i>
+														</div>
+													</a>
+												</div>
+
+												<div class="col-md-3 col-sm-3 col-xs-6">
+													<a data-toggle="tooltip" title="Current Due"
+														class="well top-block"> <i
+														class="glyphicon glyphicon-star green"></i>
+														<div>Current Due</div>
+														<div>
+															<i class="fa fa-inr"></i>500000
+														</div>
+														<div class="checkbox">
+															<label><input type="checkbox"
+																id="currDueCheckbox" value="" onclick='addCurrDue()'>Select</label>
+														</div>
+														<div class="whitespace"></div>
+														<div>
+															<i title="Expand Selection"
+																class="glyphicon glyphicon-chevron-down blue"></i>
+														</div>
+													</a>
+												</div>
+
+												<div class="col-md-3 col-sm-3 col-xs-6">
+													<a data-toggle="tooltip" title="Total Due"
+														class="well top-block"> <i
+														class="glyphicon glyphicon-shopping-cart yellow"></i>
+														<div>Total</div>
+														<div>
+															<i class="fa fa-inr"></i>600000
+														</div>
+														<div class="checkbox">
+															<label><input type="checkbox" id="totDueCheckbox"
+																onclick='addTotDue()' value="">Select</label>
+														</div>
+														<div class="whitespace"></div>
+														<div>
+															<i title="Expand Selection"
+																class="glyphicon glyphicon-chevron-down blue"></i>
+														</div>
+													</a>
+												</div>
+
+												<div class="col-md-3 col-sm-3 col-xs-6">
+													<a data-toggle="tooltip" title="Current Selected Amount"
+														class="well top-block"> <i
+														class="glyphicon glyphicon-envelope red"></i>
+
+														<div>My Selection</div>
+
+														<div id="mySelection">
+															<i class="fa fa-inr"></i>0
+														</div>
+														<div class="whitespace"></div>
+														<div>
+															<button type="button" style="width: 100%"
+																onclick='window.location="College-Payment-Options.html"'
+																class="btn-round btn-xs btn-info">Add to Cart</button>
+														</div>
+														<div>
+															<button type="button" style="width: 100%"
+																onclick='window.location="College-Payment-Options.html"'
+																class="btn-round btn-xs btn-success">Pay Now</button>
+														</div>
+														<div>
+															<i title="Expand Selection"
+																class="glyphicon glyphicon-chevron-down blue"></i>
+														</div>
+
+													</a>
+												</div>
+											</form> -->
+										</div>
+										<div class="row">
+											<div class="col-md-3">
+												<center>
+													<button type="button" style="width: 75%"
+														onclick='window.location="College-Payment-Summary.html"'
+														class="btn-round btn-xs btn-success">Pay Now</button>
+												</center>
+											</div>
+											<div class="col-md-6"></div>
+											<div class="col-md-3">
+												<center>
+													<button type="button" style="width: 75%"
+														onclick='AddToCart()' class="btn-round btn-xs btn-info">Add
+														to Cart</button>
+												</center>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<!--row ends-->
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--/row-->
+
+			<!--/row-->
+			<!-- content ends -->
+		</div>
+		<!--/#content.col-md-0-->
+	</div>
+	<!--/fluid-row-->
+
+
+
+	<hr>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">×</button>
+					<h3>Settings</h3>
+				</div>
+				<div class="modal-body">
+					<p>Here settings can be configured...</p>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+					<a href="#" class="btn btn-primary" data-dismiss="modal">Save
+						changes</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	 <!--  <footer>
+		<p class="col-md-9 col-sm-9 col-xs-12 copyright">
+			&copy; <a href="http://dexpertsystems.com" target="_blank">Dexpert
+				Systems Pvt. Ltd</a>
+		</p>
+
+		<p class="col-md-3 col-sm-3 col-xs-12 powered-by">
+			Powered by: <a href="http://dexpertsystems.com">Dexpert</a>
+		</p>
+	</footer>
+ -->
+	</div>
+	<!--/.fluid-container-->
+
+	<!-- external javascript -->
+
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<!-- library for cookie management -->
+	<script src="js/jquery.cookie.js"></script>
+	<!-- calender plugin -->
+	<script src='bower_components/moment/min/moment.min.js'></script>
+	<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+
+	<!-- data table plugin -->
+	<script src='js/jquery.dataTables.min.js'></script>
+
+	<!-- select or dropdown enhancer -->
+	<script src="bower_components/chosen/chosen.jquery.min.js"></script>
+	<!-- plugin for gallery image view -->
+	<script src="bower_components/colorbox/jquery.colorbox-min.js"></script>
+	<!-- notification plugin -->
+	<script src="js/jquery.noty.js"></script>
+	<!-- library for making tables responsive -->
+	<script src="bower_components/responsive-tables/responsive-tables.js"></script>
+	<!-- tour plugin -->
+	<script
+		src="bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
+	<!-- star rating plugin -->
+	<script src="js/jquery.raty.min.js"></script>
+	<!-- for iOS style toggle switch -->
+	<script src="js/jquery.iphone.toggle.js"></script>
+	<!-- autogrowing textarea plugin -->
+	<script src="js/jquery.autogrow-textarea.js"></script>
+	<!-- multiple file upload plugin -->
+	<script src="js/jquery.uploadify-3.1.min.js"></script>
+	<!-- history.js for cross-browser state change on ajax -->
+	<script src="js/jquery.history.js"></script>
+	<!-- application script for Charisma demo -->
+	<script src="js/charisma.js"></script>
+
+	<script>
+		var prevSel = false;
+		var currSel = false;
+		var totSel = false;
+		var selAmt = 0;
+	</script>
+	<script>
+		function addPrevDue() {
+			if (document.getElementById("prevDueCheckbox").checked) {
+				if (document.getElementById("currDueCheckbox").checked) {
+					document.getElementById("totDueCheckbox").checked = true;
+				}
+				selAmt = selAmt + 100000;
+			} else {
+				document.getElementById("totDueCheckbox").checked = false;
+				selAmt = selAmt - 100000;
+			}
+			document.getElementById("mySelection").innerHTML = '<i class="fa fa-inr"></i>'
+					+ selAmt;
+		}
+		function addCurrDue() {
+			if (document.getElementById("currDueCheckbox").checked) {
+				if (document.getElementById("prevDueCheckbox").checked) {
+					document.getElementById("totDueCheckbox").checked = true;
+				}
+				selAmt = selAmt + 500000;
+			} else {
+				document.getElementById("totDueCheckbox").checked = false;
+				selAmt = selAmt - 500000;
+			}
+			document.getElementById("mySelection").innerHTML = '<i class="fa fa-inr"></i>'
+					+ selAmt;
+		}
+		function addTotDue() {
+			if (document.getElementById("totDueCheckbox").checked) {
+				document.getElementById("currDueCheckbox").checked = true;
+				document.getElementById("prevDueCheckbox").checked = true;
+				selAmt = 600000;
+			} else {
+				document.getElementById("prevDueCheckbox").checked = false;
+				document.getElementById("currDueCheckbox").checked = false;
+				selAmt = 0;
+			}
+			document.getElementById("mySelection").innerHTML = '<i class="fa fa-inr"></i>'
+					+ selAmt;
+		}
+		function toggleFeeSummary() {
+			document.getElementById("feeSummaryBox").style.display = "block";
+		}
+		function toggleFeeType() {
+			document.getElementById("feeSummaryBox").style.display = "none";
+			document.getElementById("feeTypeBox").style.display = "block";
+			$("#selectFeeType").chosen({
+				disable_search_threshold : 10
+			})
+		}
+		function AddToCart() {
+			alert("Your Selection Has Been Addded To Cart!");
+			window.location = "index-College.html";
+		}
+	</script>
+
+</body>
+</html>

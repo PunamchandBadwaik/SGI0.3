@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="30000001" />
+	<package name="affiliatedInstitute" extends="struts-default">
+		<action name="registerInstitute"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="registerInstitute">
+
+
+
+			<interceptor-ref name="defaultStack">
+				<param name="fileUpload.maximumSize">30000000</param>
+				<param name="contentType">text/html,text/plain,application/msword,text/richtext,application/pdf,image/jpeg</param>
+				<param name="allowedTypes">text/html,text/plain,application/msword,text/richtext,application/pdf,image/jpeg</param>
+			</interceptor-ref>
+
+			<result name="success">Success.jsp</result>
+			<result name="failure">
+				CollegeForm.jsp
+			</result>
+			<result name="input">/CollegeForm.jsp</result>
+
+
+		</action>
+		<action name="GetInstitutesAll"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getInstituteDetails">
+			<result name="success">/Admin-MyColleges.jsp</result>
+			<result name="input">/CollegeForm.jsp</result>
+		</action>
+
+
+		<action name="getCollegeList"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getCollegeList">
+
+			<result name="success">Admin-MyColleges.jsp</result>
+
+		</action>
+
+		<action name="GetCollegeListOnUniversity"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getUniversityCollegeList">
+
+			<result name="success">Admin-MyColleges.jsp</result>
+
+		</action>
+
+
+		<action name="downloadFile"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="downloadFile">
+
+			<result name="success" type="stream">
+				<!-- <param name="contentType">application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,text/html,text/plain,application/msword,text/richtext</param> -->
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileFileName}"</param>
+				<param name="bufferSize">10024</param>
+			</result>
+		</action>
+
+
+		<action name="AddBulkColleges"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="bulkCollegesAdd">
+
+			<interceptor-ref name="defaultStack">
+				<param name="fileUpload.maximumSize">30000000</param>
+				<param name="contentType">application/vnd.ms-excel,application/msexcel,application/x-msexcelapplication/x-ms-excel,application/x-excel,application/x-dos_ms_excel,application/xls,application/x-xls,application</param>
+				<param name="allowedTypes">application/vnd.ms-excel,application/msexcel,application/x-msexcelapplication/x-ms-excel,application/x-excel,application/x-dos_ms_excel,application/xls,application/x-xls,application</param>
+			</interceptor-ref>
+
+			<result name="success">AddBulkInstitutes.jsp</result>
+			<result name="failure">AddBulkInstitutes.jsp</result>
+			<result name="error">Login.jsp</result>
+
+
+		</action>
+
+
+		<action name="ShowCollegeReport"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getCollegeList">
+
+
+			<result name="success">
+				CollegeReport.jsp
+			</result>
+		</action>
+
+		<action name="GenerateCollegeReport"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getCollegeList">
+
+			<result name="success">GenerateCollegeReport.jsp</result>
+		</action>
+
+	</package>
+
+
+
+
+	<package name="University" extends="struts-default">
+
+		<action name="registerUniversity"
+			class="com.dexpert.feecollection.main.users.parent.ParAction" method="registerUniversity">
+			<result name="success">Success.jsp</result>
+			<result name="input">/UniversityForm.jsp</result>
+			<result name="failure">/UniversityForm.jsp</result>
+			<result name="duplicate">/Error.jsp</result>
+
+		</action>
+
+		<action name="UniversityDetailRecord"
+			class="com.dexpert.feecollection.main.users.parent.ParAction" method="getUniversityDetail">
+
+			<result name="success">Admin-ParentInstituteHome.jsp</result>
+		</action>
+
+		<action name="ViewUniversityDetails"
+			class="com.dexpert.feecollection.main.users.parent.ParAction" method="viewUniDetail">
+
+			<result name="success">University-View-Detail.jsp</result>
+		</action>
+
+		<action name="GetUniversityDetail"
+			class="com.dexpert.feecollection.main.users.parent.ParAction" method="getUniversityDetail">
+
+			<result name="success">CollegeForm.jsp</result>
+		</action>
+
+
+	</package>
+
+
+	<package name="User_Login_Logout" extends="struts-default">
+
+		<action name="LoginUser" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="userLogin">
+
+			<result name="university">index-University.jsp</result>
+			<result name="college">index-College.jsp</result>
+			<result name="superAdmin">index-Admin.jsp</result>
+			<result name="collegeOperator">index-College-Operator.jsp</result>
+			<result name="student" type="redirect">getTheStudentFeeDetailsFromLoginPage
+			</result>
+			<result name="input">Login.jsp</result>
+			<result name="failure">Login.jsp</result>
+			<result name="error">Login.jsp</result>
+
+		</action>
+
+		<action name="logOutUser" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="logoutUser">
+
+			<result name="success">WaitPage.jsp</result>
+
+		</action>
+
+
+		<!-- changeUserPassword -->
+
+		<action name="changeUserPassword" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="changeUserPwd">
+
+			<result name="success">UserNewPassDetail.jsp</result>
+
+		</action>
+
+		<action name="editUserDetail" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="editUserDetail">
+
+			<result name="editInst">Edit-Institute.jsp</result>
+			<result name="editUni">Edit-University.jsp</result>
+			<result name="editSu">Edit-SuperAdmin.jsp</result>
+			<result name="editOp">Edit-Operator.jsp</result>
+			
+		</action>
+
+
+
+		<!-- ` forgetPasswordPage -->
+
+		<action name="forgetPasswordPage" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="getTheForgetPasswordDetails">
+
+			<result name="success">Login.jsp</result>
+			<result name="failure">ForgetPassword.jsp</result>
+
+		</action>
+
+
+
+
+
+	</package>
+	<package name="Lookup" extends="struts-default">
+		<action name="addParam"
+			class="com.dexpert.feecollection.main.fee.lookup.LookupAction"
+			method="AddParameter">
+			<interceptor-ref name="token"></interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success">/ParamValForm.jsp</result>
+			<result name="Numeric">/ParamValFormNumeric.jsp</result>
+			<result name="Boolean">/WaitPage.jsp</result>
+			<result name="error">/Error.jsp</result>
+			<result name="input">/ParamForm.jsp</result>
+			<result name="invalid.token">/ParamValForm.jsp</result>
+		</action>
+		<action name="GetAllParameters"
+			class="com.dexpert.feecollection.main.fee.lookup.LookupAction"
+			method="GetParameterListAll">
+			<result name="success">/FeeConfig-Parameters.jsp</result>
+
+		</action>
+
+		<action name="deleteParam"
+			class="com.dexpert.feecollection.main.fee.lookup.LookupAction"
+			method="deleteRecord">
+			<result name="success">/Success.jsp</result>
+
+		</action>
+		<action name="viewParam"
+			class="com.dexpert.feecollection.main.fee.lookup.LookupAction"
+			method="GetParamDetails">
+
+			<result name="String">/ParamValForm.jsp</result>
+			<result name="Numeric">/ParamValFormNumeric.jsp</result>
+			<result name="Boolean">/ParamValFormBoolean.jsp</result>
+			<result name="error">/Error.jsp</result>
+			<result name="input">/ParamValForm.jsp</result>
+
+		</action>
+	</package>
+
+	<package name="SuperAdmin" extends="struts-default">
+
+
+		<action name="CollegeOperatorDetail"
+			class="com.dexpert.feecollection.main.users.operator.OperatorAction"
+			method="getListOfCollegeOperators">
+
+			<result name="success">Admin-College-Operator.jsp</result>
+
+
+		</action>
+
+
+
+
+		<!-- registerOperator -->
+
+		<action name="registerOperator"
+			class="com.dexpert.feecollection.main.users.operator.OperatorAction"
+			method="registerCollegeOperatorAction">
+
+			<result name="success">Success.jsp</result>
+			<result name="failure">CollegeOperatorForm.jsp</result>
+
+
+		</action>
+
+
+
+
+		<action name="getCollegeListForOperator"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getCollegeList">
+
+
+			<result name="success">CollegeOperatorForm.jsp</result>
+
+		</action>
+		<action name="registerSuperAdmin"
+			class="com.dexpert.feecollection.main.users.superadmin.SaAction"
+			method="registerSuperAdmn">
+
+			<result name="success">/WaitPage.jsp</result>
+			<result name="input">/SuperAdminForm.jsp</result>
+			<result name="failure">/SuperAdminForm.jsp</result>
+		</action>
+
+
+		<action name="showSAdminProfile"
+			class="com.dexpert.feecollection.main.users.superadmin.SaAction"
+			method="viewSaProfile">
+
+			<result name="success">ViewSAProfile.jsp</result>
+		</action>
+
+
+	</package>
+
+
+	<package name="College" extends="struts-default">
+
+		<action name="ViewCollegeDetails"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="viewCollegeDetail">
+			<result name="success">CollegeDetails.jsp</result>
+		</action>
+		<action name="ViewCollegeFees"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="viewCollegeDetail">
+			<result name="success">CollegeFeeDetails.jsp</result>
+		</action>
+
+		<action name="GetAllInsParameters"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="GetParameterListInstitute">
+			<result name="success">/CollegeConfForm.jsp</result>
+
+		</action>
+		<action name="editCollegeDetails"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="editCollegeDetail">
+
+
+			<result name="success"> UpdateCollegeDetails.jsp</result>
+		</action>
+
+		<action name="updateCollegeDetails"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="updateCollegeDetail">
+
+			<result name="success">Success.jsp</result>
+			<result name="failure">UpdateCollegeDetails.jsp</result>
+
+
+		</action>
+		<action name="configureCollege"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="configureCollegeParam">
+
+			<result name="success">Success.jsp</result>
+			<result name="failure">UpdateCollegeDetails.jsp</result>
+
+
+		</action>
+
+		<action name="editCollegeDoc"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="editCollegeDoc">
+
+			<result name="success">Update-AffDocs.jsp</result>
+
+		</action>
+
+
+		<action name="updateCollegeDoc"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="updateCollegeDoc">
+
+			<result name="success">Success.jsp</result>
+
+		</action>
+
+		<action name="GetAffFees"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="GetFees">
+
+			<result name="success">CollegeAddFee.jsp</result>
+
+		</action>
+		<action name="updateCollegeFees"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="AddFees">
+
+			<result name="success">Success.jsp</result>
+			<result name="error">Success.jsp</result>
+
+		</action>
+		<action name="RemoveCollegeFees"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="RemoveFee">
+
+			<result name="success">Success.jsp</result>
+			<result name="error">Success.jsp</result>
+
+		</action>
+		<action name="getFeeProps"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="viewFeeProps">
+
+			<result name="success">CollegeFeePropDetails.jsp</result>
+			<result name="error">CollegeFeePropDetails.jsp</result>
+
+		</action>
+
+		<action name="getInstDues"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getDues">
+
+			<result name="success">Institute-Fees.jsp</result>
+			<result name="error">Institute-Fees.jsp</result>
+
+		</action>
+		<action name="CollegeDueReport"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="collegeDueReport">
+
+			<result name="success">College-Due-Report.jsp</result>
+
+
+		</action>
+		<action name="saveFeeCalcDetails"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="UpdateCalcParameters">
+
+			<result name="success">Success.jsp</result>
+
+
+		</action>
+		<action name="TranactionReport"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getInsTransactionDetails">
+
+			<result name="success">/Transaction-Due-Report.jsp</result>
+
+
+		</action>
+
+
+
+	</package>
+
+	<package name="FeeParamValues" extends="struts-default">
+
+		<action name="saveParamValues"
+			class="com.dexpert.feecollection.main.fee.lookup.values.FvAction"
+			method="updateValues">
+
+			<result name="success">ParamForm.jsp</result>
+			<result name="view">Success.jsp</result>
+
+		</action>
+
+	</package>
+
+	<package name="FeeConfig" extends="struts-default">
+
+		<action name="GetParamValues"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="populateFeeForm">
+
+			<result name="success">FeeForm.jsp</result>
+
+		</action>
+		<action name="GenerateCombination"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="GenerateCombination">
+
+			<result name="success">FeeForm2.jsp</result>
+
+
+		</action>
+
+		<action name="DeleteCombination"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="DeleteCombination">
+			<result name="success">FeeForm2.jsp</result>
+
+		</action>
+		<action name="saveFee"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="SaveFee">
+
+			<result name="success">Success.jsp</result>
+
+
+		</action>
+		<action name="GetFeesAll"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="GetFeesAll">
+
+			<result name="success">FeeConfig-Values.jsp</result>
+
+		</action>
+		<action name="getFeeCalcDetails"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="FeeDetails">
+
+			<result name="success">FeeCalcDetails.jsp</result>
+			<result name="EDIT">FeeCalcDetailsEdit.jsp</result>
+
+		</action>
+	</package>
+
+	<package name="Test" extends="struts-default">
+
+		<action name="TestAtom" class="com.test.mapping.TestAction"
+			method="addFee">
+
+			<result name="success">Test.jsp</result>
+
+		</action>
+
+	</package>
+
+	<package name="Student" extends="struts-default">
+		<action name="AddStudentColleges"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getCollegeList">
+
+			<result name="success">StudentForm.jsp</result>
+		</action>
+
+
+		<action name="AddBulkStudent"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="addBulkStudents">
+
+			<interceptor-ref name="defaultStack">
+				<param name="fileUpload.maximumSize">30000000</param>
+				<param name="contentType">application/vnd.ms-excel,application/msexcel,application/x-msexcelapplication/x-ms-excel,application/x-excel,application/x-dos_ms_excel,application/xls,application/x-xls,application</param>
+				<param name="allowedTypes">application/vnd.ms-excel,application/msexcel,application/x-msexcelapplication/x-ms-excel,application/x-excel,application/x-dos_ms_excel,application/xls,application/x-xls,application</param>
+			</interceptor-ref>
+
+			<result name="success">Success.jsp</result>
+			<result name="failure">AddBulkStudent.jsp</result>
+			<result name="error">Login.jsp</result>
+
+
+
+
+
+
+
+
+
+		</action>
+
+		<action name="registerStudent"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="registerStudent">
+
+			<result name="success">Success.jsp</result>
+			<result name="failure">StudentForm.jsp</result>
+			<result name="input">StudentForm.jsp</result>
+			<result name="feeNotSet">StudentForm.jsp</result>
+
+		</action>
+		<action name="StudentTotalRecord"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="getStudentList">
+
+			<result name="success">StudentDetail.jsp</result>
+			<result name="error">Login.jsp</result>
+		</action>
+
+		<action name="ViewApplicantDetail"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="viewApplicant">
+
+			<result name="success">View-Applicant.jsp</result>
+		</action>
+
+		<!-- <action name="StudentQuickPay" class="com.dexpert.feecollection.main.users.applicant.AppAction" 
+			method="authenticateStudent"> <result name="success">Student-Detail-For-QuickPay.jsp</result> 
+			<result name="failure">Student-Enrollment-Number.jsp</result> </action> -->
+		<action name="getTransactionDetailsOfStudent"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="getTransactionDetailsOfStudent">
+
+			<result name="success">Transaction-Due-Report.jsp</result>
+			<result name="error">Login.jsp</result>
+		</action>
+
+
+
+	</package>
+
+	<package name="Student Payment" extends="struts-default">
+
+
+		<action name="submitingParameter"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="submitParameter">
+
+
+			<result name="success"> Student-Detail-For-QuickPay.jsp</result>
+			<result name="failure"> Student-Detail-For-QuickPay.jsp</result>
+
+
+
+
+		</action>
+		<action name="submitingParameterNoValidate"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="submitParameter">
+
+
+			<result name="success"> Student-Detail-For-QuickPayNoValidation.jsp
+			</result>
+			<result name="failure"> Student-Detail-For-QuickPayNoValidation.jsp
+			</result>
+
+
+
+
+		</action>
+
+	</package>
+
+
+
+	<package name="Test" extends="struts-default">
+
+		<action name="TestAtom" class="com.test.mapping.TestAction"
+			method="addFee">
+
+			<result name="success">Test.jsp</result>
+
+		</action>
+
+	</package>
+
+	<package name="download_excelTemplate_Student" extends="struts-default">
+
+		<action name="DownloadExcelTemplateFile"
+			class="com.dexpert.feecollection.main.users.applicant.template.ExcelTemplateAction"
+			method="downloadExcelFileTemplateForStudent">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename="${downloadFile}"</param>
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+			</result>
+
+
+		</action>
+
+	</package>
+
+	<package name="download_excelTemplate_College" extends="struts-default">
+
+		<action name="DownloadExcelTemplateFileForCollege"
+			class="com.dexpert.feecollection.main.users.affiliated.template.ExcelTemplateAction"
+			method="downloadExcelFileTemplateForCollege">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename="${downloadFile}"</param>
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="inputName">inputStream</param>
+				<param name="bufferSize">1024</param>
+			</result>
+
+
+		</action>
+
+	</package>
+
+	<package name="Payment gateway" extends="struts-default">
+
+		<action name="AccessingPaymentGateway"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="studentToPaymentGateway">
+
+		</action>
+
+
+		<action name="AccessingSGIPaymentGateway"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="SGIPaymentGateway">
+
+		</action>
+
+
+
+		<action name="instPaymentGateway"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="instPaymentGateway"></action>
+
+
+		<action name="StudentQuickPayMod"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="studentServiceDetail">
+
+			<result name="success">Student-Detail-For-QuickPayNoValidation.jsp
+			</result>
+		</action>
+
+		<action name="OperatorStudentPayment"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="operatorStudentPayment">
+			<result name="success">Success.jsp</result>
+			<result name="error">Login.jsp</result>
+
+		</action>
+		<action name="StudentPayment"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="studentPayment">
+			<result name="success">Success.jsp</result>
+			<result name="error">Login.jsp</result>
+
+
+		</action>
+
+		<action name="ResponseAction"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="responseHandelling">
+
+			<result name="success">TransactionResponsePage.jsp</result>
+
+		</action>
+
+		<action name="RetrieveUserSession"
+			class="com.dexpert.feecollection.main.RetrieveUserSessionAction"
+			method="RetrieveSessionUpdateTrans">
+
+			<result name="home" type="redirect">getTheStudentFeeDetailsFromLoginPage
+			</result>
+
+			<result name="opHome" type="redirect">gotoOperatorLoginPage
+			</result>
+			<result name="error">Login.jsp</result>
+
+		</action>
+
+		<action name="gotoOperatorLoginPage"
+			class="com.dexpert.feecollection.main.users.operator.OperatorAction"
+			method="getOperatorLogin">
+
+			<result name="success">StudentEnrollmentNo.jsp</result>
+
+		</action>
+
+	</package>
+
+	<package name="challan" extends="struts-default">
+
+
+		<action name="getStudentRecordByOperator"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="StudentDuesDetail">
+
+			<result name="success">OperatorStudentDetail.jsp</result>
+			<result name="failure">StudentEnrollmentNo.jsp</result>
+
+
+		</action>
+
+
+		<action name="getTheStudentFeeDetailsFromLoginPage"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="getParticularFeeDetailsOfStudentFromloginPage">
+
+			<result name="success">ShowStudentDuePayments.jsp</result>
+			<result name="error">Login.jsp</result>
+
+		</action>
+
+		<!-- <action name="challanAction" class="com.dexpert.feecollection.challan.ChallanAction" 
+			method="serachByChallanNumber"> <result name="success">challanSearchResult.jsp</result> 
+			<result name="showview">Operator-Reports.jsp</result> </action> -->
+
+
+		<action name="serachByChallanNumber" class="com.dexpert.feecollection.challan.ChallanAction"
+			method="serachByChallanNumber">
+
+			<result name="success">/challanSearchResult.jsp</result>
+			<result name="showView">/viewChallan.jsp</result>
+		</action>
+		<action name="allChallanInfo" class="com.dexpert.feecollection.challan.ChallanAction"
+			method="allChallanInfo">
+
+			<result name="success">/ChallanReport.jsp</result>
+
+		</action>
+
+
+	</package>
+
+
+</struts>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<title>FeeDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description"
+	content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
+<meta name="author" content="Muhammad Usman">
+
+<!-- The styles -->
+<link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
+
+<link href="css/charisma-app.css" rel="stylesheet">
+<link href='bower_components/fullcalendar/dist/fullcalendar.css'
+	rel='stylesheet'>
+<link href='bower_components/fullcalendar/dist/fullcalendar.print.css'
+	rel='stylesheet' media='print'>
+<link href='bower_components/chosen/chosen.min.css' rel='stylesheet'>
+<link href='bower_components/colorbox/example3/colorbox.css'
+	rel='stylesheet'>
+<link href='bower_components/responsive-tables/responsive-tables.css'
+	rel='stylesheet'>
+<link
+	href='bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css'
+	rel='stylesheet'>
+<link href='css/jquery.noty.css' rel='stylesheet'>
+<link href='css/noty_theme_default.css' rel='stylesheet'>
+<link href='css/elfinder.min.css' rel='stylesheet'>
+<link href='css/elfinder.theme.css' rel='stylesheet'>
+<link href='css/jquery.iphone.toggle.css' rel='stylesheet'>
+<link href='css/uploadify.css' rel='stylesheet'>
+<link href='css/animate.min.css' rel='stylesheet'>
+<link href="bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<!-- jQuery -->
+<script src="bower_components/jquery/jquery.min.js"></script>
+
+<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- The fav icon -->
+<link rel="shortcut icon" href="img/favicon.ico">
+
+</head>
+
+<body>
+	<!-- topbar starts -->
+	<div class="navbar navbar-default" role="navigation">
+
+		<div class="navbar-inner">
+			<button type="button" class="navbar-toggle pull-left animated flip">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+
+			<a class="navbar-brand" href="index-College.html"> <img
+				alt="Charisma Logo" src="img/logo20.png" class="hidden-xs" /> <span>Fee
+					Collection Portal</span></a>
+
+			<!-- user dropdown starts -->
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class="glyphicon glyphicon-user"></i><span
+						class="hidden-sm hidden-xs"> <%=loginUser.getUserName()%></span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#">Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="logOutUser">Logout</a></li>
+				</ul>
+			</div>
+			<!-- user dropdown ends -->
+
+			<!-- theme selector starts -->
+			<div class="btn-group pull-right theme-container">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class="glyphicon glyphicon-tint"></i><span
+						class="hidden-sm hidden-xs"> </span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" id="themes">
+					<li><a data-value="classic" href="#"><i class="whitespace"></i>
+							Classic</a></li>
+					<li><a data-value="cerulean" href="#"><i
+							class="whitespace"></i> Cerulean</a></li>
+					<li><a data-value="cyborg" href="#"><i class="whitespace"></i>
+							Cyborg</a></li>
+					<li><a data-value="simplex" href="#"><i class="whitespace"></i>
+							Simplex</a></li>
+					<li><a data-value="darkly" href="#"><i class="whitespace"></i>
+							Darkly</a></li>
+					<li><a data-value="lumen" href="#"><i class="whitespace"></i>
+							Lumen</a></li>
+					<li><a data-value="slate" href="#"><i class="whitespace"></i>
+							Slate</a></li>
+					<li><a data-value="spacelab" href="#"><i
+							class="whitespace"></i> Spacelab</a></li>
+					<li><a data-value="united" href="#"><i class="whitespace"></i>
+							United</a></li>
+				</ul>
+			</div>
+			<!-- theme selector ends -->
+			<!-- cart button starts -->
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="College-Payment-Summary.html">Proceed To
+							Checkout</a></li>
+					<li class="divider"></li>
+					<li><a href="#"
+						onclick='window.open("Cart.html", "MyCart", "width=500,height=900")'>View
+							Cart</a></li>
+				</ul>
+			</div>
+			<!-- cart button ends -->
+		</div>
+	</div>
+	<!-- topbar ends -->
+	<div class="ch-container">
+		<div class="row">
+
+			<!-- left menu starts -->
+			<div class="col-sm-2 col-lg-2">
+				<div class="sidebar-nav">
+					<div class="nav-canvas">
+						<div class="nav-sm nav nav-stacked"></div>
+						<ul class="nav nav-pills nav-stacked main-menu">
+							<li class="nav-header">Main</li>
+							<li><a class="ajax-link" href="index-Admin.jsp"><i
+									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
+
+							<li><a class="ajax-link" href="Admin-MyColleges.jsp"><i
+									class="fa fa-building"></i><span> My Colleges</span></a></li>
+							<li><a class="ajax-link" href="Admin-PaymentsList.html"><i
+									class="fa fa-inr"></i><span> Payments</span></a></li>
+							<li><a class="ajax-link" href="Admin-Manage-Fee.html"><i
+									class="fa fa-inr"></i><span>Manage Fees</span></a></li>
+							<li><a class="ajax-link" href="Admin-PaymentHistory.html"><i
+									class="fa fa-history"></i><span> Payment History</span></a></li>
+							<li><a class="ajax-link" href="Admin-Reports.html"><i
+									class="glyphicon glyphicon-list-alt"></i><span> Reports</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!--/span-->
+			<!-- left menu ends -->
+
+			<noscript>
+				<div class="alert alert-block col-md-12">
+					<h4 class="alert-heading">Warning!</h4>
+
+					<p>
+						You need to have <a href="http://en.wikipedia.org/wiki/JavaScript"
+							target="_blank">JavaScript</a> enabled to use this site.
+					</p>
+				</div>
+			</noscript>
+
+			<div id="content" class="col-lg-10 col-sm-10">
+				<!-- content starts -->
+				<div>
+					<ul class="breadcrumb">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Dashboard</a></li>
+					</ul>
+				</div>
+
+
+				<div class="row">
+					<div class="box col-md-12">
+						<div class="box-inner">
+							<div class="box-header well">
+								<h2>
+									<i class="glyphicon glyphicon-search"></i> Search College
+								</h2>
+
+								<div class="box-icon">
+
+									<a href="#" class="btn btn-minimize btn-round btn-default"><i
+										class="glyphicon glyphicon-chevron-up"></i></a>
+
+								</div>
+							</div>
+							<div class="box-content row">
+								<div class="col-lg-12 col-md-12 animated fadeIn">
+									<!---Content-->
+									<div class="col-lg-4 col-md-4">
+										<label for="DistrictAutocomplete">Select District</label>
+										<div id="the-basics" class="has-success">
+											<input id="DistrictAutocomplete" type="text"
+												class="form-control typeahead">
+											<button class="btn btn-success" onclick="showCollegeBox()">Go</button>
+										</div>
+									</div>
+									<div class="col-lg-10 col-md-10"></div>
+									<div id="CollBox" class=" col-md-4" style="display: none">
+										<label for="DistrictAutocomplete">Select College</label>
+										<div id="the-college" class="has-success">
+											<input id="DistrictAutocomplete" type="text"
+												class="form-control typeahead">
+											<button class="btn btn-success" onclick="showDepartmentBox()">Go</button>
+										</div>
+									</div>
+									<div class="col-lg-10 col-md-10"></div>
+									<div id="DeptBox" class=" col-md-4" style="display: none">
+										<div class="control-group">
+											<label class="control-label" for="selectError">Select
+												Department</label>
+
+											<div class="controls">
+												<select id="selectDept" onchange="showSearchResults()">
+													<option selected="selected" disabled="disabled">Select
+														Department</option>
+													<option>Undergraduate</option>
+													<option>Postgraduate</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-10 col-md-10"></div>
+									<div id="MonthBox" class=" col-md-4" style="display: none">
+										<div class="control-group">
+											<label class="control-label" for="selectError">Select
+												Month</label>
+
+											<div class="controls">
+												<select id="selectMonth" onchange="showSearchResults()">
+													<option selected="selected" disabled="disabled">Select
+														Month</option>
+													<option>January</option>
+													<option>February</option>
+													<option>March</option>
+													<option>April</option>
+													<option>May</option>
+													<option>June</option>
+													<option>July</option>
+													<option>August</option>
+													<option>September</option>
+													<option>October</option>
+													<option>November</option>
+													<option>December</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-10 col-md-10"></div>
+
+									<div id="SearchResultBox" style="display: none"
+										class="col-lg-12 col-md-12 animated fadeIn">
+										<div class="whitespace"></div>
+										<label>Payments History</label>
+										<table
+											class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
+											<thead>
+												<tr>
+													<th>Sr. No.</th>
+													<th>Month</th>
+													<th>Date of payment</th>
+													<th>Fee Type</th>
+													<th>Amount Paid</th>
+													<th>Payment Mode</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td class="center">December</td>
+													<td class="center">01/12/2014</td>
+													<td class="center">Admission Fee</td>
+													<td class="center">300000</td>
+													<td class="center">Credit Card</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td class="center">October</td>
+													<td class="center">04/10/2014</td>
+													<td class="center">Affiliation Fee</td>
+													<td class="center">200000</td>
+													<td class="center">Cash</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td class="center">June</td>
+													<td class="center">06/06/2014</td>
+													<td class="center">Admission Fee</td>
+													<td class="center">400000</td>
+													<td class="center">NEFT</td>
+												</tr>
+												<tr>
+													<td>4</td>
+													<td class="center">February</td>
+													<td class="center">14/02/2014</td>
+													<td class="center">Examination Fee</td>
+													<td class="center">200000</td>
+													<td class="center">NetBanking</td>
+												</tr>
+												<tr>
+													<td>5</td>
+													<td class="center">January</td>
+													<td class="center">25/01/2014</td>
+													<td class="center">Admission Fee</td>
+													<td class="center">450000</td>
+													<td class="center">Cheque</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--/row-->
+
+				<!--/row-->
+				<!-- content ends -->
+			</div>
+			<!--/#content.col-md-0-->
+		</div>
+		<!--/fluid-row-->
+
+
+
+		<hr>
+
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">×</button>
+						<h3>Settings</h3>
+					</div>
+					<div class="modal-body">
+						<p>Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+						<a href="#" class="btn btn-primary" data-dismiss="modal">Save
+							changes</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--  <footer>
+			<p class="col-md-9 col-sm-9 col-xs-12 copyright">
+				&copy; <a href="http://dexpertsystems.com" target="_blank">Dexpert
+					Systems Pvt. Ltd</a>
+			</p>
+
+			<p class="col-md-3 col-sm-3 col-xs-12 powered-by">
+				Powered by: <a href="http://dexpertsystems.com">Dexpert</a>
+			</p>
+		</footer> -->
+
+	</div>
+	<!--/.fluid-container-->
+
+	<!-- external javascript -->
+
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<!-- library for cookie management -->
+	<script src="js/jquery.cookie.js"></script>
+	<!-- calender plugin -->
+	<script src='bower_components/moment/min/moment.min.js'></script>
+	<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+
+	<!-- data table plugin -->
+	<script src='js/jquery.dataTables.min.js'></script>
+
+	<!-- select or dropdown enhancer -->
+	<script src="bower_components/chosen/chosen.jquery.min.js"></script>
+	<!-- plugin for gallery image view -->
+	<script src="bower_components/colorbox/jquery.colorbox-min.js"></script>
+	<!-- notification plugin -->
+	<script src="js/jquery.noty.js"></script>
+	<!-- library for making tables responsive -->
+	<script src="bower_components/responsive-tables/responsive-tables.js"></script>
+	<!-- tour plugin -->
+	<script
+		src="bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
+	<!-- star rating plugin -->
+	<script src="js/jquery.raty.min.js"></script>
+	<!-- for iOS style toggle switch -->
+	<script src="js/jquery.iphone.toggle.js"></script>
+	<!-- autogrowing textarea plugin -->
+	<script src="js/jquery.autogrow-textarea.js"></script>
+	<!-- multiple file upload plugin -->
+	<script src="js/jquery.uploadify-3.1.min.js"></script>
+	<!-- history.js for cross-browser state change on ajax -->
+	<script src="js/jquery.history.js"></script>
+	<!-- application script for Charisma demo -->
+	<script src="js/charisma.js"></script>
+	<!-- TypeAhead Script -->
+	<script src="js/typeahead.bundle.js"></script>
+	<script>
+		function showCollegeBox() {
+			document.getElementById("SearchResultBox").style.display = "none";
+
+			document.getElementById("DeptBox").style.display = "none";
+			document.getElementById("MonthBox").style.display = "none";
+			document.getElementById("CollBox").style.display = "block";
+		}
+		function showDepartmentBox() {
+			document.getElementById("SearchResultBox").style.display = "none";
+			document.getElementById("DeptBox").style.display = "block";
+			document.getElementById("MonthBox").style.display = "none";
+			$("#selectDept").chosen({
+				disable_search_threshold : 10
+			})
+		}
+		function showMonthBox() {
+			document.getElementById("SearchResultBox").style.display = "none";
+
+			document.getElementById("MonthBox").style.display = "block";
+			$("#selectMonth").chosen({
+				disable_search_threshold : 10
+			})
+		}
+		function showSearchResults() {
+			document.getElementById("SearchResultBox").style.display = "block";
+
+		}
+		function showDetails() {
+			document.getElementById("SearchResultBox").style.display = "none";
+
+		}
+	</script>
+
+	<script>
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches, substrRegex;
+
+				// an array that will be populated with substring matches
+				matches = [];
+
+				// regex used to determine if a string contains the substring `q`
+				substrRegex = new RegExp(q, 'i');
+
+				// iterate through the pool of strings and for any string that
+				// contains the substring `q`, add it to the `matches` array
+				$.each(strs, function(i, str) {
+					if (substrRegex.test(str)) {
+						// the typeahead jQuery plugin expects suggestions to a
+						// JavaScript object, refer to typeahead docs for more info
+						matches.push({
+							value : str
+						});
+					}
+				});
+
+				cb(matches);
+			};
+		};
+
+		var states = [ 'Bangalore', 'Mysore', 'Tumkur', 'Belgaum', 'BG Nagar',
+				'Hubli', 'Bijapur', 'Gulbarga', 'Bellary', 'Kolar' ];
+
+		var colleges = [
+				'M001 Bangalore Medical College',
+				'M002 Dr. B.R Ambedkar Medical College',
+				'M003 Institute of Aerospace Medicine',
+				'M004 St. Johns Medical College',
+				'M005 Kempegowda Institute Of Medical Sciences',
+				'M006 Government Medical College',
+				'M007 Siddartha Medical College',
+				'M008 J.N Medical College',
+				'M009 Adichunchanagiri Institute of Medical Sciences',
+				'M010 MS Ramaiah Medical College',
+				'M011 Sri Jayadeva Institute of Cardiovascular Sciences & Research',
+				'M012 Kidwai Institute of Oncolgy',
+				'M013 Al-Ameen Medical College', 'M014 M.R.Medical College',
+				'M015 Vijayanagar Institute Of Medical Sciences',
+				'M016 Command Hospital', 'M017 JSS Medical College',
+				'M018 Devaraj Urs Medical College' ];
+
+		$('#the-basics .typeahead').typeahead({
+			hint : true,
+			highlight : true,
+			minLength : 1
+		}, {
+			name : 'states',
+			displayKey : 'value',
+			source : substringMatcher(states)
+		});
+		$('#the-college .typeahead').typeahead({
+			hint : true,
+			highlight : true,
+			minLength : 1
+		}, {
+			name : 'states',
+			displayKey : 'value',
+			source : substringMatcher(colleges)
+		});
+	</script>
+
+</body>
+</html>
