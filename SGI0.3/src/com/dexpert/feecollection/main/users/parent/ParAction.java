@@ -100,7 +100,7 @@ public class ParAction extends ActionSupport {
 		parBean = parDAO.saveOrUpdate(parBean, f + File.separator);
 		// -----Code for sending email//--------------------
 		EmailSessionBean email = new EmailSessionBean();
-		email.sendEmail(parBean.getParInstEmail(), "Welcome To Fee Collection Portal!", username, password,
+		email.sendEmail(parBean.getParInstEmail(), "Welcome To FeeDesk!", username, password,
 				parBean.getParInstName());
 		request.setAttribute("msg", "University Added Successfully");
 		return SUCCESS;

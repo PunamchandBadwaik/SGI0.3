@@ -114,7 +114,7 @@ public class OperatorAction extends ActionSupport {
 		OperatorDao.registerCollegeOperatorDao(operatorBean);
 		// -----Code for sending email//--------------------
 		EmailSessionBean email = new EmailSessionBean();
-		email.sendEmail(operatorBean.getOperatorEmail(), "Welcome To Fee Collection Portal!", username, password,
+		email.sendEmail(operatorBean.getOperatorEmail(), "Welcome To FeeDesk!", username, password,
 				operatorBean.getOperatorName());
 
 		request.setAttribute("msg", "Operator Added Successfully");

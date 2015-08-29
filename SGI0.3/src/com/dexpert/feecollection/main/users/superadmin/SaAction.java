@@ -82,7 +82,7 @@ public class SaAction extends ActionSupport {
 		superAdmin = saDAO.saveOrUpdate(superAdmin);
 		// -----Code for sending email//--------------------
 		EmailSessionBean email = new EmailSessionBean();
-		email.sendEmail(superAdmin.getEmailId(), "Welcome To Fee Collection Portal!", username, password,
+		email.sendEmail(superAdmin.getEmailId(), "Welcome To FeeDesk!", username, password,
 				superAdmin.getFirstName());
 		request.setAttribute("redirectLink", "SuperAdminForm.jsp");
 		return SUCCESS;

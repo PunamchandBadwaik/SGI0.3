@@ -176,7 +176,7 @@ public class AffAction extends ActionSupport {
 
 				// -----Code for sending email//--------------------
 				EmailSessionBean email = new EmailSessionBean();
-				email.sendEmail(affInstBean.getEmail(), "Welcome To Fee Collection Portal!", username, password,
+				email.sendEmail(affInstBean.getEmail(), "Welcome To FeeDesk!", username, password,
 						affInstBean.getInstName());
 
 				request.setAttribute("msg", "Institute Added Successfully");
