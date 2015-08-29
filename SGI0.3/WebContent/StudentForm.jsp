@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
 <%
@@ -8,7 +9,6 @@
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	String profile = (String) session.getAttribute("sesProfile");
-	
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -150,26 +150,25 @@
 												<tr>
 													<th>
 														<%
-														if (profile.contentEquals("Affiliated") )
-															
-														{
+															if (profile.contentEquals("Affiliated"))
+
+															{
 
 																System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
- 														}
-														 %>
-														 
-														 <%
-														if (profile.contentEquals("CollegeOperator") )
-															
-														{
+ 	}
+ %> <%
+ 	if (profile.contentEquals("CollegeOperator"))
 
-																System.out.print("Profile is11111 ::" + profile);
-														%> <input type="hidden" name="aplInstId"
-														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>"> <%
- 														}
-														 %>
+ 	{
+
+ 		System.out.print("Profile is11111 ::" + profile);
+ %> <input type="hidden" name="aplInstId"
+														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
+														<%
+															}
+														%>
 													</th>
 													<th></th>
 													<th></th>
@@ -249,10 +248,10 @@
 														</div></td>
 
 												</tr>
-											
 
 
-												
+
+
 
 
 
@@ -359,7 +358,7 @@
 																			<option value="">----- Select Course------</option>
 																			<option value="FE">FE</option>
 																			<option value="SE">SE</option>
-																			<option value="SE(Direct)">SE(Direct)</option>
+																			<option value="SED">SE(Direct)</option>
 
 																			<option value="TE">TE</option>
 																			<option value="BE">BE</option>
