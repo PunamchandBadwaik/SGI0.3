@@ -89,7 +89,8 @@
 					class="icon-bar"></span>
 			</button>
 
-		<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -102,7 +103,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -218,7 +220,17 @@
 							<%
 								}
 							%>
+							<%
+								if (profile.contentEquals("SU")){
+							%>
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 
+
+
+							<%
+								}
+							%>
 						</ul>
 					</div>
 				</div>
@@ -300,8 +312,9 @@
 														name="<s:property value="parInstId"/>"></td>
 													<%-- 	<td><s:property value="instId"/> </td> --%>
 													<td class="center"><s:property value="parInstName" /></td>
-													
-													<td class="center"><s:property value="parInstContPerson" /></td>
+
+													<td class="center"><s:property
+															value="parInstContPerson" /></td>
 													<td class="center"><s:property value="parInstContact" /></td>
 													<td class="center"><s:property value="parInstAddress" /></td>
 													<td class="center"><a class="btn btn-success btn-sm"

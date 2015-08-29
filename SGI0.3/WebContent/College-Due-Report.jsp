@@ -87,7 +87,8 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -100,7 +101,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -170,14 +172,14 @@
 								href='<%=session.getAttribute("dashLink").toString()%>'><i
 									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
 							<%
-								if (profile.contentEquals("SU")){
+								if (profile.contentEquals("SU")) {
 							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> Parent Institute</span></a></li>
 							<%
 								}
 							%>
 							<%
-								if (!profile.contentEquals("Affiliated")){
+								if (!profile.contentEquals("Affiliated")) {
 							%>
 							<li><a class="ajax-link" href="getCollegeList"><i
 									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
@@ -185,29 +187,39 @@
 								}
 							%>
 							<%
-								if (profile.contentEquals("Affiliated")){
+								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
 									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
 							<%
 								}
 							%>
 							<%
-								if (!profile.contentEquals("Affiliated")){
+								if (!profile.contentEquals("Affiliated")) {
 							%>
 							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
 									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
 							<%
 								}
 							%>
-							<%
+							<%-- <%
 								if (!profile.contentEquals("Affiliated")){
 							%><li><a class="ajax-link" href="getInstDues"><i
 									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
 							<%
 								}
-							%>
-							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+							%> --%>
+							<%
+								if (profile.contentEquals("SU")){
+							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+									
+									<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							<%
+								}
+							%>
+
+
 						</ul>
 					</div>
 				</div>
@@ -243,7 +255,8 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> College Due Report Detail
+									<i class="glyphicon glyphicon-list-alt"></i> College Due Report
+									Detail
 								</h2>
 
 								<div class="box-icon">

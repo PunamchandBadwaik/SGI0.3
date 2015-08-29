@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
+<%
+	int i = 1;
+%>
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
@@ -21,10 +25,10 @@
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-			if (cookie.getName().equals("user"))
-				usercookie = cookie.getValue();
-			if (cookie.getName().equals("JSESSIONID"))
-				sessionID = cookie.getValue();
+	if (cookie.getName().equals("user"))
+		usercookie = cookie.getValue();
+	if (cookie.getName().equals("JSESSIONID"))
+		sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
@@ -86,7 +90,8 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -99,7 +104,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -136,7 +142,21 @@
 			</div>
 			<!-- theme selector ends -->
 			<!-- cart button starts -->
-		
+			<%-- <div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="College-Payment-Summary.html">Proceed To
+							Checkout</a></li>
+					<li class="divider"></li>
+					<li><a href="#"
+						onclick='window.open("Cart.html", "MyCart", "width=500,height=900")'>View
+							Cart</a></li>
+				</ul>
+			</div> --%>
 			<!-- cart button ends -->
 		</div>
 	</div>
@@ -155,14 +175,14 @@
 								href='<%=session.getAttribute("dashLink").toString()%>'><i
 									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
 							<%
-								if (profile.contentEquals("SU")){
+								if (profile.contentEquals("SU")) {
 							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> Parent Institute</span></a></li>
 							<%
 								}
 							%>
 							<%
-								if (!profile.contentEquals("Affiliated")){
+								if (!profile.contentEquals("Affiliated")) {
 							%>
 							<li><a class="ajax-link" href="getCollegeList"><i
 									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
@@ -170,14 +190,14 @@
 								}
 							%>
 							<%
-								if (profile.contentEquals("Affiliated")){
+								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
 									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
 							<%
 								}
 							%>
 							<%
-								if (!profile.contentEquals("Affiliated")){
+								if (!profile.contentEquals("Affiliated")) {
 							%>
 							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
 									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
@@ -185,14 +205,29 @@
 								}
 							%>
 							<%
-								if (profile.contentEquals("Affiliated")){
+								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="getInstDues"><i
 									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
 							<%
 								}
 							%>
+
+
+
+							<%
+								if (profile.contentEquals("SU")){
+							%>
+							<li><a class="ajax-link" href="UniversityDetailRecord"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+
+
+
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+
+							<%
+								}
+							%>
 						</ul>
 					</div>
 				</div>
@@ -228,7 +263,8 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> All Colleges
+									<i class="glyphicon glyphicon-list-alt"></i> &nbsp;College
+									Report
 								</h2>
 
 								<div class="box-icon">
@@ -248,47 +284,51 @@
 											</button>
 										</div>
 									</div>
+
 									<!---Content-->
 									<table
 										class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
 										<thead>
 											<tr>
 												<th width="7%">Sr. No.</th>
-
+												<!-- <th>ID</th> -->
 												<th>Institute Name</th>
-												<th>Contact Number</th>
-												<th>College Email</th>
-												<th>Institute Address</th>
-												<th>Place</th>
+												<th>Contact No.</th>
+												<th>Email</th>
+												<th>University Name</th>
+												<th>Address</th>
 
 											</tr>
 										</thead>
 										<tbody>
-											<%
-												int i = 1;
-											%>
-											<s:iterator value="affInstList">
+											<c:forEach items="${affInstList}" var="aff"
+												varStatus="counter">
 												<tr>
-													<td><span style="margin-left: 10px;"><%=i%></span></td>
+													<td><%=i%></td>
+													<td><span style="margin-left: 10px;"> <c:out
+																value="${aff.instName}" /> <%-- <s:property
+																value="instName" /> --%></span></td>
+													<td><span style="margin-left: 10px;"> <c:out
+																value="${aff.contactNumber}" /> <%-- <s:property
+																value="contactNumber" /> --%></span></td>
 
-													<td><span style="margin-left: 10px;"><s:property
-																value="instName" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="contactNumber" /></span></td>
+													<td><span style="margin-left: 10px;"> <c:out
+																value="${aff.email}" /> <%-- <s:property
+																value="email" /> --%></span></td>
 
-													<td><span style="margin-left: 10px;"><s:property
-																value="email" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="instAddress" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="place" /></span></td>
-
+													<td><span style="margin-left: 10px;"> <c:out
+																value="${aff.parBeanAff.parInstName}" /> <%-- 
+													
+													<s:property
+																value="affInstList.parBeanAff.parInstName" /> --%></span></td>
+													<td><span style="margin-left: 10px;"> <c:out
+																value="${aff.instAddress}" /> <%-- <s:property
+																value="instAddress" /> --%></span></td>
 												</tr>
-
 												<%
 													i++;
 												%>
-											</s:iterator>
+											</c:forEach>
 
 
 										</tbody>
@@ -385,8 +425,58 @@
 	<script src="js/charisma.js"></script>
 	<!-- TypeAhead Script -->
 	<script src="js/typeahead.bundle.js"></script>
+	<script>
+		function showSearchResults() {
+			document.getElementById("SearchResultBox").style.display = "block";
+			document.getElementById("CollegeDetailBox").style.display = "none";
+		}
+		function showDetails(id) {
 
+			window.open("ViewUniversityDetails?parInstId=" + id,
+					"CollegeDetails", "width=700,height=900");
+		}
+	</script>
 
+	<script>
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches, substrRegex;
+
+				// an array that will be populated with substring matches
+				matches = [];
+
+				// regex used to determine if a string contains the substring `q`
+				substrRegex = new RegExp(q, 'i');
+
+				// iterate through the pool of strings and for any string that
+				// contains the substring `q`, add it to the `matches` array
+				$.each(strs, function(i, str) {
+					if (substrRegex.test(str)) {
+						// the typeahead jQuery plugin expects suggestions to a
+						// JavaScript object, refer to typeahead docs for more info
+						matches.push({
+							value : str
+						});
+					}
+				});
+
+				cb(matches);
+			};
+		};
+
+		var states = [ 'Bangalore', 'Mysore', 'Tumkur', 'Belgaum', 'BG Nagar',
+				'Hubli', 'Bijapur', 'Gulbarga', 'Bellary', 'Kolar' ];
+
+		$('#the-basics .typeahead').typeahead({
+			hint : true,
+			highlight : true,
+			minLength : 1
+		}, {
+			name : 'states',
+			displayKey : 'value',
+			source : substringMatcher(states)
+		});
+	</script>
 
 </body>
 </html>

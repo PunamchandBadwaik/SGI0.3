@@ -96,7 +96,8 @@ try{
 					class="icon-bar"></span>
 			</button>
 
-			<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 			<!-- user dropdown starts -->
@@ -108,7 +109,8 @@ try{
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -201,13 +203,15 @@ try{
 							<%
 								}
 							%>
-							<%-- <li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li> --%>
+							
 
 							<%
 								if (profile.contentEquals("SU")){
 							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
+									
+									<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 							<%
 								}
 							%>

@@ -95,7 +95,8 @@ try{
 					class="icon-bar"></span>
 			</button>
 
-			<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -108,7 +109,8 @@ try{
 					</span> <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -168,8 +170,8 @@ try{
 							<%
 								}
 							%>
-					
-					<%
+
+							<%
 								if (profile.contentEquals("Parent")) {
 							%>
 							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
@@ -187,8 +189,8 @@ try{
 							<%
 								}
 							%>
-					
-					
+
+
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
@@ -215,24 +217,43 @@ try{
 								if (profile.contentEquals("Parent")){
 							%><li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-						<%
+							<%
 								}
 							%>
-							
-							
+
+
 							<%
 								if (profile.contentEquals("Affiliated")){
-							%>	<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+							%>
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="glyphicon glyphicon-home"></i><span> Report</span></a></li>
-							
-									
-									
-						<%
+
+
+
+							<%
 								}
 							%>
 							
+								
 							
-								</ul>
+							<%
+								if (profile.contentEquals("SU")){
+							%>
+							<li><a class="ajax-link" href="UniversityDetailRecord"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+						
+							
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+
+
+
+							<%
+								}
+							%>
+
+
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -290,11 +311,7 @@ try{
 										if (profile.contentEquals("Affiliated")){
 									%>
 
-									<!-- <p class="btn-group">
-										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='CollegeDueReport'">College
-											Due Report</button>
-									</p> -->
+
 
 
 									<p class="btn-group">
@@ -321,6 +338,43 @@ try{
 									<%
 										}
 									%>
+
+
+									<%
+										if (profile.contentEquals("SU")){
+									%>
+									<p class="btn-group">
+										<button class="btn btn-default" title="Get College Report"
+											onclick="window.location='ShowCollegeReport'">College
+											Report</button>
+									</p>
+
+
+
+									<p class="btn-group">
+										<button class="btn btn-default" title="Get College Due Report"
+											onclick="window.location='CollegeDueReport'">College
+											Due Report</button>
+									</p>
+
+									<p class="btn-group">
+										<button class="btn btn-default" title="Get Transaction Report"
+											onclick="window.location='TranactionReport'">Transaction
+											Report</button>
+									</p>
+
+
+
+
+
+
+
+
+									<%
+										}
+									%>
+
+
 
 
 

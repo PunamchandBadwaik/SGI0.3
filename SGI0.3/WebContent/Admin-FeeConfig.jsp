@@ -221,7 +221,17 @@
 							<%
 								}
 							%>
+							<%
+								if (profile.contentEquals("SU")) {
+							%>
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 
+
+
+							<%
+								}
+							%>
 
 							<%-- <li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>

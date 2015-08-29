@@ -87,7 +87,8 @@
 					class="icon-bar"></span>
 			</button>
 
-		<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -100,7 +101,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -153,7 +155,7 @@
 							<li><a class="ajax-link"
 								href='<%=session.getAttribute("dashLink").toString()%>'><i
 									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-							
+
 							<%-- <%
 								if (!profile.contentEquals("Affiliated")){
 							%>
@@ -188,6 +190,11 @@
 									class="fa fa-list-alt"></i><span> Students Fee Payment</span></a></li>
 							<li><a class="ajax-link" href="Operator-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+
+							
+
+
+
 						</ul>
 					</div>
 				</div>
@@ -235,10 +242,7 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 									<h1>
 										Welcome
-										<%=loginUser.getOperatorBean().getOperatorName()%><br>
-										
-										
-										 <small>This
+										<%=loginUser.getOperatorBean().getOperatorName()%><br> <small>This
 											is the online fee payment portal</small>
 									</h1>
 									<p>You can use the portal to monitor and manage the fee

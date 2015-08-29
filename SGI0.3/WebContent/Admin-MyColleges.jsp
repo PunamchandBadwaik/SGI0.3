@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
@@ -258,6 +258,17 @@
 							<%
 								}
 							%>
+							
+							<%
+								if (profile.contentEquals("SU")){
+							%>
+							
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+
+							<%
+								}
+							%>
 
 
 
@@ -430,8 +441,7 @@
 
 													<td class="center"><c:out value="${aff.place}" /></td>
 													<td><a class="btn btn-success btn-sm"
-														title="Button To Display College Detail"
-														onclick="showDetails(<c:out value="${aff.instId}" />)">
+														title="Button To Display College Detail"							onclick="showDetails(<c:out value="${aff.instId}" />)">
 															<i class="glyphicon glyphicon-zoom-in icon-white"></i>
 															View
 													</a></td>
