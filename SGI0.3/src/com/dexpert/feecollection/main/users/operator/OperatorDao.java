@@ -5,6 +5,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -57,17 +58,21 @@ public class OperatorDao {
 	}
 
 	public static List<OperatorBean> getAllRecordsOfCollegeOperator() {
-
 		Session session = factory.openSession();
-		@SuppressWarnings("unchecked")
-		List<OperatorBean> listOfOptrRecords = (List<OperatorBean>) session.createCriteria(OperatorBean.class).list();
-		log.info("Size of Operator Records" + listOfOptrRecords.size());
+		List<OperatorBean> listOfOptrRecords = new ArrayList<OperatorBean>();
+		try {
+			Criteria criteria = session.createCriteria(OperatorBean.class);
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			listOfOptrRecords = criteria.list();
+			return listOfOptrRecords;
 
-		return listOfOptrRecords;
+		} finally {
+			session.close();
+
+		}
+
 	}
 
-	
-	
 	public static Integer getRowCount() {
 		// Declarations
 
@@ -141,18 +146,18 @@ public class OperatorDao {
 
 	public Integer getCollegeIdOfOperator(Integer operatorId) {
 		Session session = factory.openSession();
-		
-		Criteria criteria=session.createCriteria(OperatorBean.class);
+
+		Criteria criteria = session.createCriteria(OperatorBean.class);
 		criteria.add(Restrictions.eq("operatorId", operatorId));
 		criteria.setProjection(Projections.property("affBean.instId"));
-		Integer collegeId=(Integer) criteria.list().iterator().next();
-		
-		
-		/*SQLQuery sqlQuery = session
-				.createSQLQuery("SELECT InsId_Fk FROM sgi.operator_table where operatorId=:operatorId");
-		sqlQuery.setParameter("operatorId", operatorId);
-		Integer collegeId = (Integer) sqlQuery.list().iterator().next();
-		*/session.close();
+		Integer collegeId = (Integer) criteria.list().iterator().next();
+
+		/*
+		 * SQLQuery sqlQuery = session .createSQLQuery(
+		 * "SELECT InsId_Fk FROM sgi.operator_table where operatorId=:operatorId"
+		 * ); sqlQuery.setParameter("operatorId", operatorId); Integer collegeId
+		 * = (Integer) sqlQuery.list().iterator().next();
+		 */session.close();
 		return collegeId;
 
 	}

@@ -130,19 +130,9 @@ public class OperatorAction extends ActionSupport {
 
 		listAffBean = affDAO.getCollegesList();
 
-		for (AffBean affBean : listAffBean) {
-
-			for (OperatorBean opBean : affBean.getOptrBeanSet()) {
-
-			}
-
-		}
 
 		listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator();
 
-		for (OperatorBean obean : listOprtBean) {
-
-		}
 
 		return SUCCESS;
 	}
