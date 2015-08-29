@@ -327,7 +327,7 @@
 																	<div class="controls">
 
 																		<select name="appBean1.category" data-rel="chosen">
-																			<option value="">-----Select Category-----</option>
+																			<option value="">---Select Category---</option>
 																			<option value="Open / E.B.C Category">Open
 																				Category</option>
 																			<option value="OBC / ESBC (Maratha) Category">OBC
@@ -355,7 +355,7 @@
 																	<div class="controls">
 																		<select name="appBean1.course" data-rel="chosen"
 																			style="width: 240px;">
-																			<option value="">----- Select Course------</option>
+																			<option value="">---Select Course---</option>
 																			<option value="FE">FE</option>
 																			<option value="SE">SE</option>
 																			<option value="SED">SE(Direct)</option>
@@ -386,7 +386,7 @@
 																	<div class="controls">
 																		<select name="appBean1.year" style="width: 240px;"
 																			data-rel="chosen">
-																			<option value="">------- Select Year-------</option>
+																			<option value="">---Select Year---</option>
 																			<option value="2008">2008</option>
 																			<option value="2009">2009</option>
 																			<option value="2010">2010</option>
