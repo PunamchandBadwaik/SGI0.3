@@ -23,10 +23,10 @@
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-			if (cookie.getName().equals("user"))
-				usercookie = cookie.getValue();
-			if (cookie.getName().equals("JSESSIONID"))
-				sessionID = cookie.getValue();
+	if (cookie.getName().equals("user"))
+		usercookie = cookie.getValue();
+	if (cookie.getName().equals("JSESSIONID"))
+		sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
@@ -105,7 +105,7 @@
 			<%
 				if (msg != null)
 
-				{
+									{
 			%>
 
 			<div
@@ -152,18 +152,18 @@
 														<%
 															if (profile.contentEquals("Affiliated"))
 
-															{
+																																																																											{
 
-																System.out.print("Profile is ::" + profile);
+																																																																												System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
 
- 	{
+      	{
 
- 		System.out.print("Profile is11111 ::" + profile);
+      		System.out.print("Profile is11111 ::" + profile);
  %> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
 														<%
@@ -178,16 +178,80 @@
 											<tbody>
 												<tr>
 
-													<td>Student Enrollment Number</td>
+													<td>Course</td>
 													<td colspan="2"><div id="the-basics"
 															class="has-success">
-															<input required="required"
-																name="appBean1.enrollmentNumber"
+															<div class="box-content">
+																<div class="control-group">
+																	<div class="controls">
+																		<select name="appBean1.course" id="courseId"
+																			onchange="hideEnrollNo()" data-rel="chosen"
+																			style="width: 240px;">
+																			<option value="">---Select Course---</option>
+																			<option value="FE">FE</option>
+																			<option value="SE">SE</option>
+																			<option value="SED">SE (Direct)</option>
+
+																			<option value="TE">TE</option>
+																			<option value="BE">BE</option>
+																			<option value="MBA 1">MBA 1</option>
+																			<option value="MBA 2">MBA 2</option>
+
+																			<option value="ME 1">ME 1</option>
+																			<option value="ME 2">ME 2</option>
+
+																		</select>
+
+																	</div>
+																</div>
+															</div>
+														</div> <script type="text/javascript">
+															function hideEnrollNo() {
+																var course = document
+																		.getElementById("courseId").value;
+
+																alert(course);
+
+																if (course == 'FE'
+																		|| course == 'SED'
+																		|| course == 'MBA 1'
+																		|| course == 'ME 1') {
+
+																	document
+																			.getElementById("enrollTextId").required = false;
+
+																	document
+																			.getElementById("enrollTrId").style.display = "none";
+																	document
+																			.getElementById("enrollTdId").style.display = "none";
+
+																} else {
+																	document
+																			.getElementById("enrollTextId").required = true;
+
+																	document
+																			.getElementById("enrollTrId").style.display = "block";
+																	document
+																			.getElementById("enrollTdId").style.display = "block";
+
+																}
+
+															}
+														</script></td>
+
+												</tr>
+
+												<tr>
+													<div>
+													<td id="enrollTrId">Student Enrollment Number</td>
+													<td id="enrollTdId" colspan="2"><div id="the-basics"
+															class="has-success">
+															<input name="appBean1.enrollmentNumber" id="enrollTextId"
 																value='<s:property value="appBean1.enrollmentNumber"/>'
 																placeholder="Enrollment Number" type="text"
 																class="form-control">
 														</div></td>
-
+													<div>
 												</tr>
 												<tr>
 
@@ -293,8 +357,8 @@
 													<td>Secondary Mobile Number</td>
 													<td colspan="2"><div id="the-basics"
 															class="has-success">
-															<input required="required" id="Contact"
-																name="appBean1.aplMobileSec" maxlength="10"
+															<input id="Contact" name="appBean1.aplMobileSec"
+																maxlength="10"
 																value='<s:property value="appBean1.aplMobileSec"/>'
 																placeholder="Mobile Number" pattern="[789][0-9]{9}"
 																type="text" class="form-control">
@@ -345,37 +409,7 @@
 
 												</tr>
 
-												<tr>
 
-													<td>Course</td>
-													<td colspan="2"><div id="the-basics"
-															class="has-success">
-															<div class="box-content">
-																<div class="control-group">
-																	<div class="controls">
-																		<select name="appBean1.course" data-rel="chosen"
-																			style="width: 240px;">
-																			<option value="">---Select Course---</option>
-																			<option value="FE">FE</option>
-																			<option value="SE">SE</option>
-																			<option value="SED">SE(Direct)</option>
-
-																			<option value="TE">TE</option>
-																			<option value="BE">BE</option>
-																			<option value="MBA 1">MBA 1</option>
-																			<option value="MBA 2">MBA 2</option>
-
-																			<option value="ME 1">ME 1</option>
-																			<option value="ME 2">ME 2</option>
-
-																		</select>
-
-																	</div>
-																</div>
-															</div>
-														</div></td>
-
-												</tr>
 												<tr>
 
 													<td>Year</td>

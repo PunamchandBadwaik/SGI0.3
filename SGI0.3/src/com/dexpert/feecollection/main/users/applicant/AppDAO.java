@@ -78,6 +78,30 @@ public class AppDAO {
 		PasswordEncryption.encrypt(String.valueOf(appBean.getYear()));
 		String encryptedPwd = PasswordEncryption.encStr;
 
+		if (appBean.getCourse().contentEquals("FE")) {
+
+			appBean.setYearCode("10");
+
+		} else if (appBean.getCourse().contentEquals("SED") || appBean.getCourse().contentEquals("SE")) {
+			appBean.setYearCode("20");
+
+		} else if (appBean.getCourse().contentEquals("ME")) {
+			appBean.setYearCode("50");
+
+		} else if (appBean.getCourse().contentEquals("MBA")) {
+			appBean.setYearCode("60");
+
+		}
+
+		if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
+				|| appBean.getEnrollmentNumber().equals("")) {
+
+			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+			String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
+			appBean.setEnrollmentNumber(EnrollNo);
+
+		}
+
 		loginBean.setPassword(encryptedPwd);
 		loginBean.setProfile("Student");
 		appBean.setLoginBean(loginBean);
@@ -141,7 +165,6 @@ public class AppDAO {
 
 			AffBean affBean = (AffBean) criteria.list().iterator().next();
 
-			
 			return affBean;
 
 		} finally {
@@ -212,7 +235,7 @@ public class AppDAO {
 
 		String name, lstName, gender, cast, address, acaYear, course, branch, emailAddress;
 
-		Integer enrollNo, mobileNumPri, MobileNumSec, admYear;
+		Integer enrollNo = null, mobileNumPri, MobileNumSec, admYear;
 
 		// ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
 		AppBean appBean = new AppBean();
@@ -250,8 +273,12 @@ public class AppDAO {
 			}
 
 			Cell r = row.getCell(0);
-			enrollNo = (int) r.getNumericCellValue();
 
+			try {
+				enrollNo = (int) r.getNumericCellValue();
+			} catch (java.lang.NullPointerException e) {
+
+			}
 			r = row.getCell(1);
 			name = r.getStringCellValue();
 
@@ -297,7 +324,6 @@ public class AppDAO {
 			r = row.getCell(12);
 			emailAddress = r.getStringCellValue();
 
-			appBean.setEnrollmentNumber(enrollNo.toString());
 			appBean.setAplFirstName(name);
 			appBean.setAplLstName(lstName);
 			appBean.setGender(gender);
@@ -306,12 +332,32 @@ public class AppDAO {
 			appBean.setAplMobilePri(mobileNumPri.toString());
 			appBean.setAplMobileSec(MobileNumSec.toString());
 			appBean.setYear(admYear.toString());
-
 			if (course.contentEquals("SE (Direct)")) {
 				String c = "SED";
 				appBean.setCourse(c);
 			} else {
 				appBean.setCourse(course);
+			}
+			if (appBean.getCourse().contentEquals("FE")) {
+
+				appBean.setYearCode("10");
+
+			} else if (appBean.getCourse().contentEquals("SED") || appBean.getCourse().contentEquals("SE")) {
+				appBean.setYearCode("20");
+
+			} else if (appBean.getCourse().contentEquals("ME")) {
+				appBean.setYearCode("50");
+
+			} else if (appBean.getCourse().contentEquals("MBA")) {
+				appBean.setYearCode("60");
+
+			}
+			try {
+				appBean.setEnrollmentNumber(enrollNo.toString());
+			} catch (java.lang.NullPointerException e) {
+				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+				String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
+				appBean.setEnrollmentNumber(EnrollNo);
 			}
 
 			appBean.setAplEmail(emailAddress);
@@ -332,7 +378,7 @@ public class AppDAO {
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
 		HttpServletRequest request = ServletActionContext.getRequest();
-		AppAction app = new AppAction();
+
 		HttpSession httpSession = request.getSession();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 
@@ -353,6 +399,10 @@ public class AppDAO {
 
 			// to get college record based on id to create relationship
 			affBean = aff.viewInstDetail(clgBean.getInstId());
+
+			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+			Integer enrollNo = Integer.parseInt(en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode()));
+			appBean.setEnrollmentNumber(enrollNo.toString());
 
 			LoginBean loginBean = new LoginBean();
 			loginBean.setUserName(appBean.getEnrollmentNumber());

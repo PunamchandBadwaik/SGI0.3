@@ -28,7 +28,7 @@ public class AppBean implements Serializable {
 	@Id
 	private String enrollmentNumber;
 	private String aplFirstName, aplLstName, aplEmail, aplAddress, aplMobilePri, aplMobileSec, gender, category,
-			course, year;
+			course, year, yearCode;
 
 	public String getCategory() {
 		return category;
@@ -45,8 +45,6 @@ public class AppBean implements Serializable {
 	public void setCourse(String course) {
 		this.course = course;
 	}
-
-	
 
 	@ManyToOne(targetEntity = AffBean.class)
 	@JoinColumn(name = "College_Id_Fk", referencedColumnName = "instId")
@@ -171,6 +169,7 @@ public class AppBean implements Serializable {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+
 	public String getYear() {
 		return year;
 	}
@@ -178,4 +177,13 @@ public class AppBean implements Serializable {
 	public void setYear(String year) {
 		this.year = year;
 	}
+
+	public String getYearCode() {
+		return yearCode;
+	}
+
+	public void setYearCode(String yearCode) {
+		this.yearCode = yearCode;
+	}
+
 }

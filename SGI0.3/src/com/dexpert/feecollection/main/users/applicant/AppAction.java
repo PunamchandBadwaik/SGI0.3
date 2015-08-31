@@ -115,7 +115,13 @@ public class AppAction extends ActionSupport {
 				return "failure";
 			}
 
-			appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
+			try {
+				appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
+			} catch (java.lang.NullPointerException e) {
+				request.setAttribute("msg", "Please Enter Enrollment Number");
+				affInstList = affDAO.getCollegesList();
+				return "failure";
+			}
 
 			try {
 				updateStudentDue();
@@ -198,8 +204,8 @@ public class AppAction extends ActionSupport {
 
 			appBeansList = aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload, f + File.separator);
 
-			request.setAttribute("msg","Student Record Uploaded Successfully");
-			
+			request.setAttribute("msg", "Student Record Uploaded Successfully");
+
 			return SUCCESS;
 
 		}
@@ -234,8 +240,6 @@ public class AppAction extends ActionSupport {
 		}
 
 	}
-
-
 
 	public void updateDueAmountOfStudent(Integer feeId, Double feeAmount, String feeName) {
 
