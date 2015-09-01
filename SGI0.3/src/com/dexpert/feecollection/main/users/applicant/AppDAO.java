@@ -67,17 +67,6 @@ public class AppDAO {
 		// Open session from session factory
 		Session session = factory.openSession();
 		AffBean affBean = new AffBean();
-
-		// to get college record based on id to create relationship
-		affBean = aff.viewInstDetail(aplInstId);
-
-		LoginBean loginBean = new LoginBean();
-		loginBean.setUserName(appBean.getEnrollmentNumber());
-
-		// to Encrypt Password
-		PasswordEncryption.encrypt(String.valueOf(appBean.getYear()));
-		String encryptedPwd = PasswordEncryption.encStr;
-
 		if (appBean.getCourse().contentEquals("FE")) {
 
 			appBean.setYearCode("10");
@@ -93,14 +82,28 @@ public class AppDAO {
 
 		}
 
-		if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
-				|| appBean.getEnrollmentNumber().equals("")) {
-
+		try {
+			if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
+					|| appBean.getEnrollmentNumber().equals("")) {
+				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+				String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
+				appBean.setEnrollmentNumber(EnrollNo);
+			}
+		} catch (java.lang.NullPointerException e) {
 			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 			String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
 			appBean.setEnrollmentNumber(EnrollNo);
-
 		}
+
+		// to get college record based on id to create relationship
+		affBean = aff.viewInstDetail(aplInstId);
+
+		LoginBean loginBean = new LoginBean();
+		loginBean.setUserName(appBean.getEnrollmentNumber());
+
+		// to Encrypt Password
+		PasswordEncryption.encrypt(String.valueOf(appBean.getYear()));
+		String encryptedPwd = PasswordEncryption.encStr;
 
 		loginBean.setPassword(encryptedPwd);
 		loginBean.setProfile("Student");
@@ -332,12 +335,14 @@ public class AppDAO {
 			appBean.setAplMobilePri(mobileNumPri.toString());
 			appBean.setAplMobileSec(MobileNumSec.toString());
 			appBean.setYear(admYear.toString());
+
 			if (course.contentEquals("SE (Direct)")) {
 				String c = "SED";
 				appBean.setCourse(c);
 			} else {
 				appBean.setCourse(course);
 			}
+
 			if (appBean.getCourse().contentEquals("FE")) {
 
 				appBean.setYearCode("10");
@@ -352,8 +357,15 @@ public class AppDAO {
 				appBean.setYearCode("60");
 
 			}
+
 			try {
 				appBean.setEnrollmentNumber(enrollNo.toString());
+				if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
+						|| appBean.getEnrollmentNumber().equals("")) {
+					GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+					String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
+					appBean.setEnrollmentNumber(EnrollNo);
+				}
 			} catch (java.lang.NullPointerException e) {
 				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 				String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
@@ -399,10 +411,6 @@ public class AppDAO {
 
 			// to get college record based on id to create relationship
 			affBean = aff.viewInstDetail(clgBean.getInstId());
-
-			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-			Integer enrollNo = Integer.parseInt(en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode()));
-			appBean.setEnrollmentNumber(enrollNo.toString());
 
 			LoginBean loginBean = new LoginBean();
 			loginBean.setUserName(appBean.getEnrollmentNumber());

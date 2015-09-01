@@ -101,6 +101,28 @@ public class AppAction extends ActionSupport {
 	public String registerStudent() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
 			BadPaddingException {
+		log.info("Course  ::" + appBean1.getCourse());
+		log.info("Category  ::" + appBean1.getCategory());
+		log.info("Admission Year  ::" + appBean1.getYear());
+		if (appBean1.getCourse().equals("") || appBean1.getCourse().equals(null) || appBean1.getCourse().equals("null")) {
+			request.setAttribute("msg", "Please Select Course");
+			affInstList = affDAO.getCollegesList();
+			return "failure";
+
+		}
+		if (appBean1.getYear().equals(null) || appBean1.getYear().equals("") || appBean1.getYear().equals("null")) {
+			request.setAttribute("msg", "Please Select Admission Year");
+			affInstList = affDAO.getCollegesList();
+			return "failure";
+
+		}
+		if (appBean1.getCategory().equals("") || appBean1.getCategory().equals(null)
+				|| appBean1.getCategory().equals("null")) {
+			request.setAttribute("msg", "Please Select Category");
+			affInstList = affDAO.getCollegesList();
+			return "failure";
+
+		}
 
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
@@ -115,23 +137,22 @@ public class AppAction extends ActionSupport {
 				return "failure";
 			}
 
-			try {
-				appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
-			} catch (java.lang.NullPointerException e) {
-				request.setAttribute("msg", "Please Enter Enrollment Number");
-				affInstList = affDAO.getCollegesList();
-				return "failure";
-			}
+			// try {
+			appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
+			// } catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Please Enter Enrollment Number");
+			affInstList = affDAO.getCollegesList();
+			// return "failure";
+			// }
 
-			try {
-				updateStudentDue();
-
-			} catch (java.util.NoSuchElementException e) {
-
-				request.setAttribute("msg", "Please Set Fees for Student");
-				affInstList = affDAO.getCollegesList();
-				return "feeNotSet";
-			}
+			/*
+			 * try { updateStudentDue();
+			 * 
+			 * } catch (java.util.NoSuchElementException e) {
+			 * 
+			 * request.setAttribute("msg", "Please Set Fees for Student");
+			 * affInstList = affDAO.getCollegesList(); return "feeNotSet"; }
+			 */
 			request.setAttribute("msg", "Student Addedd Successfully");
 			return SUCCESS;
 

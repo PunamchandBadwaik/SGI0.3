@@ -105,7 +105,7 @@
 			<%
 				if (msg != null)
 
-									{
+																			{
 			%>
 
 			<div
@@ -152,18 +152,16 @@
 														<%
 															if (profile.contentEquals("Affiliated"))
 
-																																																																											{
+																																																																																																																																																																																																			{
 
-																																																																												System.out.print("Profile is ::" + profile);
+																																																																																																																																																																																																				System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
 
-      	{
-
-      		System.out.print("Profile is11111 ::" + profile);
+             											   	{
  %> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
 														<%
@@ -210,29 +208,48 @@
 																var course = document
 																		.getElementById("courseId").value;
 
-																alert(course);
-
 																if (course == 'FE'
 																		|| course == 'SED'
 																		|| course == 'MBA 1'
 																		|| course == 'ME 1') {
 
 																	document
+																			.getElementById("enrollDiv").style.display = "none";
+																	document
+																			.getElementById("labelId").style.display = "none";
+																	document
 																			.getElementById("enrollTextId").required = false;
 
-																	document
-																			.getElementById("enrollTrId").style.display = "none";
-																	document
-																			.getElementById("enrollTdId").style.display = "none";
-
 																} else {
-																	document
-																			.getElementById("enrollTextId").required = true;
 
-																	document
-																			.getElementById("enrollTrId").style.display = "block";
-																	document
-																			.getElementById("enrollTdId").style.display = "block";
+																	var xmlhttp;
+																	if (window.XMLHttpRequest) {
+																		xmlhttp = new XMLHttpRequest();
+																	} else {
+																		xmlhttp = new ActiveXObject(
+																				"Microsoft.XMLHTTP");
+																	}
+																	xmlhttp.onreadystatechange = function() {
+																		if (xmlhttp.readyState == 4
+																				&& xmlhttp.status == 200) {
+																			document
+																					.getElementById("enrollDiv").innerHTML = xmlhttp.responseText;
+																			document
+																					.getElementById("enrollDiv").style.display = "block";
+																			document
+																					.getElementById("labelId").style.display = "block";
+																			document
+																					.getElementById("enrollTextId").required = true;
+
+																		}
+																	}
+																	xmlhttp
+																			.open(
+																					"GET",
+																					"StudentAjaxRollNo.jsp",
+																					true);
+																	xmlhttp
+																			.send();
 
 																}
 
@@ -241,18 +258,25 @@
 
 												</tr>
 
+
+
+
+
+
 												<tr>
-													<div>
-													<td id="enrollTrId">Student Enrollment Number</td>
-													<td id="enrollTdId" colspan="2"><div id="the-basics"
-															class="has-success">
-															<input name="appBean1.enrollmentNumber" id="enrollTextId"
-																value='<s:property value="appBean1.enrollmentNumber"/>'
-																placeholder="Enrollment Number" type="text"
-																class="form-control">
-														</div></td>
-													<div>
+
+													<td id="labelId" style="display: none;">Student
+														Enrollment No.</td>
+													<td colspan="2">
+
+														<div id="the-basics" class="has-success">
+
+															<div id="enrollDiv"></div>
+														</div>
+													</td>
+
 												</tr>
+
 												<tr>
 
 													<td>Student Name</td>
@@ -281,30 +305,32 @@
 																<s:property value="appBean1.gender" />
 															</s:set>
 															<s:if test='%{#gender=="Male"}'>
-																<input type="radio" required="required"
+																<label> <input type="radio" required="required"
 																	name="appBean1.gender" checked="checked"
 																	id="userPrefixMr" value="Male">Male
-															&nbsp;&nbsp;&nbsp;<input type="radio" required="required"
-																	name="appBean1.gender" id="userPrefixMrs"
-																	value="Female">Female
-															
+																</label>
+															&nbsp;&nbsp;&nbsp;<label><input type="radio"
+																	required="required" name="appBean1.gender"
+																	id="userPrefixMrs" value="Female">Female</label>
+
 															</s:if>
 															<s:elseif test='%{#gender=="Female"}'>
-																<input type="radio" required="required"
-																	name="appBean1.gender" id="userPrefixMr" value="Male">Male
-															&nbsp;&nbsp;&nbsp;<input checked="checked" type="radio"
-																	required="required" name="appBean1.gender"
-																	id="userPrefixMrs" value="Female">Female
-															
+																<label><input type="radio" required="required"
+																	name="appBean1.gender" id="userPrefixMr" value="Male">Male</label>
+															&nbsp;&nbsp;&nbsp;	<label><input
+																	checked="checked" type="radio" required="required"
+																	name="appBean1.gender" id="userPrefixMrs"
+																	value="Female">Female</label>
+
 															</s:elseif>
 
 															<s:else>
-																<input type="radio" required="required"
-																	name="appBean1.gender" id="userPrefixMr" value="Male">Male
-															&nbsp;&nbsp;&nbsp;<input type="radio" required="required"
-																	name="appBean1.gender" id="userPrefixMrs"
-																	value="Female">Female
-															
+																<label><input type="radio" required="required"
+																	name="appBean1.gender" id="userPrefixMr" value="Male">Male</label>
+															&nbsp;&nbsp;&nbsp;	<label><input type="radio"
+																	required="required" name="appBean1.gender"
+																	id="userPrefixMrs" value="Female">Female</label>
+
 															</s:else>
 
 
