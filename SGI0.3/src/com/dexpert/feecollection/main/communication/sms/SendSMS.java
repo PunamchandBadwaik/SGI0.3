@@ -11,18 +11,15 @@ public class SendSMS {
 
 	// create an account on ipipi.com with the given username and password
 
-	public void msgsend(String recipient) {
+	public void msgsend(String recipient, String message) {
 
 		try {
 
-			String message = "Hi Punamchand";
 			String username = "9999600509";
 			String password = "abechor2014";
-			//String originator = "9999600509";
-			String sender="AdDesk";
-			String requestUrl = "http://bhashsms.com/api/sendmsg.php?user=" + username
-					+ "&pass=" + password + "&sender=" + sender+"&phone="
-					+ recipient + "&text"+message+"&priority=nontemplate&stype=normal";
+			String sender = "AdDesk";
+			String requestUrl = "http://bhashsms.com/api/sendmsg.php?user=" + username + "&pass=" + password
+					+ "&sender=" + sender + "&phone=" + recipient + "&text" + message + "&priority=ndnd&stype=normal";
 			URL url = new URL(requestUrl);
 			HttpURLConnection uc = (HttpURLConnection) url.openConnection();
 			System.out.println("Success message :" + uc.getResponseMessage());

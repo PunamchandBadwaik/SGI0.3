@@ -37,6 +37,7 @@ import COM.rsa.Intel.cr;
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
+import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
@@ -121,6 +122,37 @@ public class AppDAO {
 			session.saveOrUpdate(appBean);
 			tx.commit();
 
+			try {
+
+				if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
+						|| appBean.getAplEmail().equals(null)) {
+
+				} else {
+					String user = appBean.getEnrollmentNumber();
+					String pass = appBean.getYear();
+					String msg = "Username is :" + user + " and " + "Passsword is :" + pass;
+					SendSMS sms = new SendSMS();
+					sms.msgsend(appBean.getAplMobilePri(), msg);
+
+				}
+			} catch (java.lang.NullPointerException e) {
+
+			}
+
+			try {
+
+				if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
+						|| appBean.getAplEmail().equals(null)) {
+
+				} else {
+					EmailSessionBean email = new EmailSessionBean();
+					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
+							appBean.getYear(), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+
+				}
+			} catch (java.lang.NullPointerException e) {
+
+			}
 		} finally {
 
 			session.close();

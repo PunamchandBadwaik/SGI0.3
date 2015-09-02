@@ -22,6 +22,7 @@ import org.apache.struts2.ServletActionContext;
 import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 
 import com.dexpert.feecollection.challan.TransactionBean;
+import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
 import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
@@ -138,28 +139,28 @@ public class AppAction extends ActionSupport {
 				return "failure";
 			}
 
-			// try {
-			appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
-			// } catch (java.lang.NullPointerException e) {
-			request.setAttribute("msg", "Please Enter Enrollment Number");
-			affInstList = affDAO.getCollegesList();
-			// return "failure";
-			// }
+			try {
+				appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
+			} catch (java.lang.NullPointerException e) {
+				request.setAttribute("msg", "Please Enter Enrollment Number");
+				affInstList = affDAO.getCollegesList();
+				return "failure";
+			}
 
-			/*
-			 * try { updateStudentDue();
-			 * 
-			 * } catch (java.util.NoSuchElementException e) {
-			 * 
-			 * request.setAttribute("msg", "Please Set Fees for Student");
-			 * affInstList = affDAO.getCollegesList(); return "feeNotSet"; }
-			 */
+			try {
+				updateStudentDue();
+
+			} catch (java.util.NoSuchElementException e) {
+
+				request.setAttribute("msg", "Please Set Fees for Student");
+				affInstList = affDAO.getCollegesList();
+				return "feeNotSet";
+			}
+
 			request.setAttribute("msg", "Student Addedd Successfully");
-			
-			//String smsUrl="http://bhashsms.com/api/sendmsg.php?";
-			
-			SendSMS sms = new SendSMS();
-			sms.msgsend(appBean1.getAplMobilePri());
+
+			// String smsUrl="http://bhashsms.com/api/sendmsg.php?";
+
 			return SUCCESS;
 
 		} else {

@@ -105,7 +105,7 @@
 			<%
 				if (msg != null)
 
-																			{
+																				{
 			%>
 
 			<div
@@ -152,16 +152,16 @@
 														<%
 															if (profile.contentEquals("Affiliated"))
 
-																																																																																																																																																																																																			{
+																																																																																																																																																																																																															{
 
-																																																																																																																																																																																																				System.out.print("Profile is ::" + profile);
+																																																																																																																																																																																																																System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
 
-             											   	{
+              											   	{
  %> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
 														<%
@@ -397,7 +397,7 @@
 													<td>Email Id</td>
 													<td colspan="2"><div id="the-basics"
 															class="has-success">
-															<input required="required" id="Contact"
+															<input id="Contact"
 																value='<s:property value="appBean1.aplEmail"/>'
 																name="appBean1.aplEmail" placeholder="Email ID"
 																type="email" class="form-control">
