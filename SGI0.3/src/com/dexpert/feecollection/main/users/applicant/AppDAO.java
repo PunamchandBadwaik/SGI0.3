@@ -133,6 +133,8 @@ public class AppDAO {
 					String msg = "Username is :" + user + " and " + "Passsword is :" + pass;
 					SendSMS sms = new SendSMS();
 					sms.msgsend(appBean.getAplMobilePri(), msg);
+					
+					
 
 				}
 			} catch (java.lang.NullPointerException e) {
