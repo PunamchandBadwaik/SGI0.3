@@ -22,6 +22,7 @@ import org.apache.struts2.ServletActionContext;
 import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 
 import com.dexpert.feecollection.challan.TransactionBean;
+import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
@@ -154,6 +155,11 @@ public class AppAction extends ActionSupport {
 			 * affInstList = affDAO.getCollegesList(); return "feeNotSet"; }
 			 */
 			request.setAttribute("msg", "Student Addedd Successfully");
+			
+			//String smsUrl="http://bhashsms.com/api/sendmsg.php?";
+			
+			SendSMS sms = new SendSMS();
+			sms.msgsend(appBean1.getAplMobilePri());
 			return SUCCESS;
 
 		} else {
