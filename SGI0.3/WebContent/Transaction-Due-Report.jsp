@@ -300,7 +300,7 @@
 											<tr>
 												<th width="7%">Sr. No.</th>
 												<th>Student Enroll Number</th>
-												<th>Tranaction ID</th>
+												<th>Transaction ID</th>
 												<th>Mode Of Tranaction</th>
 												<th>Payee Name</th>
 												<th>Payee Mobile</th>
@@ -309,7 +309,7 @@
 												<th>Amount</th>
 												<th>Status</th>
 
-												<th>Tranaction Date</th>
+												<th>Transaction Date</th>
 
 
 											</tr>

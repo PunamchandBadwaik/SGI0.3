@@ -304,16 +304,14 @@
 	<script src="js/charisma.js"></script>
 
 	<script>
-		function OpenSummaryInParent() {
-			window.opener.location = "College-Payment-Summary.html";
-			window.close();
-
-		}
+	
 		
 		
 		function updateCollege(instId)
 		{
-			window.location = "editCollegeDetails?instId="+instId;
+			window.location="LockFeature.jsp";
+			
+			/* window.location = "editCollegeDetails?instId="+instId; */
 			
 			
 		}
