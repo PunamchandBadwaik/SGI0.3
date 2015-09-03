@@ -18,6 +18,7 @@ import org.hibernate.criterion.Restrictions;
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
+import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
 
@@ -64,6 +65,23 @@ public class ApplicantFeeCollectionDAO {
 
 	}
 
+	public TransactionBean getTransaction(String txnId)
+	{
+		Session session=factory.openSession();
+		Criteria cr=session.createCriteria(TransactionBean.class);
+		cr.add(Restrictions.eq("txnId", txnId));
+		TransactionBean res=(TransactionBean) cr.list().iterator().next();
+		return res;
+	}
+	public ArrayList<BulkPaymentBean>getBulkPayments(String txnId)
+	{
+		
+		Session session=factory.openSession();
+		Criteria cr=session.createCriteria(BulkPaymentBean.class);
+		cr.add(Restrictions.eq("txnId", txnId));
+		ArrayList<BulkPaymentBean>resList=new ArrayList<BulkPaymentBean>(cr.list());
+		return resList;
+	}
 	public void updateTransTable(String txnId, String RspCode, String dueStr, String studentEnrollmentNo, String payMode) {
 		TransactionBean newBean = new TransactionBean();
 		newBean.setTxnId(txnId);
@@ -195,4 +213,32 @@ public class ApplicantFeeCollectionDAO {
 		session.close();
 	}
 
+	public void insertBulkPayDetails(ArrayList<BulkPaymentBean> savelist) {
+		// Declarations
+
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			for (int i = 0; i < savelist.size(); i++) {
+				BulkPaymentBean savebean = new BulkPaymentBean();
+				savebean = savelist.get(i);
+				session.save(savebean);
+				if (i % 20 == 0) { // 20, same as the JDBC batch size
+					// flush a batch of inserts and release memory:
+					session.flush();
+					session.clear();
+				}
+			}
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			// close session
+			session.close();
+		}
+	}
 }
+
+

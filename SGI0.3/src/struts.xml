@@ -178,7 +178,7 @@
 			<result name="editUni">Edit-University.jsp</result>
 			<result name="editSu">Edit-SuperAdmin.jsp</result>
 			<result name="editOp">Edit-Operator.jsp</result>
-			
+
 		</action>
 
 
@@ -684,6 +684,14 @@
 			<result name="error">Login.jsp</result>
 
 		</action>
+		<action name="PayBulk"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="operatorStudentPaymentBulk">
+			<result name="success">Success.jsp</result>
+			<result name="error">Login.jsp</result>
+
+		</action>
+		
 		<action name="StudentPayment"
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
 			method="studentPayment">
@@ -768,5 +776,20 @@
 
 	</package>
 
+	<package name="Cart" extends="struts-default">
+		<action name="getCart" class="com.dexpert.feecollection.main.fee.CartActions"
+			method="ShowCart">
+
+			<result name="success">/Cart.jsp</result>
+		</action>
+		<action name="addToCart" class="com.dexpert.feecollection.main.fee.CartActions"
+			method="AddToCart">
+			<result name="success" type="redirect">getCart</result>
+		</action>
+		<action name="RemFromCart" class="com.dexpert.feecollection.main.fee.CartActions"
+			method="RemoveFromCart">
+			<result name="success" type="redirect">getCart</result>
+		</action>
+	</package>
 
 </struts>

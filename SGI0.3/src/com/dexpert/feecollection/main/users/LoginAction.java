@@ -159,7 +159,7 @@ public class LoginAction extends ActionSupport {
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
 				usercookie.setMaxAge(60 * 60);
 				response.addCookie(usercookie);
-
+				httpSession.setAttribute("cart_init", 0);
 				httpSession.setAttribute("loginUserBean", lgbean);
 
 				if (lgbean.getAffBean() != null) {
@@ -186,6 +186,7 @@ public class LoginAction extends ActionSupport {
 
 					httpSession.setAttribute("sesProfile", "CollegeOperator");
 					httpSession.setAttribute("dashLink", "index-College-Operator.jsp");
+					httpSession.setAttribute("oprBean", lgbean.getOperatorBean());
 					return "collegeOperator";
 				}
 
@@ -232,7 +233,7 @@ public class LoginAction extends ActionSupport {
 		httpSession.removeAttribute("loginBean");
 		httpSession.removeAttribute("sesProfile");
 		httpSession.removeAttribute("dashLink");
-
+		httpSession.removeAttribute("cart_init");
 		request.setAttribute("redirectLink", "Login.jsp");
 
 		return SUCCESS;

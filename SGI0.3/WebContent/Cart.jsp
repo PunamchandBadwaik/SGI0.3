@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <html lang="en">
 <head>
   
@@ -87,52 +88,31 @@
 												
 												<tr>
 													<th>Sr. No.</th>
-													<th>Fee Type</th>
-													<th>Department</th>
+													<th>Student Name</th>
+													<th>Enrollment Number</th>
+													
 													<th>Fee Amount</th>
 													<th></th>
 												</tr>
 											</thead>
 											<tbody>
+											<s:iterator value="cartList" >
 												<tr>
-													<td>1</td>
-													<td>Admission Fee</td>
-													<td>UG</td>
-													<td><i class="fa fa-inr"></i>10000</td>
-													<td><button class="btn btn-sm btn-danger" title="Remove From Cart"><i class="fa fa-trash-o"></i></button></td>
+													<td><s:property value="id" /></td>
+													<td><s:property value="name" /></td>
+													<td><s:property value="appId" /></td>
+													
+													<td><i class="fa fa-inr"></i><s:property value="amount" /></td>
+													<td><button class="btn btn-sm btn-danger" title="Remove From Cart" onclick='window.location="RemFromCart?cart_rem_id=<s:property value='id' />"'><i class="fa fa-trash-o"></i></button></td>
+													
 												</tr>
-												<tr>
-													<td>2</td>
-													<td>Admission Fee</td>
-													<td>PG</td>
-													<td><i class="fa fa-inr"></i>10000</td>
-													<td><button class="btn btn-sm btn-danger" title="Remove From Cart"><i class="fa fa-trash-o"></i></button></td>
-												</tr>
-												<tr>
-													<td>3</td>
-													<td>Affiliation Fee</td>
-													<td>UG</td>
-													<td><i class="fa fa-inr"></i>10000</td>
-													<td><button class="btn btn-sm btn-danger" title="Remove From Cart"><i class="fa fa-trash-o"></i></button></td>
-												</tr>
-												<tr>
-													<td>4</td>
-													<td>Examination Fee</td>
-													<td>-</td>
-													<td><i class="fa fa-inr"></i>10000</td>
-													<td><button class="btn btn-sm btn-danger" title="Remove From Cart"><i class="fa fa-trash-o"></i></button></td>
-												</tr>
-												<tr>
-													<td>5</td>
-													<td>Affiliation Fee</td>
-													<td>PG</td>
-													<td><i class="fa fa-inr"></i>10000</td>
-													<td><button class="btn btn-sm btn-danger" title="Remove From Cart"><i class="fa fa-trash-o"></i></button></td>
-												</tr>
+												</s:iterator>
+												
 												<tr>
 													<td>&nbsp;</td>
 													<td><strong>Total</strong></td>
-												  <td><i class="fa fa-inr"></i><strong>50000</strong></td>
+												  <td></td>
+													<td><i class="fa fa-inr"></i><strong> <s:property value="cartTotal" /></strong></td>
 													<td></td>
 												</tr>
 											</tbody>
@@ -143,7 +123,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3"><button onclick='OpenSummaryInParent()' class="btn btn-success">Pay Now</button></div>
+						<div class="col-md-3"><button onclick='PayCart()' class="btn btn-success">Pay Now</button></div>
 						<div class="col-md-6"></div>
 						<div class="col-md-3"><button onclick="window.close()" class="btn btn-info">Close Cart</button></div>
 </div>
@@ -226,6 +206,11 @@ function OpenSummaryInParent()
 	window.opener.location="College-Payment-Summary.html";
 	window.close();
 	
+	}
+	function PayCart()
+	{
+		window.location="PayBulk";
+		window.resizeTo(screen.width, screen.height);
 	}
 </script>
 </body>

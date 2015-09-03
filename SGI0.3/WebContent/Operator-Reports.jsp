@@ -144,7 +144,19 @@ try{
 				</ul>
 			</div>
 			<!-- theme selector ends -->
-
+	<!----Cart Button Starts--->
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					
+					<li><a href="#" onclick='openCart()'>View Cart</a></li>
+				</ul>
+			</div>
+			<!-- cart button ends -->
 		</div>
 	</div>
 	<!-- topbar ends -->
@@ -732,7 +744,14 @@ try{
 		$("#selectReportType").chosen({
 			disable_search_threshold : 10
 		})
+		
+		
 	</script>
-
+<script>
+function openCart()
+{
+	window.open("getCart","CartWindow","height=1080,width=700");
+	}
+</script>
 </body>
 </html>

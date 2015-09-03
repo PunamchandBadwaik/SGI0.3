@@ -3,13 +3,10 @@ package com.dexpert.feecollection.main.payment.studentPayment;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,10 +17,11 @@ import org.apache.struts2.ServletActionContext;
 
 import com.dexpert.feecollection.challan.ChallanDAO;
 import com.dexpert.feecollection.challan.TransactionBean;
+import com.dexpert.feecollection.main.fee.CartDataBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupAction;
-import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
 import com.dexpert.feecollection.main.users.applicant.AppDAO;
+import com.dexpert.feecollection.main.users.operator.OperatorBean;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class ApplicantFeeCollectionAction extends ActionSupport {
@@ -64,6 +62,29 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		HttpSession session = (HttpSession) httpSession.getServletContext().getAttribute("txnId");
 		HashMap<String, String> hmap = (HashMap<String, String>) session.getAttribute("hmap");
 		String clientTranId = hmap.get("txnID");
+		TransactionBean transBean=dao.getTransaction(clientTranId);
+		if(transBean.getBulkPay()!=null&&transBean.getBulkPay()==1)
+		{
+			ArrayList<BulkPaymentBean>bulkdetails=new ArrayList<BulkPaymentBean>();
+			bulkdetails=dao.getBulkPayments(clientTranId);
+			
+			for (int i = 0; i < bulkdetails.size(); i++) {
+				
+		
+			if (respCode.equals("0")) {
+				dao.updateFeeduesTableDetail(bulkdetails.get(i).getDueString());
+
+				request.setAttribute("msg", " Congratulations.., Your Transaction Successfully Done..");
+				request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
+
+			} else {
+				request.setAttribute("msg", "Sorry, Your Transaction Declined..");
+				request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
+			}
+			}
+		}
+		else
+		{
 		String dueString = dao.getDueString(clientTranId);
 		if (respCode.equals("0")) {
 			dao.updateFeeduesTableDetail(dueString);
@@ -75,7 +96,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			request.setAttribute("msg", "Sorry, Your Transaction Declined..");
 			request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
 		}
-
+		}
 		return SUCCESS;
 	}
 
@@ -117,6 +138,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			tran.setTxnId(txnId);
 			tran.setPayeeAmount(fee);
 			tran.setStatus("Pending");
+			tran.setBulkPay(0);
 			//
 			dao.insertPaymentDetails(tran);
 			String name = studentDetails.getAplFirstName();
@@ -137,6 +159,89 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			response.sendRedirect(url);
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Session Time Out");
+			return ERROR;
+		}
+
+	}
+	
+	public String operatorStudentPaymentBulk() throws IOException {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		Date date = new Date(timestamp.getTime());
+		AppBean studentDetails = new AppBean();
+		BulkPaymentBean bulkBean=new BulkPaymentBean();
+		ArrayList<CartDataBean> cartList = new ArrayList<CartDataBean>();
+		ArrayList<BulkPaymentBean>bulkPayList=new ArrayList<BulkPaymentBean>();
+		try {
+			Integer cartInit = (Integer) httpSession.getAttribute("cart_init");
+			String enrollmentNumber="0";
+
+			String txnId = Idgenerator.transxId();
+			/* String user = request.getParameter("feeName"); */
+			//Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
+			Double feeTot=(double)0;
+			String dueString = "NA";
+			//populate the bulk payment table
+			if (cartInit == 0) {
+				return ERROR;
+
+			} else if (cartInit == 1) {
+				cartList = (ArrayList<CartDataBean>) httpSession.getAttribute("cart_list");
+				for (int i = 0; i < cartList.size(); i++) {
+					CartDataBean cartdata=cartList.get(i);
+					enrollmentNumber = cartdata.getAppId().trim();
+					studentDetails = appDAO.getUserDetail(enrollmentNumber);
+					bulkBean.setDueString(cartdata.getDueString());
+					bulkBean.setStudentEnrollmentNumber(cartdata.getAppId());
+					bulkBean.setTransId(txnId);
+					bulkBean.setInsId(studentDetails.getAffBeanStu().getInstId());
+					bulkBean.setPayeeAdd(studentDetails.getAplAddress());
+					bulkBean.setPayeeEmail(studentDetails.getAplEmail());
+					bulkBean.setPayeeMob(studentDetails.getAplMobilePri());
+					bulkBean.setPayeeName(studentDetails.getAplFirstName()+" "+studentDetails.getAplLstName());
+					bulkBean.setPayeeAmount(cartdata.getAmount());
+					feeTot=feeTot+cartdata.getAmount();
+					bulkPayList.add(bulkBean);
+				}
+				dao.insertBulkPayDetails(bulkPayList);
+			} else {
+				return ERROR;
+			}
+			// insert details into transaction bean
+			TransactionBean tran = new TransactionBean();
+			tran.setInsId(studentDetails.getAffBeanStu().getInstId());
+			tran.setDueString(dueString);
+			tran.setPayeeAdd("NA");
+			tran.setPayeeEmail("NA");
+			tran.setPayeeMob("NA");
+			tran.setPayeeName("Bulk Transaction");
+			tran.setStudentEnrollmentNumber("NA");
+			tran.setTransDate(date);
+			tran.setTxnId(txnId);
+			tran.setPayeeAmount(feeTot);
+			tran.setStatus("Pending");
+			tran.setBulkPay(1);
+			//
+			dao.insertPaymentDetails(tran);
+			OperatorBean oprBean = (OperatorBean)httpSession.getAttribute("oprBean");
+			String name=oprBean.getOperatorName()+" "+oprBean.getOperatorLstName();
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+
+			hashMap.put("enrollId", "Bulk Payment");
+			hashMap.put("txnID", txnId);
+			httpSession.setAttribute("dueStr", dueString);
+			httpSession.setAttribute("hmap", hashMap);
+			httpSession.getServletContext().setAttribute(txnId, httpSession);
+
+			String url = "http://" + SabPaisaURL + "/SabPaisa?Name=" + name + "&amt=" + feeTot + "&txnId=" + txnId
+					+ "&RollNo=" + "Bulk Payment" + "&client=SGI" + "&ru=" + returnUrl + "&Contact="
+					+ oprBean.getOperatorContact() + "&failureURL=" + clientFailureUrl + "&Email="
+					+ oprBean.getOperatorEmail() + "&Add=" + oprBean.getOperatorAddress();
+
+			response.sendRedirect(url);
+			return SUCCESS;
+		} catch (java.lang.NullPointerException e) {
+			e.printStackTrace();
 			request.setAttribute("msg", "Session Time Out");
 			return ERROR;
 		}

@@ -49,6 +49,7 @@
 		<mapping class="com.dexpert.feecollection.challan.ChallanBean" />
 
 		<mapping class="com.dexpert.feecollection.challan.TransactionBean" />
+		<mapping class="com.dexpert.feecollection.main.payment.studentPayment.BulkPaymentBean" />
 
 
 

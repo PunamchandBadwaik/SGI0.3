@@ -143,7 +143,19 @@
 				</ul>
 			</div>
 			<!-- theme selector ends -->
-
+			<!----Cart Button Starts--->
+			<div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					
+					<li><a href="#" onclick="openCart()">View Cart</a></li>
+				</ul>
+			</div>
+			<!-- cart button ends -->
 		</div>
 	</div>
 	<!-- topbar ends -->
@@ -436,12 +448,15 @@
 										</tr>
 
 										<tr>
-											<td colspan="9"><span style="float: right;"> <input
+										<td > <input
+													type="button" class="btn btn-info" id="btnPayment"
+													value="Add To Cart" onclick="return validateFees(1)"></td>
+											<td colspan="8"><span style="float: right;"> <input
 													type="button" class="btn btn-danger" id="btnPayment"
-													value="Proceed to Payment" onclick="return validateFees()"></span>
+													value="Proceed to Payment" onclick="return validateFees(0)"></span>
 
 												<script type="text/javascript">
-														function validateFees() {
+														function validateFees(cart) {
 															var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															
@@ -497,10 +512,19 @@
 																
 																
 															var enrollId=document.getElementById("enrollId").value;
-																
-																document.getElementById("paymentDueStr").value=dueStr;
-																var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId;
+															document.getElementById("paymentDueStr").value=dueStr;
+															var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId;
+																if(cart=="0")
+																	{
+																	//Don't Add to Cart and continue with payment
+																	
 																window.location="OperatorStudentPayment"+queryString;
+																	}
+																if(cart=="1")
+																	{
+																	window.open("addToCart"+queryString,"CartWindow","height=1080,width=700");
+																	}
+																
 																return true;
 															}
 														}
@@ -603,6 +627,11 @@
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-
+<script>
+function openCart()
+{
+	window.open("getCart","CartWindow","height=1080,width=700");
+	}
+</script>
 </body>
 </html>
