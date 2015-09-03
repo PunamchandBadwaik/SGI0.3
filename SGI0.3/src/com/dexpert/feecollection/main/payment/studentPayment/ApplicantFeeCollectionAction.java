@@ -30,9 +30,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	 * 
 	 */
 
-	public String SabPaisaURL = "49.50.72.228:8080";
-	public String returnUrl = "http://49.50.72.228:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://49.50.72.228:8080/SGI0.3/Login.jsp";
+	public String SabPaisaURL = "localhost:8081";
+	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
 
 	private static final long serialVersionUID = 1L;
 	HttpServletRequest request = ServletActionContext.getRequest();
@@ -62,17 +62,28 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		HttpSession session = (HttpSession) httpSession.getServletContext().getAttribute("txnId");
 		HashMap<String, String> hmap = (HashMap<String, String>) session.getAttribute("hmap");
 		String clientTranId = hmap.get("txnID");
-		TransactionBean transBean=dao.getTransaction(clientTranId);
-		if(transBean.getBulkPay()!=null&&transBean.getBulkPay()==1)
-		{
-			ArrayList<BulkPaymentBean>bulkdetails=new ArrayList<BulkPaymentBean>();
-			bulkdetails=dao.getBulkPayments(clientTranId);
-			
+		TransactionBean transBean = dao.getTransaction(clientTranId);
+		if (transBean.getBulkPay() != null && transBean.getBulkPay() == 1) {
+			ArrayList<BulkPaymentBean> bulkdetails = new ArrayList<BulkPaymentBean>();
+			bulkdetails = dao.getBulkPayments(clientTranId);
+
 			for (int i = 0; i < bulkdetails.size(); i++) {
-				
-		
+
+				if (respCode.equals("0")) {
+					dao.updateFeeduesTableDetail(bulkdetails.get(i).getDueString());
+
+					request.setAttribute("msg", " Congratulations.., Your Transaction Successfully Done..");
+					request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
+
+				} else {
+					request.setAttribute("msg", "Sorry, Your Transaction Declined..");
+					request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
+				}
+			}
+		} else {
+			String dueString = dao.getDueString(clientTranId);
 			if (respCode.equals("0")) {
-				dao.updateFeeduesTableDetail(bulkdetails.get(i).getDueString());
+				dao.updateFeeduesTableDetail(dueString);
 
 				request.setAttribute("msg", " Congratulations.., Your Transaction Successfully Done..");
 				request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
@@ -81,21 +92,6 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 				request.setAttribute("msg", "Sorry, Your Transaction Declined..");
 				request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
 			}
-			}
-		}
-		else
-		{
-		String dueString = dao.getDueString(clientTranId);
-		if (respCode.equals("0")) {
-			dao.updateFeeduesTableDetail(dueString);
-
-			request.setAttribute("msg", " Congratulations.., Your Transaction Successfully Done..");
-			request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
-
-		} else {
-			request.setAttribute("msg", "Sorry, Your Transaction Declined..");
-			request.setAttribute("txnID", "Transaction ID is :: " + clientTranId);
-		}
 		}
 		return SUCCESS;
 	}
@@ -164,31 +160,32 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		}
 
 	}
-	
+
 	public String operatorStudentPaymentBulk() throws IOException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Date date = new Date(timestamp.getTime());
 		AppBean studentDetails = new AppBean();
-		BulkPaymentBean bulkBean=new BulkPaymentBean();
+		BulkPaymentBean bulkBean = new BulkPaymentBean();
 		ArrayList<CartDataBean> cartList = new ArrayList<CartDataBean>();
-		ArrayList<BulkPaymentBean>bulkPayList=new ArrayList<BulkPaymentBean>();
+		ArrayList<BulkPaymentBean> bulkPayList = new ArrayList<BulkPaymentBean>();
 		try {
 			Integer cartInit = (Integer) httpSession.getAttribute("cart_init");
-			String enrollmentNumber="0";
+			String enrollmentNumber = "0";
 
 			String txnId = Idgenerator.transxId();
 			/* String user = request.getParameter("feeName"); */
-			//Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
-			Double feeTot=(double)0;
+			// Double fee =
+			// Double.parseDouble(request.getParameter("totalPaidAmount"));
+			Double feeTot = (double) 0;
 			String dueString = "NA";
-			//populate the bulk payment table
+			// populate the bulk payment table
 			if (cartInit == 0) {
 				return ERROR;
 
 			} else if (cartInit == 1) {
 				cartList = (ArrayList<CartDataBean>) httpSession.getAttribute("cart_list");
 				for (int i = 0; i < cartList.size(); i++) {
-					CartDataBean cartdata=cartList.get(i);
+					CartDataBean cartdata = cartList.get(i);
 					enrollmentNumber = cartdata.getAppId().trim();
 					studentDetails = appDAO.getUserDetail(enrollmentNumber);
 					bulkBean.setDueString(cartdata.getDueString());
@@ -198,9 +195,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 					bulkBean.setPayeeAdd(studentDetails.getAplAddress());
 					bulkBean.setPayeeEmail(studentDetails.getAplEmail());
 					bulkBean.setPayeeMob(studentDetails.getAplMobilePri());
-					bulkBean.setPayeeName(studentDetails.getAplFirstName()+" "+studentDetails.getAplLstName());
+					bulkBean.setPayeeName(studentDetails.getAplFirstName() + " " + studentDetails.getAplLstName());
 					bulkBean.setPayeeAmount(cartdata.getAmount());
-					feeTot=feeTot+cartdata.getAmount();
+					feeTot = feeTot + cartdata.getAmount();
 					bulkPayList.add(bulkBean);
 				}
 				dao.insertBulkPayDetails(bulkPayList);
@@ -223,8 +220,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			tran.setBulkPay(1);
 			//
 			dao.insertPaymentDetails(tran);
-			OperatorBean oprBean = (OperatorBean)httpSession.getAttribute("oprBean");
-			String name=oprBean.getOperatorName()+" "+oprBean.getOperatorLstName();
+			OperatorBean oprBean = (OperatorBean) httpSession.getAttribute("oprBean");
+			String name = oprBean.getOperatorName() + " " + oprBean.getOperatorLstName();
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 
 			hashMap.put("enrollId", "Bulk Payment");
@@ -327,7 +324,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 			String url = "http://" + SabPaisaURL + "/SabPaisa?Name=" + name + "&amt=" + fee + "&txnId=" + txnId
 					+ "&RollNo=" + enrollmentId + "&client=SGI" + "&ru=" + returnUrl + "&Contact="
-					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl;
+					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl + "&Email="
+					+ studentDetails.getAplEmail();
 
 			response.sendRedirect(url);
 			return SUCCESS;
@@ -352,8 +350,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 		challanDAO.saveToTransaction(enrollmentId, mobile, txnId, studFee);
 
-		String url = "http://"+SabPaisaURL+"/SabPaisa?Name=" + name + "&amt=" + fee + "&Contact=" + mobile + "&RollNo="
-				+ enrollmentId + "&client=SGI" + "&ru=" + returnUrl + "&txnId=" + txnId;
+		String url = "http://" + SabPaisaURL + "/SabPaisa?Name=" + name + "&amt=" + fee + "&Contact=" + mobile
+				+ "&RollNo=" + enrollmentId + "&client=SGI" + "&ru=" + returnUrl + "&txnId=" + txnId;
 
 		response.sendRedirect(url);
 

@@ -207,14 +207,14 @@
 							%>
 							<li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> Parent Institute</span></a></li>
-						
+
 							<li><a class="ajax-link" href="getCollegeList"><i
 									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-						
+
 							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
 									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-							
-							
+
+
 							<li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
 
@@ -321,10 +321,22 @@
 											<s:iterator value="transactionDetailsForReport">
 												<tr>
 													<td><span style="margin-left: 10px;"><%=i%></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="studentEnrollmentNumber" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="txnId" /></span></td>
+													<td><s:set var="val">
+															<s:property value="studentEnrollmentNumber" />
+														</s:set> <s:if test='%{#val=="NA"}'>
+
+															<a href="#" onclick="window.open('showBulkTrans?transId=<s:property value="txnId" />','Bulk Transaction','width=700,height=500')" title="View Detail"> <span style="margin-left: 10px;"><s:property
+																		value="studentEnrollmentNumber" /></span>
+
+															</a>
+
+
+														</s:if> <s:else>
+															<span style="margin-left: 10px;"><s:property
+																	value="studentEnrollmentNumber" /></span>
+
+														</s:else></td>
+													<td><span style="margin-left: 10px;"><s:property value="txnId" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property
 																value="paymentMode" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property

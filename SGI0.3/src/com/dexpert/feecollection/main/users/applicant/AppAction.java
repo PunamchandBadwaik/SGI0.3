@@ -147,19 +147,17 @@ public class AppAction extends ActionSupport {
 				return "failure";
 			}
 
-			/*try {
-				//updateStudentDue();
+			try {
+				updateStudentDue();
 
 			} catch (java.util.NoSuchElementException e) {
 
 				request.setAttribute("msg", "Please Set Fees for Student");
 				affInstList = affDAO.getCollegesList();
 				return "feeNotSet";
-			}*/
+			}
 
 			request.setAttribute("msg", "Student Addedd Successfully");
-
-			// String smsUrl="http://bhashsms.com/api/sendmsg.php?";
 
 			return SUCCESS;
 
@@ -361,6 +359,13 @@ public class AppAction extends ActionSupport {
 			request.setAttribute("msg", "Session Time Out");
 			return ERROR;
 		}
+		return SUCCESS;
+	}
+
+	public String showBulkTransDetail() {
+
+		String transactionId = request.getParameter("transId");
+
 		return SUCCESS;
 	}
 

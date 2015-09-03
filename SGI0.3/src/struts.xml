@@ -424,6 +424,8 @@
 
 		</action>
 
+		
+
 
 
 	</package>
@@ -518,14 +520,6 @@
 			<result name="failure">AddBulkStudent.jsp</result>
 			<result name="error">Login.jsp</result>
 
-
-
-
-
-
-
-
-
 		</action>
 
 		<action name="registerStudent"
@@ -538,6 +532,15 @@
 			<result name="feeNotSet">StudentForm.jsp</result>
 
 		</action>
+		
+		<action name="showBulkTrans"
+			class="com.dexpert.feecollection.main.users.applicant.AppAction"
+			method="showBulkTransDetail">
+
+			<result name="success">ShowBulk-TransDetail.jsp</result>
+		</action>
+		
+		
 		<action name="StudentTotalRecord"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="getStudentList">
@@ -563,6 +566,7 @@
 			<result name="success">Transaction-Due-Report.jsp</result>
 			<result name="error">Login.jsp</result>
 		</action>
+
 
 
 
@@ -691,7 +695,7 @@
 			<result name="error">Login.jsp</result>
 
 		</action>
-		
+
 		<action name="StudentPayment"
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
 			method="studentPayment">
