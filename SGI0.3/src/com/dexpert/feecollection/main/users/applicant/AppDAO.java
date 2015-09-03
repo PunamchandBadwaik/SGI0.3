@@ -130,11 +130,9 @@ public class AppDAO {
 				} else {
 					String user = appBean.getEnrollmentNumber();
 					String pass = appBean.getYear();
-					String msg = "Username is :" + user + " and " + "Passsword is :" + pass;
+					String msg = " UserId :" + user + "" + " Passsword : " + pass;
 					SendSMS sms = new SendSMS();
-					sms.msgsend(appBean.getAplMobilePri(), msg);
-					
-					
+					sms.sendSMS(appBean.getAplMobilePri(), msg);
 
 				}
 			} catch (java.lang.NullPointerException e) {

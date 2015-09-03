@@ -1,71 +1,62 @@
 package com.dexpert.feecollection.main.communication.sms;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+
 import java.net.URL;
-import java.net.URLEncoder;
+import java.net.URLConnection;
 
 public class SendSMS {
-	
-	private final String USER_AGENT = "Chrome/44.0.2403.157";
-	public SendSMS() {
-	}
 
-	// create an account on ipipi.com with the given username and password
+	public String sendSMS(String recepient, String message) {
+		String user = "spectra";
+		String password = "research1";
+		String senderId = "sanchi";
+		String msg = "Welcome To FeeDesk ";
+		String detail = msg + message;
 
-	public void msgsend(String recipient, String message) {
+		URLConnection connection = null;
+		String turl = "http://bhashsms.com/api/sendmsg.php?user=" + user + "&pass=" + password + "&sender=" + senderId
+				+ "&phone=" + recepient + "&text=" + detail + "&priority=ndnd&stype=normal";
 
 		try {
-			
+			// Create connection
+			URL url = new URL(turl);
+			connection = url.openConnection();
 
-			String username = "spectra";
-			String password = "research1";
-			String sender = "sanchi";
-			String requestUrl = "http://bhashsms.com/api/sendmsg.php?user=" + username + "&pass=" + password + "&sender=" + sender + "&phone=" + recipient + "&text=" + message + "&priority=ndnd&stype=normal";
-			URL url = new URL(requestUrl);
-			HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-			uc.setRequestMethod("GET");
-			uc.setRequestProperty("User-Agent", USER_AGENT);
-			/*int responseCode = uc.getResponseCode();
-			System.out.println("Response Code : " + responseCode);
-			BufferedReader in = new BufferedReader(
-			        new InputStreamReader(uc.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Content-Length", Integer.toString(turl.getBytes().length));
+			connection.setRequestProperty("Content-Language", "en-US");
+			connection.setUseCaches(false);
+			connection.setDoOutput(true);
 
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
+			// Send request
+			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+			wr.writeBytes(turl);
+			wr.close();
+
+			// Get Response
+			InputStream is = connection.getInputStream();
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+			StringBuilder response = new StringBuilder(); // or StringBuffer if
+															// not Java 5+
+			String line;
+			while ((line = rd.readLine()) != null) {
+				response.append(line);
+				response.append('\r');
 			}
-			in.close();
-			System.out.println("Success message :" + uc.getResponseMessage());
+			rd.close();
+			return response.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (connection != null) {
 
-			System.out.println("Message Url is ::" + requestUrl);
-			
-			*/
-			
-	        int responseCode = uc.getResponseCode();
-	        System.out.println("GET Response Code :: " + responseCode);
-	        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-	            BufferedReader in = new BufferedReader(new InputStreamReader(
-	                    uc.getInputStream()));
-	            String inputLine;
-	            StringBuffer response = new StringBuffer();
-	 
-	            while ((inputLine = in.readLine()) != null) {
-	                response.append(inputLine);
-	            }
-	            in.close();
-	 
-	            // print result
-	            System.out.println(response.toString());
-	        } else {
-	            System.out.println("GET request not worked");
-	        }
-			
-			
-		} catch (Exception ex) {
-			System.out.println("Failure Message ::" + ex.getMessage());
+			}
 		}
+
 	}
 }

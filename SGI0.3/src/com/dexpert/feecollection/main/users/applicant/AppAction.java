@@ -147,15 +147,15 @@ public class AppAction extends ActionSupport {
 				return "failure";
 			}
 
-			try {
-				updateStudentDue();
+			/*try {
+				//updateStudentDue();
 
 			} catch (java.util.NoSuchElementException e) {
 
 				request.setAttribute("msg", "Please Set Fees for Student");
 				affInstList = affDAO.getCollegesList();
 				return "feeNotSet";
-			}
+			}*/
 
 			request.setAttribute("msg", "Student Addedd Successfully");
 
