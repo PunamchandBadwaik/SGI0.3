@@ -82,6 +82,22 @@ public class AppDAO {
 			appBean.setYearCode("60");
 
 		}
+		else if (appBean.getCourse().contentEquals("BPh")) {
+			appBean.setYearCode("30");
+
+		}
+		else if (appBean.getCourse().contentEquals("BPhSYD")) {
+			appBean.setYearCode("40");
+
+		}
+		else if (appBean.getCourse().contentEquals("MPh")) {
+			appBean.setYearCode("80");
+
+		}
+		else if (appBean.getCourse().contentEquals("MPhSYD")) {
+			appBean.setYearCode("90");
+
+		}
 
 		try {
 			if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
@@ -387,6 +403,23 @@ public class AppDAO {
 
 			} else if (appBean.getCourse().contentEquals("MBA")) {
 				appBean.setYearCode("60");
+
+			}
+			
+			else if (appBean.getCourse().contentEquals("BPh")) {
+				appBean.setYearCode("30");
+
+			}
+			else if (appBean.getCourse().contentEquals("BPhSYD")) {
+				appBean.setYearCode("40");
+
+			}
+			else if (appBean.getCourse().contentEquals("MPh")) {
+				appBean.setYearCode("80");
+
+			}
+			else if (appBean.getCourse().contentEquals("MPhSYD")) {
+				appBean.setYearCode("90");
 
 			}
 

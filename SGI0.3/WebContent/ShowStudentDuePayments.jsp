@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+
 <html lang="en">
 <head>
 <%

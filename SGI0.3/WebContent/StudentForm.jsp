@@ -197,6 +197,22 @@
 
 																			<option value="ME 1">ME 1</option>
 																			<option value="ME 2">ME 2</option>
+																			
+																			<option value="BPhFY">First Year B.Pharm</option>
+																			<option value="BPhSY">Second Year B.Pharm</option>
+																			<option value="BPhSYD">Second Year(Direct) B.Pharm</option>
+																			<option value="BPhTY">Third Year B.Pharm</option>
+																			<option value="MPhFnY">Final Year  B.Pharm</option>
+																			<option value="MPhFY">First Year M.Pharm</option>
+																			<option value="MPhSY">Second Year M.Pharm</option>
+																			<option value="MPhSYD">Second Year(Direct) M.Pharm</option>
+																			<option value="MPhTY">Third Year M.Pharm</option>
+																			<option value="MPhFnY">Final Year M.Pharm</option>
+																			
+																			
+																			
+																			
+																			
 
 																		</select>
 
@@ -211,7 +227,7 @@
 																if (course == 'FE'
 																		|| course == 'SED'
 																		|| course == 'MBA 1'
-																		|| course == 'ME 1') {
+																		|| course == 'ME 1' || course=='BPhFY'|| course=='MPhFY'|| course=='BPhSYD'|| course=='MPhSYD') {
 
 																	document
 																			.getElementById("enrollDiv").style.display = "none";
