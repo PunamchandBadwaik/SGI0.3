@@ -185,6 +185,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			} else if (cartInit == 1) {
 				cartList = (ArrayList<CartDataBean>) httpSession.getAttribute("cart_list");
 				for (int i = 0; i < cartList.size(); i++) {
+					bulkBean=new BulkPaymentBean();
 					CartDataBean cartdata = cartList.get(i);
 					enrollmentNumber = cartdata.getAppId().trim();
 					studentDetails = appDAO.getUserDetail(enrollmentNumber);
