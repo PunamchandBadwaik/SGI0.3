@@ -174,7 +174,7 @@ public class AppDAO {
 				} else {
 					EmailSessionBean email = new EmailSessionBean();
 					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getYear(), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+							appBean.getYear().substring(0, 4), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
 
 				}
 			} catch (java.lang.NullPointerException e) {
@@ -605,7 +605,7 @@ public class AppDAO {
 				} else {
 					EmailSessionBean email = new EmailSessionBean();
 					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getYear(), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+							appBean.getYear().substring(0, 4), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
 
 				}
 			} catch (java.lang.NullPointerException e) {
