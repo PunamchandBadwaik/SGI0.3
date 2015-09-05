@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
+import org.hibernate.exception.ConstraintViolationException;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
@@ -145,6 +146,12 @@ public class AppAction extends ActionSupport {
 				request.setAttribute("msg", "Please Enter Enrollment Number");
 				affInstList = affDAO.getCollegesList();
 				return "failure";
+			}
+			catch(ConstraintViolationException ex){
+				request.setAttribute("msg", "Enrollment Number Already Exit");
+				affInstList = affDAO.getCollegesList();
+				return "failure";
+				
 			}
 
 			try {
