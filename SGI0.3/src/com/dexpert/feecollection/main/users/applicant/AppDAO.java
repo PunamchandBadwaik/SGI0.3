@@ -297,7 +297,7 @@ public class AppDAO {
 
 		String name, lstName, gender, cast, address, acaYear, course, branch, emailAddress;
 
-		Integer enrollNo = null, mobileNumPri, MobileNumSec, admYear;
+		Long enrollNo = null, mobileNumPri, MobileNumSec, admYear;
 		String mobPri, mobSec, admssionYear;
 
 		// ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
@@ -338,7 +338,7 @@ public class AppDAO {
 			Cell r = row.getCell(0);
 
 			try {
-				enrollNo = (int) r.getNumericCellValue();
+				enrollNo = (long) r.getNumericCellValue();
 			} catch (java.lang.NullPointerException e) {
 
 			}
@@ -358,7 +358,7 @@ public class AppDAO {
 			address = r.getStringCellValue();
 
 			r = row.getCell(6);
-			mobileNumPri = (int) r.getNumericCellValue();
+			mobileNumPri = (long) r.getNumericCellValue();
 			
 			log.info("Mobile number is ::"+mobileNumPri);
 
@@ -367,7 +367,7 @@ public class AppDAO {
 			 */
 
 			r = row.getCell(7);
-			MobileNumSec = (int) r.getNumericCellValue();
+			MobileNumSec = (long) r.getNumericCellValue();
 
 			/*
 			 * r = row.getCell(7); mobSec = r.getStringCellValue();
