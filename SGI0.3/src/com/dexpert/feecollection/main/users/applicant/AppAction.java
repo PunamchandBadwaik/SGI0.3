@@ -140,19 +140,21 @@ public class AppAction extends ActionSupport {
 				return "failure";
 			}
 
-			try {
+			//try {
+				log.info("Enrollment Number is"+appBean1.getEnrollmentNumber());
 				appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
-			} catch (java.lang.NullPointerException e) {
-				request.setAttribute("msg", "Please Enter Enrollment Number");
-				affInstList = affDAO.getCollegesList();
-				return "failure";
-			}
-			catch(ConstraintViolationException ex){
+				
+			//} catch (java.lang.NullPointerException e) {
+				//request.setAttribute("msg", "Please Enter Enrollment Number");
+				//affInstList = affDAO.getCollegesList();
+				//return "failure";
+			//}
+			/*catch(ConstraintViolationException ex){
 				request.setAttribute("msg", "Enrollment Number Already Exit");
 				affInstList = affDAO.getCollegesList();
 				return "failure";
 				
-			}
+			}*/
 
 			try {
 				updateStudentDue();

@@ -66,6 +66,7 @@ public class AppDAO {
 			UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
 		// Declarations
 		// Open session from session factory
+		
 		Session session = factory.openSession();
 		AffBean affBean = new AffBean();
 		if (appBean.getCourse().contentEquals("FE")) {
@@ -105,13 +106,15 @@ public class AppDAO {
 				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 				String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
 				appBean.setEnrollmentNumber(EnrollNo);
+			log.info("enrollment number generated"+EnrollNo);
 			}
 		} catch (java.lang.NullPointerException e) {
 			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 			String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode());
 			appBean.setEnrollmentNumber(EnrollNo);
+			log.info("enrollment number generated"+EnrollNo);
 		}
-
+        
 		// to get college record based on id to create relationship
 		affBean = aff.viewInstDetail(aplInstId);
 
