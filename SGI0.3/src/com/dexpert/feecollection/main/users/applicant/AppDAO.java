@@ -579,7 +579,7 @@ public class AppDAO {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
-			//updateStudentDue(appBean);
+			updateStudentDue(appBean);
 			try {
 
 				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")

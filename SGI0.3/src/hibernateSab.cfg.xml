@@ -7,7 +7,7 @@
 
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sabpaisa</property>
-		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.username">dexpertuser</property>
 		<property name="hibernate.connection.password">Dspl_2014</property>
 		<property name="hibernate.c3p0.min_size">7</property>
 		<property name="hibernate.c3p0.max_size">10</property>
