@@ -202,11 +202,11 @@
 																			<option value="BPhSY">Second Year B.Pharm</option>
 																			<option value="BPhSYD">Second Year(Direct) B.Pharm</option>
 																			<option value="BPhTY">Third Year B.Pharm</option>
-																			<option value="MPhFnY">Final Year  B.Pharm</option>
+																			<option value="BPhFnY">Final Year  B.Pharm</option>
 																			<option value="MPhFY">First Year M.Pharm</option>
-																			<option value="MPhSY">Second Year M.Pharm</option>
+																			<!-- <option value="MPhSY">Second Year M.Pharm</option>
 																			<option value="MPhSYD">Second Year(Direct) M.Pharm</option>
-																			<option value="MPhTY">Third Year M.Pharm</option>
+																			<option value="MPhTY">Third Year M.Pharm</option> -->
 																			<option value="MPhFnY">Final Year M.Pharm</option>
 																			
 																			

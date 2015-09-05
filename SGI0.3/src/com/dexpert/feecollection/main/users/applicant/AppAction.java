@@ -250,7 +250,7 @@ public class AppAction extends ActionSupport {
 
 		List<Integer> feeIdes = new ArrayList<Integer>();
 		String applicableFeeString = aplDAO.getApplicableFeesString(appBean1.getCourse());
-
+         log.info("Applicable fee string"+applicableFeeString);
 		String applicableFeeIdArray[] = applicableFeeString.split("~");
 		for (String string : applicableFeeIdArray) {
 			feeIdes.add(Integer.parseInt(string));
