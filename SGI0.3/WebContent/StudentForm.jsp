@@ -204,10 +204,12 @@
 																			<option value="BPhTY">Third Year B.Pharm</option>
 																			<option value="BPhFnY">Final Year  B.Pharm</option>
 																			<option value="MPhFY">First Year M.Pharm</option>
+																			<option value="MPhFnY">Final Year M.Pharm</option>
+																			
 																			<!-- <option value="MPhSY">Second Year M.Pharm</option>
 																			<option value="MPhSYD">Second Year(Direct) M.Pharm</option>
 																			<option value="MPhTY">Third Year M.Pharm</option> -->
-																			<option value="MPhFnY">Final Year M.Pharm</option>
+																			
 																			
 																			
 																			
@@ -463,16 +465,16 @@
 																		<select name="appBean1.year" style="width: 240px;"
 																			data-rel="chosen">
 																			<option value="">---Select Year---</option>
-																			<option value="2008">2008</option>
-																			<option value="2009">2009</option>
-																			<option value="2010">2010</option>
-																			<option value="2011">2011</option>
-																			<option value="2012">2012</option>
-																			<option value="2013">2013</option>
-																			<option value="2014">2014</option>
-																			<option value="2015">2015</option>
-																			<option value="2016">2016</option>
-																			<option value="2017">2017</option>
+																			<option value="2008-2009">2008-2009</option>
+																			<option value="2009-2010">2009-2010</option>
+																			<option value="2010-2011">2010-2011</option>
+																			<option value="2011-2012">2011-2012</option>
+																			<option value="2012-2013">2012-2013</option>
+																			<option value="2013-2014">2013-2014</option>
+																			<option value="2014-2015">2014-2015</option>
+																			<option value="2015-2016">2015-2016</option>
+																			<option value="2016-2017">2016-2017</option>
+																			<option value="2017-2018">2017-2018</option>
 
 																		</select>
 

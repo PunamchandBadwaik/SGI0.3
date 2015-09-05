@@ -14,7 +14,7 @@
 		<tr>
 
 			<td ><input name="appBean1.enrollmentNumber"
-				id="enrollTextId"
+				id="enrollTextId" pattern="[0-9]*"
 				value='<s:property value="appBean1.enrollmentNumber"/>'
 				placeholder="Enrollment Number" type="text" class="form-control">
 			</td>

@@ -4,19 +4,25 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Logger;
 
 public class SendSMS {
 
+	Logger log=Logger.getLogger("SMS");
 	public String sendSMS(String recepient, String message) {
+		
+		
 		String user = "spectra";
 		String password = "research1";
-		String senderId = "sanchi";
+		String senderId = "EventD";
 		String msg = "Welcome To FeeDesk ";
 		String detail = msg + message;
 
+		log.info("Recepient is ::"+recepient);
+		log.info("Message is ::"+detail);
+		
 		URLConnection connection = null;
 		String turl = "http://bhashsms.com/api/sendmsg.php?user=" + user + "&pass=" + password + "&sender=" + senderId
 				+ "&phone=" + recepient + "&text=" + detail + "&priority=ndnd&stype=normal";
@@ -42,11 +48,14 @@ public class SendSMS {
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 			StringBuilder response = new StringBuilder(); // or StringBuffer if
 															// not Java 5+
+			
+			
 			String line;
 			while ((line = rd.readLine()) != null) {
 				response.append(line);
 				response.append('\r');
 			}
+			log.info("Response COde is "+response);
 			rd.close();
 			return response.toString();
 		} catch (Exception e) {
