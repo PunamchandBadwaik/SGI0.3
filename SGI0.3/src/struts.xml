@@ -484,6 +484,13 @@
 			<result name="EDIT">FeeCalcDetailsEdit.jsp</result>
 
 		</action>
+		<action name="getFeeStructure"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="FeeDetails">
+
+			<result name="success">FeeStructureView.jsp</result>
+			<result name="EDIT">FeeStructureView.jsp</result>
+
+		</action>
 	</package>
 
 	<package name="Test" extends="struts-default">

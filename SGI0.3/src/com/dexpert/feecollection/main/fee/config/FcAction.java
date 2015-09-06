@@ -425,6 +425,7 @@ public class FcAction extends ActionSupport {
 		ArrayList<Integer> combo = new ArrayList<Integer>();
 		ComboMap = (HashMap<Integer, ArrayList<Integer>>) ses.getAttribute("sesComboMap");
 		FcBean comboBean = new FcBean();
+		uids.removeAll(Collections.singleton(null));
 		log.info("uids are " + uids.toString());
 		for (int i = 0; i < (uids.size()); i++) {
 			log.info("uid from jsp is " + uids.get(i).getComboId());

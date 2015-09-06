@@ -103,13 +103,12 @@
 
 
 				<div class="row">
-					<form action="saveFee" method="post">
+					<form action="saveFeeCalcDetails" method="post">
 						<div class="box col-md-12">
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> Set Fee Values
-										for Admission Fee
+										<i class="glyphicon glyphicon-info-sign"></i> Fee Structure
 									</h2>
 
 									<div class="box-icon">
@@ -120,8 +119,7 @@
 									</div>
 								</div>
 								<div class="box-content row">
-									<div class="col-lg-12 col-md-12 animated fadeIn"
-										id="showCombinationDiv">
+									<div class="col-lg-12 col-md-12 animated fadeIn">
 
 
 										<table class="table table-condensed table-striped">
@@ -135,92 +133,42 @@
 														<th><s:property /></th>
 
 													</s:iterator>
-													<th></th>
+													<th>Amount Per Student</th>
+													
 												</tr>
 											</thead>
 											<tbody>
 												<s:iterator value="BodyList">
-													<tr id="<%=j%>">
+													<tr>
 														<td><%=i%> <s:property value="%{#ind.index}" /></td>
 														<s:iterator status="incr">
 
 
-															<td ><s:if test="%{#incr.index==0}">
+															<td><s:if test="%{#incr.index==0}">
 																	<input value='<s:property />'
-																		name="uids[<%=j%>].comboId" hidden="hidden">
-
-
-
-
-																	<button type="button" data-toggle="popover"
-																		data-content=""
-																		onclick="removeFeeCombo(<%=j %>)"
-																		class="btn btn-sm btn-danger">
-																		<i class="fa fa-trash"></i>
-																	</button>
-
-
-
+																		name="calcList[<%=j%>].comboId" hidden="hidden">
 																</s:if> <s:else>
 																	<s:property />
 																</s:else></td>
 
 
 														</s:iterator>
-
-														<td><input name="uids[<%=j%>].amount"
-															class="form-control" type="text"
-															placeholder="Enter Fee Value" pattern="[0-9.,]*">
-
-														</td>
+														
+														
 													</tr>
 													<%
-														i++;
-																																																																																																						  j++;
-													%>
+															i++;
+																									  j++;
+														%>
 												</s:iterator>
 											</tbody>
 										</table>
 									</div>
-
-									<script type="text/javascript">
-									function removeFeeCombo(id)//Code to remove invalid combinations of Fees
-									{
-										
-										document.getElementById(id).remove();
-									}
-										/* function deleteCombination(id) {
-
-											
-											alert(id);
-											
-											var xmlhttp;
-											if (window.XMLHttpRequest)
-											  {// code for IE7+, Firefox, Chrome, Opera, Safari
-											  xmlhttp=new XMLHttpRequest();
-											  }
-											else
-											  {// code for IE6, IE5
-											  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-											  }
-											xmlhttp.onreadystatechange=function()
-											  {
-											  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-											    {
-											    document.getElementById("showCombinationDiv").innerHTML=xmlhttp.responseText;
-											    }
-											  }
-											xmlhttp.open("GET","DeleteCombination?comboId="+id,true);
-											xmlhttp.send();
-
-										} */
-									</script>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-12">
-							<button type="submit" class="btn btn-success">Save Fee
-								Details</button>
+							
 
 							<button onclick="window.close()" class="btn btn-info">Close
 							</button>
@@ -314,7 +262,7 @@
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-	<script type="text/javascript">
+	<script>
 		function OpenSummaryInParent() {
 			window.opener.location = "College-Payment-Summary.html";
 			window.close();

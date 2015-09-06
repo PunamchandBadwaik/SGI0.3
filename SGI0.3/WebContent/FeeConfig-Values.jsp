@@ -349,7 +349,7 @@
 												<th>Fee ID</th>
 												<th>Fee Name</th>
 												<th>Paid By</th>
-												<!-- <th>Actions</th> -->
+												 <th>Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -365,10 +365,10 @@
 															<s:property value="forInstitute" />
 														</s:set> <s:if test="%{#app==1}">Student</s:if> <s:if
 															test="%{#ins==1}">College</s:if></td>
-													<!-- <td class="center"><a class="btn btn-success btn-sm"
-														href="#" data-toggle="popover" data-content=""
+												 <!-- <td class="center"><a class="btn btn-success btn-sm"
+														href="#" onclick='window.open("getFeeStructure")' data-toggle="popover" data-content=""
 														title="Feature Locked"> <i
-															class="glyphicon glyphicon-zoom-in icon-white"></i> View
+															class="glyphicon glyphicon-zoom-in icon-white"></i> View Structure
 													</a> <a class="btn btn-info btn-sm" href="#"
 														data-toggle="popover" data-content=""
 														title="Feature Locked"> <i
@@ -378,7 +378,7 @@
 														title="Feature Locked"> <i
 															class="glyphicon glyphicon-zoom-in icon-white"></i>
 															Delete
-													</a></td> -->
+													</a></td>  -->
 												</tr>
 												<%
 													i++;
