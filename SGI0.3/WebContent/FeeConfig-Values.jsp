@@ -349,7 +349,7 @@
 												<th>Fee ID</th>
 												<th>Fee Name</th>
 												<th>Paid By</th>
-												 <th>Actions</th>
+												 <!-- <th>Actions</th> -->
 											</tr>
 										</thead>
 										<tbody>
