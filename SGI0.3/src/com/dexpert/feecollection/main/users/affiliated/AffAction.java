@@ -593,9 +593,11 @@ public class AffAction extends ActionSupport {
 		List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
 		if(enrollmentNumber.size()<1)
 		{
+		totalDuesOfStudent=new ArrayList<Object[]>();	
 		return "nodues";	
 		}
 		totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
+		log.info("List size is");
 		Iterator<Object[]> itr = totalDuesOfStudent.iterator();
 		while (itr.hasNext()) {
 			Object[] dues = itr.next();
