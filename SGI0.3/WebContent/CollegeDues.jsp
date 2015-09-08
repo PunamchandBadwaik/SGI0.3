@@ -196,7 +196,7 @@
 														<tr>
 															<td><%=i%></td>
 
-															<td class="center">Rs. <s:property value="#duesArray[0]" /> <input
+															<td class="center"> <s:property value="#duesArray[0]" /> <input
 																type="hidden" id="feeName"
 																value='<s:property value="#duesArray[0]" />'></td>
 
