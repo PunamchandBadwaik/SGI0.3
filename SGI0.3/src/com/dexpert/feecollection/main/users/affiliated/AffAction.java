@@ -591,8 +591,10 @@ public class AffAction extends ActionSupport {
 		String courseName = request.getParameter("courseName");
 		// String feeName=request.getParameter("feeName");
 		List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
-		log.info("Number of Student" + enrollmentNumber);
-		log.info("pppppppppppoup values is ::" + popUp);
+		if(enrollmentNumber.size()<1)
+		{
+		return "nodues";	
+		}
 		totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
 		Iterator<Object[]> itr = totalDuesOfStudent.iterator();
 		while (itr.hasNext()) {

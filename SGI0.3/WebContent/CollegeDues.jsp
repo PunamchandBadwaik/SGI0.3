@@ -165,7 +165,7 @@
 								<div class="box-content row">
 									<div class="col-lg-12 col-md-12 animated fadeIn">
 
-										<s:if test="%{totalDuesOfStudent.isEmpty()}">
+										<s:if test="%{#totalDuesOfStudent.isEmpty()}">
 											<div
 												style="color: green; text-align: center; font-weight: bold; font-size: x-large;">
 												No Due Available For This College</div>

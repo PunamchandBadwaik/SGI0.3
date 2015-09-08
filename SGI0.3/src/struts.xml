@@ -405,6 +405,8 @@
 
 			<result name="success">College-Due-Report.jsp</result>
 			<result name="popUp">CollegeDues.jsp</result>
+			<result name="nodues">CollegeDues.jsp</result>
+			
 
 		</action>
 		<action name="saveFeeCalcDetails"
