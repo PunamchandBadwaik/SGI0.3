@@ -29,9 +29,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	 * 
 	 */
 
-	public String SabPaisaURL = "49.50.72.228:8080";
-	public String returnUrl = "http://49.50.72.228:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://49.50.72.228:8080/SGI0.3/Login.jsp";
+	public String SabPaisaURL = "localhost:8081";
+	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
 
 	private static final long serialVersionUID = 1L;
 	HttpServletRequest request = ServletActionContext.getRequest();
