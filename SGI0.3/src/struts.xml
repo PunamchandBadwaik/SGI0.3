@@ -404,7 +404,7 @@
 			method="collegeDueReport">
 
 			<result name="success">College-Due-Report.jsp</result>
-
+			<result name="popUp">CollegeDues.jsp</result>
 
 		</action>
 		<action name="saveFeeCalcDetails"
@@ -424,7 +424,7 @@
 
 		</action>
 
-		
+
 
 
 
@@ -539,15 +539,15 @@
 			<result name="feeNotSet">StudentForm.jsp</result>
 
 		</action>
-		
+
 		<action name="showBulkTrans"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="showBulkTransDetail">
 
 			<result name="success">ShowBulk-TransDetail.jsp</result>
 		</action>
-		
-		
+
+
 		<action name="StudentTotalRecord"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="getStudentList">

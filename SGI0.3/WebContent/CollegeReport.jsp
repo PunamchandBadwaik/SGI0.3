@@ -307,6 +307,7 @@
 												<th>Email</th>
 												<th>University Name</th>
 												<th>Address</th>
+												<th>Action</th>
 
 											</tr>
 										</thead>
@@ -334,6 +335,11 @@
 													<td><span style="margin-left: 10px;"> <c:out
 																value="${aff.instAddress}" /> <%-- <s:property
 																value="instAddress" /> --%></span></td>
+													<td><input type="button" class="btn btn-success"
+														value="View All Dues"
+														onclick='window.open("CollegeDueReport?instId="+${aff.instId},"","width=1000,height=600")'>
+
+													</td>
 												</tr>
 												<%
 													i++;

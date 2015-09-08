@@ -83,6 +83,10 @@ public class AffAction extends ActionSupport {
 	private Integer fileSize;
 	private String contentType;
 	private List<TransactionBean> transactionDetailsForReport;
+	private List<Object[]> totalDuesOfStudent;
+	Double totalNetDuesOFCollegeStudent = 0.0;
+	Double totalPaymentToDate = 0.0;
+	Double totalOriginalDues = 0.0;
 
 	// End of Global Variables
 
@@ -137,7 +141,7 @@ public class AffAction extends ActionSupport {
 				// one to many and many to one relationship
 				parBean1.getAffBeanOneToManySet().add(affInstBean);
 				affInstBean.setParBeanAff(parBean1);
-				
+
 				parDAO.saveOrUpdate(parBean1, null);
 
 				// for bidirectional relationship ,set parent record to child
@@ -164,9 +168,6 @@ public class AffAction extends ActionSupport {
 
 				affInstBean.setFileUpload(fileUpload);
 				affInstBean.setFileUploadFileName(fileUploadFileName);
-				
-				
-				
 
 				log.info("The ID after saving is is " + affInstBean.getInstId());
 				// if saved successfully generate credentials and forward
@@ -234,7 +235,7 @@ public class AffAction extends ActionSupport {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		parBean = affDao.getUniversityCollegeList(loginBean);
-		log.info("University Names ::"+parBean.getParInstName());
+		log.info("University Names ::" + parBean.getParInstName());
 		return SUCCESS;
 	}
 
@@ -245,7 +246,7 @@ public class AffAction extends ActionSupport {
 		String instituteId = request.getParameter("instId");
 		Integer instId = Integer.parseInt(instituteId);
 		affInstBean = affDao.viewInstDetail(instId);
-	
+
 		ses.setAttribute("sesAffBean", affInstBean);
 
 		return SUCCESS;
@@ -573,9 +574,46 @@ public class AffAction extends ActionSupport {
 	// to get College Due Report
 
 	public String collegeDueReport() {
+		boolean popUp = false;
 		log.info("COllege Due Report");
-		collegeDueReport = (ArrayList<PaymentDuesBean>) affDao.collegeDueReport();
-		log.info("list size of college Due" + collegeDueReport.size());
+		Integer collegeId = null;
+		// collegeDueReport = (ArrayList<PaymentDuesBean>)
+		// affDao.collegeDueReport();
+		// log.info("list size of college Due" + collegeDueReport.size());
+		if (ses.getAttribute("sesProfile").equals("Affiliated")) {
+			collegeId = (Integer) ses.getAttribute("sesId");
+		}
+		if (collegeId == null) {
+			collegeId = Integer.parseInt(request.getParameter("instId"));
+			popUp = true;
+		}
+		log.info("College Id is" + collegeId);
+		String courseName = request.getParameter("courseName");
+		// String feeName=request.getParameter("feeName");
+		List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+		log.info("Number of Student" + enrollmentNumber);
+		log.info("pppppppppppoup values is ::" + popUp);
+		totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
+		Iterator<Object[]> itr = totalDuesOfStudent.iterator();
+		while (itr.hasNext()) {
+			Object[] dues = itr.next();
+			Double netDue = dues[1] == null ? 0.0 : (Double) dues[1];
+			Double originalDue = dues[2] == null ? 0.0 : (Double) dues[1];
+			Double paymentToDate = dues[3] == null ? 0.0 : (Double) dues[1];
+			totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent + netDue;
+			totalOriginalDues = totalOriginalDues + originalDue;
+			totalPaymentToDate = totalPaymentToDate + paymentToDate;
+			log.info("total net due" + totalNetDuesOFCollegeStudent);
+			log.info("total net due" + totalOriginalDues);
+			log.info("total net due" + totalPaymentToDate);
+		}
+
+		if (popUp == true) {
+			log.info("ppppppppppppppppppppppppppppppp");
+			return "popUp";
+		}
+
+		log.info("total dues of id" + totalDuesOfStudent.size());
 		return SUCCESS;
 
 	}
@@ -901,6 +939,38 @@ public class AffAction extends ActionSupport {
 
 	public void setParBeansList(List<ParBean> parBeansList) {
 		this.parBeansList = parBeansList;
+	}
+
+	public List<Object[]> getTotalDuesOfStudent() {
+		return totalDuesOfStudent;
+	}
+
+	public void setTotalDuesOfStudent(List<Object[]> totalDuesOfStudent) {
+		this.totalDuesOfStudent = totalDuesOfStudent;
+	}
+
+	public Double getTotalNetDuesOFCollegeStudent() {
+		return totalNetDuesOFCollegeStudent;
+	}
+
+	public void setTotalNetDuesOFCollegeStudent(Double totalNetDuesOFCollegeStudent) {
+		this.totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent;
+	}
+
+	public Double getTotalPaymentToDate() {
+		return totalPaymentToDate;
+	}
+
+	public void setTotalPaymentToDate(Double totalPaymentToDate) {
+		this.totalPaymentToDate = totalPaymentToDate;
+	}
+
+	public Double getTotalOriginalDues() {
+		return totalOriginalDues;
+	}
+
+	public void setTotalOriginalDues(Double totalOriginalDues) {
+		this.totalOriginalDues = totalOriginalDues;
 	}
 
 	// End of Getter Setter Methods

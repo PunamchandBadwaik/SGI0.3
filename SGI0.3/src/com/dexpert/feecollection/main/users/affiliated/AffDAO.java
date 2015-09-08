@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -28,12 +29,15 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+
+import COM.rsa.Intel.cr;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -42,6 +46,7 @@ import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
+import com.dexpert.feecollection.main.users.applicant.AppBean;
 import com.dexpert.feecollection.main.users.parent.ParBean;
 import com.dexpert.feecollection.main.users.parent.ParDAO;
 
@@ -170,7 +175,7 @@ public class AffDAO {
 
 	// get direct child i.e. college list
 	public List<AffBean> getCollegesList() {
-		
+
 		Session session = factory.openSession();
 
 		Criteria criteria = session.createCriteria(AffBean.class);
@@ -598,5 +603,34 @@ public class AffDAO {
 		session.close();
 		return collegesTransactionList;
 	}
+
+	public Integer getCollegeId(String collegeName) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(AffBean.class);
+		criteria.add(Restrictions.eq("instName", collegeName));
+		AffBean affBean = (AffBean) criteria.list().iterator().next();
+		Integer id = affBean.getInstId();
+		log.info("College id in dao class" + id);
+		return id;
+	}
+
+	public List<String> findAllStudentOfInstituteByCourse(Integer collegeId, String courseName) {
+		Session session = factory.openSession();
+        Criteria criteria=session.createCriteria(AppBean.class);
+        criteria.add(Restrictions.eq("affBeanStu.instId",collegeId)).setProjection(Projections.property("enrollmentNumber"));
+	    List<String> appBeans=criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+	    return appBeans;
+	}
+	public List<Object[]> findTotalDuesOFFee(String feeName,List<String> enrollmentNumber)
+	{
+	Session session=factory.openSession();
+	String query="SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
+    SQLQuery sqlQuery=session.createSQLQuery(query);
+    sqlQuery.setParameterList("enrollmentNumber", enrollmentNumber) ;
+    List<Object[]> totalDueOfStudent=sqlQuery.list();
+    session.close();
+    return totalDueOfStudent;
+    }
+	
 
 }

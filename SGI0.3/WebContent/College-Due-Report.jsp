@@ -190,6 +190,11 @@
 								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
 									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+							
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+						
+							
 							<%
 								}
 							%>
@@ -209,11 +214,11 @@
 								}
 							%> --%>
 							<%
-								if (profile.contentEquals("SU")){
+								if (profile.contentEquals("SU")) {
 							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
-									
-									<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 							<%
 								}
@@ -277,50 +282,73 @@
 										</div>
 									</div>
 									<!---Content-->
-									<table
-										class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
-										<thead>
-											<tr>
-												<th width="7%">Sr. No.</th>
-
-												<th>Institute Name</th>
-												<th>Contact Number</th>
-												<th>College Email</th>
-												<th>Institute Address</th>
-												<th>Place</th>
-
-											</tr>
-										</thead>
-										<tbody>
-											<%
-												int i = 1;
-											%>
-											<s:iterator value="affInstList">
-												<tr>
-													<td><span style="margin-left: 10px;"><%=i%></span></td>
-
-													<td><span style="margin-left: 10px;"><s:property
-																value="instName" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="contactNumber" /></span></td>
-
-													<td><span style="margin-left: 10px;"><s:property
-																value="email" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="instAddress" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="place" /></span></td>
-
-												</tr>
-
-												<%
-													i++;
-												%>
-											</s:iterator>
+										<s:if test="%{totalDuesOfStudent.isEmpty()}">
+											<div
+												style="color: green; text-align: center; font-weight: bold; font-size: x-large;">
+												No Due Available For This College</div>
+										</s:if>
+										<s:else>
+											<table
+												class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
+												<thead>
+													<tr>
+														<th>Sr. No.</th>
+														<th>Enrollment Number</th>
+														<th></th>
+														<th>Original Dues</th>
+														<th></th>
+														<th>Payment To Date</th>
+														<th></th>
+														<th colspan="2">Net Dues</th>
 
 
-										</tbody>
-									</table>
+													</tr>
+												</thead>
+												<tbody>
+
+													<%
+														int i = 1;
+													%>
+													<s:iterator value="totalDuesOfStudent" var="duesArray">
+														<tr>
+															<td><%=i%></td>
+
+															<td class="center">Rs. <s:property value="#duesArray[0]" /> <input
+																type="hidden" id="feeName"
+																value='<s:property value="#duesArray[0]" />'></td>
+
+															<td></td>
+															<td class="center">Rs. <s:property
+																	value="#duesArray[2]" default="0" /></td>
+															<td></td>
+															<td class="center">Rs. <s:property
+																	value="#duesArray[3]" default="0" /></td>
+															<td></td>
+															<td colspan="2" class="center">Rs. <s:property
+																	value="#duesArray[1]" default="0" /></td>
+
+														</tr>
+
+														<%
+															i++;
+														%>
+													</s:iterator>
+													<tr>
+														<td></td>
+														<td></td>
+														<td><span style="font-weight: bold;">Total Original Due</span></td>
+														<td>Rs. <s:property value="totalOriginalDues" /></td>
+														<td><span style="font-weight: bold;">PTD</span></td>
+														<td>Rs. <s:property value="totalPaymentToDate" /></td>
+														<td><span style="font-weight: bold;">TND</span></td>
+														<td colspan="2">Rs. <s:property value="totalNetDuesOFCollegeStudent" /></td>
+
+
+													</tr>
+												</tbody>
+											</table>
+											
+										</s:else>
 
 								</div>
 
