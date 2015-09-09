@@ -575,52 +575,71 @@ public class AffAction extends ActionSupport {
 
 	public String collegeDueReport() {
 		boolean popUp = false;
-		log.info("COllege Due Report");
 		Integer collegeId = null;
 		// collegeDueReport = (ArrayList<PaymentDuesBean>)
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
-		if (ses.getAttribute("sesProfile").equals("Affiliated")) {
+		
+		if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
 			collegeId = (Integer) ses.getAttribute("sesId");
+			String courseName = request.getParameter("courseName");
+			// String feeName=request.getParameter("feeName");
+			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+			if(enrollmentNumber.size()<1)
+			{
+			totalDuesOfStudent=new ArrayList<Object[]>();	
+			return "nodues";	
+			}
+			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
+			log.info("List size is");
+			Iterator<Object[]> itr = totalDuesOfStudent.iterator();
+			while (itr.hasNext()) {
+				Object[] dues = itr.next();
+				Double netDue = dues[1] == null ? 0.0 : (Double) dues[1];
+				Double originalDue = dues[2] == null ? 0.0 : (Double) dues[2];
+				Double paymentToDate = dues[3] == null ? 0.0 : (Double) dues[3];
+				totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent + netDue;
+				totalOriginalDues = totalOriginalDues + originalDue;
+				totalPaymentToDate = totalPaymentToDate + paymentToDate;
+				log.info("total net due" + totalNetDuesOFCollegeStudent);
+				log.info("total original due " + totalOriginalDues);
+				log.info("total paid " + totalPaymentToDate);
+			}
+			return SUCCESS;
+
 		}
-		if (collegeId == null) {
+		else if(ses.getAttribute("sesProfile").toString().contentEquals("Parent")){
 			collegeId = Integer.parseInt(request.getParameter("instId"));
+			String courseName = request.getParameter("courseName");
 			popUp = true;
-		}
-		log.info("College Id is" + collegeId);
-		String courseName = request.getParameter("courseName");
-		// String feeName=request.getParameter("feeName");
-		List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
-		if(enrollmentNumber.size()<1)
-		{
-		totalDuesOfStudent=new ArrayList<Object[]>();	
-		return "nodues";	
-		}
-		totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
-		log.info("List size is");
-		Iterator<Object[]> itr = totalDuesOfStudent.iterator();
-		while (itr.hasNext()) {
-			Object[] dues = itr.next();
-			Double netDue = dues[1] == null ? 0.0 : (Double) dues[1];
-			Double originalDue = dues[2] == null ? 0.0 : (Double) dues[1];
-			Double paymentToDate = dues[3] == null ? 0.0 : (Double) dues[1];
-			totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent + netDue;
-			totalOriginalDues = totalOriginalDues + originalDue;
-			totalPaymentToDate = totalPaymentToDate + paymentToDate;
-			log.info("total net due" + totalNetDuesOFCollegeStudent);
-			log.info("total net due" + totalOriginalDues);
-			log.info("total net due" + totalPaymentToDate);
-		}
-
-		if (popUp == true) {
+			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+			if(enrollmentNumber.size()<1)
+			{
+			totalDuesOfStudent=new ArrayList<Object[]>();	
+			return "nodues";	
+			}
+			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
+			log.info("List size is");
+			Iterator<Object[]> itr = totalDuesOfStudent.iterator();
+			while (itr.hasNext()) {
+				Object[] dues = itr.next();
+				Double netDue = dues[1] == null ? 0.0 : (Double) dues[1];
+				Double originalDue = dues[2] == null ? 0.0 : (Double) dues[2];
+				Double paymentToDate = dues[3] == null ? 0.0 : (Double) dues[3];
+				totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent + netDue;
+				totalOriginalDues = totalOriginalDues + originalDue;
+				totalPaymentToDate = totalPaymentToDate + paymentToDate;
+				log.info("total net due" + totalNetDuesOFCollegeStudent);
+				log.info("total original due " + totalOriginalDues);
+				log.info("total paid " + totalPaymentToDate);
+			}
 			log.info("ppppppppppppppppppppppppppppppp");
-			return "popUp";
+           return "popUp";
+			
 		}
-
-		log.info("total dues of id" + totalDuesOfStudent.size());
-		return SUCCESS;
-
-	}
+	return "popUp";
+	
+}
 
 	public String UpdateCalcParameters() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
