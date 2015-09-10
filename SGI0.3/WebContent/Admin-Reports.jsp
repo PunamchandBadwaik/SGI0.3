@@ -326,6 +326,11 @@ try{
 											onclick="window.location='CollegeDueReport'">College
 											Due Report</button>
 									</p>
+									<p class="btn-group">
+										<button class="btn btn-default" title="Get College Due Report"
+											onclick="window.location='CustomCollegeDueReport'">Custom  College
+											Due Report</button>
+									</p>
 									
 									
 
@@ -342,6 +347,11 @@ try{
 										<button class="btn btn-default" title="Get College Report"
 											onclick="window.location='ShowCollegeReport'">College
 											Report</button>
+									</p>
+									<p class="btn-group">
+										<button class="btn btn-default" title="Get College Due Report"
+											onclick="window.location='CustomCollegeDueReport'">Custom  College
+											Due Report</button>
 									</p>
 
 									<%
@@ -372,8 +382,13 @@ try{
 											Report</button>
 									</p>
 
-
-
+                                   <p class="btn-group">
+										<button class="btn btn-default" title="Get College Due Report"
+											onclick="window.location='CustomCollegeDueReport'">Custom  College
+											Due Report</button>
+									</p>
+									
+                                
 
 
 

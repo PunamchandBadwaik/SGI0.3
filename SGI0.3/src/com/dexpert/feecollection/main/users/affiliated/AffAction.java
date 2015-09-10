@@ -579,16 +579,15 @@ public class AffAction extends ActionSupport {
 		// collegeDueReport = (ArrayList<PaymentDuesBean>)
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
-		
+
 		if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
 			collegeId = (Integer) ses.getAttribute("sesId");
 			String courseName = request.getParameter("courseName");
 			// String feeName=request.getParameter("feeName");
 			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
-			if(enrollmentNumber.size()<1)
-			{
-			totalDuesOfStudent=new ArrayList<Object[]>();	
-			return "nodues";	
+			if (enrollmentNumber.size() < 1) {
+				totalDuesOfStudent = new ArrayList<Object[]>();
+				return "nodues";
 			}
 			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
 			log.info("List size is");
@@ -607,16 +606,14 @@ public class AffAction extends ActionSupport {
 			}
 			return SUCCESS;
 
-		}
-		else if(ses.getAttribute("sesProfile").toString().contentEquals("Parent")){
+		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
 			collegeId = Integer.parseInt(request.getParameter("instId"));
 			String courseName = request.getParameter("courseName");
 			popUp = true;
 			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
-			if(enrollmentNumber.size()<1)
-			{
-			totalDuesOfStudent=new ArrayList<Object[]>();	
-			return "nodues";	
+			if (enrollmentNumber.size() < 1) {
+				totalDuesOfStudent = new ArrayList<Object[]>();
+				return "nodues";
 			}
 			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
 			log.info("List size is");
@@ -634,12 +631,12 @@ public class AffAction extends ActionSupport {
 				log.info("total paid " + totalPaymentToDate);
 			}
 			log.info("ppppppppppppppppppppppppppppppp");
-           return "popUp";
-			
+			return "popUp";
+
 		}
-	return "popUp";
-	
-}
+		return "popUp";
+
+	}
 
 	public String UpdateCalcParameters() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
@@ -731,6 +728,29 @@ public class AffAction extends ActionSupport {
 		}
 		return resList;
 
+	}
+
+	public String CustomCollegeDueReport() {
+
+		return SUCCESS;
+	}
+
+	public String getValForDropDown() {
+		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
+
+		} else if (ses.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
+
+		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Student")) {
+
+		}
+
+		else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
+
+		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
+
+		}
+
+		return SUCCESS;
 	}
 
 	public String getInsTransactionDetails() {
