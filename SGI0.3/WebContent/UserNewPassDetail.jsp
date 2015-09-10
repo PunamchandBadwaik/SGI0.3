@@ -89,6 +89,10 @@
 	<!-- topbar starts -->
 
 	<!-- topbar ends -->
+		<% String msg=(String)request.getAttribute("msg"); %>
+			
+							
+	
 	<div class="ch-container">
 		<div class="row">
 
@@ -104,11 +108,15 @@
 				</div>
 			</noscript>
 
-			<div id="content" class="col-lg-10 col-sm-10">
+				
+							
+					<div id="content" class="col-lg-10 col-sm-10">
 				<!-- content starts -->
 
-
-
+				
+ 
+								
+								
 
 				<div class="row">
 					<div class="box col-md-12">
@@ -117,7 +125,9 @@
 								<h2>
 									<i class="glyphicon glyphicon-list-alt"></i> Change Password
 								</h2>
-
+								
+								
+								
 								<div class="box-icon">
 
 									<a href="#" class="btn btn-minimize btn-round btn-default"><i
@@ -129,13 +139,22 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 
 									<!---Content-->
-									<form action="">
+									<form id="validatedForm" action="validateChangePasswordDetails">
 										<table class="table table-condensed">
 											<thead>
 
 												<tr>
 
-													<th></th>
+													<th><%if(msg !="" && msg !=null){ %>
+								
+									<div align="center"> <h2>
+		<style="color: red; text-align: center; font-weight: bold; font-size: x-large;">
+	<%=msg%> </h2>
+		
+	</div>
+
+<%} %>
+													</th>
 													<th></th>
 
 												</tr>
@@ -145,22 +164,26 @@
 												<tr>
 
 													<td style="font-weight: bold;" >Old Password</td>
-													<td><div id="the-basics" class="has-success"><input type="text" class="form-control"></div></td>
+													<td><div id="the-basics" class="has-success"><input type="text" name="loginBean.password" placeholder="Old Password" required="required" class="form-control"></div></td>
 												</tr>
 												<tr>
 
 													<td style="font-weight: bold;">New Password</td>
-													<td><div id="the-basics" class="has-success"><input type="text" class="form-control"></div></td>
+													<td><div id="the-basics" class="has-success"><input type="password" name="newPwd" id="password" required="required"
+												pattern=".{5,10}" placeholder="Password" class="form-control"></div></td>
 												</tr>
 												<tr>
 
 													<td style="font-weight: bold;">Confirm Password</td>
-													<td><div id="the-basics" class="has-success"><input type="text" class="form-control"></div></td>
+													<td><div id="the-basics" class="has-success">
+													<input type="hidden" name="loginBean.userName" value="<%=loginUser.getUserName()%>">
+													<input type="password" name="cPwd" id="cnfPass" required="required"
+												pattern=".{5,10}" placeholder="Confirm Password" oninput="check(this)" class="form-control"></div></td>
 												</tr>
 
 												<tr>
 
-													<td><input type="button" class="btn btn-info"
+													<td><input type="submit" class="btn btn-info"
 														value="Change Password"></td>
 													<td><input type="button" class="btn btn-default"
 														value="Cancel"></td>
@@ -225,6 +248,26 @@
 	<script src="js/jquery.history.js"></script>
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
+	
+	<script type="text/javascript">
+	function check(input) {
+		var pass=document.getElementById("password").value;
+		var cpass=document.getElementById("cnfPass").value;
+		if (input.value != document.getElementById('password').value && pass != cpass) {
+			input.setCustomValidity('Both passwords must match');
+			if (input.value < 5 && input.value.length()!=document.getElementById('password').value.length()) {
+				input.setCustomValidity('Passwrod must greater than 5');
+				
+
+			}
+
+		} else {
+			// input is valid -- reset the error message
+			input.setCustomValidity('');
+		}
+
+	}
+ 			</script>
 
 
 </body>

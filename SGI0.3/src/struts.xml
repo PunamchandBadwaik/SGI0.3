@@ -162,6 +162,7 @@
 		</action>
 
 
+		
 		<!-- changeUserPassword -->
 
 		<action name="changeUserPassword" class="com.dexpert.feecollection.main.users.LoginAction"
@@ -170,6 +171,19 @@
 			<result name="success">UserNewPassDetail.jsp</result>
 
 		</action>
+		
+						<!-- validateChangePasswordDetails -->
+			
+			<action name="validateChangePasswordDetails" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="validateChangePwdDetails">
+
+			<result name="success">EditUserDetail.jsp</result>
+			<result name="failure">UserNewPassDetail.jsp</result>
+
+		</action>
+			
+			
+		
 
 		<action name="editUserDetail" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="editUserDetail">
@@ -182,6 +196,39 @@
 		</action>
 
 
+
+			<!-- updatePersonalInfo Super Admin -->
+		<action name="updatePersonalInfo" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="updatePersonalInfoDetail">
+			<result name="success">EditUserDetail.jsp</result>
+			
+		</action>
+				
+				
+				<!-- updatePersonalInfo Admin -->
+		<action name="updatePersonalInfoAdmin" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="updatePersonalInfoAdminDetail">
+			<result name="success">EditUserDetail.jsp</result>
+			
+		</action>
+		  
+		  
+		  <!-- updatePersonalInfo Institute -->
+		<action name="updatePersonalInfoInstitute" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="updatePersonalInfoInstituteDetail">
+			<result name="success">EditUserDetail.jsp</result>
+			
+		</action>
+		
+				 <!-- updatePersonalInfo CollegeOperator -->
+		<action name="updatePersonalInfoCollegeOperator" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="updatePersonalInfoCollegeOperatorDetail">
+			<result name="success">EditUserDetail.jsp</result>
+			
+		</action>
+		
+
+			
 
 		<!-- ` forgetPasswordPage -->
 

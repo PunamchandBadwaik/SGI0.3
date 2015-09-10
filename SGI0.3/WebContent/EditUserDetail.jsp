@@ -460,6 +460,25 @@
 				xmlhttp.send();
 
 			}
+			
+			function check(input) {
+				var pass=document.getElementById("password").value;
+				var cpass=document.getElementById("cnfPass").value;
+				if (input.value != document.getElementById('password').value && pass != cpass) {
+					input.setCustomValidity('Both passwords must match');
+					if (input.value < 5 && input.value.length()!=document.getElementById('password').value.length()) {
+						input.setCustomValidity('Passwrod must greater than 5');
+						
+
+					}
+
+				} else {
+					// input is valid -- reset the error message
+					input.setCustomValidity('');
+				}
+
+			}
+
 		</script>
 </body>
 </html>

@@ -42,7 +42,17 @@ public class LoginAction extends ActionSupport {
 	LoginBean loginBean = new LoginBean();
 	LoginDAO loginDAO = new LoginDAO();
 
-	private String firstName;
+	private String firstName,newPwd;
+	private Integer userId;
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	private String profile;
 	private String emailId;
 	private ParBean parBean = new ParBean();
@@ -313,6 +323,72 @@ public class LoginAction extends ActionSupport {
 		return SUCCESS;
 	}
 
+	
+	public String validateChangePwdDetails() throws InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{
+		
+		
+		log.info("login details:"+loginBean.getUserName()+" "+loginBean.getPassword()+" "+newPwd);
+		log.info("user Name is ::" + loginBean.getUserName());
+		log.info("Password is ::" + loginBean.getPassword());
+		String encryptedPwd,decrypedText = null;
+		String userProfile="";
+		LoginBean lgbean = new LoginBean();
+		log.info("");
+
+		List<LoginBean> loginUserList = loginDAO.getLoginDetails(loginBean);
+
+		Iterator<LoginBean> loginIterator = loginUserList.iterator();
+		while (loginIterator.hasNext()) {
+			log.info("1");
+			lgbean = (LoginBean) loginIterator.next();
+			userProfile=lgbean.getProfile();
+			setUserId(lgbean.getLoginId());
+			encryptedPwd = lgbean.getPassword();
+			log.info("2");
+			PasswordEncryption.decrypt(encryptedPwd);
+			decrypedText = PasswordEncryption.plainStr;
+			log.info("3");
+			log.info("password frm Database is ::" + decrypedText);
+			log.info("4");
+		}
+		
+		if(loginBean.getPassword().equals(decrypedText) ){
+			
+			log.info("Password is matching:"+loginBean.getPassword());
+			
+			if(userProfile.contentEquals("Institute")){
+				
+				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+				request.setAttribute("msg", "Your Password is Successfully changed..");
+				return SUCCESS;
+				
+				} else if (userProfile.contentEquals("Admin")) {
+				
+				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+				request.setAttribute("msg", "Your Password is Successfully changed..");
+				return SUCCESS;
+			
+			}else if (userProfile.contentEquals("Super Admin")) {
+				
+				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+				request.setAttribute("msg", "Your Password is Successfully changed..");
+				return SUCCESS;
+				
+			}else if (userProfile.contentEquals("CollegeOperator")) {
+				
+				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+				request.setAttribute("msg", "Your Password is Successfully changed..");
+				return SUCCESS;
+				
+			}
+		}
+		request.setAttribute("msg", "Please Enter Your old Password");
+		return "failure";
+		
+	}
+
+	
+	
 	// End of Action Methods
 
 	// ---------------------------------------------------
@@ -349,6 +425,13 @@ public class LoginAction extends ActionSupport {
 
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
+	}
+	public String getNewPwd() {
+		return newPwd;
+	}
+
+	public void setNewPwd(String newPwd) {
+		this.newPwd = newPwd;
 	}
 
 }
