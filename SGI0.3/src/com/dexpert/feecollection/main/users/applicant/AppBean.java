@@ -69,8 +69,7 @@ public class AppBean implements Serializable {
 	 * @JoinColumn(name = "affInst_Fk") AffBean affBean;
 	 */
 
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = PaymentDuesBean.class)
-	@JoinColumn(name = "enrollmentNumber_Fk", referencedColumnName = "enrollmentNumber")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
 	@OrderBy(value = "dueId")
 	private Set<PaymentDuesBean> paymentDues;
 

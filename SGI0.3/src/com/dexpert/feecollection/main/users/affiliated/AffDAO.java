@@ -616,63 +616,83 @@ public class AffDAO {
 
 	public List<String> findAllStudentOfInstituteByCourse(Integer collegeId, String courseName) {
 		Session session = factory.openSession();
-        Criteria criteria=session.createCriteria(AppBean.class);
-        criteria.add(Restrictions.eq("affBeanStu.instId",collegeId)).setProjection(Projections.property("enrollmentNumber"));
-	    List<String> appBeans=criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-	    return appBeans;
+		Criteria criteria = session.createCriteria(AppBean.class);
+		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId));
+		if (courseName != null && !courseName.isEmpty()) {
+			criteria.add(Restrictions.eq("course", courseName));
+		}
+		criteria.setProjection(Projections.property("enrollmentNumber"));
+		List<String> appBeans = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		return appBeans;
 	}
-	public List<Object[]> findTotalDuesOFFee(String feeName,List<String> enrollmentNumber)
-	{
-	Session session=factory.openSession();
-	String query="SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
-    SQLQuery sqlQuery=session.createSQLQuery(query);
-    sqlQuery.setParameterList("enrollmentNumber", enrollmentNumber) ;
-    List<Object[]> totalDueOfStudent=sqlQuery.list();
-    session.close();
-    return totalDueOfStudent;
+
+	public List<Object[]> findTotalDuesOFFee(String feeName, List<String> enrollmentNumber) {
+		Session session = factory.openSession();
+		String query = "SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
+		SQLQuery sqlQuery = session.createSQLQuery(query);
+		sqlQuery.setParameterList("enrollmentNumber", enrollmentNumber);
+		List<Object[]> totalDueOfStudent = sqlQuery.list();
+		session.close();
+		return totalDueOfStudent;
 	}
 
 	public static void updatePersonalRecordOfInstitute(AffBean affBean) {
-		
-		Session session=factory.openSession();
-		
-		AffBean affBean2=(AffBean)session.get(AffBean.class, affBean.getInstId());
-		
+
+		Session session = factory.openSession();
+
+		AffBean affBean2 = (AffBean) session.get(AffBean.class, affBean.getInstId());
+
 		affBean2.setContactPerson(affBean.getContactPerson());
 		affBean2.setEmail(affBean.getEmail());
 		affBean2.setPlace(affBean.getPlace());
 		affBean2.setInstAddress(affBean.getInstAddress());
 		affBean2.setContactNumber(affBean.getContactNumber());
 		affBean2.setMobileNum(affBean.getMobileNum());
-		
-		Transaction tx=session.beginTransaction();
+
+		Transaction tx = session.beginTransaction();
 		session.merge(affBean2);
 		tx.commit();
 		session.close();
-		
+
 	}
-	public List<AffBean> getCollegList(Integer universityId)
-	{
-		Session session=factory.openSession();
-		Criteria criteria=session.createCriteria(AffBean.class);
-		if(universityId!=null){
-		criteria.add(Restrictions.eq("parBeanAff.parInstId",universityId));	}
-		List<AffBean> affBeans=criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-	    session.close();
+
+	public List<AffBean> getCollegList(Integer universityId) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(AffBean.class);
+		if (universityId != null) {
+			criteria.add(Restrictions.eq("parBeanAff.parInstId", universityId));
+		}
+		List<AffBean> affBeans = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		session.close();
 		return affBeans;
-	
+
 	}
-	public List<String> getListOfCourses(Integer collegeId)
-	{
-		Session session=factory.openSession();
-		Criteria criteria=session.createCriteria(AppBean.class);
-		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId)).setProjection(Projections.groupProperty("course")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);	
-		List<String> ListOfCourse=criteria.list();
+
+	public List<String> getListOfCourses(Integer collegeId) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(AppBean.class);
+		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId))
+				.setProjection(Projections.groupProperty("course")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<String> ListOfCourse = criteria.list();
 		session.clear();
 		return ListOfCourse;
 	}
-	
-	
-	
+
+	public List<Object[]> findDueOfFees(String feeName, List<String> enrollmentNumber) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(PaymentDuesBean.class);
+		criteria.add(Restrictions.in("appBean.enrollmentNumber", enrollmentNumber));
+		if (feeName != null && !feeName.isEmpty()) {
+			criteria.add(Restrictions.eq("feeName", feeName));
+		} else {
+			criteria.setProjection(Projections.groupProperty("feeName"));
+		}
+		criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
+				.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date")).add(Projections.sum("netDue")));
+       List<Object[]>  feeDues=criteria.list();
+		
+       session.close();
+       return feeDues;
+	}
 
 }

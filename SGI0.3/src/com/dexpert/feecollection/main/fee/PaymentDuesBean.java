@@ -6,9 +6,13 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+
+import com.dexpert.feecollection.main.users.applicant.AppBean;
 @Entity
 @Table(name = "fee_dues_master")
 public class PaymentDuesBean implements Serializable {
@@ -35,6 +39,16 @@ public class PaymentDuesBean implements Serializable {
 	private Integer feeId;
 	private Date dueDate,dateCalculated;
 	private Double total_fee_amount,payments_to_date,netDue;
+	@ManyToOne(targetEntity=AppBean.class)
+	@JoinColumn(name = "enrollmentNumber_Fk", referencedColumnName = "enrollmentNumber")
+	private AppBean appBean;
+	
+	public AppBean getAppBean() {
+		return appBean;
+	}
+	public void setAppBean(AppBean appBean) {
+		this.appBean = appBean;
+	}
 	public Integer getDueId() {
 		return dueId;
 	}

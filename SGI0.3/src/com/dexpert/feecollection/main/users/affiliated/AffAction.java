@@ -90,6 +90,7 @@ public class AffAction extends ActionSupport {
 	List<String> listOfCourse;
 	List<String> feeNameList;
 	AppDAO appDAO = new AppDAO();
+	List<Object[]> totalDuesOFCollege;
 
 	// End of Global Variables
 
@@ -738,30 +739,61 @@ public class AffAction extends ActionSupport {
 		String collegeName = request.getParameter("collegeName");
 		String courseName = request.getParameter("courseName");
 		String feeName = request.getParameter("feeName");
-		if ((universityName != null && !universityName.isEmpty()) && (collegeName != null && !collegeName.isEmpty())
-				&& (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
 
-		} else if ((universityName != null && !universityName.isEmpty())
-				&& (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
-				|| (universityName != null && !universityName.isEmpty())
-				&& (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
-				|| (universityName != null && !universityName.isEmpty())
-				&& (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())
-				|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
-				&& (feeName != null && !feeName.isEmpty())) {
+		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
+			if ((universityName != null && !universityName.isEmpty())
+					&& (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+					&& (feeName != null && !feeName.isEmpty())) {
 
-		} else if ((universityName != null && !universityName.isEmpty())
-				&& (collegeName != null && !collegeName.isEmpty())
-				|| (universityName != null && !universityName.isEmpty())
-				&& (courseName != null && !courseName.isEmpty())
-				|| (universityName != null && !universityName.isEmpty()) && (feeName != null && !feeName.isEmpty())
-				|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
-				|| (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
-				|| (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
+			} else if ((universityName != null && !universityName.isEmpty())
+					&& (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+					|| (universityName != null && !universityName.isEmpty())
+					&& (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+					|| (universityName != null && !universityName.isEmpty())
+					&& (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+					|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+					&& (feeName != null && !feeName.isEmpty())) {
 
-		} else if ((universityName != null && !universityName.isEmpty())
-				|| (collegeName != null && !collegeName.isEmpty()) || (feeName != null && !feeName.isEmpty())
-				|| (courseName != null && !courseName.isEmpty())) {
+			} else if ((universityName != null && !universityName.isEmpty())
+					&& (collegeName != null && !collegeName.isEmpty())
+					|| (universityName != null && !universityName.isEmpty())
+					&& (courseName != null && !courseName.isEmpty())
+					|| (universityName != null && !universityName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+					|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+					|| (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+					|| (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
+
+			} else if ((universityName != null && !universityName.isEmpty())
+					|| (collegeName != null && !collegeName.isEmpty()) || (feeName != null && !feeName.isEmpty())
+					|| (courseName != null && !courseName.isEmpty())) {
+
+			}
+		}// end of super admin
+		else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
+			if ((collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+					&& (feeName != null && !feeName.isEmpty())) {
+
+			} else if ((collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+					|| (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+					|| (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
+
+			} else if ((collegeName != null && !collegeName.isEmpty()) || (feeName != null && !feeName.isEmpty())
+					|| (courseName != null && !courseName.isEmpty())) {
+
+			}
+
+		}// end of university
+
+		else if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
+			if ((feeName != null && !feeName.isEmpty()) && (courseName != null && !courseName.isEmpty())) {
+				Integer collegeId = (Integer) ses.getAttribute("sesId");
+				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+				log.info("Number of Student"+enrollmentNumberList.size());
+				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
+                log.info("Due list size is"+totalDuesOFCollege.size());
+			} else if ((feeName != null && !feeName.isEmpty()) || (courseName != null && !courseName.isEmpty())) {
+
+			}
 
 		}
 
@@ -1112,6 +1144,14 @@ public class AffAction extends ActionSupport {
 
 	public void setFeeNameList(List<String> feeNameList) {
 		this.feeNameList = feeNameList;
+	}
+
+	public List<Object[]> getTotalDuesOFCollege() {
+		return totalDuesOFCollege;
+	}
+
+	public void setTotalDuesOFCollege(List<Object[]> totalDuesOFCollege) {
+		this.totalDuesOFCollege = totalDuesOFCollege;
 	}
 
 	// End of Getter Setter Methods
