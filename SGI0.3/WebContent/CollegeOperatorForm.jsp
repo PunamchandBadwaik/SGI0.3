@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
-<html lang="en">
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<html lang="en">
 <head>
+<%
+	//checking session
+	LoginBean loginUser = new LoginBean();
+	loginUser = (LoginBean) session.getAttribute("loginUserBean");
+	String profile = (String) session.getAttribute("sesProfile");
 
+	if (loginUser == null) {
+		response.sendRedirect("Login.jsp");
+
+		return;
+
+	}
+	String usercookie = null;
+	String sessionID = null;
+	String dispchar = "display:none";
+	Cookie[] cookies = request.getCookies();
+	if (cookies != null) {
+		for (Cookie cookie : cookies) {
+
+			if (cookie.getName().equals("user"))
+				usercookie = cookie.getValue();
+			if (cookie.getName().equals("JSESSIONID"))
+				sessionID = cookie.getValue();
+		}
+	} else {
+		sessionID = session.getId();
+	}
+%>
 <meta charset="utf-8">
 <title>FeeDesk</title>
-<style type="text/css">
-#errors {
-	color: red;
-	font-size: medium;
-	font-weight: bold;
-	text-align: center;
-}
-</style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description"
 	content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
@@ -56,36 +75,8 @@
 <link rel="shortcut icon" href="img/favicon.ico">
 
 </head>
-<%
-	//checking session
-	LoginBean loginUser = new LoginBean();
-	loginUser = (LoginBean) session.getAttribute("loginUserBean");
-	String profile = (String) session.getAttribute("sesProfile");
 
-	if (loginUser == null) {
-		response.sendRedirect("Login.jsp");
-
-		return;
-
-	}
-	String usercookie = null;
-	String sessionID = null;
-	String dispchar = "display:none";
-	Cookie[] cookies = request.getCookies();
-	if (cookies != null) {
-		for (Cookie cookie : cookies) {
-
-			if (cookie.getName().equals("user"))
-				usercookie = cookie.getValue();
-			if (cookie.getName().equals("JSESSIONID"))
-				sessionID = cookie.getValue();
-		}
-	} else {
-		sessionID = session.getId();
-	}
-%>
-
-<body>
+<body onload="getCollegeList()">
 	<!-- topbar starts -->
 
 	<!-- topbar ends -->
@@ -104,141 +95,251 @@
 				</div>
 			</noscript>
 
+
+
+			<%
+				String msg = (String) request.getAttribute("msg");
+			%>
+
+			<%
+				if (msg != null)
+
+				{
+			%>
+
+			<div
+				style="color: red; text-align: center; font-weight: bold; font-size: medium;">
+
+
+				<%=msg%>
+			</div>
+			<%
+				}
+			%>
+
+
 			<div id="content" class="col-lg-10 col-sm-10">
 				<!-- content starts -->
-
-
+				<div></div>
 
 
 				<div class="row">
-					<div class="box col-md-12">
-						<div class="box-inner">
-							<div class="box-header well">
-								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> Edit Personal
-									Information
-								</h2>
+					<form action="registerOperator">
+						<div class="box col-md-12">
+							<div class="box-inner">
+								<div class="box-header well">
+									<h2>
+										<i class="glyphicon glyphicon-info-sign"></i> New Operator
+										Form
+									</h2>
 
-								<div class="box-icon">
+									<div class="box-icon">
 
-									<a href="#" class="btn btn-minimize btn-round btn-default"><i
-										class="glyphicon glyphicon-chevron-up"></i></a>
+										<a href="#" class="btn btn-minimize btn-round btn-default"><i
+											class="glyphicon glyphicon-chevron-down"></i></a>
 
+									</div>
 								</div>
-							</div>
-							<div class="box-content row">
-								<div class="col-lg-12 col-md-12 animated fadeIn">
+								<div class="box-content row">
+									<div class="col-lg-12 col-md-12 animated fadeIn">
 
-									<!---Content-->
-									<form action="updatePersonalInfoCollegeOperator">
+
 										<table class="table table-condensed">
+											<thead>
 
+												<tr>
+													<th>
+														<%
+															if (profile.contentEquals("Affiliated")) {
+
+																System.out.print("Profile is ::" + profile);
+														%> <%-- <input type="hidden" name="aplInstId"
+														value="<%=loginUser.getAffBean().getInstId()%>"> --%> <%
+ 	}
+ %>
+													</th>
+													<th></th>
+													<th></th>
+
+												</tr>
+											</thead>
 											<tbody>
 
 												<tr>
 
-													<td style="font-weight: bold;">First Name</td>
-													<td>
-														<div id="the-basics" class="has-success">
-														
-														<input type="hidden" name="operatorBean.OperatorId"  class="form-control"
-																value='<s:property value="operatorBean.OperatorId" />'>
+													<td>Name</td>
+													<td><div id="the-basics" class="has-success">
+															<input required="required" id="District/Area"
+																name="operatorBean.operatorName"
+																value='<s:property value="operatorBean.operatorName"/>'
+																placeholder="First Name" type="text"
+																class="form-control">
+														</div></td>
 
-															<input type="text" name="operatorBean.operatorName"  class="form-control"
-																value='<s:property value="operatorBean.operatorName" />'>
-														</div>
+													<td><div id="the-basics" class="has-success">
+															<input required="required"
+																name="operatorBean.operatorLstName"
+																value='<s:property value="operatorBean.operatorLstName"/>'
+																placeholder="Last Name" type="text" class="form-control">
+														</div></td>
 
-													</td>
 												</tr>
-												
+
 												<tr>
 
-													<td style="font-weight: bold;">Last Name</td>
-													<td>
-
-														<div id="the-basics" class="has-success">
-															<input type="text" name="operatorBean.operatorLstName" class="form-control" value='<s:property value="operatorBean.operatorLstName" />'>
-														</div>
-													</td>
-												</tr>
-												
-																		<tr>
-
-													<td style="font-weight: bold;">Email ID</td>
-													<td>
-
-														<div id="the-basics" class="has-success">
-
-															<input type="text" name="operatorBean.operatorEmail" class="form-control" value='<s:property value="operatorBean.operatorEmail" />'>
-														</div>
-													</td>
-												</tr>
-												
-												<tr>
-
-													<td style="font-weight: bold;">Address</td>
+													<td>Gender</td>
 													<td><div id="the-basics" class="has-success">
 
-															<textarea name="operatorBean.operatorAddress" class="form-control"><s:property value="operatorBean.operatorAddress"/>
-															</textarea>
+															<s:set var="gender">
+																<s:property value="operatorBean.gender" />
+															</s:set>
+															<s:if test='%{#gender=="Male"}'>
+																<input type="radio" required="required"
+																	name="operatorBean.gender" checked="checked"
+																	id="userPrefixMr" value="Male">Male
+															&nbsp;&nbsp;&nbsp;<input type="radio" required="required"
+																	name="operatorBean.gender" id="userPrefixMrs"
+																	value="Female">Female
+															
+															</s:if>
+															<s:elseif test='%{#gender=="Female"}'>
+																<input type="radio" required="required"
+																	name="operatorBean.gender" id="userPrefixMr"
+																	value="Male">Male
+															&nbsp;&nbsp;&nbsp;<input checked="checked" type="radio"
+																	required="required" name="operatorBean.gender"
+																	id="userPrefixMrs" value="Female">Female
+															
+															</s:elseif>
+
+															<s:else>
+																<input type="radio" required="required"
+																	name="operatorBean.gender" id="userPrefixMr"
+																	value="Male">Male
+															&nbsp;&nbsp;&nbsp;<input type="radio" required="required"
+																	name="operatorBean.gender" id="userPrefixMrs"
+																	value="Female">Female
+															
+															</s:else>
+
 
 
 														</div></td>
+
 												</tr>
+												<%
+													if (!profile.contentEquals("Affiliated")) {
+												%>
+
 												<tr>
 
-													<td style="font-weight: bold;">Mobile Primary</td>
-													<td>
-														<div id="the-basics" class="has-success" >
+													<td>College Name</td>
+													<td colspan="2">
+														<div class="box-content">
+															<div class="control-group">
+																<div class="controls">
+																	<select data-rel="chosen" name="opInstId"
+																		style="width: 300px;">
+																		<option value="">--Select College--</option>
+																		<s:iterator value="affInstList">
+
+																			<option value='<s:property value="instId" />'><s:property
+																					value="instName" /></option>
+
+																		</s:iterator>
+																	</select>
+																</div>
+															</div>
 
 
-															<input type="text" name="operatorBean.operatorContact" class="form-control" value='<s:property value="operatorBean.operatorContact" />'>
 														</div>
+
 													</td>
+
+												</tr>
+												<%
+													}
+												%>
+
+												<tr>
+
+													<td>Address</td>
+													<td colspan="2"><div id="the-basics"
+															class="has-success">
+															<textarea required="required" id="CollegeName"
+																name="operatorBean.operatorAddress"
+																placeholder="Address" class="form-control"><s:property
+																	value="operatorBean.operatorAddress" /></textarea>
+
+														</div></td>
+
 												</tr>
 
 												<tr>
 
-													<td style="font-weight: bold;">Mobile Secondary</td>
-													<td>
+													<td>Primary Mobile Number</td>
+													<td colspan="2"><div id="the-basics"
+															class="has-success">
+															<input required="required" id="Contact"
+																name="operatorBean.operatorContact" maxlength="10"
+																value='<s:property value="operatorBean.operatorContact"/>'
+																placeholder="Mobile Number" pattern="[789][0-9]{9}"
+																type="text" class="form-control">
 
-														<div id="the-basics" class="has-success">
+														</div></td>
 
-															<input type="text" name="operatorBean.operatorContactSec" class="form-control" value='<s:property value="operatorBean.operatorContactSec" />'>
-														</div>
-													</td>
 												</tr>
-
 												<tr>
 
-													<td><input type="submit" class="btn btn-success"
-														value="Update Detail"></td>
-													<td><input type="button" class="btn btn-default"
-														value="Cancel"></td>
+													<td>Secondary Mobile Number</td>
+													<td colspan="2"><div id="the-basics"
+															class="has-success">
+															<input id="Contact"
+																name="operatorBean.operatorContactSec" maxlength="10"
+																value='<s:property value="operatorBean.operatorContactSec"/>'
+																placeholder="Mobile Number" pattern="[789][0-9]{9}"
+																type="text" class="form-control">
+
+														</div></td>
 
 												</tr>
+												<tr>
+
+													<td>Email Id</td>
+													<td colspan="2"><div id="the-basics"
+															class="has-success">
+															<input required="required" id="Contact"
+																value='<s:property value="operatorBean.operatorEmail"/>'
+																name="operatorBean.operatorEmail" placeholder="Email ID"
+																type="email" class="form-control">
+
+														</div></td>
+
+												</tr>
+
+
+
 
 											</tbody>
 										</table>
-									</form>
+
+
+									</div>
 
 
 								</div>
-
-
 							</div>
+						</div>
+						<div class="col-md-12">
+							<button type="submit" onclick="OpenSummaryInParent()"
+								class="btn btn-success">Add Operator Detail</button>
 
+							<button onclick="window.close()" class="btn btn-info">Close
+							</button>
 
 						</div>
-
-					</div>
+					</form>
 				</div>
-
-
-
-
-
-
 
 				<!--/row-->
 
@@ -259,7 +360,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">Ã—</button>
+						<button type="button" class="close" data-dismiss="modal">Ã?</button>
 						<h3>Settings</h3>
 					</div>
 					<div class="modal-body">
@@ -324,6 +425,17 @@
 	<script src="js/jquery.history.js"></script>
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
+	<%-- 
+	<script>
+		
+			window.onunload = function() {
+				window.opener.document.location.reload();
+				setTimeout(window.close(), 100);
+			}
+
+
+		
+	</script> --%>
 
 
 </body>
