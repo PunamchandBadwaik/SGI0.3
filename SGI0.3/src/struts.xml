@@ -770,7 +770,7 @@
 		<action name="StudentPayment"
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
 			method="studentPayment">
-			<result name="success">Success.jsp</result>
+			<result name="success">WaitToLoad.jsp</result>
 			<result name="error">Login.jsp</result>
 
 

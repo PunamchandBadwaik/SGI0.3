@@ -29,9 +29,13 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	 * 
 	 */
 
-	public String SabPaisaURL = "49.50.72.228:8080";
+	public String SabPaisaURL = "localhost:8081";
+	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
+	
+	/*public String SabPaisaURL = "49.50.72.228:8080";
 	public String returnUrl = "http://49.50.72.228:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://49.50.72.228:8080/SGI0.3/Login.jsp";
+	String clientFailureUrl = "http://49.50.72.228:8080/SGI0.3/Login.jsp";*/
 
 	private static final long serialVersionUID = 1L;
 	HttpServletRequest request = ServletActionContext.getRequest();
@@ -312,7 +316,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			tran.setStatus("Pending");
 			//
 			dao.insertPaymentDetails(tran);
-			String name = studentDetails.getAplFirstName();
+			String name = studentDetails.getAplFirstName().concat(" ").concat(studentDetails.getAplLstName());
 
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 
@@ -325,9 +329,11 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			String url = "http://" + SabPaisaURL + "/SabPaisa?Name=" + name + "&amt=" + fee + "&txnId=" + txnId
 					+ "&RollNo=" + enrollmentId + "&client=SGI" + "&ru=" + returnUrl + "&Contact="
 					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl + "&Email="
-					+ studentDetails.getAplEmail();
+					+ studentDetails.getAplEmail()+"&Add="+studentDetails.getAplAddress();
 
-			response.sendRedirect(url);
+			request.setAttribute("sabPaisaURL", url);
+			
+			//response.sendRedirect(url);
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
