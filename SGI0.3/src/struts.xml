@@ -412,13 +412,16 @@
 		</action>
 		<action name="CustomCollegeDueReport"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
-			method="CustomCollegeDueReport">
+			method="getValForDropDown">
         <result name="success">Custom_College-Due-Report.jsp</result>
 		</action>
 		<action name="getValForDropDown"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="getValForDropDown">
-        <result name="success">.jsp</result>
+        <result name="success">Custom_College-Due-Report.jsp</result>
+        <result name="feeName">FeeNames_Ajax.jsp</result>
+        <result name="collegeList">CollegeList_Ajax.jsp</result>
+        <result name="listOfCourse">CourseList_Ajax.jsp</result>
 		</action>
 		
 		<action name="saveFeeCalcDetails"

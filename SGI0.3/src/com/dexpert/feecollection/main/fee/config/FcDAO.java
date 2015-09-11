@@ -189,6 +189,16 @@ public class FcDAO {
 		return feeName;
 
 	}
+	
+	public List<String> getFeeNames(List<Integer> feeIdes)
+	{
+	Session session=factory.openSession();	
+	Criteria criteria=session.createCriteria(FeeDetailsBean.class);	
+	criteria.add(Restrictions.in("feeId", feeIdes)).setProjection(Projections.property("feeName"));
+	List<String> feeName=criteria.list();
+	session.close();
+	return feeName;	
+	}
 
 	// DAO Methods End
 }

@@ -631,6 +631,30 @@ public class AffDAO {
     session.close();
     return totalDueOfStudent;
     }
+	public List<AffBean> getCollegList(Integer universityId)
+	{
+		Session session=factory.openSession();
+		Criteria criteria=session.createCriteria(AffBean.class);
+		if(universityId!=null){
+		criteria.add(Restrictions.eq("parBeanAff.parInstId",universityId));	}
+		List<AffBean> affBeans=criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+	    session.close();
+		return affBeans;
+	
+	}
+	public List<String> getListOfCourses(Integer collegeId)
+	{
+		Session session=factory.openSession();
+		Criteria criteria=session.createCriteria(AppBean.class);
+		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId)).setProjection(Projections.groupProperty("course")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);	
+		List<String> ListOfCourse=criteria.list();
+		session.clear();
+		return ListOfCourse;
+	}
+	
+	
+	
+	
 	
 
 }

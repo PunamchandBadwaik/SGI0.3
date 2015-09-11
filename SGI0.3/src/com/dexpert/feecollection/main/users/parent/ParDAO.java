@@ -23,6 +23,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -150,70 +151,80 @@ public class ParDAO {
 
 	}
 
-	public static ParBean validateTheForgetPwdDetails(String profile, String emailId) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
-		Session session=factory.openSession();
-		try{
-		ParBean bean=(ParBean)session.createCriteria(ParBean.class).add(Restrictions.eq("parInstEmail", emailId)).list().iterator().next();
-		if(bean!=null){
-			
-			LoginBean loginDetailsOfSuAdmin=(LoginBean)session.get(LoginBean.class,bean.getLoginBean().getLoginId());
-			
-			// to get Random generated Password
-			String password = RandomPasswordGenerator.generatePswd(6, 8, 1, 2, 0);
-			log.info("Password Generated is " + password);
-			log.info("User Name is " + bean.loginBean.getUserName());
+	public static ParBean validateTheForgetPwdDetails(String profile, String emailId) throws InvalidKeyException,
+			NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException,
+			UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+		Session session = factory.openSession();
+		try {
+			ParBean bean = (ParBean) session.createCriteria(ParBean.class)
+					.add(Restrictions.eq("parInstEmail", emailId)).list().iterator().next();
+			if (bean != null) {
 
-			// to Encrypt Password
-			PasswordEncryption.encrypt(password);
-			String encryptedPwd = PasswordEncryption.encStr;
-			
-			
-		loginDetailsOfSuAdmin.setPassword(encryptedPwd);
-		
-		
-		Transaction tx=session.beginTransaction();
-		session.saveOrUpdate(loginDetailsOfSuAdmin);
-			
+				LoginBean loginDetailsOfSuAdmin = (LoginBean) session.get(LoginBean.class, bean.getLoginBean()
+						.getLoginId());
+
+				// to get Random generated Password
+				String password = RandomPasswordGenerator.generatePswd(6, 8, 1, 2, 0);
+				log.info("Password Generated is " + password);
+				log.info("User Name is " + bean.loginBean.getUserName());
+
+				// to Encrypt Password
+				PasswordEncryption.encrypt(password);
+				String encryptedPwd = PasswordEncryption.encStr;
+
+				loginDetailsOfSuAdmin.setPassword(encryptedPwd);
+
+				Transaction tx = session.beginTransaction();
+				session.saveOrUpdate(loginDetailsOfSuAdmin);
+
 				tx.commit();
-			//session.close();
-			
-			// -----Code for sending email//--------------------
-			EmailSessionBean email = new EmailSessionBean();
-			email.sendEmail(bean.getParInstEmail(), "Welcome To Fee Collection Portal!", bean.getLoginBean().getUserName(), password,
-					bean.getParInstName());
-			
-			log.info("password :"+password);
-			
-		}
-		
-		
-		return bean;
-		} catch(NoSuchElementException ex)
-		{
-		return null;
-		
-		} 
-		finally {
+				// session.close();
+
+				// -----Code for sending email//--------------------
+				EmailSessionBean email = new EmailSessionBean();
+				email.sendEmail(bean.getParInstEmail(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
+						.getUserName(), password, bean.getParInstName());
+
+				log.info("password :" + password);
+
+			}
+
+			return bean;
+		} catch (NoSuchElementException ex) {
+			return null;
+
+		} finally {
 
 			// close session
 			session.close();
 
 		}
 	}
-	public List<Integer> getIdesOfAllCollege(Integer id)
-	{
-	List<Integer> listOfIdes=new ArrayList<Integer>();
-	Session session=factory.openSession();	
-	Criteria criteria=session.createCriteria(ParBean.class);	
-	ParBean parBean=(ParBean)criteria.add(Restrictions.eq("parInstId",id)).list().iterator().next();	
-	Set<AffBean> affBean=parBean.getAffBeanOneToManySet();
-	Iterator<AffBean> itr=affBean.iterator();
-	while(itr.hasNext()){
-	listOfIdes.add(itr.next().getInstId());	
+
+	public List<Integer> getIdesOfAllCollege(Integer id) {
+		List<Integer> listOfIdes = new ArrayList<Integer>();
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(ParBean.class);
+		ParBean parBean = (ParBean) criteria.add(Restrictions.eq("parInstId", id)).list().iterator().next();
+		Set<AffBean> affBean = parBean.getAffBeanOneToManySet();
+		Iterator<AffBean> itr = affBean.iterator();
+		while (itr.hasNext()) {
+			listOfIdes.add(itr.next().getInstId());
+		}
+		log.info("list size is" + listOfIdes.size());
+		return listOfIdes;
+
 	}
-	log.info("list size is"+listOfIdes.size());
-	return listOfIdes;
-		
-		
+
+	public Integer getUniversityId(String universityName) {
+		Integer universityId=null;
+		if(universityName!=null &&!universityName.isEmpty()&&!universityName.contentEquals("")){
+		Session session = factory.openSession();
+		universityId=(Integer)session.createCriteria(ParBean.class).add(Restrictions.eq("parInstName", universityName))
+				.setProjection(Projections.id()).list().iterator().next();
+		}
+	        return universityId;
+	
 	}
-	}
+
+}

@@ -22,10 +22,10 @@
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-			if (cookie.getName().equals("user"))
-				usercookie = cookie.getValue();
-			if (cookie.getName().equals("JSESSIONID"))
-				sessionID = cookie.getValue();
+	if (cookie.getName().equals("user"))
+		usercookie = cookie.getValue();
+	if (cookie.getName().equals("JSESSIONID"))
+		sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
@@ -290,78 +290,25 @@
 									<div>
 
 										<div class="controls">
-										<table>
-										<tr>
-										<td>Select UniverSity</td>
-										<td><select name="appBean1.course" id="courseId"
-												onchange="universitySelected(this.value)" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select University---</option>
-												<option>Pune</option>
-												<option>Nagpur</option>
-
-
-
-
-
-											</select></td>
-                                      										
-										
-										</tr>
-										
-										</table>	
-
-										</div>
-
-
-
-
-									</div>
-
-
-									 <p class="btn-group">
-									<div>
-
-										<div class="controls">
-										<table>
-										<tr>
-										<td>Select College Name</td>
-										<td><select name="appBean1.course" id="courseId"
-												onchange="collegeSelected(this.value)" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select College---</option>
-												<option value="Pune" >Pune</option>
-												<option value="Nagpur">Nagpur</option>
-											</select></td>
-										
-										</tr>
-									
-										</table>
-											
-
-										</div>
-
-
-
-
-									</div>
-                                    </p>
-									  <p class="btn-group">
-									<div>
-
-										<div class="controls">
 											<table>
-											<tr>
-											<td>Select Course</td>
-											<td><select name="appBean1.course" id="courseId"
-												onchange="hideEnrollNo()" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select Course---</option>
-											</select></td>
-											
-											
-											</tr>
-											
+												<tr>
+													<td>Select UniverSity</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="universitySelected(this.value)"
+														data-rel="chosen" style="width: 240px;">
+															<option value="">---Select University---</option>
+															<option>Pune</option>
+															<option>Nagpur</option>
+
+
+
+
+
+													</select></td>
+
+
+												</tr>
+
 											</table>
 
 										</div>
@@ -370,22 +317,51 @@
 
 
 									</div>
-                                </p>
-									  <p class="btn-group">
+
+
+									<p class="btn-group">
 									<div>
 
 										<div class="controls">
 											<table>
-											<tr><td>Select Fee Name</td>
-											<td><select name="appBean1.course" id="courseId"
-												onchange="hideEnrollNo()" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select Fees---</option>
+												<tr>
+													<td>Select College Name</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="collegeSelected(this.value)" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select College---</option>
+															<option value="Pune">Pune</option>
+															<option value="Nagpur">Nagpur</option>
+													</select></td>
+
+												</tr>
+
+											</table>
 
 
-											</select></td>
-											
-											</tr>
+										</div>
+
+
+
+
+									</div>
+									</p>
+									<p class="btn-group">
+									<div>
+
+										<div class="controls">
+											<table>
+												<tr>
+													<td>Select Course</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="hideEnrollNo()" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select Course---</option>
+													</select></td>
+
+
+												</tr>
+
 											</table>
 
 										</div>
@@ -394,7 +370,32 @@
 
 
 									</div>
-                                  </P>
+									</p>
+									<p class="btn-group">
+									<div>
+
+										<div class="controls">
+											<table>
+												<tr>
+													<td>Select Fee Name</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="hideEnrollNo()" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select Fees---</option>
+
+
+													</select></td>
+
+												</tr>
+											</table>
+
+										</div>
+
+
+
+
+									</div>
+									</P>
 
 
 									<%
@@ -404,25 +405,27 @@
 									<%
 										if (profile.contentEquals("Parent")) {
 									%>
-									 <p class="btn-group">
+									<p class="btn-group">
 									<div>
 
 										<div class="controls">
-										<table>
-										<tr>
-										<td>Select College Name</td>
-										<td><select name="appBean1.course" id="courseId"
-												onchange="collegeSelected(this.value)" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select College---</option>
-												<option value="Pune" >Pune</option>
-												<option value="Nagpur">Nagpur</option>
-											</select></td>
-										
-										</tr>
-									
-										</table>
-											
+											<table>
+												<tr>
+													<td>Select College Name</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="collegeSelected(this.value)" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select College---</option>
+															<s:iterator value="affBeansList">
+																<option value="<s:property value="instName"/>"><s:property
+																		value="instName" /></option>
+															</s:iterator>
+													</select></td>
+
+												</tr>
+
+											</table>
+
 
 										</div>
 
@@ -430,23 +433,23 @@
 
 
 									</div>
-                                    </p>
-									  <p class="btn-group">
-									<div>
+									</p>
+									<p class="btn-group">
+									<div id="courseList" style="display: none;">
 
 										<div class="controls">
 											<table>
-											<tr>
-											<td>Select Course</td>
-											<td><select name="appBean1.course" id="courseId"
-												onchange="hideEnrollNo()" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select Course---</option>
-											</select></td>
-											
-											
-											</tr>
-											
+												<tr>
+													<td>Select Course</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="hideEnrollNo()" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select Course---</option>
+													</select></td>
+
+
+												</tr>
+
 											</table>
 
 										</div>
@@ -455,22 +458,23 @@
 
 
 									</div>
-                                </p>
-									  <p class="btn-group">
-									<div>
+									</p>
+									<p class="btn-group">
+									<div id="feeName">
 
 										<div class="controls">
 											<table>
-											<tr><td>Select Fee Name</td>
-											<td><select name="appBean1.course" id="courseId"
-												onchange="hideEnrollNo()" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select Fees---</option>
+												<tr>
+													<td>Select Fee Name</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="hideEnrollNo()" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select Fees---</option>
 
 
-											</select></td>
-											
-											</tr>
+													</select></td>
+
+												</tr>
 											</table>
 
 										</div>
@@ -479,7 +483,8 @@
 
 
 									</div>
-                                  </P>
+									</P>
+
 
 
 									<%
@@ -488,23 +493,27 @@
 									<%
 										if (profile.contentEquals("Affiliated")) {
 									%>
-									
-									  <p class="btn-group">
+
+									<p class="btn-group">
 									<div>
 
 										<div class="controls">
 											<table>
-											<tr>
-											<td>Select Course</td>
-											<td><select name="appBean1.course" id="courseId"
-												onchange="hideEnrollNo()" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select Course---</option>
-											</select></td>
-											
-											
-											</tr>
-											
+												<tr>
+													<td>Select Course</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="courseSelected(this.value)" data-rel="chosen"
+														style="width: 240px;">
+
+															<option value="">---Select Course---</option>
+															<s:iterator value="listOfCourse" status="var">
+																<option value="<s:property/>"><s:property /></option>
+															</s:iterator>
+													</select></td>
+
+
+												</tr>
+
 											</table>
 
 										</div>
@@ -513,22 +522,23 @@
 
 
 									</div>
-                                </p>
-									  <p class="btn-group">
-									<div>
+									</p>
+									<p class="btn-group">
+									<div id="feeName">
 
 										<div class="controls">
 											<table>
-											<tr><td>Select Fee Name</td>
-											<td><select name="appBean1.course" id="courseId"
-												onchange="hideEnrollNo()" data-rel="chosen"
-												style="width: 240px;">
-												<option value="">---Select Fees---</option>
+												<tr>
+													<td>Select Fee Name</td>
+													<td><select name="appBean1.course" id="courseId"
+														onchange="hideEnrollNo()" data-rel="chosen"
+														style="width: 240px;">
+															<option value="">---Select Fees---</option>
 
 
-											</select></td>
-											
-											</tr>
+													</select></td>
+
+												</tr>
 											</table>
 
 										</div>
@@ -537,7 +547,7 @@
 
 
 									</div>
-                                  </P>
+									</P>
 
 
 
@@ -631,58 +641,55 @@
 						<!-- TypeAhead Script -->
 						<script src="js/typeahead.bundle.js"></script>
 						<script type="text/javascript">
-						function universitySelected(universityName)
-						{
-							alert(universityName);
-							
-							
-							
-						}
-						function collegeSelected(collegeName)
-						{
-							alert(collegeName);
-							
-							
-							
-						}
-						function courseSelected(couseName)
-						{
+							function universitySelected(universityName) {
+								alert(universityName);
 
-							
-						}
-						function sendProfile()
-						{
-							
-							
-							
-							var xmlhttp;
-							if (window.XMLHttpRequest)
-							  {
-							  xmlhttp=new XMLHttpRequest();
-							  }
-							else
-							  {
-							  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-							  }
-							xmlhttp.onreadystatechange=function()
-							  {
-							  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-							    {
-							    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-							    }
-							  }
-							xmlhttp.open("GET","getValForDropDown",true);
-							xmlhttp.send();	
-							
-							
-						}
-						
-						
-						
-						
-						
+							}
+							function collegeSelected(collegeName) {
+								var ajax = true;
+								var query = "?collegeName=" + collegeName
+										+ "&ajax=" + ajax;
+								var xmlhttp;
+								if (window.XMLHttpRequest) {
+									xmlhttp = new XMLHttpRequest();
+								} else {
+									xmlhttp = new ActiveXObject(
+											"Microsoft.XMLHTTP");
+								}
+								xmlhttp.onreadystatechange = function() {
+									if (xmlhttp.readyState == 4
+											&& xmlhttp.status == 200) {
+										document.getElementById("courseList").innerHTML = xmlhttp.responseText;
+									}
+								}
+								xmlhttp.open("GET",
+										"getValForDropDown" + query, true);
+								xmlhttp.send();
+	
+
+							}
+							function courseSelected(courseName) {
+								var ajax = true;
+								var query = "?courseName=" + courseName
+										+ "&ajax=" + ajax;
+								var xmlhttp;
+								if (window.XMLHttpRequest) {
+									xmlhttp = new XMLHttpRequest();
+								} else {
+									xmlhttp = new ActiveXObject(
+											"Microsoft.XMLHTTP");
+								}
+								xmlhttp.onreadystatechange = function() {
+									if (xmlhttp.readyState == 4
+											&& xmlhttp.status == 200) {
+										document.getElementById("feeName").innerHTML = xmlhttp.responseText;
+									}
+								}
+								xmlhttp.open("GET",
+										"getValForDropDown" + query, true);
+								xmlhttp.send();
+
+							}
 						</script>
-						
-						
 </body>
 </html>
