@@ -130,7 +130,7 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 
 									<!---Content-->
-									<form action="updatePersonalInfo">
+									<form action="updatePersonalInfoInstitute">
 										<table class="table table-condensed">
 
 											<tbody>
@@ -140,8 +140,11 @@
 													<td style="font-weight: bold;">Institute Name</td>
 													<td>
 														<div id="the-basics" class="has-success">
+														
+														<input type="hidden" name="affBean.instId" class="form-control"
+																value='<s:property value="affBean.instId" />'>
 
-															<input type="text" class="form-control"
+															<input type="text" name="affBean.instName" readonly="readonly" class="form-control"
 																value='<s:property value="affBean.instName" />'>
 														</div>
 
@@ -153,7 +156,7 @@
 													<td>
 														<div id="the-basics" class="has-success">
 
-															<input type="text" class="form-control"
+															<input type="text" name="affBean.contactPerson" class="form-control"
 																value='<s:property value="affBean.contactPerson" />'>
 
 														</div>
@@ -165,7 +168,7 @@
 													<td>
 
 														<div id="the-basics" class="has-success">
-															<input type="text" class="form-control"
+															<input type="text" name="affBean.email" class="form-control"
 																value='<s:property value="affBean.email" />'>
 														</div>
 													</td>
@@ -177,7 +180,7 @@
 													<td>
 
 														<div id="the-basics" class="has-success">
-															<input type="text" class="form-control"
+															<input type="text" name="affBean.place" class="form-control"
 																value='<s:property value="affBean.place" />'>
 														</div>
 													</td>
@@ -187,7 +190,7 @@
 													<td style="font-weight: bold;">Address</td>
 													<td><div id="the-basics" class="has-success">
 
-															<textarea class="form-control"><s:property
+															<textarea name="affBean.instAddress" class="form-control"><s:property
 																	value="affBean.instAddress" /></textarea>
 
 
@@ -200,7 +203,7 @@
 														<div id="the-basics" class="has-success">
 
 
-															<input type="text" class="form-control"
+															<input type="text" name="affBean.contactNumber" class="form-control"
 																value='<s:property value="affBean.contactNumber" />'>
 														</div>
 													</td>
@@ -213,7 +216,7 @@
 
 														<div id="the-basics" class="has-success">
 
-															<input type="text" class="form-control"
+															<input type="text" name="affBean.mobileNum" class="form-control"
 																value='<s:property value="affBean.mobileNum" />'>
 														</div>
 													</td>
@@ -221,7 +224,7 @@
 
 												<tr>
 
-													<td><input type="button" class="btn btn-success"
+													<td><input type="submit" class="btn btn-success"
 														value="Update Detail"></td>
 													<td><input type="button" class="btn btn-default"
 														value="Cancel"></td>

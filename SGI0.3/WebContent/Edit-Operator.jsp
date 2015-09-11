@@ -130,7 +130,7 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 
 									<!---Content-->
-									<form action="updatePersonalInfo">
+									<form action="updatePersonalInfoCollegeOperator">
 										<table class="table table-condensed">
 
 											<tbody>
@@ -140,8 +140,11 @@
 													<td style="font-weight: bold;">First Name</td>
 													<td>
 														<div id="the-basics" class="has-success">
+														
+														<input type="hidden" name="operatorBean.OperatorId"  class="form-control"
+																value='<s:property value="operatorBean.OperatorId" />'>
 
-															<input type="text" class="form-control"
+															<input type="text" name="operatorBean.operatorName"  class="form-control"
 																value='<s:property value="operatorBean.operatorName" />'>
 														</div>
 
@@ -154,7 +157,7 @@
 													<td>
 
 														<div id="the-basics" class="has-success">
-															<input type="text" class="form-control" value='<s:property value="operatorBean.operatorLstName" />'>
+															<input type="text" name="operatorBean.operatorLstName" class="form-control" value='<s:property value="operatorBean.operatorLstName" />'>
 														</div>
 													</td>
 												</tr>
@@ -166,7 +169,7 @@
 
 														<div id="the-basics" class="has-success">
 
-															<input type="text" class="form-control" value='<s:property value="operatorBean.operatorEmail" />'>
+															<input type="text" name="operatorBean.operatorEmail" class="form-control" value='<s:property value="operatorBean.operatorEmail" />'>
 														</div>
 													</td>
 												</tr>
@@ -176,7 +179,7 @@
 													<td style="font-weight: bold;">Address</td>
 													<td><div id="the-basics" class="has-success">
 
-															<textarea class="form-control"><s:property value="operatorBean.operatorAddress"/>
+															<textarea name="operatorBean.operatorAddress" class="form-control"><s:property value="operatorBean.operatorAddress"/>
 															</textarea>
 
 
@@ -189,7 +192,7 @@
 														<div id="the-basics" class="has-success" >
 
 
-															<input type="text" class="form-control" value='<s:property value="operatorBean.operatorContact" />'>
+															<input type="text" name="operatorBean.operatorContact" class="form-control" value='<s:property value="operatorBean.operatorContact" />'>
 														</div>
 													</td>
 												</tr>
@@ -201,14 +204,14 @@
 
 														<div id="the-basics" class="has-success">
 
-															<input type="text" class="form-control" value='<s:property value="operatorBean.operatorContactSec" />'>
+															<input type="text" name="operatorBean.operatorContactSec" class="form-control" value='<s:property value="operatorBean.operatorContactSec" />'>
 														</div>
 													</td>
 												</tr>
 
 												<tr>
 
-													<td><input type="button" class="btn btn-success"
+													<td><input type="submit" class="btn btn-success"
 														value="Update Detail"></td>
 													<td><input type="button" class="btn btn-default"
 														value="Cancel"></td>

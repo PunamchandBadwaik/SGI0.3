@@ -630,7 +630,27 @@ public class AffDAO {
     List<Object[]> totalDueOfStudent=sqlQuery.list();
     session.close();
     return totalDueOfStudent;
-    }
+	}
+
+	public static void updatePersonalRecordOfInstitute(AffBean affBean) {
+		
+		Session session=factory.openSession();
+		
+		AffBean affBean2=(AffBean)session.get(AffBean.class, affBean.getInstId());
+		
+		affBean2.setContactPerson(affBean.getContactPerson());
+		affBean2.setEmail(affBean.getEmail());
+		affBean2.setPlace(affBean.getPlace());
+		affBean2.setInstAddress(affBean.getInstAddress());
+		affBean2.setContactNumber(affBean.getContactNumber());
+		affBean2.setMobileNum(affBean.getMobileNum());
+		
+		Transaction tx=session.beginTransaction();
+		session.merge(affBean2);
+		tx.commit();
+		session.close();
+		
+	}
 	public List<AffBean> getCollegList(Integer universityId)
 	{
 		Session session=factory.openSession();
@@ -651,8 +671,6 @@ public class AffDAO {
 		session.clear();
 		return ListOfCourse;
 	}
-	
-	
 	
 	
 	

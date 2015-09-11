@@ -130,7 +130,7 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 
 									<!---Content-->
-									<form action="updatePersonalInfo">
+									<form action="updatePersonalInfoAdmin">
 										<table class="table table-condensed">
 
 											<tbody>
@@ -140,8 +140,8 @@
 													<td style="font-weight: bold;">University Name</td>
 													<td>
 														<div id="the-basics" class="has-success">
-
-															<input type="text" class="form-control"
+															<input type="hidden" name="parBean.parInstId" value='<s:property value="parBean.parInstId" />'>
+															<input type="text" name="parBean.parInstName" class="form-control"
 																value='<s:property value="parBean.parInstName" />'>
 														</div>
 
@@ -149,11 +149,11 @@
 												</tr>
 												<tr>
 
-													<td style="font-weight: bold;">Address</td>
+													<td style="font-weight: bold;">Email Id</td>
 													<td>
 														<div id="the-basics" class="has-success">
 
-															<input type="text" class="form-control" value='<s:property value="parBean.parInstEmail" />'>
+															<input type="email" name="parBean.parInstEmail" class="form-control" value='<s:property value="parBean.parInstEmail" />'>
 
 														</div>
 													</td>
@@ -164,7 +164,7 @@
 													<td>
 
 														<div id="the-basics" class="has-success">
-															<input type="text" class="form-control" value='<s:property value="parBean.parInstContPerson" />'>
+															<input type="text" name="parBean.parInstContPerson" class="form-control" value='<s:property value="parBean.parInstContPerson" />'>
 														</div>
 													</td>
 												</tr>
@@ -173,7 +173,7 @@
 													<td style="font-weight: bold;">Address</td>
 													<td><div id="the-basics" class="has-success">
 
-															<textarea class="form-control"><s:property value="parBean.parInstAddress" /></textarea>
+															<textarea name="parBean.parInstAddress" class="form-control"><s:property value="parBean.parInstAddress" /></textarea>
 
 
 														</div></td>
@@ -185,7 +185,7 @@
 														<div id="the-basics" class="has-success">
 
 
-															<input type="text" class="form-control" value='<s:property value="parBean.parInstContact" />'>
+															<input type="text" name="parBean.parInstContact" class="form-control" value='<s:property value="parBean.parInstContact" />'>
 														</div>
 													</td>
 												</tr>
@@ -194,7 +194,7 @@
 
 												<tr>
 
-													<td><input type="button" class="btn btn-success"
+													<td><input type="submit" class="btn btn-success"
 														value="Update Detail"></td>
 													<td><input type="button" class="btn btn-default"
 														value="Cancel"></td>

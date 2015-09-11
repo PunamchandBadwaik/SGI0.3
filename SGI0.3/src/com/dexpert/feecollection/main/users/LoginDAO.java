@@ -1,11 +1,20 @@
 package com.dexpert.feecollection.main.users;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -118,5 +127,32 @@ public class LoginDAO {
 
 		}
 	}
+
+	public static void updateChangePwdDetails(LoginBean creds, String newPwd) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+		
+		
+		Session session = factory.openSession();
+		
+		String password =newPwd;
+		log.info("Password  is changed:" + password);
+
+		PasswordEncryption.encrypt(password);
+
+		String userEncryptedPwd = PasswordEncryption.encStr;
+
+		
+		
+		LoginBean bean=(LoginBean)session.get(LoginBean.class, creds.getLoginId());
+		
+		bean.setPassword(userEncryptedPwd);		
+		
+	
+		Transaction tx=session.beginTransaction();
+		session.merge(bean);
+		tx.commit();
+		session.close();
+		
+	}
+
 
 }

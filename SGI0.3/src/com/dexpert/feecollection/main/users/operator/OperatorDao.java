@@ -161,4 +161,26 @@ public class OperatorDao {
 		return collegeId;
 
 	}
+
+	
+	public static void updatePersonalRecordOfCollegeOperatorDetail(OperatorBean operatorBean) {
+
+		Session session=factory.openSession();
+		OperatorBean operatorBean2=(OperatorBean)session.get(OperatorBean.class, operatorBean.getOperatorId());
+		
+		operatorBean2.setOperatorName(operatorBean.getOperatorName());
+		operatorBean2.setOperatorAddress(operatorBean.getOperatorAddress());
+		operatorBean2.setOperatorLstName(operatorBean.getOperatorLstName());
+		operatorBean2.setOperatorEmail(operatorBean.getOperatorEmail());
+		operatorBean2.setOperatorContact(operatorBean.getOperatorContact());
+		operatorBean2.setOperatorContactSec(operatorBean.getOperatorContactSec());
+		
+		Transaction transaction=session.beginTransaction();
+		session.merge(operatorBean2);
+		transaction.commit();
+		session.close();
+		
+		
+	}
+	
 }
