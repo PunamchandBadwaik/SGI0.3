@@ -87,9 +87,10 @@ public class AffAction extends ActionSupport {
 	Double totalNetDuesOFCollegeStudent = 0.0;
 	Double totalPaymentToDate = 0.0;
 	Double totalOriginalDues = 0.0;
-    List<String> listOfCourse;
-    List<String> feeNameList;
-    AppDAO appDAO=new AppDAO();
+	List<String> listOfCourse;
+	List<String> feeNameList;
+	AppDAO appDAO = new AppDAO();
+
 	// End of Global Variables
 
 	// ---------------------------------------------------
@@ -733,6 +734,36 @@ public class AffAction extends ActionSupport {
 	}
 
 	public String CustomCollegeDueReport() {
+		String universityName = request.getParameter("universityName");
+		String collegeName = request.getParameter("collegeName");
+		String courseName = request.getParameter("courseName");
+		String feeName = request.getParameter("feeName");
+		if ((universityName != null && !universityName.isEmpty()) && (collegeName != null && !collegeName.isEmpty())
+				&& (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
+
+		} else if ((universityName != null && !universityName.isEmpty())
+				&& (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+				|| (universityName != null && !universityName.isEmpty())
+				&& (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+				|| (universityName != null && !universityName.isEmpty())
+				&& (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+				|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+				&& (feeName != null && !feeName.isEmpty())) {
+
+		} else if ((universityName != null && !universityName.isEmpty())
+				&& (collegeName != null && !collegeName.isEmpty())
+				|| (universityName != null && !universityName.isEmpty())
+				&& (courseName != null && !courseName.isEmpty())
+				|| (universityName != null && !universityName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+				|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
+				|| (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
+				|| (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
+
+		} else if ((universityName != null && !universityName.isEmpty())
+				|| (collegeName != null && !collegeName.isEmpty()) || (feeName != null && !feeName.isEmpty())
+				|| (courseName != null && !courseName.isEmpty())) {
+
+		}
 
 		return SUCCESS;
 	}
@@ -742,57 +773,56 @@ public class AffAction extends ActionSupport {
 		String universityName = request.getParameter("");
 		String courseName = request.getParameter("courseName");
 		String feeName = request.getParameter("");
-        String ajax=request.getParameter("");
+		String ajax = request.getParameter("");
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			parBeans = parDAO.getUniversityList();
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
 
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
-			
-			if(collegeName!=null&&!collegeName.isEmpty())
-			{
-		    Integer id=affDao.getCollegeId(collegeName);
-		    log.info("id of the college is"+id);
-		    listOfCourse=affDao.getListOfCourses(id);
-		    log.info("list of course"+listOfCourse.size());
-			return "listOfCourse";	
+
+			if (collegeName != null && !collegeName.isEmpty()) {
+				Integer id = affDao.getCollegeId(collegeName);
+				log.info("id of the college is" + id);
+				listOfCourse = affDao.getListOfCourses(id);
+				log.info("list of course" + listOfCourse.size());
+				return "listOfCourse";
 			}
-			if(courseName!=null && !courseName.isEmpty()){
-				String applicableFeeString=appDAO.getApplicableFeesString(courseName);	
-				String [] FeeIdArray=applicableFeeString.split("~");
+			if (courseName != null && !courseName.isEmpty()) {
+				String applicableFeeString = appDAO.getApplicableFeesString(courseName);
+				String[] FeeIdArray = applicableFeeString.split("~");
 				List<Integer> feeIdes = new ArrayList<Integer>();
 				for (String feeId : FeeIdArray) {
-				feeIdes.add(Integer.parseInt(feeId));	
+					feeIdes.add(Integer.parseInt(feeId));
 				}
-				feeNameList=feeDAO.getFeeNames(feeIdes);
-				log.info("fee name list size"+feeNameList.size());
+				feeNameList = feeDAO.getFeeNames(feeIdes);
+				log.info("fee name list size" + feeNameList.size());
 				return "feeName";
 			}
 			Integer id = (Integer) ses.getAttribute("sesId");
-			affBeansList=affDao.getCollegList(id);
-			log.info("List of college"+affBeansList.size());
+			affBeansList = affDao.getCollegList(id);
+			log.info("List of college" + affBeansList.size());
 			return SUCCESS;
 
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
-			if(courseName!=null && !courseName.isEmpty()){
-				String applicableFeeString=appDAO.getApplicableFeesString(courseName);	
-				String [] FeeIdArray=applicableFeeString.split("~");
+			if (courseName != null && !courseName.isEmpty()) {
+				String applicableFeeString = appDAO.getApplicableFeesString(courseName);
+				String[] FeeIdArray = applicableFeeString.split("~");
 				List<Integer> feeIdes = new ArrayList<Integer>();
 				for (String feeId : FeeIdArray) {
-				feeIdes.add(Integer.parseInt(feeId));	
+					feeIdes.add(Integer.parseInt(feeId));
 				}
-				feeNameList=feeDAO.getFeeNames(feeIdes);
-				log.info("fee name list size"+feeNameList.size());
+				feeNameList = feeDAO.getFeeNames(feeIdes);
+				log.info("fee name list size" + feeNameList.size());
 				return "feeName";
 			}
-			Integer id = (Integer) ses.getAttribute("sesId")==null?affDao.getCollegeId(collegeName):(Integer) ses.getAttribute("sesId");	
-		    log.info("id is"+id);
-			listOfCourse=affDao.getListOfCourses(id);
-		    log.info("list of course"+listOfCourse.size());
+			Integer id = (Integer) ses.getAttribute("sesId") == null ? affDao.getCollegeId(collegeName) : (Integer) ses
+					.getAttribute("sesId");
+			log.info("id is" + id);
+			listOfCourse = affDao.getListOfCourses(id);
+			log.info("list of course" + listOfCourse.size());
 			return SUCCESS;
 
 		}
-		
 
 		return SUCCESS;
 	}
@@ -1083,10 +1113,6 @@ public class AffAction extends ActionSupport {
 	public void setFeeNameList(List<String> feeNameList) {
 		this.feeNameList = feeNameList;
 	}
-	
-	
-	
-	
 
 	// End of Getter Setter Methods
 }

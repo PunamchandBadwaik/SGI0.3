@@ -435,7 +435,7 @@
 									</div>
 									</p>
 									<p class="btn-group">
-									<div id="courseList" style="display: none;">
+									<div id="courseList">
 
 										<div class="controls">
 											<table>
@@ -646,6 +646,10 @@
 
 							}
 							function collegeSelected(collegeName) {
+								
+								if(collegeName==""){
+									return false
+								}
 								var ajax = true;
 								var query = "?collegeName=" + collegeName
 										+ "&ajax=" + ajax;
@@ -669,6 +673,10 @@
 
 							}
 							function courseSelected(courseName) {
+								
+								if(courseName==""){
+									return false;
+								}
 								var ajax = true;
 								var query = "?courseName=" + courseName
 										+ "&ajax=" + ajax;
