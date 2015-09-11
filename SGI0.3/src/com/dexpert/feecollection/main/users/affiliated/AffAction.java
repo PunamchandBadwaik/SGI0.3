@@ -796,19 +796,23 @@ public class AffAction extends ActionSupport {
 					Integer collegeId = affDao.getCollegeId(collegeName);
 					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
 					log.info("Number of Student" + enrollmentNumberList);
-					totalDuesOFCollege=affDao.findDueOfFees(feeName, enrollmentNumberList);
+					totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 					return SUCCESS;
-				}
-				else if(courseName != null && !courseName.isEmpty() && feeName != null && !feeName.isEmpty())
-				{
-					
-					
-					
+				} else if (courseName != null && !courseName.isEmpty() && feeName != null && !feeName.isEmpty()) {
+
 				}
 
 				// end of else if
 			} else if ((collegeName != null && !collegeName.isEmpty()) || (feeName != null && !feeName.isEmpty())
 					|| (courseName != null && !courseName.isEmpty())) {
+				if (collegeName != null && !collegeName.isEmpty()) {
+					Integer collegeId = affDao.getCollegeId(collegeName);
+					log.info("college Id is"+collegeId);
+					List<String> enrollmentList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					log.info("list of student"+enrollmentList);
+					totalDuesOFCollege=affDao.findDueOfFees(null, enrollmentList);
+                    return SUCCESS;
+				}
 
 			}
 

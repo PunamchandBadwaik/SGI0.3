@@ -463,7 +463,7 @@
 											<table>
 												<tr>
 													<td>Select Fee Name</td>
-													<td><select name="appBean1.course" id="courseId"
+													<td><select name="appBean1.course" id="feeId"
 														onchange="" data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Fees---</option>
 
@@ -701,8 +701,7 @@
 								var courseName = document
 										.getElementById("courseId").value == null ? ""
 										: document.getElementById("courseId").value;
-								var feeName = document.getElementById("feeId").value == null ? ""
-										: document.getElementById("feeId").value;
+								var feeName = document.getElementById("feeId").value;
 								var universityName = "";/* document
 																																		.getElementById("universityName").value;
 								 */
