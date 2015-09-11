@@ -216,4 +216,22 @@ public class ParDAO {
 		
 		
 	}
+
+	public static void updatePersonalRecordOfAdmin(ParBean parBean2) {
+
+		Session session=factory.openSession();
+		
+		ParBean bean=(ParBean)session.get(ParBean.class, parBean2.getParInstId());
+		
+		bean.setParInstName(parBean2.getParInstName());
+		bean.setParInstEmail(parBean2.getParInstEmail());
+		bean.setParInstAddress(parBean2.getParInstAddress());
+		bean.setParInstContPerson(parBean2.getParInstContPerson());
+		bean.setParInstContact(parBean2.getParInstContact());
+		Transaction tx=session.beginTransaction();
+		session.merge(bean);
+		tx.commit();
+		session.close();
+		
+	}
 	}

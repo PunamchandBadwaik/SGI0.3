@@ -140,8 +140,8 @@
 													<td style="font-weight: bold;">First Name</td>
 													<td>
 														<div id="the-basics" class="has-success">
-
-															<input type="text" required="required"
+															<input type="hidden" name="saBean.saId" value='<s:property value="saBean.saId" />'>
+															<input type="text" name="saBean.firstName" required="required"
 																class="form-control"
 																value='<s:property value="saBean.firstName" />'>
 														</div>
@@ -154,7 +154,7 @@
 													<td>
 														<div id="the-basics" class="has-success">
 
-															<input type="text" required="required"
+															<input type="text" name="saBean.midName" required="required"
 																class="form-control"
 																value='<s:property value="saBean.midName" />'>
 
@@ -167,7 +167,7 @@
 													<td>
 
 														<div id="the-basics" class="has-success">
-															<input type="text" required="required"
+															<input type="text" name="saBean.lstName" required="required"
 																class="form-control"
 																value='<s:property value="saBean.lstName" />'>
 														</div>
@@ -178,7 +178,7 @@
 													<td style="font-weight: bold;">Address</td>
 													<td><div id="the-basics" class="has-success">
 
-															<textarea class="form-control" required="required"><s:property
+															<textarea class="form-control" name="saBean.address" required="required"><s:property
 																	value="saBean.address" /></textarea>
 
 
@@ -191,7 +191,7 @@
 														<div id="the-basics" class="has-success">
 
 
-															<input type="text" required="required"
+															<input type="text" name="saBean.mobileNum" required="required"
 																class="form-control"
 																value='<s:property value="saBean.mobileNum" />'>
 														</div>
@@ -202,7 +202,7 @@
 
 												<tr>
 
-													<td><input type="button" class="btn btn-success"
+													<td><input type="submit" class="btn btn-success"
 														value="Update Detail"></td>
 													<td><input type="button" class="btn btn-default"
 														value="Cancel"></td>

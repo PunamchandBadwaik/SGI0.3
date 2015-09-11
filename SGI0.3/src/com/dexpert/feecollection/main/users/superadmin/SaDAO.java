@@ -141,5 +141,22 @@ public class SaDAO {
 
 	}
 	}
+
+		public static void updatePersonalRecordOfSuperAdmin(SaBean saBean) {
+
+		Session session=factory.openSession();
+		SaBean bean=(SaBean)session.get(SaBean.class, saBean.getSaId());
+		
+		bean.setFirstName(saBean.getFirstName());
+		bean.setMidName(saBean.getMidName());
+		bean.setLstName(saBean.getLstName());
+		bean.setAddress(saBean.getAddress());
+		bean.setMobileNum(saBean.getMobileNum());
+		Transaction transaction=session.beginTransaction();
+		session.merge(bean);
+		transaction.commit();
+		session.close();
+		
+	}
 	
 }

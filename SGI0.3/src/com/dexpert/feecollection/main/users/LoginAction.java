@@ -386,6 +386,56 @@ public class LoginAction extends ActionSupport {
 		return "failure";
 		
 	}
+	
+    // updatePersonalInfoDetail for Super Admin
+
+public String updatePersonalInfoDetail(){
+
+
+SaDAO.updatePersonalRecordOfSuperAdmin(saBean);
+	request.setAttribute("msg", "Super Admin Updated Successfully");
+	
+
+return SUCCESS;
+}
+
+				//updatePersonalInfoAdminDetail for Admin
+
+public String updatePersonalInfoAdminDetail(){
+
+
+ParDAO.updatePersonalRecordOfAdmin(parBean);
+	request.setAttribute("msg", "Admin Updated Successfully");
+	
+
+return SUCCESS;
+}
+
+//  updatePersonalInfoInstituteDetail for Institute
+
+public String updatePersonalInfoInstituteDetail(){
+
+
+AffDAO.updatePersonalRecordOfInstitute(affBean);
+request.setAttribute("msg", "Admin Updated Successfully");
+
+
+return SUCCESS;
+}
+
+
+/*updatePersonalInfoCollegeOperatorDetail for College Operator*/
+public String updatePersonalInfoCollegeOperatorDetail(){
+
+
+OperatorDao.updatePersonalRecordOfCollegeOperatorDetail(operatorBean);
+request.setAttribute("msg", "Admin Updated Successfully");
+
+
+return SUCCESS;
+}
+
+
 
 	
 	
