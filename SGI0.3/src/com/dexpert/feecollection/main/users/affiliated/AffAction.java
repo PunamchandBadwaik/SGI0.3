@@ -739,7 +739,10 @@ public class AffAction extends ActionSupport {
 		String collegeName = request.getParameter("collegeName");
 		String courseName = request.getParameter("courseName");
 		String feeName = request.getParameter("feeName");
-
+		log.info("university name" + universityName);
+		log.info("collegeName" + collegeName);
+		log.info("courseName" + courseName);
+		log.info("feeName" + feeName);
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			if ((universityName != null && !universityName.isEmpty())
 					&& (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
@@ -772,11 +775,38 @@ public class AffAction extends ActionSupport {
 		else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
 			if ((collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
 					&& (feeName != null && !feeName.isEmpty())) {
+				Integer collegeId = affDao.getCollegeId(collegeName);
+				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+				log.info("Number of student" + enrollmentNumberList);
+				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
+				return SUCCESS;
 
 			} else if ((collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
 					|| (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
 					|| (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
+				// else if start
 
+				if ((collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())) {
+					Integer collegeId = affDao.getCollegeId(collegeName);
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+					log.info("Number of Student" + enrollmentNumberList);
+					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
+					return SUCCESS;
+				} else if (collegeName != null && !collegeName.isEmpty() && feeName != null && !feeName.isEmpty()) {
+					Integer collegeId = affDao.getCollegeId(collegeName);
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+					log.info("Number of Student" + enrollmentNumberList);
+					totalDuesOFCollege=affDao.findDueOfFees(feeName, enrollmentNumberList);
+					return SUCCESS;
+				}
+				else if(courseName != null && !courseName.isEmpty() && feeName != null && !feeName.isEmpty())
+				{
+					
+					
+					
+				}
+
+				// end of else if
 			} else if ((collegeName != null && !collegeName.isEmpty()) || (feeName != null && !feeName.isEmpty())
 					|| (courseName != null && !courseName.isEmpty())) {
 
@@ -785,13 +815,28 @@ public class AffAction extends ActionSupport {
 		}// end of university
 
 		else if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
+			Integer collegeId = null;
 			if ((feeName != null && !feeName.isEmpty()) && (courseName != null && !courseName.isEmpty())) {
-				Integer collegeId = (Integer) ses.getAttribute("sesId");
+				collegeId = (Integer) ses.getAttribute("sesId");
 				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
-				log.info("Number of Student"+enrollmentNumberList.size());
+				log.info("Number of Student" + enrollmentNumberList);
 				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
-                log.info("Due list size is"+totalDuesOFCollege.size());
+				log.info("Due list size is" + totalDuesOFCollege.size());
+				return SUCCESS;
 			} else if ((feeName != null && !feeName.isEmpty()) || (courseName != null && !courseName.isEmpty())) {
+				collegeId = (Integer) ses.getAttribute("sesId");
+				if (feeName != null && !feeName.isEmpty()) {
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					log.info("Number of Student" + enrollmentNumberList);
+					totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
+					return SUCCESS;
+				} else if (courseName != null && !courseName.isEmpty()) {
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+					log.info("Number of Student" + enrollmentNumberList);
+					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
+					return SUCCESS;
+
+				}
 
 			}
 

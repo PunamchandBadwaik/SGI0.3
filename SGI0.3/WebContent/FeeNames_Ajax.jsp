@@ -14,8 +14,8 @@
 			<table>
 				<tr>
 					<td>Select Fee Name</td>
-					<td><select name="appBean1.course" id="courseId"
-						onchange="hideEnrollNo()" data-rel="chosen" style="width: 240px;">
+					<td><select name="feeName" id="feeId"
+						onchange="" data-rel="chosen" style="width: 240px;">
 							<option value="">---Select Fees---</option>
                             <s:iterator value="feeNameList" status="var">
                             <option value="<s:property/>"><s:property/></option>

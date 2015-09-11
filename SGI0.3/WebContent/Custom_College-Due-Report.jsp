@@ -293,7 +293,7 @@
 											<table>
 												<tr>
 													<td>Select UniverSity</td>
-													<td><select name="appBean1.course" id="courseId"
+													<td><select name="university" id="universityName"
 														onchange="universitySelected(this.value)"
 														data-rel="chosen" style="width: 240px;">
 															<option value="">---Select University---</option>
@@ -354,8 +354,7 @@
 												<tr>
 													<td>Select Course</td>
 													<td><select name="appBean1.course" id="courseId"
-														onchange="hideEnrollNo()" data-rel="chosen"
-														style="width: 240px;">
+														onchange="" data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Course---</option>
 													</select></td>
 
@@ -379,8 +378,7 @@
 												<tr>
 													<td>Select Fee Name</td>
 													<td><select name="appBean1.course" id="courseId"
-														onchange="hideEnrollNo()" data-rel="chosen"
-														style="width: 240px;">
+														onchange="" data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Fees---</option>
 
 
@@ -412,7 +410,7 @@
 											<table>
 												<tr>
 													<td>Select College Name</td>
-													<td><select name="appBean1.course" id="courseId"
+													<td><select name="college" id="collegeName"
 														onchange="collegeSelected(this.value)" data-rel="chosen"
 														style="width: 240px;">
 															<option value="">---Select College---</option>
@@ -442,8 +440,7 @@
 												<tr>
 													<td>Select Course</td>
 													<td><select name="appBean1.course" id="courseId"
-														onchange="hideEnrollNo()" data-rel="chosen"
-														style="width: 240px;">
+														onchange="" data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Course---</option>
 													</select></td>
 
@@ -467,8 +464,7 @@
 												<tr>
 													<td>Select Fee Name</td>
 													<td><select name="appBean1.course" id="courseId"
-														onchange="hideEnrollNo()" data-rel="chosen"
-														style="width: 240px;">
+														onchange="" data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Fees---</option>
 
 
@@ -501,7 +497,7 @@
 											<table>
 												<tr>
 													<td>Select Course</td>
-													<td><select name="appBean1.course" id="courseId"
+													<td><select name="course" id="courseId"
 														onchange="courseSelected(this.value)" data-rel="chosen"
 														style="width: 240px;">
 
@@ -530,9 +526,8 @@
 											<table>
 												<tr>
 													<td>Select Fee Name</td>
-													<td><select name="appBean1.course" id="courseId"
-														onchange="hideEnrollNo()" data-rel="chosen"
-														style="width: 240px;">
+													<td><select name="feeName" id="feeId" onchange=""
+														data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Fees---</option>
 
 
@@ -554,6 +549,11 @@
 									<%
 										}
 									%>
+									<div>
+										<input type="button" onclick="searchDues()" value="Search">
+
+									</div>
+									<div id="dueReport"></div>
 
 									<!-- content ends -->
 								</div>
@@ -646,8 +646,8 @@
 
 							}
 							function collegeSelected(collegeName) {
-								
-								if(collegeName==""){
+
+								if (collegeName == "") {
 									return false
 								}
 								var ajax = true;
@@ -669,12 +669,11 @@
 								xmlhttp.open("GET",
 										"getValForDropDown" + query, true);
 								xmlhttp.send();
-	
 
 							}
 							function courseSelected(courseName) {
-								
-								if(courseName==""){
+
+								if (courseName == "") {
 									return false;
 								}
 								var ajax = true;
@@ -695,6 +694,41 @@
 								}
 								xmlhttp.open("GET",
 										"getValForDropDown" + query, true);
+								xmlhttp.send();
+
+							}
+							function searchDues() {
+								var courseName = document
+										.getElementById("courseId").value == null ? ""
+										: document.getElementById("courseId").value;
+								var feeName = document.getElementById("feeId").value == null ? ""
+										: document.getElementById("feeId").value;
+								var universityName = "";/* document
+																																		.getElementById("universityName").value;
+								 */
+								var collegeName = document
+										.getElementById("collegeName").value;
+
+								var query = "?universityName=" + universityName
+										+ "&collegeName=" + collegeName
+										+ "&courseName=" + courseName
+										+ "&feeName=" + feeName;
+								alert(query);
+								var xmlhttp;
+								if (window.XMLHttpRequest) {
+									xmlhttp = new XMLHttpRequest();
+								} else {
+									xmlhttp = new ActiveXObject(
+											"Microsoft.XMLHTTP");
+								}
+								xmlhttp.onreadystatechange = function() {
+									if (xmlhttp.readyState == 4
+											&& xmlhttp.status == 200) {
+										document.getElementById("dueReport").innerHTML = xmlhttp.responseText;
+									}
+								}
+								xmlhttp.open("GET", "CustomCollegeDueReport"
+										+ query, true);
 								xmlhttp.send();
 
 							}

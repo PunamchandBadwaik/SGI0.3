@@ -684,15 +684,19 @@ public class AffDAO {
 		criteria.add(Restrictions.in("appBean.enrollmentNumber", enrollmentNumber));
 		if (feeName != null && !feeName.isEmpty()) {
 			criteria.add(Restrictions.eq("feeName", feeName));
+			criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
+					.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
+					.add(Projections.sum("netDue")));
+
 		} else {
-			criteria.setProjection(Projections.groupProperty("feeName"));
+               criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
+					.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
+					.add(Projections.sum("netDue")).add(Projections.groupProperty("feeName")));
 		}
-		criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
-				.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date")).add(Projections.sum("netDue")));
-       List<Object[]>  feeDues=criteria.list();
-		
-       session.close();
-       return feeDues;
+		List<Object[]> feeDues = criteria.list();
+
+		session.close();
+		return feeDues;
 	}
 
 }

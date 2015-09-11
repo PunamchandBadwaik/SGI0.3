@@ -328,7 +328,7 @@ try{
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='CustomCollegeDueReport'">Custom  College
+											onclick="window.location='getValForDropDown'">Custom  College
 											Due Report</button>
 									</p>
 									
@@ -350,7 +350,7 @@ try{
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='CustomCollegeDueReport'">Custom  College
+											onclick="window.location='getValForDropDown'">Custom  College
 											Due Report</button>
 									</p>
 
