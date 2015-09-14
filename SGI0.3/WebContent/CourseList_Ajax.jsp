@@ -17,6 +17,9 @@
 					<td><select name="appBean1.course" id="courseId"
 						onchange="courseSelected(this.value)" data-rel="chosen" style="width: 240px;">
 							<option value="">---Select Course---</option>
+							<s:if test="%{!listOfCourse.isEmpty()||listOfCourse.size()>0}">
+							<option value="All">All Course</option>
+							</s:if>
 							<s:iterator value="listOfCourse" status="var">
 								<option value="<s:property/>"><s:property /></option>
 							</s:iterator>

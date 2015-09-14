@@ -14,9 +14,12 @@
 			<table>
 				<tr>
 					<td>Select College Name</td>
-					<td><select name="appBean1.course" id="courseId"
-						onchange="hideEnrollNo()" data-rel="chosen" style="width: 240px;">
-							<option value="">---Select Fees---</option>
+					<td><select name="college" id="collegeName"
+						onchange="collegeSelected(this.value)" data-rel="chosen" style="width: 240px;">
+							<option value="">---Select College---</option>
+                            <s:if test="%{!affBeansList.isEmpty()||affBeansList.size()>0}">
+                            <option value="All">All College</option>
+                            </s:if>
                             <s:iterator value="affBeansList">
                             <option value="<s:property value="instName"/>"><s:property value="instName"/></option>
                             </s:iterator>

@@ -668,11 +668,15 @@ public class AffDAO {
 
 	}
 
-	public List<String> getListOfCourses(Integer collegeId) {
+	public List<String> getListOfCourses(Integer collegeId, List<Integer> listOfCollegeId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AppBean.class);
-		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId))
-				.setProjection(Projections.groupProperty("course")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		if(collegeId!=null){
+		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId));
+		}else if(listOfCollegeId!=null&&listOfCollegeId.size()>0){
+	    criteria.add(Restrictions.in("affBeanStu.instId", listOfCollegeId));
+		}
+		criteria.setProjection(Projections.groupProperty("course")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<String> ListOfCourse = criteria.list();
 		session.clear();
 		return ListOfCourse;
@@ -689,7 +693,7 @@ public class AffDAO {
 					.add(Projections.sum("netDue")));
 
 		} else {
-               criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
+			criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
 					.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
 					.add(Projections.sum("netDue")).add(Projections.groupProperty("feeName")));
 		}
@@ -697,6 +701,19 @@ public class AffDAO {
 
 		session.close();
 		return feeDues;
+	}
+
+	public List<String> findEnrollmentNumberOfMoreTheOneCollege(List<Integer> collegeIdes, String courseName) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(AppBean.class);
+		criteria.add(Restrictions.in("affBeanStu.instId", collegeIdes));
+		if (courseName != null && !courseName.isEmpty()) {
+			criteria.add(Restrictions.eq("course", courseName));
+		}
+		criteria.setProjection(Projections.property("enrollmentNumber"));
+		List<String> appBeans = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		return appBeans;
+
 	}
 
 }

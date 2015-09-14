@@ -189,15 +189,19 @@ public class FcDAO {
 		return feeName;
 
 	}
-	
-	public List<String> getFeeNames(List<Integer> feeIdes)
-	{
-	Session session=factory.openSession();	
-	Criteria criteria=session.createCriteria(FeeDetailsBean.class);	
-	criteria.add(Restrictions.in("feeId", feeIdes)).setProjection(Projections.property("feeName"));
-	List<String> feeName=criteria.list();
-	session.close();
-	return feeName;	
+
+	public List<String> getFeeNames(List<Integer> feeIdes) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(FeeDetailsBean.class);
+		if (feeIdes != null && feeIdes.size() > 0 && (!feeIdes.isEmpty())) {
+			criteria.add(Restrictions.in("feeId", feeIdes)).setProjection(Projections.property("feeName"))
+					.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		} else {
+			criteria.setProjection(Projections.property("feeName")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		}
+		List<String> feeName = criteria.list();
+		session.close();
+		return feeName;
 	}
 
 	// DAO Methods End
