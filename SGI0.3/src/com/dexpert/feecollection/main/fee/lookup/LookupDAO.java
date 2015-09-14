@@ -39,7 +39,7 @@ public class LookupDAO {
 			session.close();
 		}
 	}
-	
+
 	public LookupBean removeLookupData(LookupBean deleteData) {
 		// Declarations
 
@@ -47,7 +47,8 @@ public class LookupDAO {
 		Session session = factory.openSession();
 		try {
 			session.beginTransaction();
-			session.delete(deleteData);;
+			session.delete(deleteData);
+			;
 			session.getTransaction().commit();
 			return deleteData;
 		} catch (Exception e) {
@@ -60,35 +61,30 @@ public class LookupDAO {
 		}
 	}
 
-	public ArrayList<LookupBean> getLookupData(String filterKey,String filterValue,Integer id,ArrayList<Integer>Ids) {
+	public ArrayList<LookupBean> getLookupData(String filterKey, String filterValue, Integer id, ArrayList<Integer> Ids) {
 		// Declarations
 
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
 			Criteria lookupCr = session.createCriteria(LookupBean.class);
-			if(filterKey.contentEquals("ALL"))
-			{
-				
+			if (filterKey.contentEquals("ALL")) {
+
 			}
-			if(filterKey.contentEquals("ID"))
-			{
-			lookupCr.add(Restrictions.eq("lookupId", id));
+			if (filterKey.contentEquals("ID")) {
+				lookupCr.add(Restrictions.eq("lookupId", id));
 			}
-			if(filterKey.contentEquals("Scope"))
-			{
-			lookupCr.add(Restrictions.eq("lookupScope", filterValue));
+			if (filterKey.contentEquals("Scope")) {
+				lookupCr.add(Restrictions.eq("lookupScope", filterValue));
 			}
-			if(filterKey.contentEquals("Type"))
-			{
+			if (filterKey.contentEquals("Type")) {
 				lookupCr.add(Restrictions.eq("lookupType", filterValue));
 			}
-			if(filterKey.contentEquals("Ids"))
-			{
-				lookupCr.add(Restrictions.in("lookupId",Ids));
+			if (filterKey.contentEquals("Ids")) {
+				lookupCr.add(Restrictions.in("lookupId", Ids));
 			}
-			
-			ArrayList<LookupBean>resultList=new ArrayList<LookupBean>();
+
+			ArrayList<LookupBean> resultList = new ArrayList<LookupBean>();
 			LookupBean resultBean = new LookupBean();
 			Iterator<LookupBean> lookupIt = lookupCr.list().iterator();
 			if (lookupIt.hasNext()) {
@@ -96,7 +92,7 @@ public class LookupDAO {
 					resultBean = lookupIt.next();
 					resultList.add(resultBean);
 				}
-			} 
+			}
 			return resultList;
 
 		} finally {
@@ -104,6 +100,7 @@ public class LookupDAO {
 			session.close();
 		}
 	}
+
 	// ----------------------------
 
 	public List<LookupBean> getListOfLookUpValues() {
@@ -111,6 +108,21 @@ public class LookupDAO {
 		try {
 
 			Criteria criteria = session.createCriteria(LookupBean.class);
+			List<LookupBean> list = criteria.list();
+			return list;
+
+		} finally {
+			// close Session
+			session.close();
+		}
+	}
+
+	public List<LookupBean> getListOfLookUpValues(String lookupScope) {
+		Session session = factory.openSession();
+		try {
+
+			Criteria criteria = session.createCriteria(LookupBean.class);
+			criteria.add(Restrictions.eq("lookupScope", lookupScope));
 			List<LookupBean> list = criteria.list();
 			return list;
 

@@ -281,7 +281,7 @@
 									<div class="row">
 										<div class="col-md-12">
 											<button class="btn btn-sm btn-info" style="float: right;"
-												onclick='window.open("AddStudentColleges", "Studetn Form", "width=500,height=600")'>
+												onclick='window.open("AddStudentColleges", "Studetn Form", "width=700,height=600")'>
 												<i class="fa fa-plus"></i> Add Student
 											</button>
 

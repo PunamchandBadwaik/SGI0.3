@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -15,6 +17,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
+import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.payment.transaction.PayBean;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
@@ -59,15 +62,9 @@ public class AppBean implements Serializable {
 	@JoinColumn(name = "aplicantId_Fk", referencedColumnName = "enrollmentNumber")
 	private Set<PayBean> payBeansSet;
 
-	/*
-	 * // one to one bidirectional relationship with student and college
-	 * 
-	 * // parent
-	 * 
-	 * @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	 * 
-	 * @JoinColumn(name = "affInst_Fk") AffBean affBean;
-	 */
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "applicant_values", joinColumns = @JoinColumn(name = "enrollmentNumber"), inverseJoinColumns = @JoinColumn(name = "value_id"))
+	Set<FvBean> applicantParamValues;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
 	@OrderBy(value = "dueId")
@@ -183,6 +180,14 @@ public class AppBean implements Serializable {
 
 	public void setYearCode(String yearCode) {
 		this.yearCode = yearCode;
+	}
+
+	public Set<FvBean> getApplicantParamValues() {
+		return applicantParamValues;
+	}
+
+	public void setApplicantParamValues(Set<FvBean> applicantParamValues) {
+		this.applicantParamValues = applicantParamValues;
 	}
 
 }

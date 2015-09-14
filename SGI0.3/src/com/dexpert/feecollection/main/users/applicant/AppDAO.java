@@ -10,6 +10,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -41,6 +42,7 @@ import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
@@ -60,6 +62,63 @@ public class AppDAO {
 	// ---------------------------------------------------
 
 	// DAO Methods Here
+	private FvBean getfeeValue(Integer feeValueId) {
+		Session session = factory.openSession();
+		try {
+			Criteria criteria = session.createCriteria(FvBean.class);
+			criteria.add(Restrictions.eq("feeValueId", feeValueId));
+			FvBean bean = (FvBean) criteria.list().iterator().next();
+
+			return bean;
+		} finally {
+
+			session.close();
+		}
+	}
+
+	public AppBean checkValues(FvBean fvBeanValue) {
+		AppBean appBean = new AppBean();
+
+		if (fvBeanValue.getValue().contentEquals("FE")) {
+
+			appBean.setYearCode("10");
+
+		} else if (fvBeanValue.getValue().contentEquals("SE(Direct)") || fvBeanValue.getValue().contentEquals("SE")) {
+			appBean.setYearCode("20");
+
+		} else if (fvBeanValue.getValue().contentEquals("ME")) {
+			appBean.setYearCode("50");
+
+		} else if (fvBeanValue.getValue().contentEquals("MBA")) {
+			appBean.setYearCode("60");
+
+		}
+
+		else if (fvBeanValue.getValue().contentEquals("B.Ph.FY")) {
+			appBean.setYearCode("10");
+
+		} else if (fvBeanValue.getValue().contentEquals("B.Ph.SY(Direct)")
+				|| fvBeanValue.getValue().contentEquals("B.Ph.SY")) {
+			appBean.setYearCode("20");
+
+		} else if (fvBeanValue.getValue().contentEquals("B.Ph.TY")) {
+			appBean.setYearCode("30");
+
+		}
+
+		else if (fvBeanValue.getValue().contentEquals("B.Ph.Final")) {
+			appBean.setYearCode("40");
+
+		} else if (fvBeanValue.getValue().contentEquals("M.Ph.FY")) {
+			appBean.setYearCode("50");
+
+		} else if (fvBeanValue.getValue().contentEquals("M.Ph.Final")) {
+			appBean.setYearCode("60");
+
+		}
+
+		return appBean;
+	}
 
 	public AppBean saveOrUpdate(AppBean appBean, Integer aplInstId) throws InvalidKeyException,
 			NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException,
@@ -69,58 +128,20 @@ public class AppDAO {
 
 		Session session = factory.openSession();
 		AffBean affBean = new AffBean();
-		if (appBean.getCourse().contentEquals("FE")) {
 
-			appBean.setYearCode("10");
+		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
+		FvBean fvBeanValue = new FvBean();
+		while (iterator.hasNext()) {
+			FvBean fvBean = (FvBean) iterator.next();
 
-		} else if (appBean.getCourse().contentEquals("SED") || appBean.getCourse().contentEquals("SE")) {
-			appBean.setYearCode("20");
+			log.info("Value of Students is ::" + fvBean.getValue());
 
-		} else if (appBean.getCourse().contentEquals("ME")) {
-			appBean.setYearCode("50");
+		//	fvBeanValue = getfeeValue(fvBean.getFeeValueId());
 
-		} else if (appBean.getCourse().contentEquals("MBA")) {
-			appBean.setYearCode("60");
-
-		}
-
-		else if (appBean.getCourse().contentEquals("BPhFY")) {
-			appBean.setYearCode("10");
-
-		} else if (appBean.getCourse().contentEquals("BPhSYD") || appBean.getCourse().contentEquals("BPhSY")) {
-			appBean.setYearCode("20");
-
-		} else if (appBean.getCourse().contentEquals("BPhTY")) {
-			appBean.setYearCode("30");
-
-		}
-
-		else if (appBean.getCourse().contentEquals("BPhFnY")) {
-			appBean.setYearCode("40");
-
-		} else if (appBean.getCourse().contentEquals("MPhFY")) {
-			appBean.setYearCode("30");
-
-		} else if (appBean.getCourse().contentEquals("MPhFnY")) {
-			appBean.setYearCode("30");
-
-		}
-
-		try {
-			if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
-					|| appBean.getEnrollmentNumber().equals("")) {
-				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-				String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode(),
-						appBean.getCourse());
-				appBean.setEnrollmentNumber(EnrollNo);
-				log.info("enrollment number generated" + EnrollNo);
-			}
-		} catch (java.lang.NullPointerException e) {
-			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-			String EnrollNo = en
-					.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode(), appBean.getCourse());
-			appBean.setEnrollmentNumber(EnrollNo);
-			log.info("enrollment number generated" + EnrollNo);
+			appBean = checkValues(fvBean);
+			
+			
+			
 		}
 
 		// to get college record based on id to create relationship
@@ -156,7 +177,8 @@ public class AppDAO {
 
 				} else {
 					String user = appBean.getEnrollmentNumber();
-					String pass = appBean.getYear().substring(0, 4);;
+					String pass = appBean.getYear().substring(0, 4);
+					;
 					String msg = "UserId :" + user + "" + " Passsword : " + pass;
 					SendSMS sms = new SendSMS();
 					sms.sendSMS(appBean.getAplMobilePri(), msg);
@@ -174,7 +196,8 @@ public class AppDAO {
 				} else {
 					EmailSessionBean email = new EmailSessionBean();
 					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getYear().substring(0, 4), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+							appBean.getYear().substring(0, 4),
+							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
 
 				}
 			} catch (java.lang.NullPointerException e) {
@@ -359,8 +382,8 @@ public class AppDAO {
 
 			r = row.getCell(6);
 			mobileNumPri = (long) r.getNumericCellValue();
-			
-			log.info("Mobile number is ::"+mobileNumPri);
+
+			log.info("Mobile number is ::" + mobileNumPri);
 
 			/*
 			 * r = row.getCell(6); mobPri = r.getStringCellValue();
@@ -411,10 +434,10 @@ public class AppDAO {
 			 * appBean.setAplMobilePri(mobPri.toString());
 			 * appBean.setAplMobileSec(mobSec.toString());
 			 */
-			log.info("Mobile number is1 ::"+mobileNumPri);
+			log.info("Mobile number is1 ::" + mobileNumPri);
 			appBean.setAplMobilePri(mobileNumPri.toString());
 			appBean.setAplMobileSec(MobileNumSec.toString());
-			log.info("Mobile number is2 ::"+appBean.getAplMobilePri());
+			log.info("Mobile number is2 ::" + appBean.getAplMobilePri());
 			/* appBean.setYear(admYear.toString()); */
 
 			appBean.setYear(admssionYear.toString());
@@ -605,7 +628,8 @@ public class AppDAO {
 				} else {
 					EmailSessionBean email = new EmailSessionBean();
 					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getYear().substring(0, 4), appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+							appBean.getYear().substring(0, 4),
+							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
 
 				}
 			} catch (java.lang.NullPointerException e) {

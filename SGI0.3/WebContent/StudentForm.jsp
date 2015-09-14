@@ -105,7 +105,7 @@
 			<%
 				if (msg != null)
 
-																				{
+								{
 			%>
 
 			<div
@@ -152,16 +152,16 @@
 														<%
 															if (profile.contentEquals("Affiliated"))
 
-																																																																																																																																																																																																															{
+																																																															{
 
-																																																																																																																																																																																																																System.out.print("Profile is ::" + profile);
+																																																																System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
 
-              											   	{
+     	{
  %> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
 														<%
@@ -174,7 +174,88 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
+
+												<s:iterator value="lookupBeanList" var="x">
+
+													<tr>
+														<td><s:property value="lookupName" /></td>
+														<td colspan="2"><select data-rel="chosen"
+															id='<s:property value="lookupId" />' name="applicantParamValue"
+															onchange="hideEnrollNo('<s:property value="lookupId" />','<s:property value="lookupName" />')"
+															style="width: 240px;" required="required">
+																<option value="">--Select--</option>
+																<s:iterator value="#x.fvBeansList">
+																	<option value='<s:property value="value"/>'><s:property
+																			value="value" /></option>
+
+																</s:iterator>
+														</select> <script type="text/javascript">
+															function hideEnrollNo(
+																	id,
+																	lookupName) {
+																//alert("id ::"+id);
+
+																var course = document
+																		.getElementById(id).value;
+																
+																if (lookupName == 'Class') {
+
+																	if (course == 'FE'
+																			|| course == 'MBA 1'
+																			|| course == 'ME 1'
+																			|| course == '1'
+																			|| course == '3'
+																			|| course == '6'||course=='4'||course=='13') {
+
+																		document
+																				.getElementById("enrollDiv").style.display = "none";
+																		document
+																				.getElementById("labelId").style.display = "none";
+																		document
+																				.getElementById("enrollTextId").required = false;
+
+																	} else {
+
+																		var xmlhttp;
+																		if (window.XMLHttpRequest) {
+																			xmlhttp = new XMLHttpRequest();
+																		} else {
+																			xmlhttp = new ActiveXObject(
+																					"Microsoft.XMLHTTP");
+																		}
+																		xmlhttp.onreadystatechange = function() {
+																			if (xmlhttp.readyState == 4
+																					&& xmlhttp.status == 200) {
+																				document
+																						.getElementById("enrollDiv").innerHTML = xmlhttp.responseText;
+																				document
+																						.getElementById("enrollDiv").style.display = "block";
+																				document
+																						.getElementById("labelId").style.display = "block";
+																				document
+																						.getElementById("enrollTextId").required = true;
+
+																			}
+																		}
+																		xmlhttp
+																				.open(
+																						"GET",
+																						"StudentAjaxRollNo.jsp",
+																						true);
+																		xmlhttp
+																				.send();
+
+																	}
+																}
+
+															}
+														</script></td>
+
+													</tr>
+
+												</s:iterator>
+
+												<%-- 	<tr>
 
 													<td>Course</td>
 													<td colspan="2"><div id="the-basics"
@@ -197,24 +278,20 @@
 
 																			<option value="ME 1">ME 1</option>
 																			<option value="ME 2">ME 2</option>
-																			
+
 																			<option value="BPhFY">First Year B.Pharm</option>
 																			<option value="BPhSY">Second Year B.Pharm</option>
-																			<option value="BPhSYD">Second Year(Direct) B.Pharm</option>
+																			<option value="BPhSYD">Second Year(Direct)
+																				B.Pharm</option>
 																			<option value="BPhTY">Third Year B.Pharm</option>
-																			<option value="BPhFnY">Final Year  B.Pharm</option>
+																			<option value="BPhFnY">Final Year B.Pharm</option>
 																			<option value="MPhFY">First Year M.Pharm</option>
 																			<option value="MPhFnY">Final Year M.Pharm</option>
-																			
+
 																			<!-- <option value="MPhSY">Second Year M.Pharm</option>
 																			<option value="MPhSYD">Second Year(Direct) M.Pharm</option>
 																			<option value="MPhTY">Third Year M.Pharm</option> -->
-																			
-																			
-																			
-																			
-																			
-																			
+
 
 																		</select>
 
@@ -229,7 +306,11 @@
 																if (course == 'FE'
 																		|| course == 'SED'
 																		|| course == 'MBA 1'
-																		|| course == 'ME 1' || course=='BPhFY'|| course=='MPhFY'|| course=='BPhSYD'|| course=='MPhSYD') {
+																		|| course == 'ME 1'
+																		|| course == 'BPhFY'
+																		|| course == 'MPhFY'
+																		|| course == 'BPhSYD'
+																		|| course == 'MPhSYD') {
 
 																	document
 																			.getElementById("enrollDiv").style.display = "none";
@@ -275,7 +356,7 @@
 														</script></td>
 
 												</tr>
-
+ --%>
 
 
 
@@ -424,7 +505,7 @@
 
 												</tr>
 
-												<tr>
+												<%-- <tr>
 
 													<td>Category</td>
 													<td colspan="2"><div id="the-basics"
@@ -452,9 +533,9 @@
 														</div></td>
 
 												</tr>
+ --%>
 
-
-												<tr>
+												<%-- <tr>
 
 													<td>Year</td>
 													<td colspan="2"><div id="the-basics"
@@ -484,7 +565,7 @@
 															</div>
 														</div></td>
 
-												</tr>
+												</tr> --%>
 
 
 

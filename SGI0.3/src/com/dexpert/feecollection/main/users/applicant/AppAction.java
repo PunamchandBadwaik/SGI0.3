@@ -8,8 +8,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -28,6 +30,7 @@ import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.LoginDAO;
@@ -47,9 +50,9 @@ public class AppAction extends ActionSupport {
 	HttpServletResponse response = ServletActionContext.getResponse();
 	static Logger log = Logger.getLogger(AffAction.class.getName());
 	AffBean affBean = new AffBean();
-	String collegeName;
+	String collegeName, applicantParamValue;
 	OperatorDao opratorDAO = new OperatorDao();
-
+	Set<FvBean> fvBeansSet = new HashSet<FvBean>();
 	Integer aplInstId;
 	List<AffBean> affInstList = new ArrayList<AffBean>();
 	String fileFileName;
@@ -104,28 +107,26 @@ public class AppAction extends ActionSupport {
 	public String registerStudent() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
 			BadPaddingException {
-		log.info("Course  ::" + appBean1.getCourse());
-		log.info("Category  ::" + appBean1.getCategory());
-		log.info("Admission Year  ::" + appBean1.getYear());
-		if (appBean1.getCourse().equals("") || appBean1.getCourse().equals(null) || appBean1.getCourse().equals("null")) {
-			request.setAttribute("msg", "Please Select Course");
-			affInstList = affDAO.getCollegesList();
-			return "failure";
+		log.info("Course  ::" + applicantParamValue);
 
-		}
-		if (appBean1.getYear().equals(null) || appBean1.getYear().equals("") || appBean1.getYear().equals("null")) {
-			request.setAttribute("msg", "Please Select Admission Year");
-			affInstList = affDAO.getCollegesList();
-			return "failure";
+		// log.info("Length iss ::" + applicantParamValue.replace(" ", ""));
 
-		}
-		if (appBean1.getCategory().equals("") || appBean1.getCategory().equals(null)
-				|| appBean1.getCategory().equals("null")) {
-			request.setAttribute("msg", "Please Select Category");
-			affInstList = affDAO.getCollegesList();
-			return "failure";
+		String[] x = applicantParamValue.replace(" ", "").split(",");
+		// log.info("x ::" + x.length);
 
+		for (int i = 0; i < x.length; i++) {
+			FvBean bean = new FvBean();
+			bean.setValue(x[i]);
+
+			if (i == 2) {
+				appBean1.setYear(bean.getValue());
+
+			}
+			fvBeansSet.add(bean);
 		}
+
+		appBean1.setApplicantParamValues(fvBeansSet);
+		// appBean1.getApplicantParamValues();
 
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
@@ -134,30 +135,31 @@ public class AppAction extends ActionSupport {
 		List<String> existEnrollmentList = aplDAO.existingEnrollNum(appBean1);
 		if (existEnrollmentList.isEmpty()) {
 
-			if (aplInstId == null) {
-				request.setAttribute("msg", "Please Select College Name");
-				affInstList = affDAO.getCollegesList();
-				return "failure";
-			}
+			/*
+			 * if (aplInstId == null) { request.setAttribute("msg",
+			 * "Please Select College Name"); affInstList =
+			 * affDAO.getCollegesList(); return "failure"; }
+			 */
 
-			//try {
-				log.info("Enrollment Number is"+appBean1.getEnrollmentNumber());
-				appBean1 = aplDAO.saveOrUpdate(appBean1, aplInstId);
-				
-			//} catch (java.lang.NullPointerException e) {
-				//request.setAttribute("msg", "Please Enter Enrollment Number");
-				//affInstList = affDAO.getCollegesList();
-				//return "failure";
-			//}
-			/*catch(ConstraintViolationException ex){
-				request.setAttribute("msg", "Enrollment Number Already Exit");
-				affInstList = affDAO.getCollegesList();
-				return "failure";
-				
-			}*/
+			// try {
+			log.info("Enrollment Number is" + appBean1.getEnrollmentNumber());
+			appBean1 = aplDAO.saveOrUpdate(appBean1, loginBean.getAffBean().getInstId());
+
+			// } catch (java.lang.NullPointerException e) {
+			// request.setAttribute("msg", "Please Enter Enrollment Number");
+			// affInstList = affDAO.getCollegesList();
+			// return "failure";
+			// }
+			/*
+			 * catch(ConstraintViolationException ex){
+			 * request.setAttribute("msg", "Enrollment Number Already Exit");
+			 * affInstList = affDAO.getCollegesList(); return "failure";
+			 * 
+			 * }
+			 */
 
 			try {
-				updateStudentDue();
+				// updateStudentDue();
 
 			} catch (java.util.NoSuchElementException e) {
 
@@ -259,7 +261,7 @@ public class AppAction extends ActionSupport {
 
 		List<Integer> feeIdes = new ArrayList<Integer>();
 		String applicableFeeString = aplDAO.getApplicableFeesString(appBean1.getCourse());
-         log.info("Applicable fee string"+applicableFeeString);
+		log.info("Applicable fee string" + applicableFeeString);
 		String applicableFeeIdArray[] = applicableFeeString.split("~");
 		for (String string : applicableFeeIdArray) {
 			feeIdes.add(Integer.parseInt(string));
@@ -533,6 +535,22 @@ public class AppAction extends ActionSupport {
 
 	public void setCollegeName(String collegeName) {
 		this.collegeName = collegeName;
+	}
+
+	public String getApplicantParamValue() {
+		return applicantParamValue;
+	}
+
+	public void setApplicantParamValue(String applicantParamValue) {
+		this.applicantParamValue = applicantParamValue;
+	}
+
+	public Set<FvBean> getFvBeansSet() {
+		return fvBeansSet;
+	}
+
+	public void setFvBeansSet(Set<FvBean> fvBeansSet) {
+		this.fvBeansSet = fvBeansSet;
 	}
 
 }
