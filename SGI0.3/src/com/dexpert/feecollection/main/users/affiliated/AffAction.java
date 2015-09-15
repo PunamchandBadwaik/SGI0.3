@@ -60,6 +60,7 @@ public class AffAction extends ActionSupport {
 	List<String> list = new ArrayList<String>();
 	private Integer parInstId;
 	private LookupDAO lookupdao = new LookupDAO();
+	List<LookupBean>lookupBeanList=new ArrayList<LookupBean>();
 	public AffBean affInstBean;
 	private ArrayList<AffFeeCalcDetail> calcList = new ArrayList<AffFeeCalcDetail>();
 	private AffFeePropBean propbean;
@@ -230,6 +231,9 @@ public class AffAction extends ActionSupport {
 	public String getCollegeList() {
 
 		affInstList = affDao.getCollegesList();
+		lookupBeanList=lookupdao.getListOfLookUpValues("Applicant");
+		log.info("look up List Size is ::"+lookupBeanList.size());
+		
 
 		return SUCCESS;
 	}
@@ -864,7 +868,7 @@ public class AffAction extends ActionSupport {
 			if (collegeName != null && !collegeName.isEmpty()) {
 				Integer id = affDao.getCollegeId(collegeName);
 				log.info("id of the college is" + id);
-				listOfCourse = affDao.getListOfCourses(id);
+				listOfCourse = affDao.getListOfCourses(id,null);
 				log.info("list of course" + listOfCourse.size());
 				return "listOfCourse";
 			}
@@ -899,7 +903,7 @@ public class AffAction extends ActionSupport {
 			Integer id = (Integer) ses.getAttribute("sesId") == null ? affDao.getCollegeId(collegeName) : (Integer) ses
 					.getAttribute("sesId");
 			log.info("id is" + id);
-			listOfCourse = affDao.getListOfCourses(id);
+			listOfCourse = affDao.getListOfCourses(id,null);
 			log.info("list of course" + listOfCourse.size());
 			return SUCCESS;
 
@@ -1201,6 +1205,14 @@ public class AffAction extends ActionSupport {
 
 	public void setTotalDuesOFCollege(List<Object[]> totalDuesOFCollege) {
 		this.totalDuesOFCollege = totalDuesOFCollege;
+	}
+
+	public List<LookupBean> getLookupBeanList() {
+		return lookupBeanList;
+	}
+
+	public void setLookupBeanList(List<LookupBean> lookupBeanList) {
+		this.lookupBeanList = lookupBeanList;
 	}
 
 	// End of Getter Setter Methods
