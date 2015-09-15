@@ -133,8 +133,8 @@
 														<th><s:property /></th>
 
 													</s:iterator>
-													<th>Amount Per Student</th>
-													
+													<th>Amount</th>
+
 												</tr>
 											</thead>
 											<tbody>
@@ -150,16 +150,16 @@
 																</s:if> <s:else>
 																	<s:property />
 																</s:else></td>
-
+															
 
 														</s:iterator>
-														
-														
+														<td>
+
 													</tr>
 													<%
-															i++;
-																									  j++;
-														%>
+														i++;
+																																				  j++;
+													%>
 												</s:iterator>
 											</tbody>
 										</table>
@@ -168,7 +168,9 @@
 							</div>
 						</div>
 						<div class="col-md-12">
-							
+
+							<button type="submit" class="btn btn-success">Save Fee
+								Details</button>
 
 							<button onclick="window.close()" class="btn btn-info">Close
 							</button>

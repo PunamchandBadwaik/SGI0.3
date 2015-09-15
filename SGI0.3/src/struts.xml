@@ -549,10 +549,17 @@
 
 		</action>
 		<action name="getFeeStructure"
-			class="com.dexpert.feecollection.main.fee.config.FcAction" method="FeeDetails">
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="ViewFeeStruct">
 
 			<result name="success">FeeStructureView.jsp</result>
 			<result name="EDIT">FeeStructureView.jsp</result>
+
+		</action>
+		<action name="getFeeStructureEdit"
+			class="com.dexpert.feecollection.main.fee.config.FcAction" method="ViewFeeStruct">
+
+			<result name="success">FeeStructure.jsp</result>
+			<result name="EDIT">FeeStructure.jsp</result>
 
 		</action>
 	</package>

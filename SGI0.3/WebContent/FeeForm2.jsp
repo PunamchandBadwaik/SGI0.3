@@ -109,7 +109,7 @@
 								<div class="box-header well">
 									<h2>
 										<i class="glyphicon glyphicon-info-sign"></i> Set Fee Values
-										for Admission Fee
+										for Fee
 									</h2>
 
 									<div class="box-icon">

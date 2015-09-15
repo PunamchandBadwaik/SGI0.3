@@ -1,8 +1,6 @@
+<!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html lang="en">
 <head>
 <%
 	//checking session
@@ -22,133 +20,273 @@
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-			if (cookie.getName().equals("loginUser"))
-				usercookie = cookie.getValue();
-			if (cookie.getName().equals("JSESSIONID"))
-				sessionID = cookie.getValue();
+	if (cookie.getName().equals("user"))
+		usercookie = cookie.getValue();
+	if (cookie.getName().equals("JSESSIONID"))
+		sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
 	}
+	int i=1;
+	int j=0;
 %>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>FeeDesk</title>
-</head>
-<body>
-	<table
-		class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
-		<thead>
-			<tr>
-				<th colspan="15">Admissions Fee Structure- UnderGraduate
-					Department</th>
-			</tr>
-			<tr>
-				<th>Sr. No.</th>
-				<th>Department</th>
-				<th colspan="3">Admission Fee</th>
-				<th colspan="3">Registration Fee</th>
-				<th colspan="2">Late Adm. Fee</th>
-				<th>Late Submission Fee</th>
-				<th>Sports Fee</th>
-				<th>Student Welfare Fund Fee</th>
-				<th>NSS Fee</th>
-				<th>Helinet Fee</th>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+<meta charset="utf-8">
 
-			</tr>
-			<tr>
-				<th></th>
-				<th></th>
-				<th>India</th>
-				<th>NRI & SAARC</th>
-				<th>Foreign Candidate</th>
-				<th>India</th>
-				<th>NRI & SAARC</th>
-				<th>Foreign Candidate</th>
-				<th>India, NRI & SAARC</th>
-				<th>Foreign Candidate</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td></td>
-				<td>Medical</td>
-				<td>500</td>
-				<td>3000</td>
-				<td>US$150</td>
-				<td>3000</td>
-				<td>5000</td>
-				<td>US$150</td>
-				<td>200</td>
-				<td>500</td>
-				<td></td>
-				<td>200</td>
-				<td>100</td>
-				<td>10</td>
-				<td>1000</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>Dental</td>
-				<td>500</td>
-				<td>3000</td>
-				<td>US$150</td>
-				<td>3000</td>
-				<td>5000</td>
-				<td>US$150</td>
-				<td>200</td>
-				<td>500</td>
-				<td></td>
-				<td>200</td>
-				<td>100</td>
-				<td>10</td>
-				<td>1000</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>Nursing, Physiotheraphy, Pharmacy, Ayurveda, Homeopathy,
-					Unani & Yoga</td>
-				<td>300</td>
-				<td>3000</td>
-				<td>US$150</td>
-				<td>2000</td>
-				<td>2000</td>
-				<td>US$150</td>
-				<td>200</td>
-				<td>500</td>
-				<td></td>
-				<td>200</td>
-				<td>100</td>
-				<td>10</td>
-				<td>500</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>All Other Paramedical Courses</td>
-				<td>300</td>
-				<td>3000</td>
-				<td>US$150</td>
-				<td>2000</td>
-				<td>2000</td>
-				<td>US$150</td>
-				<td>200</td>
-				<td>500</td>
-				<td></td>
-				<td>200</td>
-				<td>100</td>
-				<td>10</td>
-				<td>500</td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
+<title>FeeDesk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description"
+	content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
+<meta name="author" content="Muhammad Usman">
+
+<!-- The styles -->
+<link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
+
+<link href="css/charisma-app.css" rel="stylesheet">
+<link href='bower_components/fullcalendar/dist/fullcalendar.css'
+	rel='stylesheet'>
+<link href='bower_components/fullcalendar/dist/fullcalendar.print.css'
+	rel='stylesheet' media='print'>
+<link href='bower_components/chosen/chosen.min.css' rel='stylesheet'>
+<link href='bower_components/colorbox/example3/colorbox.css'
+	rel='stylesheet'>
+<link href='bower_components/responsive-tables/responsive-tables.css'
+	rel='stylesheet'>
+<link
+	href='bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css'
+	rel='stylesheet'>
+<link href='css/jquery.noty.css' rel='stylesheet'>
+<link href='css/noty_theme_default.css' rel='stylesheet'>
+<link href='css/elfinder.min.css' rel='stylesheet'>
+<link href='css/elfinder.theme.css' rel='stylesheet'>
+<link href='css/jquery.iphone.toggle.css' rel='stylesheet'>
+<link href='css/uploadify.css' rel='stylesheet'>
+<link href='css/animate.min.css' rel='stylesheet'>
+<link href="bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<!-- jQuery -->
+<script src="bower_components/jquery/jquery.min.js"></script>
+
+<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- The fav icon -->
+<link rel="shortcut icon" href="img/favicon.ico">
+
+</head>
+
+<body>
+	<!-- topbar starts -->
+
+	<!-- topbar ends -->
+	<div class="ch-container">
+		<div class="row">
+
+
+			<noscript>
+				<div class="alert alert-block col-md-12">
+					<h4 class="alert-heading">Warning!</h4>
+
+					<p>
+						You need to have <a href="http://en.wikipedia.org/wiki/JavaScript"
+							target="_blank">JavaScript</a> enabled to use this site.
+					</p>
+				</div>
+			</noscript>
+
+			<div id="content" class="col-lg-12 col-sm-12">
+				<!-- content starts -->
+				<div></div>
+
+
+				<div class="row">
+					<form action="saveFee" method="post">
+						<div class="box col-md-12">
+							<div class="box-inner">
+								<div class="box-header well">
+									<h2>
+										<i class="glyphicon glyphicon-info-sign"></i> Set Fee Values
+										for Fee
+									</h2>
+
+									<div class="box-icon">
+
+										<a href="#" class="btn btn-minimize btn-round btn-default"><i
+											class="glyphicon"></i></a>
+
+									</div>
+								</div>
+								<div class="box-content row">
+									<div class="col-lg-12 col-md-12 animated fadeIn"
+										id="showCombinationDiv">
+
+
+										<table class="table table-condensed table-striped">
+
+											<thead>
+												<tr>
+													<th>Sr. No.</th>
+													<th></th>
+													<s:iterator value="HeaderList" status="ind">
+
+														<th><s:property /></th>
+
+													</s:iterator>
+													<th>Old Amount</th>
+													<th>New Amount</th>
+												</tr>
+											</thead>
+											<tbody>
+												<s:iterator value="BodyList">
+													<tr id="<%=j%>">
+														<td><%=i%> <s:property value="%{#ind.index}" /></td>
+														<s:iterator status="incr">
+
+
+															<td><s:if test="%{#incr.index==0}">
+																	<input value='<s:property />'
+																		name="uids[<%=j%>].comboId" hidden="hidden">
+
+
+
+
+																	<button type="button" data-toggle="popover"
+																		data-content="" onclick="removeFeeCombo(<%=j%>)"
+																		class="btn btn-sm btn-danger">
+																		<i class="fa fa-trash"></i>
+																	</button>
+
+
+
+																</s:if> <s:else>
+																	<s:property />
+
+																</s:else></td>
+															<s:if test="%{#incr.index==BodyList.get(0).size()-1}">
+																<td><input name="uids[<%=j%>].amount"
+																	class="form-control" type="text"
+																	placeholder="Enter Fee Value" pattern="[0-9.,]*"
+																	value="<s:property />"></td>
+															</s:if>
+
+														</s:iterator>
+													</tr>
+													<%
+														i++;
+																																																																																																																	  j++;
+													%>
+												</s:iterator>
+											</tbody>
+										</table>
+									</div>
+
+									<script type="text/javascript">
+									function removeFeeCombo(id)//Code to remove invalid combinations of Fees
+									{
+										
+										document.getElementById(id).remove();
+									}
+									</script>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<button type="submit" class="btn btn-success">Save Fee
+								Details</button>
+
+							<button onclick="window.close()" class="btn btn-info">Close
+							</button>
+
+						</div>
+					</form>
+				</div>
+
+				<!--/row-->
+
+				<!--/row-->
+				<!-- content ends -->
+			</div>
+			<!--/#content.col-md-0-->
+		</div>
+		<!--/fluid-row-->
+
+
+
+		<hr>
+
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">×</button>
+						<h3>Settings</h3>
+					</div>
+					<div class="modal-body">
+						<p>Here settings can be configured...</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+						<a href="#" class="btn btn-primary" data-dismiss="modal">Save
+							changes</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <footer class="row">
+			<p class="col-md-9 col-sm-9 col-xs-12 copyright">
+				&copy; <a href="http://dexpertsystems.com" target="_blank">Dexpert
+					Systems Pvt. Ltd</a>
+			</p>
+
+			<p class="col-md-3 col-sm-3 col-xs-12 powered-by">
+				Powered by: <a href="http://dexpertsystems.com">Dexpert</a>
+			</p>
+		</footer> -->
+
+	</div>
+	<!--/.fluid-container-->
+
+	<!-- external javascript -->
+
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<!-- library for cookie management -->
+	<script src="js/jquery.cookie.js"></script>
+	<!-- calender plugin -->
+	<script src='bower_components/moment/min/moment.min.js'></script>
+	<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+
+	<!-- data table plugin -->
+	<script src='js/jquery.dataTables.min.js'></script>
+
+	<!-- select or dropdown enhancer -->
+	<script src="bower_components/chosen/chosen.jquery.min.js"></script>
+	<!-- plugin for gallery image view -->
+	<script src="bower_components/colorbox/jquery.colorbox-min.js"></script>
+	<!-- notification plugin -->
+	<script src="js/jquery.noty.js"></script>
+	<!-- library for making tables responsive -->
+	<script src="bower_components/responsive-tables/responsive-tables.js"></script>
+	<!-- tour plugin -->
+	<script
+		src="bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
+	<!-- star rating plugin -->
+	<script src="js/jquery.raty.min.js"></script>
+	<!-- for iOS style toggle switch -->
+	<script src="js/jquery.iphone.toggle.js"></script>
+	<!-- autogrowing textarea plugin -->
+	<script src="js/jquery.autogrow-textarea.js"></script>
+	<!-- multiple file upload plugin -->
+	<script src="js/jquery.uploadify-3.1.min.js"></script>
+	<!-- history.js for cross-browser state change on ajax -->
+	<script src="js/jquery.history.js"></script>
+	<!-- application script for Charisma demo -->
+	<script src="js/charisma.js"></script>
 </body>
 </html>

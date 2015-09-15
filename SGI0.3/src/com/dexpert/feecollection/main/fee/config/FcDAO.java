@@ -50,6 +50,34 @@ public class FcDAO {
 		}
 	}
 
+	
+	public void deleteFeeBulk(ArrayList<FcBean> remlist) {
+		// Declarations
+
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			for (int i = 0; i < remlist.size(); i++) {
+				FcBean rembean = new FcBean();
+				rembean = remlist.get(i);
+				session.delete(rembean);
+				if (i % 20 == 0) { // 20, same as the JDBC batch size
+					// flush a batch of deletes and release memory:
+					session.flush();
+					session.clear();
+				}
+			}
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			// close session
+			session.close();
+		}
+	}
+	
 	public void saveFeeDetails(FeeDetailsBean savedata) {
 		// Declarations
 

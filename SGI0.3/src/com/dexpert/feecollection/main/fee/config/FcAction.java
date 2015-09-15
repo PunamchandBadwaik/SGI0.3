@@ -414,12 +414,29 @@ public class FcAction extends ActionSupport {
 		// Populate Header List with Strings of Parameters
 		HeaderList = GetHeaders(Combos);
 		// End of Commbination Code
-
+		ses.setAttribute("sesFeeEditFlag", 0); 
 		return SUCCESS;
 	}
 
 	public String SaveFee() {
 		FeeDetailsBean fee = (FeeDetailsBean) ses.getAttribute("sesFeeDetails");
+		//New Code for fee Update
+		Integer editFlag=0;
+		try
+		{
+			editFlag=(Integer)ses.getAttribute("sesFeeEditFlag");
+		}
+		catch(Exception e)
+		{
+			editFlag=0;
+		}
+		if(editFlag==1)
+		{
+			ses.setAttribute("sesFeeEditFlag", 0); 
+			ArrayList<FcBean>oldCombos=new ArrayList<FcBean>(fee.getConfigs());
+			 configdao.deleteFeeBulk(oldCombos);
+		}
+		//
 		HashMap<Integer, ArrayList<Integer>> ComboMap = new HashMap<Integer, ArrayList<Integer>>();
 		ArrayList<FcBean> comboList = new ArrayList<FcBean>();
 		ArrayList<Integer> combo = new ArrayList<Integer>();
@@ -539,7 +556,7 @@ public class FcAction extends ActionSupport {
 					temp.add(calcParamMap.get(tempList.get(0).getComboId()).getCalcId().toString());
 				}
 				temp.add(tempList.get(0).getComboId().toString());
-
+				
 				for (int i = 0; i < tempList.size(); i++) {
 					temp.add(ValueMap.get(tempList.get(i).getValueId()).getValue());
 				}
@@ -557,6 +574,82 @@ public class FcAction extends ActionSupport {
 			}
 		} else {
 			// return error when no no config found in feedetail bean
+			return ERROR;
+		}
+	}
+	
+	public String ViewFeeStruct() {
+		Integer id = Integer.parseInt(request.getParameter("reqFeeId").trim());
+		ses.setAttribute("sesFeeEditFlag",1);
+		HashMap<Integer, ArrayList<Integer>> comboMapEdit = new HashMap<Integer, ArrayList<Integer>>();
+		fDfeeList = configdao.GetFees("id", null, id, null);
+		FeeDetailsBean fdBean = new FeeDetailsBean();
+		fdBean = fDfeeList.get(0);
+		ses.setAttribute("sesFeeDetails", fdBean);
+		ListMultimap<Integer, FcBean> comboMap = ArrayListMultimap.create();
+		List<FcBean> comboList = new ArrayList<FcBean>();
+		log.info(fdBean.getConfigs().toString());
+		if (fdBean.getConfigs().size() > 0) {
+
+			comboList = fdBean.getConfigs();
+			for (int i = 0; i < comboList.size(); i++) {
+
+				FcBean temp = new FcBean();
+				temp = comboList.get(i);
+
+				comboMap.put(temp.getComboId(), temp);
+			}
+			// Get Headers
+			ArrayList<FcBean> tempList = new ArrayList<FcBean>();
+
+			ArrayList<Integer> keyList = new ArrayList<Integer>(comboMap.keySet());
+
+			tempList.addAll(comboMap.get(keyList.get(0)));
+			ArrayList<Integer[]> headerinput = new ArrayList<Integer[]>();
+
+			ArrayList<Integer> valueidList = new ArrayList<Integer>();
+			log.info("templist is " + tempList.toString());
+			for (int i = 0; i < tempList.size(); i++) {
+				valueidList.add(tempList.get(i).getValueId());
+			}
+			Integer[] valueids = new Integer[valueidList.size()];
+			valueidList.toArray(valueids);
+			headerinput.add(valueids);
+			HeaderList = GetHeaders(headerinput);
+
+			// Prepare Body
+			ArrayList<FvBean> FvBeanList = new ArrayList<FvBean>();
+			FvBeanList = fvdao.getValues("ALL", null, null);
+			HashMap<Integer, FvBean> ValueMap = new HashMap<Integer, FvBean>();
+			ValueMap = CreateMap(FvBeanList);
+			ArrayList<ArrayList<String>> tempbody = new ArrayList<ArrayList<String>>();
+			ArrayList<Integer> tempids = new ArrayList<Integer>();
+			//Integer comboId = 0;
+			Iterator<Integer> keyIt = keyList.iterator();
+			while (keyIt.hasNext()) {
+				tempids.clear();
+				ArrayList<String> temp = new ArrayList<String>();
+				tempList.clear();
+				tempList.addAll(comboMap.get(keyIt.next()));				
+				temp.add(tempList.get(0).getComboId().toString());
+				log.info("String generated is "+temp);
+				for (int i = 0; i < tempList.size(); i++) {
+					temp.add(ValueMap.get(tempList.get(i).getValueId()).getValue());
+					log.info("Value ids are "+tempList.get(i).getValueId());
+					tempids.add(tempList.get(i).getValueId());
+				}
+				temp.add(tempList.get(0).getAmount().toString());
+				comboMapEdit.put(tempList.get(0).getComboId(), tempids);
+				log.info("String generated is "+temp);
+				tempbody.add(temp);
+			}
+			ses.setAttribute("sesComboMap", comboMapEdit);
+			BodyList = tempbody;
+			
+				return SUCCESS;
+			
+		} else {
+			// return error when no  config found in feedetail bean
 			return ERROR;
 		}
 	}
