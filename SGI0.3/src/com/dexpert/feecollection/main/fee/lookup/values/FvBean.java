@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -29,7 +30,7 @@ public class FvBean implements Serializable {
 	private Integer feeValueId;
 	private String value;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "applicantParamValues")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "applicantParamValues")
 	Set<AppBean> appBeanParamSet;
 
 	// one to one unidirectional mapping with Fee Config

@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +43,7 @@ import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.lookup.values.BreakString;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
@@ -62,12 +64,21 @@ public class AppDAO {
 	// ---------------------------------------------------
 
 	// DAO Methods Here
-	private FvBean getfeeValue(Integer feeValueId) {
+	public FvBean getfeeValue(Integer feeValueId) {
 		Session session = factory.openSession();
 		try {
-			Criteria criteria = session.createCriteria(FvBean.class);
-			criteria.add(Restrictions.eq("feeValueId", feeValueId));
-			FvBean bean = (FvBean) criteria.list().iterator().next();
+
+			FvBean bean = (FvBean) session.get(FvBean.class, feeValueId);
+
+			/*
+			 * Criteria criteria = session.createCriteria(FvBean.class);
+			 * criteria.add(Restrictions.eq("feeValueId", feeValueId)); FvBean
+			 * bean = (FvBean) criteria.list().iterator().next();
+			 */
+			log.info("Value is ::" + bean.getFeeValueId());
+			log.info("Value is ::" + bean.getValue());
+			log.info("Value is ::" + bean.getLookupname());
+			log.info("Value is ::" + bean.getLookupname().getLookupId());
 
 			return bean;
 		} finally {
@@ -76,7 +87,7 @@ public class AppDAO {
 		}
 	}
 
-	public AppBean checkValues(FvBean fvBeanValue) {
+	public String checkValues(FvBean fvBeanValue) {
 		AppBean appBean = new AppBean();
 
 		if (fvBeanValue.getValue().contentEquals("FE")) {
@@ -116,8 +127,8 @@ public class AppDAO {
 			appBean.setYearCode("60");
 
 		}
-
-		return appBean;
+		log.info("Year Code is 11111111::" + appBean.getYearCode());
+		return appBean.getYearCode();
 	}
 
 	public AppBean saveOrUpdate(AppBean appBean, Integer aplInstId) throws InvalidKeyException,
@@ -125,27 +136,47 @@ public class AppDAO {
 			UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
 		// Declarations
 		// Open session from session factory
-
+		log.info("Admission Year is ::" + appBean.getYear());
+		String adYear = appBean.getYear();
+		String yrCode = appBean.getYear();
 		Session session = factory.openSession();
 		AffBean affBean = new AffBean();
-
 		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
-		FvBean fvBeanValue = new FvBean();
+		Set<FvBean> fvBeans = new HashSet<FvBean>();
+		String pp = "";
 		while (iterator.hasNext()) {
-			FvBean fvBean = (FvBean) iterator.next();
+			FvBean fvBeanValue = (FvBean) iterator.next();
+			log.info("Value of Students is ::" + fvBeanValue.getFeeValueId());
+			fvBeanValue = getfeeValue(fvBeanValue.getFeeValueId());
+			fvBeans.add(fvBeanValue);
+			pp = pp + (pp.concat(",").concat(fvBeanValue.getValue()));
 
-			log.info("Value of Students is ::" + fvBean.getValue());
-
-		//	fvBeanValue = getfeeValue(fvBean.getFeeValueId());
-
-			appBean = checkValues(fvBean);
-			
-			
-			
 		}
 
+		log.info("New String value is ::" + pp);
+		log.info("Lissssssssssss ::" + fvBeans.size());
+		appBean.setApplicantParamValues(fvBeans);
+		appBean.setYear(adYear);
 		// to get college record based on id to create relationship
 		affBean = aff.viewInstDetail(aplInstId);
+
+		BreakString bs = new BreakString();
+		String k = bs.breakString(pp);
+		log.info("Break String element is ::" + k);
+		try {
+
+			if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
+					|| appBean.getEnrollmentNumber().equals("")) {
+				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+				String EnrollNo = en.generateEnrollmentNumber(k);
+				appBean.setEnrollmentNumber(EnrollNo);
+			}
+		} catch (java.lang.NullPointerException e) {
+			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+			String EnrollNo = en
+					.generateEnrollmentNumber(k);
+			appBean.setEnrollmentNumber(EnrollNo);
+		}
 
 		LoginBean loginBean = new LoginBean();
 		loginBean.setUserName(appBean.getEnrollmentNumber());
@@ -164,50 +195,54 @@ public class AppDAO {
 
 		// one to many Relationship
 		affBean.getAplBeanSet().add(appBean);
-
 		try {
 			Transaction tx = session.beginTransaction();
-			session.saveOrUpdate(appBean);
+			// session.saveOrUpdate(appBean);
 			tx.commit();
 
-			try {
-
-				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
-						|| appBean.getAplMobilePri().equals(null)) {
-
-				} else {
-					String user = appBean.getEnrollmentNumber();
-					String pass = appBean.getYear().substring(0, 4);
-					;
-					String msg = "UserId :" + user + "" + " Passsword : " + pass;
-					SendSMS sms = new SendSMS();
-					sms.sendSMS(appBean.getAplMobilePri(), msg);
-
-				}
-			} catch (java.lang.NullPointerException e) {
-
-			}
-
-			try {
-
-				if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
-						|| appBean.getAplEmail().equals(null)) {
-
-				} else {
-					EmailSessionBean email = new EmailSessionBean();
-					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getYear().substring(0, 4),
-							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
-
-				}
-			} catch (java.lang.NullPointerException e) {
-
-			}
+			/*
+			 * try {
+			 * 
+			 * if (appBean.getAplMobilePri().equals("") ||
+			 * appBean.getAplMobilePri().equals("null") ||
+			 * appBean.getAplMobilePri().equals(null)) {
+			 * 
+			 * } else { String user = appBean.getEnrollmentNumber(); String pass
+			 * = appBean.getYear().substring(0, 4); ; String msg = "UserId :" +
+			 * user + "" + " Passsword : " + pass; SendSMS sms = new SendSMS();
+			 * sms.sendSMS(appBean.getAplMobilePri(), msg);
+			 * 
+			 * } } catch (java.lang.NullPointerException e) {
+			 * 
+			 * }
+			 * 
+			 * try {
+			 * 
+			 * if (appBean.getAplEmail().equals("") ||
+			 * appBean.getAplEmail().equals("null") ||
+			 * appBean.getAplEmail().equals(null)) {
+			 * 
+			 * } else { EmailSessionBean email = new EmailSessionBean();
+			 * email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!",
+			 * appBean.getEnrollmentNumber(), appBean.getYear().substring(0, 4),
+			 * appBean
+			 * .getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+			 * 
+			 * } } catch (java.lang.NullPointerException e) {
+			 * 
+			 * }
+			 */
 		} finally {
 
 			session.close();
 		}
 		return appBean;
+
+	}
+
+	private void updateFeeValueTable(Integer feeValueId) {
+		Session session = factory.openSession();
+		Transaction transaction = session.beginTransaction();
 
 	}
 
@@ -531,14 +566,12 @@ public class AppDAO {
 				if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
 						|| appBean.getEnrollmentNumber().equals("")) {
 					GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-					String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode(),
-							appBean.getCourse());
+					String EnrollNo = en.generateEnrollmentNumber(k);
 					appBean.setEnrollmentNumber(EnrollNo);
 				}
 			} catch (java.lang.NullPointerException e) {
 				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-				String EnrollNo = en.generateEnrollmentNumber(appBean.getYear(), appBean.getYearCode(),
-						appBean.getCourse());
+				String EnrollNo = en.generateEnrollmentNumber(k);
 				appBean.setEnrollmentNumber(EnrollNo);
 			}
 

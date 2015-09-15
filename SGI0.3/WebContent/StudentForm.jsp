@@ -185,7 +185,7 @@
 															style="width: 240px;" required="required">
 																<option value="">--Select--</option>
 																<s:iterator value="#x.fvBeansList">
-																	<option value='<s:property value="value"/>'><s:property
+																	<option value='<s:property value="feeValueId"/>'><s:property
 																			value="value" /></option>
 
 																</s:iterator>

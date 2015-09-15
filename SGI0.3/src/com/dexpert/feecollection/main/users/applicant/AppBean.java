@@ -62,7 +62,7 @@ public class AppBean implements Serializable {
 	@JoinColumn(name = "aplicantId_Fk", referencedColumnName = "enrollmentNumber")
 	private Set<PayBean> payBeansSet;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name = "applicant_values", joinColumns = @JoinColumn(name = "enrollmentNumber"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> applicantParamValues;
 

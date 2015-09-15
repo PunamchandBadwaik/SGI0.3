@@ -30,6 +30,8 @@ import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.lookup.LookupBean;
+import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
@@ -50,6 +52,7 @@ public class AppAction extends ActionSupport {
 	HttpServletResponse response = ServletActionContext.getResponse();
 	static Logger log = Logger.getLogger(AffAction.class.getName());
 	AffBean affBean = new AffBean();
+	List<LookupBean> lookupBeanList = new ArrayList<LookupBean>();
 	String collegeName, applicantParamValue;
 	OperatorDao opratorDAO = new OperatorDao();
 	Set<FvBean> fvBeansSet = new HashSet<FvBean>();
@@ -107,6 +110,7 @@ public class AppAction extends ActionSupport {
 	public String registerStudent() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
 			BadPaddingException {
+		LookupDAO lookupdao = new LookupDAO();
 		log.info("Course  ::" + applicantParamValue);
 
 		// log.info("Length iss ::" + applicantParamValue.replace(" ", ""));
@@ -116,10 +120,19 @@ public class AppAction extends ActionSupport {
 
 		for (int i = 0; i < x.length; i++) {
 			FvBean bean = new FvBean();
-			bean.setValue(x[i]);
+			// bean.setValue(x[i]);
+			bean.setFeeValueId(Integer.parseInt(x[i]));
+			if (i == 1) {
+				FvBean bean2 = aplDAO.getfeeValue(bean.getFeeValueId());
+				String yearCode = aplDAO.checkValues(bean2);
+				appBean1.setYearCode(yearCode);
+				log.info("Year Code Is :" + appBean1.getYearCode());
 
+			}
 			if (i == 2) {
-				appBean1.setYear(bean.getValue());
+				FvBean bean2 = aplDAO.getfeeValue(bean.getFeeValueId());
+				appBean1.setYear(bean2.getValue());
+				log.info("Admission Year Is :" + appBean1.getYear());
 
 			}
 			fvBeansSet.add(bean);
@@ -142,7 +155,8 @@ public class AppAction extends ActionSupport {
 			 */
 
 			// try {
-			log.info("Enrollment Number is" + appBean1.getEnrollmentNumber());
+			// log.info("Enrollment Number is" +
+			// appBean1.getEnrollmentNumber());
 			appBean1 = aplDAO.saveOrUpdate(appBean1, loginBean.getAffBean().getInstId());
 
 			// } catch (java.lang.NullPointerException e) {
@@ -176,6 +190,7 @@ public class AppAction extends ActionSupport {
 			log.info("4");
 			request.setAttribute("msg", "Enrollment Number Already Registered");
 			affInstList = affDAO.getCollegesList();
+			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant");
 			return "failure";
 		}
 
@@ -551,6 +566,14 @@ public class AppAction extends ActionSupport {
 
 	public void setFvBeansSet(Set<FvBean> fvBeansSet) {
 		this.fvBeansSet = fvBeansSet;
+	}
+
+	public List<LookupBean> getLookupBeanList() {
+		return lookupBeanList;
+	}
+
+	public void setLookupBeanList(List<LookupBean> lookupBeanList) {
+		this.lookupBeanList = lookupBeanList;
 	}
 
 }

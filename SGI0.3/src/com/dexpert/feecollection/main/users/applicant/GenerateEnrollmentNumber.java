@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+
 import com.dexpert.feecollection.main.ConnectionClass;
 
 public class GenerateEnrollmentNumber {
@@ -75,7 +76,14 @@ public class GenerateEnrollmentNumber {
 
 	}
 
-	public String generateEnrollmentNumber(String yr, String yc, String course) {
+	public String generateEnrollmentNumber(String q) {
+		
+		/*String[] x = q.split(",");
+		for (int i = 0; i < x.length; i++) {
+			
+		}
+		*/
+		
 		String initialString = yr.substring(2, 4).concat(yc);
 		String en = null;
 		String finalEnroll = null;
