@@ -683,7 +683,10 @@ public class AffDAO {
 	}
 
 	public List<Object[]> findDueOfFees(String feeName, List<String> enrollmentNumber) {
+		List<Object[]> feeDues=new ArrayList<Object[]>();
 		Session session = factory.openSession();
+		try{
+		
 		Criteria criteria = session.createCriteria(PaymentDuesBean.class);
 		criteria.add(Restrictions.in("appBean.enrollmentNumber", enrollmentNumber));
 		if (feeName != null && !feeName.isEmpty()) {
@@ -697,10 +700,18 @@ public class AffDAO {
 					.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
 					.add(Projections.sum("netDue")).add(Projections.groupProperty("feeName")));
 		}
-		List<Object[]> feeDues = criteria.list();
-
-		session.close();
-		return feeDues;
+		feeDues = criteria.list();
+        return feeDues;
+		}catch(Exception ex)
+		{
+		ex.printStackTrace();	
+		return feeDues;	
+		}
+		
+		finally{
+		session.close();	
+			
+		}
 	}
 
 	public List<String> findEnrollmentNumberOfMoreTheOneCollege(List<Integer> collegeIdes, String courseName) {
