@@ -613,7 +613,7 @@ public class AffAction extends ActionSupport {
 			}
 			return SUCCESS;
 
-		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
+		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")||ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			collegeId = Integer.parseInt(request.getParameter("instId"));
 			String courseName = request.getParameter("courseName");
 			popUp = true;

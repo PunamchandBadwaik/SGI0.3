@@ -11,10 +11,10 @@
 
 	<div>
 		<s:if
-			test='%{totalDuesOfStudent.isEmpty()|| totalDuesOfStudent.size()<1}'>
+			test='%{totalDuesOFCollege.isEmpty()|| totalDuesOFCollege.size()<1}'>
 			<div
 				style="color: red; text-align: center; font-weight: bold; font-size: medium;">
-				No Due Available For This College</div>
+				No Due Available </div>
 		</s:if>
 		<s:else>
 			<table
