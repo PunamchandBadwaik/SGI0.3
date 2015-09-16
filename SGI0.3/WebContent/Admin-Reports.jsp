@@ -362,7 +362,7 @@ try{
 									<%
 										if (profile.contentEquals("SU")){
 									%>
-									<p class="btn-group">
+									 <p class="btn-group">
 										<button class="btn btn-default" title="Get College Report"
 											onclick="window.location='ShowCollegeReport'">College
 											Report</button>
@@ -370,11 +370,11 @@ try{
 
 
 
-									<p class="btn-group">
+									<!-- <p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
 											onclick="window.location='CollegeDueReport'">College
 											Due Report</button>
-									</p>
+									</p> -->
 
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get Transaction Report"
