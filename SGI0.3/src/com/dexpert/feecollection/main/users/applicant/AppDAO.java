@@ -342,7 +342,8 @@ public class AppDAO {
 				continue;
 			}
 			int noOfColumns = hssfSheet.getRow(row.getRowNum()).getPhysicalNumberOfCells();
-			log.info(":::::::::::: " + row.getRowNum() + " >>>" + noOfColumns);
+			log.info("::::::row number::::: " + row.getRowNum() + " Column numbers ::" + noOfColumns);
+			
 			Iterator<Cell> cellIterator = row.cellIterator();
 
 			while (cellIterator.hasNext()) {
