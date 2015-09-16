@@ -30,7 +30,7 @@ public class FvBean implements Serializable {
 	private Integer feeValueId;
 	private String value;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "applicantParamValues")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "applicantParamValues")
 	Set<AppBean> appBeanParamSet;
 
 	// one to one unidirectional mapping with Fee Config

@@ -1,22 +1,60 @@
 package com.dexpert.feecollection.main.users.applicant;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
+import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 
 public class GenerateEnrollmentNumber {
 	// Declare Global Variables Here
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(GenerateEnrollmentNumber.class.getName());
 
+	public Integer getIds(String AdmiYear, String yc, String course, LinkedHashSet<FvBean> set) {
+		log.info("size is ::" + set.size());
+		log.info("Admission Year :" + AdmiYear);
+		log.info("Course :" + course);
+		log.info("Year :" + yc);
+
+		Session session = factory.openSession();
+		List<FvBean> list = new ArrayList<FvBean>();
+
+		try {
+			Criteria criteria = session.createCriteria(FvBean.class);
+
+			Iterator<FvBean> iterator = set.iterator();
+
+			while (iterator.hasNext()) {
+				FvBean fvBean = (FvBean) iterator.next();
+				criteria.add(Restrictions.eq("feeValueId", fvBean.getFeeValueId()));
+			}
+
+			list = criteria.list();
+			log.info("Length is :::::::::::::::::::::::: :" + list.size());
+			return list.size();
+
+		} finally {
+			session.close();
+		}
+
+	}
+
 	public Integer getCountOfYear(String AdmiYear, String yc, String course) {
+
+		log.info("Admission Year :" + AdmiYear);
+		log.info("Course :" + course);
+		log.info("Year :" + yc);
+
 		Session session = factory.openSession();
 		List<AppBean> list = new ArrayList<AppBean>();
 		try {
@@ -76,14 +114,8 @@ public class GenerateEnrollmentNumber {
 
 	}
 
-	public String generateEnrollmentNumber(String q) {
-		
-		/*String[] x = q.split(",");
-		for (int i = 0; i < x.length; i++) {
-			
-		}
-		*/
-		
+	public String generateEnrollmentNumber(String yr, String yc, String course) {
+
 		String initialString = yr.substring(2, 4).concat(yc);
 		String en = null;
 		String finalEnroll = null;
@@ -98,9 +130,9 @@ public class GenerateEnrollmentNumber {
 				finalEnroll = initialString.concat("00001");
 			}
 
-		} else if (course.equals("BPhFY") || course.equals("BPhSY") || course.equals("BPhSYD")
-				|| course.equals("BPhTY") || course.equals("BPhFnY") || course.equals("MPhFY")
-				|| course.equals("MPhFnY")) {
+		} else if (course.equals("B.Ph.FY") || course.equals("B.Ph.SY") || course.equals("B.Ph.SY(Direct)")
+				|| course.equals("B.Ph.TY") || course.equals("B.Ph.Final") || course.equals("M.Ph.FY")
+				|| course.equals("M.Ph.Final")) {
 
 			try {
 				Integer count = getCountOfYear(yr, yc, course);

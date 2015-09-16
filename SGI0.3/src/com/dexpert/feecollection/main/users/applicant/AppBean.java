@@ -31,7 +31,7 @@ public class AppBean implements Serializable {
 	@Id
 	private String enrollmentNumber;
 	private String aplFirstName, aplLstName, aplEmail, aplAddress, aplMobilePri, aplMobileSec, gender, category,
-			course, year, yearCode;
+			course, year, yearCode, grNumber;
 
 	public String getCategory() {
 		return category;
@@ -62,7 +62,7 @@ public class AppBean implements Serializable {
 	@JoinColumn(name = "aplicantId_Fk", referencedColumnName = "enrollmentNumber")
 	private Set<PayBean> payBeansSet;
 
-	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "applicant_values", joinColumns = @JoinColumn(name = "enrollmentNumber"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> applicantParamValues;
 
@@ -188,6 +188,14 @@ public class AppBean implements Serializable {
 
 	public void setApplicantParamValues(Set<FvBean> applicantParamValues) {
 		this.applicantParamValues = applicantParamValues;
+	}
+
+	public String getGrNumber() {
+		return grNumber;
+	}
+
+	public void setGrNumber(String grNumber) {
+		this.grNumber = grNumber;
 	}
 
 }

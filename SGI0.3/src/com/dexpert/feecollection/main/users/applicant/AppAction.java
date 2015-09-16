@@ -8,10 +8,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -21,12 +21,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
-import org.hibernate.exception.ConstraintViolationException;
 
 import com.dexpert.feecollection.challan.TransactionBean;
-import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
-import com.dexpert.feecollection.main.communication.sms.SendSMS;
+
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
@@ -35,7 +32,6 @@ import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
-import com.dexpert.feecollection.main.users.LoginDAO;
 import com.dexpert.feecollection.main.users.affiliated.AffAction;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
@@ -55,7 +51,7 @@ public class AppAction extends ActionSupport {
 	List<LookupBean> lookupBeanList = new ArrayList<LookupBean>();
 	String collegeName, applicantParamValue;
 	OperatorDao opratorDAO = new OperatorDao();
-	Set<FvBean> fvBeansSet = new HashSet<FvBean>();
+	LinkedHashSet<FvBean> fvBeansSet = new LinkedHashSet<FvBean>();
 	Integer aplInstId;
 	List<AffBean> affInstList = new ArrayList<AffBean>();
 	String fileFileName;
@@ -120,25 +116,12 @@ public class AppAction extends ActionSupport {
 
 		for (int i = 0; i < x.length; i++) {
 			FvBean bean = new FvBean();
-			// bean.setValue(x[i]);
 			bean.setFeeValueId(Integer.parseInt(x[i]));
-			if (i == 1) {
-				FvBean bean2 = aplDAO.getfeeValue(bean.getFeeValueId());
-				String yearCode = aplDAO.checkValues(bean2);
-				appBean1.setYearCode(yearCode);
-				log.info("Year Code Is :" + appBean1.getYearCode());
 
-			}
-			if (i == 2) {
-				FvBean bean2 = aplDAO.getfeeValue(bean.getFeeValueId());
-				appBean1.setYear(bean2.getValue());
-				log.info("Admission Year Is :" + appBean1.getYear());
-
-			}
 			fvBeansSet.add(bean);
 		}
 
-		appBean1.setApplicantParamValues(fvBeansSet);
+		// appBean1.setApplicantParamValues(fvBeansSet);
 		// appBean1.getApplicantParamValues();
 
 		HttpSession httpSession = request.getSession();
@@ -157,7 +140,7 @@ public class AppAction extends ActionSupport {
 			// try {
 			// log.info("Enrollment Number is" +
 			// appBean1.getEnrollmentNumber());
-			appBean1 = aplDAO.saveOrUpdate(appBean1, loginBean.getAffBean().getInstId());
+			appBean1 = aplDAO.saveOrUpdate(appBean1, loginBean.getAffBean().getInstId(), fvBeansSet);
 
 			// } catch (java.lang.NullPointerException e) {
 			// request.setAttribute("msg", "Please Enter Enrollment Number");
@@ -560,11 +543,11 @@ public class AppAction extends ActionSupport {
 		this.applicantParamValue = applicantParamValue;
 	}
 
-	public Set<FvBean> getFvBeansSet() {
+	public LinkedHashSet<FvBean> getFvBeansSet() {
 		return fvBeansSet;
 	}
 
-	public void setFvBeansSet(Set<FvBean> fvBeansSet) {
+	public void setFvBeansSet(LinkedHashSet<FvBean> fvBeansSet) {
 		this.fvBeansSet = fvBeansSet;
 	}
 

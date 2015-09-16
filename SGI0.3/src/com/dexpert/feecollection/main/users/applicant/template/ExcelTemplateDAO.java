@@ -24,12 +24,11 @@ public class ExcelTemplateDAO {
 		paramStr.add("First Name");
 		paramStr.add("Last Name");
 		paramStr.add("Gender");
-		paramStr.add("Cast");
+		paramStr.add("Category");
 		paramStr.add("Address");
-		paramStr.add("Primary Contact Number");
-		paramStr.add("Secondary Contact Number");
+		paramStr.add("Primary Mobile");
+		paramStr.add("Secondary Mobile");
 		paramStr.add("Admission Year");
-		paramStr.add("Academic Year");
 		paramStr.add("Course");
 		paramStr.add("Branch");
 		paramStr.add("Email Id");
