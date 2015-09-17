@@ -381,7 +381,12 @@
 														title="Button To Display College Detail"
 														onclick="showDetails(<s:property value="instId"/>)"> <i
 															class="glyphicon glyphicon-zoom-in icon-white"></i> View
-													</a></td>
+													</a>
+													
+													<button class="btn btn-sm btn-warning"
+															onclick='window.open("ViewCollegeFees?instId=<s:property value="instId"/>", "CollegeForm", "width=700,height=500")'>
+															Associated Fees</button></td>
+													</td>
 
 													<%-- <td class="center"><a class="btn btn-success btn-sm"
 														title="Button To Display College Detail"

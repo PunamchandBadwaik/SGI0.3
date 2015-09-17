@@ -145,7 +145,7 @@
 														<s:iterator status="incr">
 
 
-															<td ><s:if test="%{#incr.index==0}">
+															<td><s:if test="%{#incr.index==0}">
 																	<input value='<s:property />'
 																		name="uids[<%=j%>].comboId" hidden="hidden">
 
@@ -153,8 +153,7 @@
 
 
 																	<button type="button" data-toggle="popover"
-																		data-content=""
-																		onclick="removeFeeCombo(<%=j %>)"
+																		data-content="" onclick="removeFeeCombo(<%=j%>)"
 																		class="btn btn-sm btn-danger">
 																		<i class="fa fa-trash"></i>
 																	</button>
@@ -176,7 +175,7 @@
 													</tr>
 													<%
 														i++;
-																																																																																																						  j++;
+																																																																																																																	  j++;
 													%>
 												</s:iterator>
 											</tbody>
@@ -187,7 +186,20 @@
 									function removeFeeCombo(id)//Code to remove invalid combinations of Fees
 									{
 										
-										document.getElementById(id).remove();
+										var c=confirm("You want to delete this Combination");
+										
+										if(c=true)
+											{
+											document.getElementById(id).remove();
+											return false
+											}
+										else
+											{
+											return false;
+											
+											}
+										
+										
 									}
 										/* function deleteCombination(id) {
 
@@ -316,7 +328,7 @@
 
 	<script type="text/javascript">
 		function OpenSummaryInParent() {
-			window.opener.location = "College-Payment-Summary.html";
+		//	window.opener.location = "College-Payment-Summary.html";
 			window.close();
 
 		}

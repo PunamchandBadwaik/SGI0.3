@@ -22,6 +22,7 @@ import org.hibernate.criterion.Restrictions;
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
+import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
@@ -91,72 +92,78 @@ public class SaDAO {
 
 	}
 
-	public SaBean validateTheForgetPwdDetails(String profile, String emailId) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
-		Session session=factory.openSession();
-		try{
-		SaBean bean=(SaBean)session.createCriteria(SaBean.class).add(Restrictions.eq("emailId", emailId)).list().iterator().next();
-		if(bean!=null){
-			
-			LoginBean loginDetailsOfSuAdmin=(LoginBean)session.get(LoginBean.class,bean.getLoginBean().getLoginId());
-			
-			// to get Random generated Password
-			String password = RandomPasswordGenerator.generatePswd(6, 8, 1, 2, 0);
-			log.info("Password Generated is " + password);
-			log.info("User Name is " + bean.loginBean.getUserName());
+	public SaBean validateTheForgetPwdDetails(String profile, String emailId) throws InvalidKeyException,
+			NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException,
+			UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+		Session session = factory.openSession();
+		try {
+			SaBean bean = (SaBean) session.createCriteria(SaBean.class).add(Restrictions.eq("emailId", emailId)).list()
+					.iterator().next();
+			if (bean != null) {
 
-			// to Encrypt Password
-			PasswordEncryption.encrypt(password);
-			String encryptedPwd = PasswordEncryption.encStr;
-			
-			
-		loginDetailsOfSuAdmin.setPassword(encryptedPwd);
-		
-		
-		Transaction tx=session.beginTransaction();
-		session.saveOrUpdate(loginDetailsOfSuAdmin);
-			
+				LoginBean loginDetailsOfSuAdmin = (LoginBean) session.get(LoginBean.class, bean.getLoginBean()
+						.getLoginId());
+
+				// to get Random generated Password
+				String password = RandomPasswordGenerator.generatePswd(6, 8, 1, 2, 0);
+				log.info("Password Generated is " + password);
+				log.info("User Name is " + bean.loginBean.getUserName());
+
+				// to Encrypt Password
+				PasswordEncryption.encrypt(password);
+				String encryptedPwd = PasswordEncryption.encStr;
+
+				loginDetailsOfSuAdmin.setPassword(encryptedPwd);
+
+				Transaction tx = session.beginTransaction();
+				session.saveOrUpdate(loginDetailsOfSuAdmin);
+
 				tx.commit();
-			//session.close();
-			
-			// -----Code for sending email//--------------------
-			EmailSessionBean email = new EmailSessionBean();
-			email.sendEmail(bean.getEmailId(), "Welcome To Fee Collection Portal!", bean.getLoginBean().getUserName(), password,
-					bean.getFirstName());
-			
-			log.info("password :"+password);
-			
+				// session.close();
+
+				String user = bean.getLoginBean().getUserName();
+				String pass = password;
+				String msg = "Username :" + user + "" + " Passsword : " + pass;
+				SendSMS sms = new SendSMS();
+				sms.sendSMS(loginDetailsOfSuAdmin.getSaBean().getMobileNum(), msg);
+
+				// -----Code for sending email//--------------------
+				EmailSessionBean email = new EmailSessionBean();
+				email.sendEmail(bean.getEmailId(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
+						.getUserName(), password, bean.getFirstName());
+
+				log.info("password :" + password);
+
+			}
+
+			return bean;
+
+		} catch (NoSuchElementException ex) {
+			return null;
+
+		} finally {
+
+			// close session
+			session.close();
+
 		}
-		
-		
-		return bean;
-	
-		} catch(NoSuchElementException ex)
-		{
-		return null;
-		
-		}finally {
-
-		// close session
-		session.close();
-
-	}
 	}
 
-		public static void updatePersonalRecordOfSuperAdmin(SaBean saBean) {
+	public static void updatePersonalRecordOfSuperAdmin(SaBean saBean) {
 
-		Session session=factory.openSession();
-		SaBean bean=(SaBean)session.get(SaBean.class, saBean.getSaId());
-		
+		Session session = factory.openSession();
+		SaBean bean = (SaBean) session.get(SaBean.class, saBean.getSaId());
+
 		bean.setFirstName(saBean.getFirstName());
 		bean.setMidName(saBean.getMidName());
 		bean.setLstName(saBean.getLstName());
 		bean.setAddress(saBean.getAddress());
 		bean.setMobileNum(saBean.getMobileNum());
-		Transaction transaction=session.beginTransaction();
+		Transaction transaction = session.beginTransaction();
 		session.merge(bean);
 		transaction.commit();
 		session.close();
-		
+
 	}
-	
+
 }

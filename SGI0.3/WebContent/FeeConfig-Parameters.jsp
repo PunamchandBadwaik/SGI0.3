@@ -162,14 +162,23 @@
 							<%
 								}
 							%>
+							
 							<%
+								if (profile.contentEquals("Parent")) {
+							%>
+							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
+									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
+							<%
+								}
+							%>
+							<%-- <%
 								if (!profile.contentEquals("Affiliated")) {
 							%>
 							<li><a class="ajax-link" href="getCollegeList"><i
 									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
 							<%
 								}
-							%>
+							%> --%>
 							<%
 								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
@@ -197,6 +206,20 @@
 							%>
 							<li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
+						
+							
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+
+
+
+							<%
+								}
+							%>
+							<%
+								if (profile.contentEquals("Parent")){
+							%>
+							
 						
 							
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i

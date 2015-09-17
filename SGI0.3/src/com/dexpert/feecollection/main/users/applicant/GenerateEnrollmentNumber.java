@@ -5,7 +5,11 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -14,6 +18,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
+import com.dexpert.feecollection.main.users.LoginBean;
 
 public class GenerateEnrollmentNumber {
 	// Declare Global Variables Here
@@ -115,8 +120,13 @@ public class GenerateEnrollmentNumber {
 	}
 
 	public String generateEnrollmentNumber(String yr, String yc, String course) {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		HttpSession httpSession = request.getSession();
+		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 
-		String initialString = yr.substring(2, 4).concat(yc);
+		Integer collegeId = lgBean.getAffBean().getInstId();
+
+		String initialString = yr.substring(2, 4).concat(collegeId.toString()).concat(yc);
 		String en = null;
 		String finalEnroll = null;
 

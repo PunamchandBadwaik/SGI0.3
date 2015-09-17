@@ -239,11 +239,17 @@ public class AffAction extends ActionSupport {
 
 	// get collgege list based on university ID
 	public String getUniversityCollegeList() {
-		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		parBean = affDao.getUniversityCollegeList(loginBean);
-		log.info("University Names ::" + parBean.getParInstName());
-		return SUCCESS;
+		try {
+			HttpSession httpSession = request.getSession();
+			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+			parBean = affDao.getUniversityCollegeList(loginBean);
+			log.info("University Names ::" + parBean.getParInstName());
+			return SUCCESS;
+		} catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Session Time Out");
+			return ERROR;
+		}
+
 	}
 
 	// get one college Detail to edit
@@ -419,7 +425,7 @@ public class AffAction extends ActionSupport {
 				if (instfeeList.get(j).getFeeId() == feeList.get(i).getFeeId()) {
 					feeList.get(i).setGenericFlag(1);
 				} else {
-					feeList.get(i).setGenericFlag(0);
+					feeList.get(i).setGenericFlag(1);
 				}
 			}
 
@@ -613,7 +619,8 @@ public class AffAction extends ActionSupport {
 			}
 			return SUCCESS;
 
-		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")||ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
+		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")
+				|| ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			collegeId = Integer.parseInt(request.getParameter("instId"));
 			String courseName = request.getParameter("courseName");
 			popUp = true;
@@ -887,7 +894,7 @@ public class AffAction extends ActionSupport {
 			}
 
 			// end of user selected 1 value
-		}// end of super admin  report
+		}// end of super admin report
 			// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// start of university report
 		else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {

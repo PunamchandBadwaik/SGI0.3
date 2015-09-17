@@ -109,24 +109,14 @@
 											<s:iterator value="feeList">
 
 												<tr>
-													<td><%=i%>
-														<%
-															i++;
-														%></td>
-													<td><s:property value="feeId" />
-														<s:set var="flag">
+													<td><%=i%> <%
+ 	i++;
+ %></td>
+													<td><s:property value="feeId" /> <s:set var="flag">
 															<s:property value="genericFlag" />
 														</s:set></td>
 													<td><s:property value="feeName" /></td>
-													<td><s:if test='%{#flag=="0"}'>
-															<button id='Add[<s:property value="feeId"/>]'
-																onclick='AddToArray(<s:property value="feeId"/>)'
-																class="btn btn-success btn-sm">Add</button>
-															<button style="display: none"
-																id='Remove[<s:property value="feeId"/>]'
-																onclick='RemoveFromValues(<s:property value="feeId"/>)'
-																class="btn btn-warning btn-sm">Remove</button>
-														</s:if> <s:else>
+													<td><s:if test='%{#flag=="1"}'>
 															<button style="display: none"
 																id='Add[<s:property value="feeId"/>]'
 																onclick='AddToArray(<s:property value="feeId"/>)'
@@ -134,6 +124,22 @@
 															<button id='Remove[<s:property value="feeId"/>]'
 																onclick='RemoveFromValues(<s:property value="feeId"/>)'
 																class="btn btn-warning btn-sm">Remove</button>
+														</s:if> <s:else>
+
+
+															<button id='Add[<s:property value="feeId"/>]'
+																onclick='AddToArray(<s:property value="feeId"/>)'
+																class="btn btn-success btn-sm">Add</button>
+															<button style="display: none"
+																id='Remove[<s:property value="feeId"/>]'
+																onclick='RemoveFromValues(<s:property value="feeId"/>)'
+																class="btn btn-warning btn-sm">Remove</button>
+
+
+
+
+
+
 														</s:else></td>
 
 												</tr>

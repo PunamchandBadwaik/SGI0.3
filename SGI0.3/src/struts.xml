@@ -47,6 +47,7 @@
 			method="getUniversityCollegeList">
 
 			<result name="success">Admin-MyColleges.jsp</result>
+			<result name="error">Login.jsp</result>
 
 		</action>
 
@@ -162,7 +163,7 @@
 		</action>
 
 
-		
+
 		<!-- changeUserPassword -->
 
 		<action name="changeUserPassword" class="com.dexpert.feecollection.main.users.LoginAction"
@@ -171,19 +172,19 @@
 			<result name="success">UserNewPassDetail.jsp</result>
 
 		</action>
-		
-						<!-- validateChangePasswordDetails -->
-			
-			<action name="validateChangePasswordDetails" class="com.dexpert.feecollection.main.users.LoginAction"
+
+		<!-- validateChangePasswordDetails -->
+
+		<action name="validateChangePasswordDetails" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="validateChangePwdDetails">
 
 			<result name="success">EditUserDetail.jsp</result>
 			<result name="failure">UserNewPassDetail.jsp</result>
 
 		</action>
-			
-			
-		
+
+
+
 
 		<action name="editUserDetail" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="editUserDetail">
@@ -197,38 +198,38 @@
 
 
 
-			<!-- updatePersonalInfo Super Admin -->
+		<!-- updatePersonalInfo Super Admin -->
 		<action name="updatePersonalInfo" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="updatePersonalInfoDetail">
 			<result name="success">EditUserDetail.jsp</result>
-			
+
 		</action>
-				
-				
-				<!-- updatePersonalInfo Admin -->
+
+
+		<!-- updatePersonalInfo Admin -->
 		<action name="updatePersonalInfoAdmin" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="updatePersonalInfoAdminDetail">
 			<result name="success">EditUserDetail.jsp</result>
-			
+
 		</action>
-		  
-		  
-		  <!-- updatePersonalInfo Institute -->
+
+
+		<!-- updatePersonalInfo Institute -->
 		<action name="updatePersonalInfoInstitute" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="updatePersonalInfoInstituteDetail">
 			<result name="success">EditUserDetail.jsp</result>
-			
+
 		</action>
-		
-				 <!-- updatePersonalInfo CollegeOperator -->
+
+		<!-- updatePersonalInfo CollegeOperator -->
 		<action name="updatePersonalInfoCollegeOperator" class="com.dexpert.feecollection.main.users.LoginAction"
 			method="updatePersonalInfoCollegeOperatorDetail">
 			<result name="success">EditUserDetail.jsp</result>
-			
-		</action>
-		
 
-			
+		</action>
+
+
+
 
 		<!-- ` forgetPasswordPage -->
 
@@ -454,23 +455,23 @@
 			<result name="popUp">CollegeDues.jsp</result>
 			<!-- <result name="nodues">CollegeDues.jsp</result> -->
 			<result name="error">Login.jsp</result>
-			
+
 
 		</action>
 		<action name="CustomCollegeDueReport"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="CustomCollegeDueReport">
-        <result name="success">Custom_Dues_Ajax.jsp</result>
+			<result name="success">Custom_Dues_Ajax.jsp</result>
 		</action>
 		<action name="getValForDropDown"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="getValForDropDown">
-        <result name="success">Custom_College-Due-Report.jsp</result>
-        <result name="feeName">FeeNames_Ajax.jsp</result>
-        <result name="collegeList">CollegeList_Ajax.jsp</result>
-        <result name="listOfCourse">CourseList_Ajax.jsp</result>
+			<result name="success">Custom_College-Due-Report.jsp</result>
+			<result name="feeName">FeeNames_Ajax.jsp</result>
+			<result name="collegeList">CollegeList_Ajax.jsp</result>
+			<result name="listOfCourse">CourseList_Ajax.jsp</result>
 		</action>
-		
+
 		<action name="saveFeeCalcDetails"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="UpdateCalcParameters">

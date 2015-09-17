@@ -114,7 +114,7 @@
 											    <td><s:property value="propbean.endDate"/></td>
 												<td><s:property value="propbean.lateDate"/></td>
 												<td><s:property value="propbean.lateAmount"/></td>
-												<td><a class="btn btn-info btn-sm" href="CollegeFeePropForm.jsp"> Edit</a></td>
+											<!-- 	<td><a class="btn btn-info btn-sm" href="CollegeFeePropForm.jsp"> Edit</a></td> -->
 
 											</tr>
 										
@@ -130,7 +130,7 @@
 					</div>
 					<div class="col-md-12">
 						<button onclick='window.location="ViewCollegeFees?instId=<%=request.getParameter("instId") %>"' class="btn btn-success">Back</button>
-						<button class="btn btn-warning" onclick='window.location="GetAffFees?collId=<s:property value='affInstBean.instId' />"'>Add Associated Fees</button>
+						<button class="btn btn-warning" onclick='window.location="GetAffFees?collId=<%=request.getParameter("instId") %>"'>Add Associated Fees</button>
 
 						<button onclick="window.close()" class="btn btn-info">Close
 						</button>

@@ -168,6 +168,7 @@ public class FcAction extends ActionSupport {
 			feedetails.setForInstitute(1);
 		} else if (feePayee.contentEquals("2")) {
 			feedetails.setForApplicant(1);
+			feedetails.setForInstitute(1);
 		} else {
 			return ERROR;
 		}

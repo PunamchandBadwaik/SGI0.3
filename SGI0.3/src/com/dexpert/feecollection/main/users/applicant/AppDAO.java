@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,12 +26,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.Criteria;
-
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -39,6 +38,7 @@ import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
 import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
+import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
 import com.dexpert.feecollection.main.fee.lookup.values.BreakString;
@@ -104,11 +104,11 @@ public class AppDAO {
 		String year = bs.getYear(k);
 		String course = bs.getCourse(k);
 		String yearCode = bs.getYearCode(course);
-		log.info("Original String element is ::" + pp);
-		log.info("Break String element is ::" + k);
-		log.info("Year is ::" + year);
-		log.info("Course is ::" + course);
-		log.info("YearCode is ::" + yearCode);
+		// log.info("Original String element is ::" + pp);
+		// log.info("Break String element is ::" + k);
+		// log.info("Year is ::" + year);
+		// log.info("Course is ::" + course);
+		// log.info("YearCode is ::" + yearCode);
 
 		appBean.setYear(year);
 		appBean.setCourse(course);
@@ -127,7 +127,7 @@ public class AppDAO {
 			String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
 			appBean.setEnrollmentNumber(EnrollNo);
 		}
-		log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
+		//log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
 		LoginBean loginBean = new LoginBean();
 		loginBean.setUserName(appBean.getEnrollmentNumber());
 
@@ -186,11 +186,81 @@ public class AppDAO {
 			} catch (java.lang.NullPointerException e) {
 
 			}
+
+			
+			//to get detail about Dues
+			getDuesDetail(appBean);
+
 		} finally {
 
 			session.close();
 		}
 		return appBean;
+
+	}
+
+	AffDAO affDao = new AffDAO();
+
+	public void getDuesDetail(AppBean appBean) {
+		FvBean fvBean = new FvBean();
+		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
+		while (iterator.hasNext()) {
+			fvBean = (FvBean) iterator.next();
+
+		//	log.info("Fee Values is ::" + fvBean.getValue() + "::" + fvBean.getFeeValueId());
+		}
+
+		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
+		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
+		Iterator<FeeDetailsBean> iterator2 = instfeeList.iterator();
+
+	//	log.info("Fv Bean List Size ::" + instfeeList.size());
+		FeeDetailsBean feeDetailsBean = new FeeDetailsBean();
+		List<FcBean> beanslist = new ArrayList<FcBean>();
+		FcBean fcBean = new FcBean();
+		while (iterator2.hasNext()) {
+			feeDetailsBean = (FeeDetailsBean) iterator2.next();
+		//	log.info("Fee Detail Bean  is ::" + feeDetailsBean.getFeeName() + "::" + feeDetailsBean.getFeeId());
+			beanslist = feeDetailsBean.getConfigs();
+
+			fcBean = (FcBean) beanslist.iterator().next();
+
+			Session session = factory.openSession();
+			Criteria criteria = session.createCriteria(FcBean.class);
+			criteria.add(Restrictions.eq("valueId", fvBean.getFeeValueId()));
+			fcBean = (FcBean) criteria.list().iterator().next();
+
+			//log.info("Fee Config  is :: combo Id :: " + fcBean.getComboId() + ":: " + fcBean.getAmount());
+
+			addToDuesTable(appBean, fvBean, fcBean, feeDetailsBean);
+			session.close();
+
+		}
+
+	}
+
+	public void addToDuesTable(AppBean appBean, FvBean fvBean, FcBean fcBean, FeeDetailsBean detailsBean) {
+		Session session = factory.openSession();
+		try {
+			Date dd = new Date();
+
+			PaymentDuesBean duesBean = new PaymentDuesBean();
+			Transaction tx = session.beginTransaction();
+			duesBean.setAppBean(appBean);
+			duesBean.setDateCalculated(dd);
+			duesBean.setFeeId(detailsBean.getFeeId());
+			duesBean.setFeeName(detailsBean.getFeeName());
+			duesBean.setNetDue(fcBean.getAmount());
+			// duesBean.setPayee(fcBean.get);
+			duesBean.setPayments_to_date(0.0);
+			duesBean.setTotal_fee_amount(fcBean.getAmount());
+			session.save(duesBean);
+			tx.commit();
+
+		} finally {
+			session.close();
+
+		}
 
 	}
 
@@ -343,7 +413,7 @@ public class AppDAO {
 			}
 			int noOfColumns = hssfSheet.getRow(row.getRowNum()).getPhysicalNumberOfCells();
 			log.info("::::::row number::::: " + row.getRowNum() + " Column numbers ::" + noOfColumns);
-			
+
 			Iterator<Cell> cellIterator = row.cellIterator();
 
 			while (cellIterator.hasNext()) {

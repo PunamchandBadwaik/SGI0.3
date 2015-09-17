@@ -128,25 +128,25 @@ public class BreakString {
 		}
 
 		else if (course.contentEquals("B.Ph.FY")) {
-			yearCode = "10";
+			yearCode = "1";
 
 		} else if (course.contentEquals("B.Ph.SY(Direct)") || course.contentEquals("B.Ph.SY")) {
-			yearCode = "20";
+			yearCode = "2";
 
 		} else if (course.contentEquals("B.Ph.TY")) {
-			yearCode = "30";
+			yearCode = "3";
 
 		}
 
 		else if (course.contentEquals("B.Ph.Final")) {
-			yearCode = "40";
+			yearCode = "4";
 
 		} else if (course.contentEquals("M.Ph.FY")) {
 
-			yearCode = "50";
+			yearCode = "5";
 		} else if (course.contentEquals("M.Ph.Final")) {
 
-			yearCode = "60";
+			yearCode = "6";
 		}
 		System.out.println("Year Code is ::" + yearCode);
 		return yearCode;
