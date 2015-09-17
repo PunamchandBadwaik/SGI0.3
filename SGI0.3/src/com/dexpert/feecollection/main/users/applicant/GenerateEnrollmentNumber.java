@@ -25,32 +25,15 @@ public class GenerateEnrollmentNumber {
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(GenerateEnrollmentNumber.class.getName());
 
-	public Integer getIds(String AdmiYear, String yc, String course, LinkedHashSet<FvBean> set) {
-		log.info("size is ::" + set.size());
-		log.info("Admission Year :" + AdmiYear);
-		log.info("Course :" + course);
-		log.info("Year :" + yc);
+	public static void main(String[] args) {
+		GenerateEnrollmentNumber gg = new GenerateEnrollmentNumber();
+		// gg.generateEnrollmentNumber("2011", "1", "B.Ph.FY");
+		Integer count = gg.getCountOfYear("2011", "1", "B.Ph.FY");
 
-		Session session = factory.openSession();
-		List<FvBean> list = new ArrayList<FvBean>();
-
-		try {
-			Criteria criteria = session.createCriteria(FvBean.class);
-
-			Iterator<FvBean> iterator = set.iterator();
-
-			while (iterator.hasNext()) {
-				FvBean fvBean = (FvBean) iterator.next();
-				criteria.add(Restrictions.eq("feeValueId", fvBean.getFeeValueId()));
-			}
-
-			list = criteria.list();
-			log.info("Length is :::::::::::::::::::::::: :" + list.size());
-			return list.size();
-
-		} finally {
-			session.close();
-		}
+		String initialString = "111";
+		String en = gg.getEnrollNumForPharma(count);
+		String finalEnroll = initialString.concat(en);
+		System.out.println("Enrollment number is ::: " + finalEnroll);
 
 	}
 
@@ -68,7 +51,10 @@ public class GenerateEnrollmentNumber {
 			criteria.add(Restrictions.eq("yearCode", yc));
 			criteria.add(Restrictions.eq("course", course));
 			list = criteria.list();
+			log.info("List Size is :: " +list.size());
 			return list.size();
+			
+			
 
 		} finally {
 			session.close();
@@ -104,6 +90,8 @@ public class GenerateEnrollmentNumber {
 			return newValue;
 
 		} else {
+
+			log.info("Counter is ::: " + count);
 			try {
 				Integer incVal = count + 1;
 
@@ -124,16 +112,17 @@ public class GenerateEnrollmentNumber {
 		HttpSession httpSession = request.getSession();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 
-		Integer collegeId = lgBean.getAffBean().getInstId();
+		String collegeId = lgBean.getAffBean().getInstId().toString();
+		String adYear = yr.substring(2, 4);
 
-		String initialString = yr.substring(2, 4).concat(collegeId.toString()).concat(yc);
+		String initialString = adYear+collegeId+yc;
 		String en = null;
 		String finalEnroll = null;
 
 		if (course.equals("FE") || course.equals("SE") || course.equals("SED") || course.equals("TE")
 				|| course.equals("BE") || course.equals("BE") || course.equals("MBA") || course.equals("ME")) {
 			try {
-				Integer count = getCountOfYear(yr, yc, course);
+				Integer count = getCountOfYear(adYear, yc, course);
 				en = getEnrollNum(count);
 				finalEnroll = initialString.concat(en);
 			} catch (java.lang.NullPointerException e) {
@@ -145,7 +134,7 @@ public class GenerateEnrollmentNumber {
 				|| course.equals("M.Ph.Final")) {
 
 			try {
-				Integer count = getCountOfYear(yr, yc, course);
+				Integer count = getCountOfYear(adYear, yc, course);
 				en = getEnrollNumForPharma(count);
 				finalEnroll = initialString.concat(en);
 			} catch (java.lang.NullPointerException e) {
