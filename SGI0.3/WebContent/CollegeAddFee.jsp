@@ -116,7 +116,7 @@
 															<s:property value="genericFlag" />
 														</s:set></td>
 													<td><s:property value="feeName" /></td>
-													<td><s:if test='%{#flag=="1"}'>
+													<td><s:if test='%{#flag==1}'>
 															<button style="display: none"
 																id='Add[<s:property value="feeId"/>]'
 																onclick='AddToArray(<s:property value="feeId"/>)'
