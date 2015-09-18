@@ -114,20 +114,13 @@ public class AppDAO {
 		appBean.setCourse(course);
 		appBean.setYearCode(yearCode);
 
-		try {
+		
+		//generating enrollment Number
+		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+		String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
+		appBean.setEnrollmentNumber(EnrollNo);
 
-			if (appBean.getEnrollmentNumber().equals("null") || appBean.getEnrollmentNumber().equals(null)
-					|| appBean.getEnrollmentNumber().equals("")) {
-				GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-				String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
-				appBean.setEnrollmentNumber(EnrollNo);
-			}
-		} catch (java.lang.NullPointerException e) {
-			GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-			String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
-			appBean.setEnrollmentNumber(EnrollNo);
-		}
-		//log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
+		// log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
 		LoginBean loginBean = new LoginBean();
 		loginBean.setUserName(appBean.getEnrollmentNumber());
 
@@ -187,8 +180,7 @@ public class AppDAO {
 
 			}
 
-			
-			//to get detail about Dues
+			// to get detail about Dues
 			getDuesDetail(appBean);
 
 		} finally {
@@ -207,20 +199,22 @@ public class AppDAO {
 		while (iterator.hasNext()) {
 			fvBean = (FvBean) iterator.next();
 
-		//	log.info("Fee Values is ::" + fvBean.getValue() + "::" + fvBean.getFeeValueId());
+			// log.info("Fee Values is ::" + fvBean.getValue() + "::" +
+			// fvBean.getFeeValueId());
 		}
 
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
 		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
 		Iterator<FeeDetailsBean> iterator2 = instfeeList.iterator();
 
-	//	log.info("Fv Bean List Size ::" + instfeeList.size());
+		// log.info("Fv Bean List Size ::" + instfeeList.size());
 		FeeDetailsBean feeDetailsBean = new FeeDetailsBean();
 		List<FcBean> beanslist = new ArrayList<FcBean>();
 		FcBean fcBean = new FcBean();
 		while (iterator2.hasNext()) {
 			feeDetailsBean = (FeeDetailsBean) iterator2.next();
-		//	log.info("Fee Detail Bean  is ::" + feeDetailsBean.getFeeName() + "::" + feeDetailsBean.getFeeId());
+			// log.info("Fee Detail Bean  is ::" + feeDetailsBean.getFeeName() +
+			// "::" + feeDetailsBean.getFeeId());
 			beanslist = feeDetailsBean.getConfigs();
 
 			fcBean = (FcBean) beanslist.iterator().next();
@@ -230,7 +224,8 @@ public class AppDAO {
 			criteria.add(Restrictions.eq("valueId", fvBean.getFeeValueId()));
 			fcBean = (FcBean) criteria.list().iterator().next();
 
-			//log.info("Fee Config  is :: combo Id :: " + fcBean.getComboId() + ":: " + fcBean.getAmount());
+			// log.info("Fee Config  is :: combo Id :: " + fcBean.getComboId() +
+			// ":: " + fcBean.getAmount());
 
 			addToDuesTable(appBean, fvBean, fcBean, feeDetailsBean);
 			session.close();

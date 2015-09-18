@@ -25,23 +25,23 @@ public class GenerateEnrollmentNumber {
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(GenerateEnrollmentNumber.class.getName());
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		GenerateEnrollmentNumber gg = new GenerateEnrollmentNumber();
 		// gg.generateEnrollmentNumber("2011", "1", "B.Ph.FY");
-		Integer count = gg.getCountOfYear("2011", "1", "B.Ph.FY");
+		Integer count = gg.getCountOfYear("2013", "1", "B.Ph.FY");
 
-		String initialString = "111";
+		String initialString = "131";
 		String en = gg.getEnrollNumForPharma(count);
 		String finalEnroll = initialString.concat(en);
 		System.out.println("Enrollment number is ::: " + finalEnroll);
 
-	}
+	}*/
 
 	public Integer getCountOfYear(String AdmiYear, String yc, String course) {
 
 		log.info("Admission Year :" + AdmiYear);
 		log.info("Course :" + course);
-		log.info("Year :" + yc);
+		log.info("Year code :" + yc);
 
 		Session session = factory.openSession();
 		List<AppBean> list = new ArrayList<AppBean>();
@@ -122,7 +122,7 @@ public class GenerateEnrollmentNumber {
 		if (course.equals("FE") || course.equals("SE") || course.equals("SED") || course.equals("TE")
 				|| course.equals("BE") || course.equals("BE") || course.equals("MBA") || course.equals("ME")) {
 			try {
-				Integer count = getCountOfYear(adYear, yc, course);
+				Integer count = getCountOfYear(yr, yc, course);
 				en = getEnrollNum(count);
 				finalEnroll = initialString.concat(en);
 			} catch (java.lang.NullPointerException e) {
@@ -134,8 +134,13 @@ public class GenerateEnrollmentNumber {
 				|| course.equals("M.Ph.Final")) {
 
 			try {
+				
+				log.info("Initial String is ::"+initialString);
 				Integer count = getCountOfYear(adYear, yc, course);
 				en = getEnrollNumForPharma(count);
+				
+				log.info("String after counter ::"+en);
+				
 				finalEnroll = initialString.concat(en);
 			} catch (java.lang.NullPointerException e) {
 				finalEnroll = initialString.concat("0001");

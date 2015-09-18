@@ -105,7 +105,7 @@
 			<%
 				if (msg != null)
 
-								{
+									{
 			%>
 
 			<div
@@ -152,16 +152,16 @@
 														<%
 															if (profile.contentEquals("Affiliated"))
 
-																																																															{
+																																																																											{
 
-																																																																System.out.print("Profile is ::" + profile);
+																																																																												System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
 
-     	{
+      	{
  %> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
 														<%
@@ -180,8 +180,9 @@
 													<tr>
 														<td><s:property value="lookupName" /></td>
 														<td colspan="2"><select data-rel="chosen"
-															id='<s:property value="lookupId" />' name="applicantParamValue"
-															onchange="hideEnrollNo('<s:property value="lookupId" />','<s:property value="lookupName" />')"
+															id='<s:property value="lookupId" />'
+															name="applicantParamValue"
+															<%-- onchange="hideEnrollNo('<s:property value="lookupId" />','<s:property value="lookupName" />')" --%>
 															style="width: 240px;" required="required">
 																<option value="">--Select--</option>
 																<s:iterator value="#x.fvBeansList">
@@ -197,7 +198,7 @@
 
 																var course = document
 																		.getElementById(id).value;
-																
+
 																if (lookupName == 'Class') {
 
 																	if (course == 'FE'
@@ -205,7 +206,9 @@
 																			|| course == 'ME 1'
 																			|| course == '1'
 																			|| course == '3'
-																			|| course == '6'||course=='4'||course=='13') {
+																			|| course == '6'
+																			|| course == '4'
+																			|| course == '13') {
 
 																		document
 																				.getElementById("enrollDiv").style.display = "none";
@@ -254,6 +257,18 @@
 													</tr>
 
 												</s:iterator>
+												<tr>
+
+													<td>GR Number</td>
+													<td colspan="2"><div id="the-basics"
+															class="has-success">
+															<input type="text" id="CollegeName" name="appBean1.grNumber"
+																placeholder="GR Number" class="form-control"><s:property
+																	value="appBean1.grNumber" />
+
+														</div></td>
+
+												</tr>
 
 												<%-- 	<tr>
 
