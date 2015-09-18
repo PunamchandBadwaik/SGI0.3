@@ -114,8 +114,7 @@ public class AppDAO {
 		appBean.setCourse(course);
 		appBean.setYearCode(yearCode);
 
-		
-		//generating enrollment Number
+		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 		String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
 		appBean.setEnrollmentNumber(EnrollNo);
@@ -191,9 +190,8 @@ public class AppDAO {
 
 	}
 
-	AffDAO affDao = new AffDAO();
-
 	public void getDuesDetail(AppBean appBean) {
+		AffDAO affDao = new AffDAO();
 		FvBean fvBean = new FvBean();
 		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
 		while (iterator.hasNext()) {

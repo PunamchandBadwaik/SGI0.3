@@ -3,7 +3,6 @@ package com.dexpert.feecollection.main.fee.lookup.values;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-
 public class BreakString {
 
 	/*
@@ -12,8 +11,8 @@ public class BreakString {
 	 * BreakString(); String aa = x.breakString(k); x.getYear(aa); String course
 	 * = x.getCourse(aa); x.getYearCode(course); }
 	 */
-	
-//	OBC~B.Ph.FY~2013-2014
+
+	// OBC~B.Ph.FY~2013-2014
 
 	public String breakString(String k)
 
@@ -40,7 +39,6 @@ public class BreakString {
 		Iterator<String> iterator = set.iterator();
 		while (iterator.hasNext()) {
 			string = (String) iterator.next();
-			
 
 			if (string == "" || string.equals(null) || string.equals("null")) {
 
@@ -57,7 +55,6 @@ public class BreakString {
 
 	}
 
-	
 	public String getCategory(String s) {
 		String[] x = s.split("~");
 		String xx = "";
@@ -72,7 +69,7 @@ public class BreakString {
 		System.out.println("Category String :" + xx);
 		return xx;
 	}
-	
+
 	public String getYear(String s) {
 		String[] x = s.split("~");
 		String xx = "";
@@ -89,10 +86,6 @@ public class BreakString {
 		return xx;
 	}
 
-	
-	
-	
-	
 	public String getCourse(String s) {
 		String[] x = s.split("~");
 		String xx = "";
@@ -128,25 +121,25 @@ public class BreakString {
 		}
 
 		else if (course.contentEquals("B.Ph.FY")) {
-			yearCode = "1";
+			yearCode = "11";
 
 		} else if (course.contentEquals("B.Ph.SY(Direct)") || course.contentEquals("B.Ph.SY")) {
-			yearCode = "2";
+			yearCode = "22";
 
 		} else if (course.contentEquals("B.Ph.TY")) {
-			yearCode = "3";
+			yearCode = "33";
 
 		}
 
 		else if (course.contentEquals("B.Ph.Final")) {
-			yearCode = "4";
+			yearCode = "44";
 
 		} else if (course.contentEquals("M.Ph.FY")) {
 
-			yearCode = "5";
+			yearCode = "55";
 		} else if (course.contentEquals("M.Ph.Final")) {
 
-			yearCode = "6";
+			yearCode = "66";
 		}
 		System.out.println("Year Code is ::" + yearCode);
 		return yearCode;

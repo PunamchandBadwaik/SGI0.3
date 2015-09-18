@@ -25,17 +25,19 @@ public class GenerateEnrollmentNumber {
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(GenerateEnrollmentNumber.class.getName());
 
-	/*public static void main(String[] args) {
-		GenerateEnrollmentNumber gg = new GenerateEnrollmentNumber();
-		// gg.generateEnrollmentNumber("2011", "1", "B.Ph.FY");
-		Integer count = gg.getCountOfYear("2013", "1", "B.Ph.FY");
-
-		String initialString = "131";
-		String en = gg.getEnrollNumForPharma(count);
-		String finalEnroll = initialString.concat(en);
-		System.out.println("Enrollment number is ::: " + finalEnroll);
-
-	}*/
+	/*
+	 * public static void main(String[] args) { GenerateEnrollmentNumber gg =
+	 * new GenerateEnrollmentNumber(); // gg.generateEnrollmentNumber("2011",
+	 * "1", "B.Ph.FY"); Integer count = gg.getCountOfYear("2013", "1",
+	 * "B.Ph.FY");
+	 * 
+	 * String initialString = "131"; String en =
+	 * gg.getEnrollNumForPharma(count); String finalEnroll =
+	 * initialString.concat(en); System.out.println("Enrollment number is ::: "
+	 * + finalEnroll);
+	 * 
+	 * }
+	 */
 
 	public Integer getCountOfYear(String AdmiYear, String yc, String course) {
 
@@ -48,13 +50,14 @@ public class GenerateEnrollmentNumber {
 		try {
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("year", AdmiYear));
-			criteria.add(Restrictions.eq("yearCode", yc));
+
 			criteria.add(Restrictions.eq("course", course));
+			//criteria.add(Restrictions.eq("yearCode", yc));
 			list = criteria.list();
-			log.info("List Size is :: " +list.size());
+
+			log.info(":::::::::::::: " + criteria);
+			log.info("List Size is :: " + list.size());
 			return list.size();
-			
-			
 
 		} finally {
 			session.close();
@@ -94,7 +97,7 @@ public class GenerateEnrollmentNumber {
 			log.info("Counter is ::: " + count);
 			try {
 				Integer incVal = count + 1;
-
+				log.info("");
 				String newValue = String.valueOf(incVal);
 				String increment = newValue.length() == 1 ? "000" + newValue : newValue.length() == 2 ? "00" + newValue
 						: newValue.length() == 3 ? "0" + newValue : newValue.length() == 4 ? newValue : newValue;
@@ -111,39 +114,45 @@ public class GenerateEnrollmentNumber {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpSession httpSession = request.getSession();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-
+		log.info("1");
 		String collegeId = lgBean.getAffBean().getInstId().toString();
 		String adYear = yr.substring(2, 4);
 
-		String initialString = adYear+collegeId+yc;
+		String initialString = adYear + collegeId + yc;
 		String en = null;
 		String finalEnroll = null;
 
 		if (course.equals("FE") || course.equals("SE") || course.equals("SED") || course.equals("TE")
 				|| course.equals("BE") || course.equals("BE") || course.equals("MBA") || course.equals("ME")) {
+			log.info("2");
 			try {
+				log.info("3");
 				Integer count = getCountOfYear(yr, yc, course);
 				en = getEnrollNum(count);
+				log.info("4");
 				finalEnroll = initialString.concat(en);
+				log.info("5");
 			} catch (java.lang.NullPointerException e) {
 				finalEnroll = initialString.concat("00001");
+				log.info("6");
 			}
 
 		} else if (course.equals("B.Ph.FY") || course.equals("B.Ph.SY") || course.equals("B.Ph.SY(Direct)")
 				|| course.equals("B.Ph.TY") || course.equals("B.Ph.Final") || course.equals("M.Ph.FY")
 				|| course.equals("M.Ph.Final")) {
-
+			log.info("7");
 			try {
-				
-				log.info("Initial String is ::"+initialString);
+				log.info("8");
+				log.info("Initial String is ::" + initialString);
 				Integer count = getCountOfYear(adYear, yc, course);
 				en = getEnrollNumForPharma(count);
-				
-				log.info("String after counter ::"+en);
-				
+				log.info("9");
+				log.info("String after counter ::" + en);
+
 				finalEnroll = initialString.concat(en);
 			} catch (java.lang.NullPointerException e) {
 				finalEnroll = initialString.concat("0001");
+				log.info("10");
 			}
 
 		}
