@@ -309,12 +309,12 @@
 
 
 												</tr>
-												
-												
-												
-												
-												
-												
+
+
+
+
+
+
 
 											</table>
 
@@ -333,7 +333,7 @@
 											<table>
 												<tr>
 													<td>Select College Name</td>
-													<td><select name="appBean1.course" id="courseId"
+													<td><select name="appBean1.course" id="collegeName"
 														onchange="collegeSelected(this.value)" data-rel="chosen"
 														style="width: 240px;">
 															<option value="">---Select College---</option>
@@ -352,54 +352,6 @@
 
 									</div>
 									</p>
-									<p class="btn-group">
-									<div id="courseList">
-
-										<div class="controls">
-											<table>
-												<tr>
-													<td>Select Course</td>
-													<td><select name="appBean1.course" id="courseId"
-														onchange="" data-rel="chosen" style="width: 240px;">
-															<option value="">---Select Course---</option>
-													</select></td>
-
-
-												</tr>
-
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</p>
-									<p class="btn-group">
-									<div id="feeName">
-
-										<div class="controls">
-											<table>
-												<tr>
-													<td>Select Fee Name</td>
-													<td><select name="fee" id="feeId"
-														onchange="" data-rel="chosen" style="width: 240px;">
-															<option value="">---Select Fees---</option>
-
-
-													</select></td>
-
-												</tr>
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</P>
 
 
 									<%
@@ -439,129 +391,15 @@
 
 									</div>
 									</p>
-									<p class="btn-group">
-									<div id="courseList">
-
-										<div class="controls">
-											<table>
-												<tr>
-													<td>Select Course</td>
-													<td><select name="appBean1.course" id="courseId"
-														onchange="" data-rel="chosen" style="width: 240px;">
-															<option value="">---Select Course---</option>
-													</select></td>
-
-
-												</tr>
-
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</p>
-									<p class="btn-group">
-									<div id="feeName">
-
-										<div class="controls">
-											<table>
-												<tr>
-													<td>Select Fee Name</td>
-													<td><select name="appBean1.course" id="feeId"
-														onchange="" data-rel="chosen" style="width: 240px;">
-															<option value="">---Select Fees---</option>
-
-
-													</select></td>
-
-												</tr>
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</P>
-
-
-
-									<%
-										}
-									%>
-									<%
-										if (profile.contentEquals("Affiliated")) {
-									%>
-
-									<p class="btn-group">
-									<div>
-
-										<div class="controls">
-											<table>
-												<tr>
-													<td>Select Course</td>
-													<td><select name="course" id="courseId"
-														onchange="courseSelected(this.value)" data-rel="chosen"
-														style="width: 240px;">
-
-															<option value="">---Select Course---</option>
-															<option value="All">All Course</option>
-															<s:iterator value="listOfCourse" status="var">
-																<option value="<s:property/>"><s:property /></option>
-															</s:iterator>
-													</select></td>
-
-
-												</tr>
-
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</p>
-									<p class="btn-group">
-									<div id="feeName">
-
-										<div class="controls">
-											<table>
-												<tr>
-													<td>Select Fee Name</td>
-													<td><select name="feeName" id="feeId" onchange=""
-														data-rel="chosen" style="width: 240px;">
-															<option value="">---Select Fees---</option>
-
-
-													</select></td>
-
-												</tr>
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</P>
-
-
 
 									<%
 										}
 									%>
 									<div>
-										<input type="button" onclick="searchDues()" value="Search">
+										<input type="button" onclick="getStudentList()" value="Search">
 
 									</div>
-									<div id="dueReport"></div>
+									<div id="studentList"></div>
 
 									<!-- content ends -->
 								</div>
@@ -571,7 +409,7 @@
 
 
 
-							<hr>
+
 
 							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 								aria-labelledby="myModalLabel" aria-hidden="true">
@@ -650,14 +488,14 @@
 						<script src="js/typeahead.bundle.js"></script>
 						<script type="text/javascript">
 							function universitySelected(universityName) {
-								alert(universityName);
+							
 								if (universityName == "") {
 									return false
 								}
 
 								var ajax = true;
 								var query = "?universityName=" + universityName
-										+ "&ajax=" + ajax;
+										+ "&forStudentReport=" + true;
 								var xmlhttp;
 								if (window.XMLHttpRequest) {
 									xmlhttp = new XMLHttpRequest();
@@ -676,102 +514,25 @@
 								xmlhttp.send();
 
 							}
-							function collegeSelected(collegeName) {
 
-								if (collegeName == "") {
-									return false
-								}
-								var ajax = true;
-								var query = "?collegeName=" + collegeName
-										+ "&ajax=" + ajax;
-								var xmlhttp;
-								if (window.XMLHttpRequest) {
-									xmlhttp = new XMLHttpRequest();
-								} else {
-									xmlhttp = new ActiveXObject(
-											"Microsoft.XMLHTTP");
-								}
-								xmlhttp.onreadystatechange = function() {
-									if (xmlhttp.readyState == 4
-											&& xmlhttp.status == 200) {
-										document.getElementById("courseList").innerHTML = xmlhttp.responseText;
-									}
-								}
-								xmlhttp.open("GET",
-										"getValForDropDown" + query, true);
-								xmlhttp.send();
-
-							}
-							function courseSelected(courseName) {
-
-								if (courseName == "") {
-									return false;
-								}
-								var ajax = true;
-								var query = "?courseName=" + courseName
-										+ "&ajax=" + ajax;
-								var xmlhttp;
-								if (window.XMLHttpRequest) {
-									xmlhttp = new XMLHttpRequest();
-								} else {
-									xmlhttp = new ActiveXObject(
-											"Microsoft.XMLHTTP");
-								}
-								xmlhttp.onreadystatechange = function() {
-									if (xmlhttp.readyState == 4
-											&& xmlhttp.status == 200) {
-										document.getElementById("feeName").innerHTML = xmlhttp.responseText;
-									}
-								}
-								xmlhttp.open("GET",
-										"getValForDropDown" + query, true);
-								xmlhttp.send();
-
-							}
-							function searchDues() {
-								var courseName = null;
-								var feeName = null;
+							function getStudentList() {
 								var universityName = null;
 								var collegeName = null;
 								var query = null;
 						<%if(profile.contentEquals("SU")){%>
 							universityName = document
 										.getElementById("universityName").value;
-								courseName = document
-										.getElementById("courseId").value == null ? ""
-										: document.getElementById("courseId").value;
-								feeName = document.getElementById("feeId").value;
 								collegeName = document
 										.getElementById("collegeName").value;
 								query = "?universityName=" + universityName
-										+ "&collegeName=" + collegeName
-										+ "&courseName=" + courseName
-										+ "&feeName=" + feeName;
-						<%}else if(profile.contentEquals("Affiliated")) 
-								{%>
-							courseName = document
-										.getElementById("courseId").value == null ? ""
-										: document.getElementById("courseId").value;
-								feeName = document.getElementById("feeId").value;
-								query = "?universityName=" + universityName
-										+ "&collegeName=" + collegeName
-										+ "&courseName=" + courseName
-										+ "&feeName=" + feeName;
+										+ "&collegeName=" + collegeName;
 						<%}
 						else if(profile.contentEquals("Parent")){%>
-							courseName = document
-										.getElementById("courseId").value == null ? ""
-										: document.getElementById("courseId").value;
-								feeName = document.getElementById("feeId").value;
-								collegeName = document
+							collegeName = document
 										.getElementById("collegeName").value;
-								query = "?universityName=" + universityName
-										+ "&collegeName=" + collegeName
-										+ "&courseName=" + courseName
-										+ "&feeName=" + feeName;
+								query = "?collegeName=" + collegeName;
 						<%}%>
-							alert(query);
-								var xmlhttp;
+							var xmlhttp;
 								if (window.XMLHttpRequest) {
 									xmlhttp = new XMLHttpRequest();
 								} else {
@@ -781,11 +542,12 @@
 								xmlhttp.onreadystatechange = function() {
 									if (xmlhttp.readyState == 4
 											&& xmlhttp.status == 200) {
-										document.getElementById("dueReport").innerHTML = xmlhttp.responseText;
+
+										document.getElementById("studentList").innerHTML = xmlhttp.responseText;
 									}
 								}
-								xmlhttp.open("GET", "CustomCollegeDueReport"
-										+ query, true);
+								xmlhttp.open("GET", "getStudentList" + query,
+										true);
 								xmlhttp.send();
 
 							}

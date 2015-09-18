@@ -346,6 +346,14 @@
 
 	<package name="College" extends="struts-default">
 
+
+
+
+		<action name="getStudentList"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getStudentList">
+			<result name="success">StudentDetail_Ajax.jsp</result>
+		</action>
 		<action name="ViewCollegeDetails"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="viewCollegeDetail">
@@ -463,22 +471,29 @@
 			method="CustomCollegeDueReport">
 			<result name="success">Custom_Dues_Ajax.jsp</result>
 		</action>
+		
 		<action name="getValForDropDown"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="getValForDropDown">
 			<result name="success">Custom_College-Due-Report.jsp</result>
 			<result name="feeName">FeeNames_Ajax.jsp</result>
 			<result name="collegeList">CollegeList_Ajax.jsp</result>
+			<result name="collegeListForStudentReport">CollegeListForStudentReport_Ajax.jsp</result>
 			<result name="listOfCourse">CourseList_Ajax.jsp</result>
 		</action>
 
+
+		<action name="getValForStudentReport"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getValForDropDown">
+			<result name="success">StudentReport.jsp</result>
+			<result name="collegeList">CollegeList_Ajax.jsp</result>
+
+		</action>
 		<action name="saveFeeCalcDetails"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="UpdateCalcParameters">
-
 			<result name="success">Success.jsp</result>
-
-
 		</action>
 		<action name="TranactionReport"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"

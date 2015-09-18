@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -91,7 +92,8 @@ public class AffAction extends ActionSupport {
 	List<String> listOfCourse;
 	List<String> feeNameList;
 	AppDAO appDAO = new AppDAO();
-	List<Object[]> totalDuesOFCollege;
+	List<Object[]> totalDuesOFCollege = new ArrayList<Object[]>();
+	AffBean affBean = new AffBean();
 
 	// End of Global Variables
 
@@ -1069,6 +1071,30 @@ public class AffAction extends ActionSupport {
 		String courseName = request.getParameter("courseName");
 		String feeName = request.getParameter("");
 		String ajax = request.getParameter("");
+		String forStudentReport = request.getParameter("forStudentReport");
+
+		// this code for generate dynamic drop down for student report
+		if (ses.getAttribute("sesProfile").toString().contentEquals("SU") && forStudentReport != null
+				&& !forStudentReport.isEmpty()) {
+			if (universityName != null && !universityName.isEmpty()) {
+				log.info(" for student Report ");
+				Integer universityId = parDAO.getUniversityId(universityName);
+				//ses.setAttribute("UniversityId", universityId);
+				affBeansList = affDao.getCollegList(universityId);
+				log.info("List of college" + affBeansList.size());
+				return "collegeListForStudentReport";
+			}
+			parBeans = parDAO.getUniversityList();
+		}
+		if(ses.getAttribute("sesProfile").toString().contentEquals("Parent")&&forStudentReport != null
+				&& !forStudentReport.isEmpty()){
+			Integer id = (Integer) ses.getAttribute("sesId");
+			affBeansList = affDao.getCollegList(id);
+			log.info("List of college" + affBeansList.size());	
+			return SUCCESS;
+			
+		}
+
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 
 			if (universityName != null && !universityName.isEmpty()) {
@@ -1208,6 +1234,7 @@ public class AffAction extends ActionSupport {
 	}
 
 	public String getInsTransactionDetails() {
+
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			transactionDetailsForReport = affDao.getAllTransactionDetail();
 			return SUCCESS;
@@ -1240,6 +1267,29 @@ public class AffAction extends ActionSupport {
 			transactionDetailsForReport = affDao.getAllTransactionDetail(insId);
 			return SUCCESS;
 		}
+	}
+
+	public String getStudentList() {
+		String universityName = request.getParameter("universityName");
+		String collegeName = request.getParameter("collegeName");
+		if ((universityName != null && !universityName.isEmpty()) && (collegeName != null && !collegeName.isEmpty())) {
+			log.info("inside su");
+			Integer universityId = parDAO.getUniversityId(universityName);
+			Integer collegeId = affDao.getCollegeId(collegeName, universityId);
+			affBean = affDao.getStudentList(collegeId);
+			return SUCCESS;
+
+		} else if (universityName != null && !universityName.isEmpty()) {
+
+		} else if (collegeName != null && !collegeName.isEmpty()) {
+			Integer universityId = (Integer) ses.getAttribute("sesId");
+			Integer collegeId = affDao.getCollegeId(collegeName, universityId);
+			affBean = affDao.getStudentList(collegeId);
+			return SUCCESS;
+
+		}
+
+		return null;
 	}
 
 	// End of Action Methods
@@ -1508,6 +1558,14 @@ public class AffAction extends ActionSupport {
 
 	public void setLookupBeanList(List<LookupBean> lookupBeanList) {
 		this.lookupBeanList = lookupBeanList;
+	}
+
+	public AffBean getAffBean() {
+		return affBean;
+	}
+
+	public void setAffBean(AffBean affBean) {
+		this.affBean = affBean;
 	}
 
 	// End of Getter Setter Methods

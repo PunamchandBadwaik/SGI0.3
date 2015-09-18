@@ -614,6 +614,18 @@ public class AffDAO {
 		return id;
 	}
 
+	public Integer getCollegeId(String collegeName, Integer universityId) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(AffBean.class);
+		criteria.add(Restrictions.eq("parBeanAff.parInstId", universityId)).add(Restrictions.eq("instName",collegeName));
+		AffBean affBean = (AffBean) criteria.list().iterator().next();
+		Integer id = affBean.getInstId();
+		log.info("College id in dao class" + id);
+		session.close();
+		return id;
+
+	}
+
 	public List<String> findAllStudentOfInstituteByCourse(Integer collegeId, String courseName) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AppBean.class);
@@ -671,10 +683,10 @@ public class AffDAO {
 	public List<String> getListOfCourses(Integer collegeId, List<Integer> listOfCollegeId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AppBean.class);
-		if(collegeId!=null){
-		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId));
-		}else if(listOfCollegeId!=null&&listOfCollegeId.size()>0){
-	    criteria.add(Restrictions.in("affBeanStu.instId", listOfCollegeId));
+		if (collegeId != null) {
+			criteria.add(Restrictions.eq("affBeanStu.instId", collegeId));
+		} else if (listOfCollegeId != null && listOfCollegeId.size() > 0) {
+			criteria.add(Restrictions.in("affBeanStu.instId", listOfCollegeId));
 		}
 		criteria.setProjection(Projections.groupProperty("course")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<String> ListOfCourse = criteria.list();
@@ -683,34 +695,33 @@ public class AffDAO {
 	}
 
 	public List<Object[]> findDueOfFees(String feeName, List<String> enrollmentNumber) {
-		List<Object[]> feeDues=new ArrayList<Object[]>();
+		List<Object[]> feeDues = new ArrayList<Object[]>();
 		Session session = factory.openSession();
-		try{
-		
-		Criteria criteria = session.createCriteria(PaymentDuesBean.class);
-		criteria.add(Restrictions.in("appBean.enrollmentNumber", enrollmentNumber));
-		if (feeName != null && !feeName.isEmpty()) {
-			criteria.add(Restrictions.eq("feeName", feeName));
-			criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
-					.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
-					.add(Projections.sum("netDue")));
+		try {
 
-		} else {
-			criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
-					.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
-					.add(Projections.sum("netDue")).add(Projections.groupProperty("feeName")));
+			Criteria criteria = session.createCriteria(PaymentDuesBean.class);
+			criteria.add(Restrictions.in("appBean.enrollmentNumber", enrollmentNumber));
+			if (feeName != null && !feeName.isEmpty()) {
+				criteria.add(Restrictions.eq("feeName", feeName));
+				criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
+						.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
+						.add(Projections.sum("netDue")));
+
+			} else {
+				criteria.setProjection(Projections.projectionList().add(Projections.property("feeName"))
+						.add(Projections.sum("total_fee_amount")).add(Projections.sum("payments_to_date"))
+						.add(Projections.sum("netDue")).add(Projections.groupProperty("feeName")));
+			}
+			feeDues = criteria.list();
+			return feeDues;
+		} catch (Exception ex) {
+			// ex.printStackTrace();
+			return feeDues;
 		}
-		feeDues = criteria.list();
-        return feeDues;
-		}catch(Exception ex)
-		{
-		ex.printStackTrace();	
-		return feeDues;	
-		}
-		
-		finally{
-		session.close();	
-			
+
+		finally {
+			session.close();
+
 		}
 	}
 
@@ -725,6 +736,25 @@ public class AffDAO {
 		List<String> appBeans = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		return appBeans;
 
+	}
+	public AffBean getStudentList(Integer collegeId)
+	{
+		Session session = factory.openSession();
+		try {
+
+			
+			Criteria criteria = session.createCriteria(AffBean.class);
+
+			criteria.add(Restrictions.eq("instId", collegeId));
+
+			AffBean affBean = (AffBean) criteria.list().iterator().next();
+
+			return affBean;
+
+		} finally {
+			session.close();
+			// TODO: handle exception
+		}
 	}
 
 }
