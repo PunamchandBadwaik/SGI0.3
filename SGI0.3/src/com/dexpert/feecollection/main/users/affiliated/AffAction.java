@@ -1289,7 +1289,7 @@ public class AffAction extends ActionSupport {
 
 		}
 
-		return null;
+		return SUCCESS;
 	}
 
 	// End of Action Methods

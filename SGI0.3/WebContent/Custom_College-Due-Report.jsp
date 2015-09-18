@@ -198,6 +198,19 @@
 							<%
 								}
 							%>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
 							<%
 								if (!profile.contentEquals("Affiliated")) {
 							%>
@@ -223,6 +236,25 @@
 							<%
 								}
 							%>
+							
+							
+							<%
+								if (profile.contentEquals("Parent")) {
+							%>
+
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							<%
+								}
+							%>
+							
+							
+							
+							
+							
+							
+							
+							
 
 
 						</ul>
@@ -770,7 +802,7 @@
 										+ "&courseName=" + courseName
 										+ "&feeName=" + feeName;
 						<%}%>
-							alert(query);
+							
 								var xmlhttp;
 								if (window.XMLHttpRequest) {
 									xmlhttp = new XMLHttpRequest();

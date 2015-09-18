@@ -223,7 +223,15 @@
 							<%
 								}
 							%>
+                           <%
+								if (profile.contentEquals("Parent")) {
+							%>
 
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							<%
+								}
+							%>
 
 						</ul>
 					</div>
@@ -372,7 +380,7 @@
 														onchange="collegeSelected(this.value)" data-rel="chosen"
 														style="width: 240px;">
 															<option value="">---Select College---</option>
-															<option value="All">All College</option>
+														
 															<s:iterator value="affBeansList">
 																<option value="<s:property value="instName"/>"><s:property
 																		value="instName" /></option>
