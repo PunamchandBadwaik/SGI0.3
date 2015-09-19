@@ -194,39 +194,51 @@ public class AppDAO {
 		AffDAO affDao = new AffDAO();
 		FvBean fvBean = new FvBean();
 		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
+		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
+		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
+		Iterator<FeeDetailsBean> feeDetailIterator = instfeeList.iterator();
+		FeeDetailsBean feeDetailsBean = new FeeDetailsBean();
+		List<FcBean> fcConfiglist = new ArrayList<FcBean>();
+		FcBean fcBean = new FcBean();
+		int k = 1;
 		while (iterator.hasNext()) {
+			log.info("fee Value Counter is ::" + k);
 			fvBean = (FvBean) iterator.next();
 
 			// log.info("Fee Values is ::" + fvBean.getValue() + "::" +
 			// fvBean.getFeeValueId());
-		}
 
-		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
-		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
-		Iterator<FeeDetailsBean> iterator2 = instfeeList.iterator();
+			// log.info("Fv Bean List Size ::" + instfeeList.size());
 
-		// log.info("Fv Bean List Size ::" + instfeeList.size());
-		FeeDetailsBean feeDetailsBean = new FeeDetailsBean();
-		List<FcBean> beanslist = new ArrayList<FcBean>();
-		FcBean fcBean = new FcBean();
-		while (iterator2.hasNext()) {
-			feeDetailsBean = (FeeDetailsBean) iterator2.next();
-			// log.info("Fee Detail Bean  is ::" + feeDetailsBean.getFeeName() +
-			// "::" + feeDetailsBean.getFeeId());
-			beanslist = feeDetailsBean.getConfigs();
+			int i = 1;
+			while (feeDetailIterator.hasNext()) {
+				log.info("fee detail Counter is ::" + i);
+				feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
+				log.info("Fee Detail Bean  is ::" + feeDetailsBean.getFeeName() + "::" + feeDetailsBean.getFeeId());
+				fcConfiglist = feeDetailsBean.getConfigs();
 
-			fcBean = (FcBean) beanslist.iterator().next();
+				Iterator<FcBean> fcConfigIterator = fcConfiglist.iterator();
 
-			Session session = factory.openSession();
-			Criteria criteria = session.createCriteria(FcBean.class);
-			criteria.add(Restrictions.eq("valueId", fvBean.getFeeValueId()));
-			fcBean = (FcBean) criteria.list().iterator().next();
+				Session session = factory.openSession();
+				int j = 1;
+				while (fcConfigIterator.hasNext()) {
+					log.info("fee Config Counter is ::" + j);
+					log.info("Value  id is ::" + fvBean.getFeeValueId());
+					/*fcBean = (FcBean) fcConfigIterator.next();
+					Criteria criteria = session.createCriteria(FcBean.class);
+					criteria.add(Restrictions.eq("valueId", fvBean.getFeeValueId()));
+							
 
-			// log.info("Fee Config  is :: combo Id :: " + fcBean.getComboId() +
-			// ":: " + fcBean.getAmount());
+					fcBean = (FcBean) criteria.list().iterator().next();
+				*/	log.info("Fee Config  is :: combo Id :: " + fcBean.getComboId() + ":: " + fcBean.getAmount());
+					j++;
+				}
 
-			addToDuesTable(appBean, fvBean, fcBean, feeDetailsBean);
-			session.close();
+				session.close();
+				i++;
+			}
+			k++;
+			// addToDuesTable(appBean, fvBean, fcBean, feeDetailsBean);
 
 		}
 

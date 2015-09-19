@@ -11,13 +11,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
@@ -49,11 +52,17 @@ public class ParBean implements Serializable {
 	// ------------------------------------
 
 	// one to many relation ship with Institutes
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="parBeanAff")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "parBeanAff")
 	Set<AffBean> affBeanOneToManySet;
 
 	// @OneToOne(cascade = CascadeType.ALL, mappedBy = "parBeanOneToOne")
 	// private AffBean affBeanOneToOneBi;
+
+	
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "University_values", joinColumns = @JoinColumn(name = "parInstId"), inverseJoinColumns = @JoinColumn(name = "value_id"))
+	Set<FvBean> parentFeeValueSet;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	LoginBean loginBean;
@@ -152,6 +161,14 @@ public class ParBean implements Serializable {
 
 	public void setAffBeanOneToManySet(Set<AffBean> affBeanOneToManySet) {
 		this.affBeanOneToManySet = affBeanOneToManySet;
+	}
+
+	public Set<FvBean> getParentFeeValueSet() {
+		return parentFeeValueSet;
+	}
+
+	public void setParentFeeValueSet(Set<FvBean> parentFeeValueSet) {
+		this.parentFeeValueSet = parentFeeValueSet;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.dexpert.feecollection.main.fee.lookup.values;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupBean;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
+import com.dexpert.feecollection.main.users.parent.ParBean;
 
 @Entity
 @Table(name = "fee_values_master")
@@ -32,6 +34,9 @@ public class FvBean implements Serializable {
 
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "applicantParamValues")
 	Set<AppBean> appBeanParamSet;
+
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "parentFeeValueSet")
+	Set<ParBean> parentParam;
 
 	// one to one unidirectional mapping with Fee Config
 
@@ -80,6 +85,14 @@ public class FvBean implements Serializable {
 
 	public void setAppBeanParamSet(Set<AppBean> appBeanParamSet) {
 		this.appBeanParamSet = appBeanParamSet;
+	}
+
+	public Set<ParBean> getParentParam() {
+		return parentParam;
+	}
+
+	public void setParentParam(Set<ParBean> parentParam) {
+		this.parentParam = parentParam;
 	}
 
 }
