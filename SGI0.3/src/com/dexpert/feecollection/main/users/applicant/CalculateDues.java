@@ -1,36 +1,37 @@
 package com.dexpert.feecollection.main.users.applicant;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import COM.rsa.asn1.el;
 
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
 import com.google.common.collect.ArrayListMultimap;
 
-public class GetAmount {
+public class CalculateDues {
 
 	static FcDAO dao = new FcDAO();
 
-	public static void main(String[] args) {
-		ArrayList<Integer> valuList = new ArrayList<Integer>();
-		valuList.add(11);
-		valuList.add(4);
-		valuList.add(1);
-		Collections.sort(valuList);
-
-		calculateFeeStudent(valuList, 1);
-
-	}
-
+	/*
+	 * public static void main(String[] args) { ArrayList<Integer> valuList =
+	 * new ArrayList<Integer>(); valuList.add(11); valuList.add(4);
+	 * valuList.add(1); Collections.sort(valuList);
+	 * 
+	 * calculateFeeStudent(valuList, 1);
+	 * 
+	 * }
+	 */
 	// public static Double calculateFeeStudent(Integer valueId1, Integer
 	// valueId2, Integer valueId3, Integer feeId) {
 	public static Double calculateFeeStudent(ArrayList<Integer> list, Integer feeId) {
 		FeeDetailsBean feeDetail = new FeeDetailsBean();
 		List<FcBean> combinations = new ArrayList<FcBean>();
 		List<FcBean> searchList = new ArrayList<FcBean>();
-		List<Integer> valueFromDB = new ArrayList<Integer>();
+
 		// Get Fee From fee_details table
 		try {
 			feeDetail = dao.GetFees("id", null, feeId, null).get(0);
@@ -70,6 +71,9 @@ public class GetAmount {
 
 				System.out.println("Amount is ::" + searchList.get(0).getAmount());
 				return searchList.get(0).getAmount();
+			} else {
+
+				System.out.println("Combination not Available");
 			}
 
 		}

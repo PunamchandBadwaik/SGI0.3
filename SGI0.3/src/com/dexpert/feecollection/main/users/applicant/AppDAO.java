@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -48,6 +49,7 @@ import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
+import com.google.common.collect.ArrayListMultimap;
 
 public class AppDAO {
 
@@ -193,58 +195,34 @@ public class AppDAO {
 	public void getDuesDetail(AppBean appBean) {
 		AffDAO affDao = new AffDAO();
 		FvBean fvBean = new FvBean();
-		Iterator<FvBean> iterator = appBean.getApplicantParamValues().iterator();
+		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
-		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
-		Iterator<FeeDetailsBean> feeDetailIterator = instfeeList.iterator();
+		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
+		Iterator<FeeDetailsBean> feeDetailIterator = instfeeSet.iterator();
 		FeeDetailsBean feeDetailsBean = new FeeDetailsBean();
-		List<FcBean> fcConfiglist = new ArrayList<FcBean>();
 		FcBean fcBean = new FcBean();
-		int k = 1;
+		// com.google.common.collect.ListMultimap<Integer, FvBean> comboMap =
+		// ArrayListMultimap.create();
+		Iterator<FvBean> iterator = appParamSet.iterator();
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		while (iterator.hasNext()) {
-			log.info("fee Value Counter is ::" + k);
-			fvBean = (FvBean) iterator.next();
+			FvBean tempFvBean = (FvBean) iterator.next();
+			list.add(tempFvBean.getFeeValueId());
 
-			// log.info("Fee Values is ::" + fvBean.getValue() + "::" +
-			// fvBean.getFeeValueId());
+		}
+		Collections.sort(list);
+		while (feeDetailIterator.hasNext()) {
 
-			// log.info("Fv Bean List Size ::" + instfeeList.size());
-
-			int i = 1;
-			while (feeDetailIterator.hasNext()) {
-				log.info("fee detail Counter is ::" + i);
-				feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
-				log.info("Fee Detail Bean  is ::" + feeDetailsBean.getFeeName() + "::" + feeDetailsBean.getFeeId());
-				fcConfiglist = feeDetailsBean.getConfigs();
-
-				Iterator<FcBean> fcConfigIterator = fcConfiglist.iterator();
-
-				Session session = factory.openSession();
-				int j = 1;
-				while (fcConfigIterator.hasNext()) {
-					log.info("fee Config Counter is ::" + j);
-					log.info("Value  id is ::" + fvBean.getFeeValueId());
-					/*fcBean = (FcBean) fcConfigIterator.next();
-					Criteria criteria = session.createCriteria(FcBean.class);
-					criteria.add(Restrictions.eq("valueId", fvBean.getFeeValueId()));
-							
-
-					fcBean = (FcBean) criteria.list().iterator().next();
-				*/	log.info("Fee Config  is :: combo Id :: " + fcBean.getComboId() + ":: " + fcBean.getAmount());
-					j++;
-				}
-
-				session.close();
-				i++;
-			}
-			k++;
-			// addToDuesTable(appBean, fvBean, fcBean, feeDetailsBean);
-
+			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
+			log.info("fee name " + feeDetailsBean.getFeeName());
+			Double amt = CalculateDues.calculateFeeStudent(list, feeDetailsBean.getFeeId());
+			fcBean.setAmount(amt);
+			addToDuesTable(appBean, fcBean, feeDetailsBean);
 		}
 
 	}
 
-	public void addToDuesTable(AppBean appBean, FvBean fvBean, FcBean fcBean, FeeDetailsBean detailsBean) {
+	public void addToDuesTable(AppBean appBean, FcBean fcBean, FeeDetailsBean detailsBean) {
 		Session session = factory.openSession();
 		try {
 			Date dd = new Date();
