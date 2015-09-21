@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -45,8 +46,6 @@ public class AffBean implements Serializable {
 
 	private String contactPerson, place, email, contactNumber, mobileNum;
 	private String instAddress;
-
-	
 
 	// --------------------------------------
 	// to upload file
@@ -81,6 +80,7 @@ public class AffBean implements Serializable {
 	// one to many relationship with FeeDetails)
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "affiliatedinstitute_feedetails", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "feeId"))
+	@OrderBy(value = "feeId")
 	Set<FeeDetailsBean> feeSet;
 
 	// one to one bidirectional relationship with student and college
@@ -90,7 +90,7 @@ public class AffBean implements Serializable {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "affiliated_values", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "value_id"))
-	Set<FvBean> paramvalues;
+	Set<FvBean> collegeParamvalues;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<AffFeePropBean> feeProps;
@@ -233,12 +233,12 @@ public class AffBean implements Serializable {
 		this.feeSet = feeSet;
 	}
 
-	public Set<FvBean> getParamvalues() {
-		return paramvalues;
+	public Set<FvBean> getCollegeParamvalues() {
+		return collegeParamvalues;
 	}
 
-	public void setParamvalues(Set<FvBean> paramvalues) {
-		this.paramvalues = paramvalues;
+	public void setCollegeParamvalues(Set<FvBean> collegeParamvalues) {
+		this.collegeParamvalues = collegeParamvalues;
 	}
 
 	public Set<AffFeePropBean> getFeeProps() {

@@ -194,7 +194,7 @@ public class AppDAO {
 
 	public void getDuesDetail(AppBean appBean) {
 		AffDAO affDao = new AffDAO();
-		FvBean fvBean = new FvBean();
+		//FvBean fvBean = new FvBean();
 		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
 		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
@@ -445,11 +445,7 @@ public class AppDAO {
 			r = row.getCell(8);
 			admssionYear = r.getStringCellValue();
 
-			/*
-			 * r = row.getCell(9); try { acaYear = r.getStringCellValue(); }
-			 * catch (java.lang.NullPointerException e) { // TODO: handle
-			 * exception }
-			 */
+		
 
 			r = row.getCell(9);
 			course = r.getStringCellValue();
@@ -459,7 +455,7 @@ public class AppDAO {
 			try {
 				branch = r.getStringCellValue();
 			} catch (java.lang.NullPointerException e) {
-				// TODO: handle exception
+				
 			}
 
 			r = row.getCell(11);

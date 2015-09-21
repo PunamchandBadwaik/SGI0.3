@@ -314,7 +314,7 @@ public class AffAction extends ActionSupport {
 		AffBean savedata = (AffBean) ses.getAttribute("sesAffBean");
 		log.info("keys are " + valueMap.keySet().toString());
 		for (int i = 0; i < paramIds.size(); i++) {
-			savedata.getParamvalues().add(valueMap.get(paramIds.get(i)));
+			savedata.getCollegeParamvalues().add(valueMap.get(paramIds.get(i)));
 		}
 
 		affDao.saveOrUpdate(savedata, null);
@@ -751,10 +751,10 @@ public class AffAction extends ActionSupport {
 		String collegeName = request.getParameter("collegeName");
 		String courseName = request.getParameter("courseName");
 		String feeName = request.getParameter("feeName");
-		log.info("university name" + universityName);
-		log.info("collegeName" + collegeName);
-		log.info("courseName" + courseName);
-		log.info("feeName" + feeName);
+		//log.info("university name" + universityName);
+		//log.info("collegeName" + collegeName);
+		//log.info("courseName" + courseName);
+		//log.info("feeName" + feeName);
 		// ////////////////////////////////////////////////////////////////////////////////////
 		// start of su admin custom due report
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {

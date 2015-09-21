@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import COM.rsa.asn1.el;
-
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
@@ -36,7 +33,7 @@ public class CalculateDues {
 		try {
 			feeDetail = dao.GetFees("id", null, feeId, null).get(0);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			// log.info("Incorrect Fee ID");
 			e.printStackTrace();
 		}
@@ -73,7 +70,7 @@ public class CalculateDues {
 				return searchList.get(0).getAmount();
 			} else {
 
-				System.out.println("Combination not Available");
+				// System.out.println("Combination not Available");
 			}
 
 		}
