@@ -102,47 +102,47 @@ public class BreakString {
 	}
 
 	public String getYearCode(String course) {
-		String yearCode = "";
+		String courseCode = "";
 
 		if (course.contentEquals("FE")) {
 
-			yearCode = "10";
+			courseCode = "10";
 
 		} else if (course.contentEquals("SE(Direct)") || course.contentEquals("SE")) {
 
-			yearCode = "20";
+			courseCode = "20";
 
 		} else if (course.contentEquals("ME")) {
-			yearCode = "50";
+			courseCode = "50";
 
 		} else if (course.contentEquals("MBA")) {
-			yearCode = "60";
+			courseCode = "60";
 
 		}
 
 		else if (course.contentEquals("B.Ph.FY")) {
-			yearCode = "11";
+			courseCode = "11";
 
 		} else if (course.contentEquals("B.Ph.SY(Direct)") || course.contentEquals("B.Ph.SY")) {
-			yearCode = "22";
+			courseCode = "22";
 
 		} else if (course.contentEquals("B.Ph.TY")) {
-			yearCode = "33";
+			courseCode = "33";
 
 		}
 
 		else if (course.contentEquals("B.Ph.Final")) {
-			yearCode = "44";
+			courseCode = "44";
 
 		} else if (course.contentEquals("M.Ph.FY")) {
 
-			yearCode = "55";
+			courseCode = "55";
 		} else if (course.contentEquals("M.Ph.Final")) {
 
-			yearCode = "66";
+			courseCode = "66";
 		}
-		System.out.println("Year Code is ::" + yearCode);
-		return yearCode;
+		System.out.println("Year Code is ::" + courseCode);
+		return courseCode;
 
 	}
 

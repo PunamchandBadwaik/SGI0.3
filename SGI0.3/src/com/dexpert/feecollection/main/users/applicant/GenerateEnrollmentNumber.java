@@ -1,9 +1,11 @@
 package com.dexpert.feecollection.main.users.applicant;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,11 +16,13 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.users.LoginBean;
+import com.dexpert.feecollection.main.users.affiliated.AffBean;
 
 public class GenerateEnrollmentNumber {
 	// Declare Global Variables Here
@@ -38,36 +42,51 @@ public class GenerateEnrollmentNumber {
 	 * 
 	 * }
 	 */
-
-	public Integer getCountOfYear(String AdmiYear, String yc, String course) {
-
-		log.info("Admission Year :" + AdmiYear);
-		log.info("Course :" + course);
-		log.info("Year code :" + yc);
-
-		Session session = factory.openSession();
-		List<AppBean> list = new ArrayList<AppBean>();
-		try {
-			Criteria criteria = session.createCriteria(AppBean.class);
-			criteria.add(Restrictions.eq("year", AdmiYear));
-
-			criteria.add(Restrictions.eq("course", course));
-			//criteria.add(Restrictions.eq("yearCode", yc));
-			list = criteria.list();
-
-			log.info(":::::::::::::: " + criteria);
-			log.info("List Size is :: " + list.size());
-			return list.size();
-
-		} finally {
-			session.close();
+	public Long sortSetOfEnrollmentNumberAndReturnMax(Set<AppBean> appBeans)
+	{
+		ArrayList<Long> tempArray=new ArrayList<Long>();
+		Iterator<AppBean> itr=appBeans.iterator();
+		while(itr.hasNext())
+		{
+		Long intEnrollmentNumber=Long.parseLong(itr.next().getEnrollmentNumber());	
+		tempArray.add(intEnrollmentNumber);	
 		}
+		Long maxEnrollmentNumber=Collections.max(tempArray);
+		return maxEnrollmentNumber;
+		
+	}
+
+	public String getNewEnrollmentNumber(String userEnteredValue,Integer couseId) {
+		log.info("inside generate enrollment number");
+		String enrollmentNumber="";
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(FvBean.class);
+		criteria.add(Restrictions.eq("feeValueId", couseId));
+		criteria.createAlias("appBeanParamSet", "app");
+		criteria.add(Restrictions.like("app.enrollmentNumber", userEnteredValue+"%"));
+		List<FvBean> fvBean=criteria.list();
+		log.info("List size is"+fvBean.size());
+		if(fvBean.size()<1){
+		log.info("list size is less than");	
+		return userEnteredValue+"001";	
+		}
+		else if(fvBean.size()>=1){
+		log.info("list size is gretter than 1");	
+		Set<AppBean> appBeans=fvBean.iterator().next().getAppBeanParamSet();	
+		Long maxEnrollmentNumber=sortSetOfEnrollmentNumberAndReturnMax(appBeans);
+		log.info("Max enrollmentNumber"+maxEnrollmentNumber);
+		Integer count=Integer.parseInt(maxEnrollmentNumber.toString().substring(8,maxEnrollmentNumber.toString().length()));	
+		String nextValue=getEnrollNum(count);
+		return userEnteredValue+nextValue;
+		}
+       
+		return null;
 
 	}
 
 	public String getEnrollNum(Integer count) {
 		if (count.equals(0)) {
-			String newValue = "00001";
+			String newValue = "001";
 			return newValue;
 
 		} else {
@@ -75,88 +94,45 @@ public class GenerateEnrollmentNumber {
 				Integer incVal = count + 1;
 
 				String newValue = String.valueOf(incVal);
-				String increment = newValue.length() == 1 ? "0000" + newValue : newValue.length() == 2 ? "000"
-						+ newValue : newValue.length() == 3 ? "00" + newValue : newValue.length() == 4 ? "0" + newValue
-						: newValue.length() == 5 ? newValue : newValue;
+				String increment = newValue.length() == 1 ? "00" + newValue : newValue.length() == 2 ? "0" + newValue
+						: newValue.length() == 3 ? newValue : newValue;
 				return increment;
 			} catch (java.lang.NullPointerException e) {
-				String newValue = "00001";
+				String newValue = "001";
 				return newValue;
 			}
 		}
 
 	}
 
-	public String getEnrollNumForPharma(Integer count) {
-		if (count.equals(0)) {
-			String newValue = "0001";
-			return newValue;
-
-		} else {
-
-			log.info("Counter is ::: " + count);
-			try {
-				Integer incVal = count + 1;
-				log.info("");
-				String newValue = String.valueOf(incVal);
-				String increment = newValue.length() == 1 ? "000" + newValue : newValue.length() == 2 ? "00" + newValue
-						: newValue.length() == 3 ? "0" + newValue : newValue.length() == 4 ? newValue : newValue;
-				return increment;
-			} catch (java.lang.NullPointerException e) {
-				String newValue = "0001";
-				return newValue;
-			}
-		}
-
+	public Integer getCourseId(String courseName) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(FvBean.class);
+		criteria.add(Restrictions.eq("value", courseName)).setProjection(Projections.id());
+		Integer courseId = (Integer) criteria.list().iterator().next();
+		session.close();
+		return courseId;
 	}
 
-	public String generateEnrollmentNumber(String yr, String yc, String course) {
+	public String generateEnrollmentNum(String admissionYear, String course) {
+		log.info("inside generate enrollment Number method");
+		log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpSession httpSession = request.getSession();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		log.info("1");
-		String collegeId = lgBean.getAffBean().getInstId().toString();
-		String adYear = yr.substring(2, 4);
+		AffBean affBean = lgBean.getAffBean();
+		String collegeId = affBean.getInstId().toString().length() == 1 ? "0" + affBean.getInstId().toString()
+				: affBean.getInstId().toString();
+		String universityId = affBean.getParBeanAff().getParInstId().toString().length() == 1 ? "0"
+				+ affBean.getParBeanAff().getParInstId().toString() : affBean.getParBeanAff().getParInstId().toString();
+		Integer courseId = getCourseId(course);
+		String twoDigitAdmissionYear=admissionYear.substring(2,4);
+		
 
-		String initialString = adYear + collegeId + yc;
-		String en = null;
-		String finalEnroll = null;
+	String enrollmentNumber= getNewEnrollmentNumber(universityId+collegeId+twoDigitAdmissionYear+courseId,courseId);
 
-		if (course.equals("FE") || course.equals("SE") || course.equals("SED") || course.equals("TE")
-				|| course.equals("BE") || course.equals("BE") || course.equals("MBA") || course.equals("ME")) {
-			log.info("2");
-			try {
-				log.info("3");
-				Integer count = getCountOfYear(yr, yc, course);
-				en = getEnrollNum(count);
-				log.info("4");
-				finalEnroll = initialString.concat(en);
-				log.info("5");
-			} catch (java.lang.NullPointerException e) {
-				finalEnroll = initialString.concat("00001");
-				log.info("6");
-			}
-
-		} else if (course.equals("B.Ph.FY") || course.equals("B.Ph.SY") || course.equals("B.Ph.SY(Direct)")
-				|| course.equals("B.Ph.TY") || course.equals("B.Ph.Final") || course.equals("M.Ph.FY")
-				|| course.equals("M.Ph.Final")) {
-			log.info("7");
-			try {
-				log.info("8");
-				log.info("Initial String is ::" + initialString);
-				Integer count = getCountOfYear(adYear, yc, course);
-				en = getEnrollNumForPharma(count);
-				log.info("9");
-				log.info("String after counter ::" + en);
-
-				finalEnroll = initialString.concat(en);
-			} catch (java.lang.NullPointerException e) {
-				finalEnroll = initialString.concat("0001");
-				log.info("10");
-			}
-
-		}
-		return finalEnroll;
+	 return enrollmentNumber;
 	}
 
 }

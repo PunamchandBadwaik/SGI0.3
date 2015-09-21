@@ -13,6 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
+import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.google.common.collect.ArrayListMultimap;
 
@@ -231,6 +232,7 @@ public class FcDAO {
 		session.close();
 		return feeName;
 	}
+	
 
 	// DAO Methods End
 }

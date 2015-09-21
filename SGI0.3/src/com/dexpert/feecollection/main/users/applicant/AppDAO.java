@@ -118,7 +118,7 @@ public class AppDAO {
 
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-		String EnrollNo = en.generateEnrollmentNumber(year, yearCode, course);
+		String EnrollNo = en.generateEnrollmentNum(year, course);
 		appBean.setEnrollmentNumber(EnrollNo);
 
 		// log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
