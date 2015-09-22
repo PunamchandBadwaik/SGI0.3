@@ -7,6 +7,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -86,6 +87,15 @@ public class FvDAO {
 		Integer id = (Integer) sqlQuery.list().iterator().next();
 		session.close();
 		return id;
+	}
+	
+	public Integer getCourseId(String courseName) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(FvBean.class);
+		criteria.add(Restrictions.eq("value", courseName)).setProjection(Projections.id());
+		Integer courseId = (Integer) criteria.list().iterator().next();
+		session.close();
+		return courseId;
 	}
 	// DAO Methods End
 

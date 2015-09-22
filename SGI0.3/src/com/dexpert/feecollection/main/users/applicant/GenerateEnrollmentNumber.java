@@ -16,11 +16,13 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
+import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 
@@ -28,58 +30,50 @@ public class GenerateEnrollmentNumber {
 	// Declare Global Variables Here
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(GenerateEnrollmentNumber.class.getName());
+	FvDAO fvDAO = new FvDAO();
 
-	/*
-	 * public static void main(String[] args) { GenerateEnrollmentNumber gg =
-	 * new GenerateEnrollmentNumber(); // gg.generateEnrollmentNumber("2011",
-	 * "1", "B.Ph.FY"); Integer count = gg.getCountOfYear("2013", "1",
-	 * "B.Ph.FY");
-	 * 
-	 * String initialString = "131"; String en =
-	 * gg.getEnrollNumForPharma(count); String finalEnroll =
-	 * initialString.concat(en); System.out.println("Enrollment number is ::: "
-	 * + finalEnroll);
-	 * 
-	 * }
-	 */
-	public Long sortSetOfEnrollmentNumberAndReturnMax(Set<AppBean> appBeans)
-	{
-		ArrayList<Long> tempArray=new ArrayList<Long>();
-		Iterator<AppBean> itr=appBeans.iterator();
-		while(itr.hasNext())
-		{
-		Long intEnrollmentNumber=Long.parseLong(itr.next().getEnrollmentNumber());	
-		tempArray.add(intEnrollmentNumber);	
+	
+	public Long sortSetOfEnrollmentNumberAndReturnMax(List<String> enrollMentNumber) {
+		ArrayList<Long> tempArray = new ArrayList<Long>();
+		Iterator<String> itr = enrollMentNumber.iterator();
+		while (itr.hasNext()) {
+			Long intEnrollmentNumber = Long.parseLong(itr.next());
+			tempArray.add(intEnrollmentNumber);
 		}
-		Long maxEnrollmentNumber=Collections.max(tempArray);
+		Long maxEnrollmentNumber = Collections.max(tempArray);
 		return maxEnrollmentNumber;
-		
+
 	}
 
-	public String getNewEnrollmentNumber(String userEnteredValue,Integer couseId) {
+	public String getNewEnrollmentNumber(String preEnrollmentNumber, Integer feeValueId) {
 		log.info("inside generate enrollment number");
-		String enrollmentNumber="";
+		String enrollmentNumber = "";
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(FvBean.class);
-		criteria.add(Restrictions.eq("feeValueId", couseId));
-		criteria.createAlias("appBeanParamSet", "app");
-		criteria.add(Restrictions.like("app.enrollmentNumber", userEnteredValue+"%"));
-		List<FvBean> fvBean=criteria.list();
-		log.info("List size is"+fvBean.size());
-		if(fvBean.size()<1){
-		log.info("list size is less than");	
-		return userEnteredValue+"001";	
+		String query = "select enrollmentNumber from fee_values_master inner join applicant_values on  fee_values_master.feeValueId=applicant_values.value_id  where feeValueId=:feeId and enrollmentNumber like:enrollmentNumber ";
+		SQLQuery sqlQuery = session.createSQLQuery(query);
+		sqlQuery.setParameter("feeId", feeValueId);
+		sqlQuery.setParameter("enrollmentNumber", preEnrollmentNumber + "%");
+		sqlQuery.setCacheable(false);
+		List<String> enrollmentNumberList = sqlQuery.list();
+		session.close();
+
+		if (enrollmentNumberList.size() < 1) {
+			log.info("list size is less than");
+			return preEnrollmentNumber + "001";
+		} else if (enrollmentNumberList.size() >= 1) {
+			log.info("list size is gretter than 1");
+			log.info("Number of enrollment Number" + enrollmentNumberList);
+			Long maxEnrollmentNumber = sortSetOfEnrollmentNumberAndReturnMax(enrollmentNumberList);
+			log.info("Max enrollmentNumber" + maxEnrollmentNumber);
+			Integer count = maxEnrollmentNumber.toString().length() == 10 ? Integer.parseInt(maxEnrollmentNumber
+					.toString().substring(7)) : Integer.parseInt(maxEnrollmentNumber.toString().substring(8));
+			log.info("value before increment" + count);
+			log.info("value after cutting"+count);
+			String nextValue = getEnrollNum(count);
+			log.info("new count" + nextValue);
+			return preEnrollmentNumber + nextValue;
 		}
-		else if(fvBean.size()>=1){
-		log.info("list size is gretter than 1");	
-		Set<AppBean> appBeans=fvBean.iterator().next().getAppBeanParamSet();	
-		Long maxEnrollmentNumber=sortSetOfEnrollmentNumberAndReturnMax(appBeans);
-		log.info("Max enrollmentNumber"+maxEnrollmentNumber);
-		Integer count=Integer.parseInt(maxEnrollmentNumber.toString().substring(8,maxEnrollmentNumber.toString().length()));	
-		String nextValue=getEnrollNum(count);
-		return userEnteredValue+nextValue;
-		}
-       
+
 		return null;
 
 	}
@@ -105,15 +99,6 @@ public class GenerateEnrollmentNumber {
 
 	}
 
-	public Integer getCourseId(String courseName) {
-		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(FvBean.class);
-		criteria.add(Restrictions.eq("value", courseName)).setProjection(Projections.id());
-		Integer courseId = (Integer) criteria.list().iterator().next();
-		session.close();
-		return courseId;
-	}
-
 	public String generateEnrollmentNum(String admissionYear, String course) {
 		log.info("inside generate enrollment Number method");
 		log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
@@ -126,13 +111,15 @@ public class GenerateEnrollmentNumber {
 				: affBean.getInstId().toString();
 		String universityId = affBean.getParBeanAff().getParInstId().toString().length() == 1 ? "0"
 				+ affBean.getParBeanAff().getParInstId().toString() : affBean.getParBeanAff().getParInstId().toString();
-		Integer courseId = getCourseId(course);
-		String twoDigitAdmissionYear=admissionYear.substring(2,4);
-		
+		Integer feevalueId = fvDAO.getCourseId(course);
+		String feeValueIdStr = feevalueId.toString().length() == 1 ? "0" + feevalueId.toString() : feevalueId
+				.toString();
+		String twoDigitAdmissionYear = admissionYear.substring(2, 4);
 
-	String enrollmentNumber= getNewEnrollmentNumber(universityId+collegeId+twoDigitAdmissionYear+courseId,courseId);
+		String enrollmentNumber = getNewEnrollmentNumber(universityId + collegeId + twoDigitAdmissionYear
+				+ feeValueIdStr, feevalueId);
 
-	 return enrollmentNumber;
+		return enrollmentNumber;
 	}
 
 }
