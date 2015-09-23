@@ -744,4 +744,19 @@ public class AppDAO {
 
 	}
 
+	public AppBean getQuickPayStudentOpDues(String enrollmentNumber) {
+		log.info("Enroll  ::" + enrollmentNumber);
+		Session session = factory.openSession();
+		try {
+
+			Criteria criteria = session.createCriteria(AppBean.class);
+			criteria.add(Restrictions.eq("enrollmentNumber", enrollmentNumber));
+			AppBean appBean = (AppBean) criteria.list().iterator().next();
+
+			return appBean;
+		} finally {
+			session.close();
+		}
+	}
+
 }

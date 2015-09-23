@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.dexpert.feecollection.challan.TransactionBean;
-
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
@@ -368,6 +366,42 @@ public class AppAction extends ActionSupport {
 			request.setAttribute("msg", "Session Time Out");
 			return ERROR;
 		}
+		return SUCCESS;
+	}
+	
+	public String quickPayStudentDuesDetail() {
+
+		/*HttpSession httpSession = request.getSession();*/
+		/*LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");*/
+		String enroll = new String();
+		try {
+			enroll = appBean1.getEnrollmentNumber();
+
+		} catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Enrollment is not exist");
+			return "failure";
+		}
+		try {
+			appBean1 = aplDAO.getUserDetail(enroll);
+		/*	app1 = aplDAO.getStudentOpDues(appBean1.getEnrollmentNumber(), loginBean.getOperatorBean().getAffBean()
+					.getInstId());
+		*/
+			app1 = aplDAO.getQuickPayStudentOpDues(appBean1.getEnrollmentNumber());
+			
+			// app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
+			totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
+			totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
+			paymentDone = aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
+
+			// log.info("total net dues is ::" + totalNetFees);
+
+		} catch (Exception e) {
+			request.setAttribute("msg", "Enrollment Number is Not Registered");
+
+			return "failure";
+		}
+
+		//
 		return SUCCESS;
 	}
 

@@ -149,6 +149,13 @@
 								<a href="StudentQuickPayMod">Click for Quick Pay </a>
 
 							</div> -->
+							
+							<div class="input-prepend">
+
+								<a href="quickPayStudentEnrollNumberSearch.jsp">Click for Quick Pay </a>
+
+							</div>
+							
 							<div class="input-prepend">
 
 								<a href="ForgetPassword.jsp">Click for Forgot Password</a>
