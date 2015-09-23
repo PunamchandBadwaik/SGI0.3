@@ -3,25 +3,15 @@ package com.dexpert.feecollection.main.users.applicant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
 import com.dexpert.feecollection.main.ConnectionClass;
-import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
@@ -46,7 +36,7 @@ public class GenerateEnrollmentNumber {
 	}
 
 	public String getNewEnrollmentNumber(String preEnrollmentNumber, Integer feeValueId) {
-		log.info("inside generate enrollment number");
+		//log.info("inside generate enrollment number");
 		String enrollmentNumber = "";
 		Session session = factory.openSession();
 		String query = "select enrollmentNumber from fee_values_master inner join applicant_values on  fee_values_master.feeValueId=applicant_values.value_id  where feeValueId=:feeId and enrollmentNumber like:enrollmentNumber ";
@@ -61,16 +51,16 @@ public class GenerateEnrollmentNumber {
 			log.info("list size is less than");
 			return preEnrollmentNumber + "001";
 		} else if (enrollmentNumberList.size() >= 1) {
-			log.info("list size is gretter than 1");
-			log.info("Number of enrollment Number" + enrollmentNumberList);
+			//log.info("list size is gretter than 1");
+		//	log.info("Number of enrollment Number" + enrollmentNumberList);
 			Long maxEnrollmentNumber = sortSetOfEnrollmentNumberAndReturnMax(enrollmentNumberList);
-			log.info("Max enrollmentNumber" + maxEnrollmentNumber);
+		//	log.info("Max enrollmentNumber" + maxEnrollmentNumber);
 			Integer count = maxEnrollmentNumber.toString().length() == 10 ? Integer.parseInt(maxEnrollmentNumber
 					.toString().substring(7)) : Integer.parseInt(maxEnrollmentNumber.toString().substring(8));
-			log.info("value before increment" + count);
+		//	log.info("value before increment" + count);
 			log.info("value after cutting"+count);
 			String nextValue = getEnrollNum(count);
-			log.info("new count" + nextValue);
+		//	log.info("new count" + nextValue);
 			return preEnrollmentNumber + nextValue;
 		}
 
@@ -100,12 +90,12 @@ public class GenerateEnrollmentNumber {
 	}
 
 	public String generateEnrollmentNum(String admissionYear, String course) {
-		log.info("inside generate enrollment Number method");
-		log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+		//log.info("inside generate enrollment Number method");
+		//log.info("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpSession httpSession = request.getSession();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		log.info("1");
+		//log.info("1");
 		AffBean affBean = lgBean.getAffBean();
 		String collegeId = affBean.getInstId().toString().length() == 1 ? "0" + affBean.getInstId().toString()
 				: affBean.getInstId().toString();

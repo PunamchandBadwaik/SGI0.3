@@ -22,7 +22,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellRange;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
@@ -194,7 +197,7 @@ public class AppDAO {
 
 	public void getDuesDetail(AppBean appBean) {
 		AffDAO affDao = new AffDAO();
-		//FvBean fvBean = new FvBean();
+		// FvBean fvBean = new FvBean();
 		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
 		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
@@ -351,14 +354,25 @@ public class AppDAO {
 		}
 	}
 
+	public AppBean AddListRecordToAppBean(ArrayList<String> list) {
+		AppBean appBean = new AppBean();
+		Iterator<String> iterator = list.iterator();
+		log.info("getting record one by one");
+		while (iterator.hasNext()) {
+			String string = (String) iterator.next();
+			log.info(string);
+
+		}
+
+		return null;
+
+	}
+
 	public ArrayList<AppBean> importExcelFileToDatabase1(String fileUploadFileName, File fileUpload, String path)
 			throws Exception {
 
-		String name = null, lstName = null, gender = null, cast = null, address = null, acaYear = null, course = null, branch = null, emailAddress = null;
+		// ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
 
-		Long enrollNo = null, mobileNumPri = null, MobileNumSec = null;
-
-		AppBean appBean = new AppBean();
 		// AffDAO affDAO = new AffDAO();
 		FileInputStream fileInputStream = new FileInputStream(fileUpload);
 
@@ -366,7 +380,78 @@ public class AppDAO {
 
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 
+		ArrayList<ArrayList<String>> StudentSet = new ArrayList<ArrayList<String>>();
+		try {
+
+			// for (int i = 0; i < xssfWorkbook.getNumberOfSheets(); i++) {
+			// hssfSheet = xssfWorkbook.getSheetAt(i);
+			Iterator<Row> rows = hssfSheet.rowIterator();
+			while (rows.hasNext()) {
+				XSSFRow row = (XSSFRow) rows.next();
+
+				if (row.getRowNum() == 0) {
+					continue;
+				}
+				int i = 1;
+				// log.info("Row Number ::" + row.getRowNum());
+				Iterator<Cell> cells = row.cellIterator();
+				ArrayList<String> al = new ArrayList<String>();
+				;
+				while (cells.hasNext()) {
+					XSSFCell cell = (XSSFCell) cells.next();
+
+					switch (cell.getCellType()) {
+
+					case Cell.CELL_TYPE_STRING:
+
+						break;
+
+					case Cell.CELL_TYPE_NUMERIC:
+						break;
+
+					}
+
+					// log.info(cell.toString());
+					// log.info("::: " + i + " >> " + cell);
+					al.add(cell.toString());
+
+					i++;
+
+				}
+				StudentSet.add(al);
+				log.info(al);
+
+			}
+			log.info("Size ::" + StudentSet.size());
+			// AddListRecordToAppBean(StudentSet);
+			// }
+			Iterator<ArrayList<String>> iterator = StudentSet.iterator();
+
+			while (iterator.hasNext()) {
+				ArrayList<java.lang.String> arrayList = (ArrayList<java.lang.String>) iterator.next();
+
+				AppBean appBean = new AppBean();
+
+				appBean.setEnrollmentNumber(arrayList.get(0));
+				appBean.setGrNumber(arrayList.get(1));
+				appBean.setAplFirstName(arrayList.get(2));
+				appBean.setAplLstName(arrayList.get(3));
+				appBean.setGender(arrayList.get(4));
+				appBean.setAplAddress(arrayList.get(5));
+				appBean.setAplMobilePri(arrayList.get(6));
+				appBean.setAplMobileSec(arrayList.get(7));
+				appBean.setAplEmail(arrayList.get(8));
+
+				log.info(" " + appBean);
+
+			}
+
+		} catch (Exception e) {
+
+		}
+
 		return null;
+
 	}
 
 	public ArrayList<AppBean> importExcelFileToDatabase(String fileUploadFileName, File fileUpload, String path)
@@ -394,6 +479,7 @@ public class AppDAO {
 			if (row.getRowNum() == 0) {
 				continue;
 			}
+
 			int noOfColumns = hssfSheet.getRow(row.getRowNum()).getPhysicalNumberOfCells();
 			log.info("::::::row number::::: " + row.getRowNum() + " Column numbers ::" + noOfColumns);
 
@@ -445,8 +531,6 @@ public class AppDAO {
 			r = row.getCell(8);
 			admssionYear = r.getStringCellValue();
 
-		
-
 			r = row.getCell(9);
 			course = r.getStringCellValue();
 
@@ -455,7 +539,7 @@ public class AppDAO {
 			try {
 				branch = r.getStringCellValue();
 			} catch (java.lang.NullPointerException e) {
-				
+
 			}
 
 			r = row.getCell(11);

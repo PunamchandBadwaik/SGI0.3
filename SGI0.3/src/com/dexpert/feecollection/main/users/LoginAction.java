@@ -42,7 +42,7 @@ public class LoginAction extends ActionSupport {
 	LoginBean loginBean = new LoginBean();
 	LoginDAO loginDAO = new LoginDAO();
 
-	private String firstName,newPwd;
+	private String firstName, newPwd;
 	private Integer userId;
 
 	public Integer getUserId() {
@@ -126,9 +126,8 @@ public class LoginAction extends ActionSupport {
 			return "editSu";
 		} else if (bean.getProfile().contentEquals("CollegeOperator")) {
 			log.info("College operator");
-			operatorBean=loginDAO.getOperatorDetail(bean.getOperatorBean().getOperatorId());
-			
-			
+			operatorBean = loginDAO.getOperatorDetail(bean.getOperatorBean().getOperatorId());
+
 			return "editOp";
 		} else if (bean.getProfile().contentEquals("Student")) {
 			log.info("Student");
@@ -323,15 +322,15 @@ public class LoginAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	
-	public String validateChangePwdDetails() throws InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException, NoSuchAlgorithmException, InvalidKeySpecException{
-		
-		
-		log.info("login details:"+loginBean.getUserName()+" "+loginBean.getPassword()+" "+newPwd);
+	public String validateChangePwdDetails() throws InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException,
+			NoSuchAlgorithmException, InvalidKeySpecException {
+
+		log.info("login details:" + loginBean.getUserName() + " " + loginBean.getPassword() + " " + newPwd);
 		log.info("user Name is ::" + loginBean.getUserName());
 		log.info("Password is ::" + loginBean.getPassword());
-		String encryptedPwd,decrypedText = null;
-		String userProfile="";
+		String encryptedPwd, decrypedText = null;
+		String userProfile = "";
 		LoginBean lgbean = new LoginBean();
 		log.info("");
 
@@ -341,7 +340,7 @@ public class LoginAction extends ActionSupport {
 		while (loginIterator.hasNext()) {
 			log.info("1");
 			lgbean = (LoginBean) loginIterator.next();
-			userProfile=lgbean.getProfile();
+			userProfile = lgbean.getProfile();
 			setUserId(lgbean.getLoginId());
 			encryptedPwd = lgbean.getPassword();
 			log.info("2");
@@ -351,94 +350,83 @@ public class LoginAction extends ActionSupport {
 			log.info("password frm Database is ::" + decrypedText);
 			log.info("4");
 		}
-		
-		if(loginBean.getPassword().equals(decrypedText) ){
-			
-			log.info("Password is matching:"+loginBean.getPassword());
-			
-			if(userProfile.contentEquals("Institute")){
-				
-				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+
+		if (loginBean.getPassword().equals(decrypedText)) {
+
+			log.info("Password is matching:" + loginBean.getPassword());
+
+			if (userProfile.contentEquals("Institute")) {
+
+				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
 				request.setAttribute("msg", "Your Password is Successfully changed..");
 				return SUCCESS;
-				
-				} else if (userProfile.contentEquals("Admin")) {
-				
-				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+
+			} else if (userProfile.contentEquals("Admin")) {
+
+				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
 				request.setAttribute("msg", "Your Password is Successfully changed..");
 				return SUCCESS;
-			
-			}else if (userProfile.contentEquals("Super Admin")) {
-				
-				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+
+			} else if (userProfile.contentEquals("Super Admin")) {
+
+				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
 				request.setAttribute("msg", "Your Password is Successfully changed..");
 				return SUCCESS;
-				
-			}else if (userProfile.contentEquals("CollegeOperator")) {
-				
-				LoginDAO.updateChangePwdDetails(lgbean,newPwd);
+
+			} else if (userProfile.contentEquals("CollegeOperator")) {
+
+				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
 				request.setAttribute("msg", "Your Password is Successfully changed..");
 				return SUCCESS;
-				
+
 			}
 		}
 		request.setAttribute("msg", "Please Enter Your old Password");
 		return "failure";
-		
+
 	}
-	
-    // updatePersonalInfoDetail for Super Admin
 
-public String updatePersonalInfoDetail(){
+	// updatePersonalInfoDetail for Super Admin
 
+	public String updatePersonalInfoDetail() {
 
-SaDAO.updatePersonalRecordOfSuperAdmin(saBean);
-	request.setAttribute("msg", "Super Admin Updated Successfully");
-	
+		SaDAO.updatePersonalRecordOfSuperAdmin(saBean);
+		request.setAttribute("msg", "Super Admin Updated Successfully");
 
-return SUCCESS;
-}
+		return SUCCESS;
+	}
 
-				//updatePersonalInfoAdminDetail for Admin
+	// updatePersonalInfoAdminDetail for Admin
 
-public String updatePersonalInfoAdminDetail(){
+	public String updatePersonalInfoAdminDetail() {
 
+		/*
+		 * ParDAO.updatePersonalRecordOfAdmin(parBean);
+		 * request.setAttribute("msg", "Admin Updated Successfully");
+		 */
 
-/*ParDAO.updatePersonalRecordOfAdmin(parBean);
-	request.setAttribute("msg", "Admin Updated Successfully");*/
-	
+		return SUCCESS;
+	}
+ 
+	// updatePersonalInfoInstituteDetail for Institute
 
-return SUCCESS;
-}
+	public String updatePersonalInfoInstituteDetail() {
 
-//  updatePersonalInfoInstituteDetail for Institute
+		AffDAO.updatePersonalRecordOfInstitute(affBean);
+		request.setAttribute("msg", "Admin Updated Successfully");
 
-public String updatePersonalInfoInstituteDetail(){
+		return SUCCESS;
+	}
 
+	/* updatePersonalInfoCollegeOperatorDetail for College Operator */
+	public String updatePersonalInfoCollegeOperatorDetail() {
 
-AffDAO.updatePersonalRecordOfInstitute(affBean);
-request.setAttribute("msg", "Admin Updated Successfully");
+		OperatorDao.updatePersonalRecordOfCollegeOperatorDetail(operatorBean);
+		request.setAttribute("msg", "Admin Updated Successfully");
 
+		return SUCCESS;
+	}
 
-return SUCCESS;
-}
-
-
-/*updatePersonalInfoCollegeOperatorDetail for College Operator*/
-public String updatePersonalInfoCollegeOperatorDetail(){
-
-
-OperatorDao.updatePersonalRecordOfCollegeOperatorDetail(operatorBean);
-request.setAttribute("msg", "Admin Updated Successfully");
-
-
-return SUCCESS;
-}
-
-
-
-	
-	
 	// End of Action Methods
 
 	// ---------------------------------------------------
@@ -476,6 +464,7 @@ return SUCCESS;
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
+
 	public String getNewPwd() {
 		return newPwd;
 	}
