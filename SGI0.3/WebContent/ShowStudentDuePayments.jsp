@@ -1,5 +1,6 @@
 <!DOCTYPE html >
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
+<%@page import="java.util.*"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
 <html lang="en">
@@ -77,7 +78,14 @@
 
 </head>
 
-<body onload="getFeeName()">
+<body onload="">
+<%
+
+HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
+
+
+%>
+var sequenceOfFees=new Array(8,9,4); 
 
 	<%
 		int i = 1;
@@ -107,7 +115,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-				<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -291,7 +300,9 @@
 												<%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
-
+											
+										
+                                                
 												<td><s:property value="total_fee_amount" /></td>
 												<td><s:set var="netDue">
 														<s:property value="netDue" />
@@ -391,19 +402,23 @@
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
 													Fees Amount</span></td>
-											<td><span style="font-size:x-large;font-weight:bold;color: purple;"> <s:property value="totalNetFees" /></span></td>
-											<td><span style="font-size:x-large;font-weight:bold;color: purple;"><s:property value="totalDueOFStudent" />
-											
-											<input type="hidden"
-													value='<s:property value="totalDueOFStudent" />'
-													id="totalNetDues">
+											<td><span
+												style="font-size: x-large; font-weight: bold; color: purple;">
+													<s:property value="totalNetFees" />
 											</span></td>
+											<td><span
+												style="font-size: x-large; font-weight: bold; color: purple;"><s:property
+														value="totalDueOFStudent" /> <input type="hidden"
+													value='<s:property value="totalDueOFStudent" />'
+													id="totalNetDues"> </span></td>
 
-											<td><span style="font-size:x-large;font-weight:bold;color: purple;"><s:property value="paymentDone" /></span></td>
+											<td><span
+												style="font-size: x-large; font-weight: bold; color: purple;"><s:property
+														value="paymentDone" /></span></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Fees
 													To be Paid</span></td>
-											<td><input type="text" style="color: " id="totalPaidAmount"
-												readonly="readonly"></td>
+											<td><input type="text" style="color:"
+												id="totalPaidAmount" readonly="readonly"></td>
 
 										</tr>
 
@@ -413,17 +428,19 @@
 													value="Proceed to Payment" onclick="return validateFees()"></span>
 
 												<script type="text/javascript">
-														function validateFees() {
-															var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
+														
+												       function validateFees() {
+															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 															//alert("tuitionFeePending is"+tuitionFeePending);
-															
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
 															// alert("tuitionFeeBeingPaid now is"+tuitionFeeBeingPaid); 
 															var totalBeingPaid =parseFloat(document.getElementById("totalPaidAmount").value);
 															//alert("totalBeingPaid is"+totalBeingPaid);
-															
 															var totalNetDue=parseFloat(document.getElementById("totalNetDues").value);
-															if(totalNetDue<0){
+															
+															
+															
+															/* if(totalNetDue<0){
 																alert("Dues Must not be Less than 0");
 																return false;																
 																
@@ -451,8 +468,62 @@
 																
 																alert("Tuition Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
 																return false;
-															}
+															} */ 
+															/* var stopPayment=false; 
+															var sequenceOfFees=new Array(8,9,4); 
+															for(i=0;i<sequenceOfFees.length;i++){
+														    var feesBeingPaid=  parseFloat(document.getElementById("FeePaid["+sequenceOfFees[i]+"]").value);
+												            var payableAmount=parseFloat(document.getElementById("payableamount["+sequenceOfFees[i]+"]").value);
+			                                                if(feesBeingPaid =='' || isNaN(feesBeingPaid) || feesBeingPaid<payableAmount){
+			                                                for(j=i+1;j<sequenceOfFees.length;j++){
+			                                                feePrority=sequenceOfFees[j];
+			                                                var lessProrityFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+feePrority+"]").value);	
+			                                                alert("Less prority fee is being paid"+lessProrityFeeBeingPaid);
+			                                                if(lessProrityFeeBeingPaid>0){
+			                                                stopPayment=true;	
+			                                                break;	
+			                                                }	
+			                                                }	
+			                                                	
+			                                                	
+			                                                }
 															
+															
+																
+															}
+															 */
+															
+															 var stopPayment=false; 
+																var sequenceOfFees=new Array(8,9,4); 
+																 var t;
+																 for(i=1;i<=sequenceOfFees.length;i++){
+																	 alert("inside loop");
+																	 alert(" size of length"+sequenceOfFees.length);
+																	 // get the serial number from the fee id in the priority sequence
+																	if (sequenceOfFees[i]==8) t=4;
+																	if (sequenceOfFees[i]==9) t=5;
+																	if (sequenceOfFees[i]==4) t=3;
+																	 // check if feeid in the loop is due, either in full or in part
+																	 if(parseFloat(document.getElementById("payableamount["+t+"]").value)>0){
+																		  // check if any other fee lower in sequence is also beig paid, while the higher sequence fee is not being paid in full
+																		 if(parseFloat(document.getElementById("FeePaid["+t+"]").value)<parseFloat(document.getElementById("payableamount["+t+"]").value)  && parseFloat(document.getElementById("FeePaid["+t+"]").value)<parseFloat(document.getElementById("totalPaidAmount").value)){
+																			 stopPayment=true;
+
+																			 
+																		 }
+																		 
+																	 }
+																	 
+																	 
+																 }
+																 
+											 					 if(stopPayment==true){
+																	 
+																		alert("Compulsory Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
+																		return false;
+																 }
+																 
+													
 															else{
 																
 																var t=1;
