@@ -228,7 +228,28 @@
 								}
 							%>
 
-
+							<%
+								if (profile.contentEquals("Parent")) {
+							%>
+							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
+									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
+							
+							<%-- <li><a class="ajax-link" href="UniversityDetailRecord"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+ --%>
+                             <li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
+									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
+                             
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							
+							
+							
+							
+							
+							<%
+								}
+							%>
 
 
 
@@ -325,7 +346,10 @@
 															<s:property value="studentEnrollmentNumber" />
 														</s:set> <s:if test='%{#val=="NA"}'>
 
-															<a href="#" onclick="window.open('showBulkTrans?transId=<s:property value="txnId" />','Bulk Transaction','width=700,height=500')" title="View Detail"> <span style="margin-left: 10px;"><s:property
+															<a href="#"
+																onclick="window.open('showBulkTrans?transId=<s:property value="txnId" />','Bulk Transaction','width=700,height=500')"
+																title="View Detail"> <span
+																style="margin-left: 10px;"><s:property
 																		value="studentEnrollmentNumber" /></span>
 
 															</a>
@@ -336,7 +360,8 @@
 																	value="studentEnrollmentNumber" /></span>
 
 														</s:else></td>
-													<td><span style="margin-left: 10px;"><s:property value="txnId" /></span></td>
+													<td><span style="margin-left: 10px;"><s:property
+																value="txnId" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property
 																value="paymentMode" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property

@@ -565,6 +565,7 @@ public class AffDAO {
 	public List<TransactionBean> getAllTransactionDetail(Integer insId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(TransactionBean.class);
+		criteria.add(Restrictions.eq("status", "Paid"));
 		List<TransactionBean> transactionDetails = criteria.add(Restrictions.eq("insId", insId)).list();
 		session.close();
 		return transactionDetails;
@@ -572,7 +573,8 @@ public class AffDAO {
 
 	public List<TransactionBean> getAllTransactionDetail() {
 		Session session = factory.openSession();
-		List<TransactionBean> transactionDetails = session.createCriteria(TransactionBean.class).list();
+		List<TransactionBean> transactionDetails = session.createCriteria(TransactionBean.class)
+				.add(Restrictions.eq("status", "Paid")).list();
 		session.close();
 		return transactionDetails;
 	}
@@ -599,6 +601,7 @@ public class AffDAO {
 	public List<TransactionBean> getTransactionOfColleges(List<Integer> ides) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(TransactionBean.class);
+		criteria.add(Restrictions.eq("status", "Paid"));
 		List<TransactionBean> collegesTransactionList = criteria.add(Restrictions.in("insId", ides)).list();
 		session.close();
 		return collegesTransactionList;
@@ -617,7 +620,8 @@ public class AffDAO {
 	public Integer getCollegeId(String collegeName, Integer universityId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AffBean.class);
-		criteria.add(Restrictions.eq("parBeanAff.parInstId", universityId)).add(Restrictions.eq("instName",collegeName));
+		criteria.add(Restrictions.eq("parBeanAff.parInstId", universityId)).add(
+				Restrictions.eq("instName", collegeName));
 		AffBean affBean = (AffBean) criteria.list().iterator().next();
 		Integer id = affBean.getInstId();
 		log.info("College id in dao class" + id);
@@ -737,12 +741,11 @@ public class AffDAO {
 		return appBeans;
 
 	}
-	public AffBean getStudentList(Integer collegeId)
-	{
+
+	public AffBean getStudentList(Integer collegeId) {
 		Session session = factory.openSession();
 		try {
 
-			
 			Criteria criteria = session.createCriteria(AffBean.class);
 
 			criteria.add(Restrictions.eq("instId", collegeId));

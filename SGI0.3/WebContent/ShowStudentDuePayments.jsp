@@ -79,13 +79,13 @@
 </head>
 
 <body onload="">
-<%
+	<%
 
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 
 %>
-var sequenceOfFees=new Array(8,9,4); 
+	var sequenceOfFees=new Array(8,9,4);
 
 	<%
 		int i = 1;
@@ -300,9 +300,9 @@ var sequenceOfFees=new Array(8,9,4);
 												<%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
-											
-										
-                                                
+
+
+
 												<td><s:property value="total_fee_amount" /></td>
 												<td><s:set var="netDue">
 														<s:property value="netDue" />
@@ -430,13 +430,73 @@ var sequenceOfFees=new Array(8,9,4);
 												<script type="text/javascript">
 														
 												       function validateFees() {
+															 
+															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
+															 
+															 
+															 
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
 															// alert("tuitionFeeBeingPaid now is"+tuitionFeeBeingPaid); 
 															var totalBeingPaid =parseFloat(document.getElementById("totalPaidAmount").value);
 															//alert("totalBeingPaid is"+totalBeingPaid);
 															var totalNetDue=parseFloat(document.getElementById("totalNetDues").value);
+															
+															var stopPayment=false;
+															if(totalNetDue<0){
+																alert("Dues Must not be Less than 0");
+																return false;																
+																
+															}
+															
+															
+															if(totalBeingPaid==0){
+																alert("Please select a Fee and amount to pay");
+																return false;																
+																
+															}
+															
+															if(isNaN(tuitionFeeBeingPaid)){
+																
+																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
+																	alert("Please select a Fee and amount to pay");
+																	return false;
+																}
+																else{
+																	
+																    tuitionFeeBeingPaid=0;
+																}
+															}
+															
+															
+															
+															
+															for(i=1;i<<%=i%>;i++){
+													        
+															var FeeBeingPaid = parseFloat(document.getElementById("FeePaid["+i+"]").value);	
+													        
+														    var payableAmount=parseFloat(document.getElementById("payableamount["+i+"]").value);
+															
+														    if(FeeBeingPaid<payableAmount&& totalBeingPaid>FeeBeingPaid){
+															 stopPayment=true;	 
+															 }
+                                                            if(isNaN(tuitionFeeBeingPaid)){
+																
+																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
+																	alert("Please select a Fee and amount to pay");
+																	return false;
+																}
+																else{
+																	
+																    tuitionFeeBeingPaid=0;
+																}
+															}
+																
+																
+															}
+														
+															
 															
 															
 															
@@ -468,62 +528,16 @@ var sequenceOfFees=new Array(8,9,4);
 																
 																alert("Tuition Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
 																return false;
-															} */ 
-															/* var stopPayment=false; 
-															var sequenceOfFees=new Array(8,9,4); 
-															for(i=0;i<sequenceOfFees.length;i++){
-														    var feesBeingPaid=  parseFloat(document.getElementById("FeePaid["+sequenceOfFees[i]+"]").value);
-												            var payableAmount=parseFloat(document.getElementById("payableamount["+sequenceOfFees[i]+"]").value);
-			                                                if(feesBeingPaid =='' || isNaN(feesBeingPaid) || feesBeingPaid<payableAmount){
-			                                                for(j=i+1;j<sequenceOfFees.length;j++){
-			                                                feePrority=sequenceOfFees[j];
-			                                                var lessProrityFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+feePrority+"]").value);	
-			                                                alert("Less prority fee is being paid"+lessProrityFeeBeingPaid);
-			                                                if(lessProrityFeeBeingPaid>0){
-			                                                stopPayment=true;	
-			                                                break;	
-			                                                }	
-			                                                }	
-			                                                	
-			                                                	
-			                                                }
-															
-															
-																
-															}
-															 */
-															
-															 var stopPayment=false; 
-																var sequenceOfFees=new Array(8,9,4); 
-																 var t;
-																 for(i=1;i<=sequenceOfFees.length;i++){
-																	 alert("inside loop");
-																	 alert(" size of length"+sequenceOfFees.length);
-																	 // get the serial number from the fee id in the priority sequence
-																	if (sequenceOfFees[i]==8) t=4;
-																	if (sequenceOfFees[i]==9) t=5;
-																	if (sequenceOfFees[i]==4) t=3;
-																	 // check if feeid in the loop is due, either in full or in part
-																	 if(parseFloat(document.getElementById("payableamount["+t+"]").value)>0){
-																		  // check if any other fee lower in sequence is also beig paid, while the higher sequence fee is not being paid in full
-																		 if(parseFloat(document.getElementById("FeePaid["+t+"]").value)<parseFloat(document.getElementById("payableamount["+t+"]").value)  && parseFloat(document.getElementById("FeePaid["+t+"]").value)<parseFloat(document.getElementById("totalPaidAmount").value)){
-																			 stopPayment=true;
-
-																			 
-																		 }
-																		 
-																	 }
-																	 
-																	 
-																 }
-																 
-											 					 if(stopPayment==true){
+															}   
+																	 */			 
+													
+															 	if(stopPayment==true){
 																	 
 																		alert("Compulsory Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
 																		return false;
 																 }
-																 
-													
+																  
+													       
 															else{
 																
 																var t=1;

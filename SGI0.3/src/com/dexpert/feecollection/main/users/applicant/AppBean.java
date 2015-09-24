@@ -73,7 +73,7 @@ public class AppBean implements Serializable {
 	Set<FvBean> applicantParamValues;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
-	@OrderBy(value = "dueId")
+	@OrderBy(value = "dueId DESC")
 	private Set<PaymentDuesBean> paymentDues;
 
 	public Set<PaymentDuesBean> getPaymentDues() {

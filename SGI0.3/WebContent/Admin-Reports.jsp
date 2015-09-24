@@ -354,6 +354,11 @@ try{
 											Due Report</button>
 									</p>
 									<p class="btn-group">
+										<button class="btn btn-default" title="Get Transaction Report"
+											onclick="window.location='TranactionReport'">Transaction
+											Report</button>
+									</p>
+									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
 											onclick="window.location='getValForStudentReport?forStudentReport=true'">
 											Student Report</button>
