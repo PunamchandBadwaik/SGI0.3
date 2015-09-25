@@ -85,7 +85,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 
 %>
-	var sequenceOfFees=new Array(8,9,4);
+	
 
 	<%
 		int i = 1;
@@ -267,6 +267,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td>Student Name</td>
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
+											<td><input type="hidden"
+												value='<s:property value="app1.isHostler" />' id="isHoster" /></td>
 										</tr>
 
 									</table>
@@ -433,8 +435,9 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															 
 															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
-															 
-															 
+														
+															 var minimumAmountMustPaid=document.getElementById("isHoster").value=="Yes"?29000:10000;
+															
 															 
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
@@ -443,20 +446,25 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															//alert("totalBeingPaid is"+totalBeingPaid);
 															var totalNetDue=parseFloat(document.getElementById("totalNetDues").value);
 															
-															var stopPayment=false;
+															var sequenceValidationCheckResult=true;
 															if(totalNetDue<0){
 																alert("Dues Must not be Less than 0");
 																return false;																
 																
 															}
 															
+															/* if(totalBeingPaid<29000){
+																alert("Please select a higher Fee and amount to pay");
+																return false;																
+																
+															} */															
 															
 															if(totalBeingPaid==0){
 																alert("Please select a Fee and amount to pay");
 																return false;																
 																
 															}
-															
+															/*
 															if(isNaN(tuitionFeeBeingPaid)){
 																
 																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
@@ -468,76 +476,63 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																    tuitionFeeBeingPaid=0;
 																}
 															}
-															
-															
-															
-															
-															for(i=1;i<<%=i%>;i++){
-													        
-															var FeeBeingPaid = parseFloat(document.getElementById("FeePaid["+i+"]").value);	
-													        
-														    var payableAmount=parseFloat(document.getElementById("payableamount["+i+"]").value);
-															
-														    if(FeeBeingPaid<payableAmount&& totalBeingPaid>FeeBeingPaid){
-															 stopPayment=true;	 
-															 }
-                                                            if(isNaN(tuitionFeeBeingPaid)){
+															*/
+															if(totalBeingPaid<minimumAmountMustPaid){
+															alert("Please pay at least "+minimumAmountMustPaid);
+															return false;
+															}
+															var j=0;
+															var t=0;
+															for(j=1;j<<%=i%>;j++){
+																// if the fee in loop is not being paid in full
 																
-																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
-																	alert("Please select a Fee and amount to pay");
-																	return false;
-																}
-																else{
+																var loopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+j+"]").value);
+																 if(isNaN(loopFeeBeingPaid)){
+																	 loopFeeBeingPaid=0;
+																 }
+																 var loopFeePending=parseFloat(document.getElementById("payableamount["+j+"]").value);
+																 if(isNaN(loopFeePending)){
+																	 loopFeePending=0;
+																 }																 
+																if(loopFeeBeingPaid<loopFeePending){
 																	
-																    tuitionFeeBeingPaid=0;
-																}
-															}
-																
-																
-															}
-														
-															
-															
-															
-															
-															/* if(totalNetDue<0){
-																alert("Dues Must not be Less than 0");
-																return false;																
-																
-															}
-															
-															
-															if(totalBeingPaid==0){
-																alert("Please select a Fee and amount to pay");
-																return false;																
-																
-															}
-															
-															if(isNaN(tuitionFeeBeingPaid)){
-																
-																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
-																	alert("Please select a Fee and amount to pay");
-																	return false;
-																}
-																else{
+																   	for (t=j+1;t<<%=i%>;t++){
+																		 var innerLoopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+t+"]").value);
+																		 if(isNaN(innerLoopFeeBeingPaid)){
+																			 innerLoopFeeBeingPaid=0;
+																		 }
+																   		if(innerLoopFeeBeingPaid>0){
+																   			sequenceValidationCheckResult=false;
+																			break;
+																   		}
+																   		else{
+																   			
+																   			sequenceValidationCheckResult=true;
+																   		}
+																   		
+																   	}
 																	
-																    tuitionFeeBeingPaid=0;
 																}
+																
+														   		if(sequenceValidationCheckResult==false){
+														   			break;
+														   		}
+																
 															}
+														/*
 															if(tuitionFeeBeingPaid<tuitionFeePending && tuitionFeeBeingPaid<totalBeingPaid){
 																
 																alert("Tuition Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
 																return false;
 															}   
-																	 */			 
-													
-															 	if(stopPayment==true){
-																	 
-																		alert("Compulsory Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
-																		return false;
-																 }
+															*/		 		 
+																										 
 																  
-													       
+													        if(sequenceValidationCheckResult==false){
+													        	
+													   			alert("Please clear Fees in top down order first");
+													   			return false;
+													        }
 															else{
 																
 																var t=1;

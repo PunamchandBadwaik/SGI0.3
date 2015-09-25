@@ -405,7 +405,17 @@ public class AppAction extends ActionSupport {
 		//
 		return SUCCESS;
 	}
-
+    // student due view for college 
+	public String viewStudentDues(){
+    String enrollmentNumber=request.getParameter("applicantId").trim();	 
+    app1 = aplDAO.getStudentDues(enrollmentNumber);
+	feeList = aplDAO.getAllFeeDeatils();
+	totalDueOFStudent = aplDAO.totalDueFeeOfStudent(enrollmentNumber);
+	totalNetFees = aplDAO.totalfeesOfStudent(enrollmentNumber);
+	paymentDone = aplDAO.totalPaymentDone(enrollmentNumber);	 
+    return SUCCESS;	 
+    	 
+     }
 	public String showBulkTransDetail() {
 
 		String transactionId = request.getParameter("transId");

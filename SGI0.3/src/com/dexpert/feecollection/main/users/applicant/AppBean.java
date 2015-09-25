@@ -37,7 +37,7 @@ public class AppBean implements Serializable {
 	@Id
 	private String enrollmentNumber;
 	private String aplFirstName, aplLstName, aplEmail, aplAddress, aplMobilePri, aplMobileSec, gender, category,
-			course, year, yearCode, grNumber;
+			course, year, yearCode, grNumber,isHostler;
 
 	public String getCategory() {
 		return category;
@@ -202,6 +202,14 @@ public class AppBean implements Serializable {
 
 	public void setGrNumber(String grNumber) {
 		this.grNumber = grNumber;
+	}
+
+	public String getIsHostler() {
+		return isHostler;
+	}
+
+	public void setIsHostler(String isHostler) {
+		this.isHostler = isHostler;
 	}
 
 }
