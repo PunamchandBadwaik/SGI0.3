@@ -105,12 +105,12 @@
 						class="hidden-sm hidden-xs"> <%-- <%=loginUser.getUserName()%> --%></span> <span
 						class="caret"></span>
 				</button>
-				<ul class="dropdown-menu">
+				<!-- <ul class="dropdown-menu">
 					<li><a id="saveProfileTagId" onclick=""
 						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
-				</ul>
+				</ul> -->
 			</div>
 			<!-- user dropdown ends -->
 
@@ -144,7 +144,7 @@
 			</div>
 			<!-- theme selector ends -->
 			<!----Cart Button Starts--->
-			<div class="btn-group pull-right">
+			<%-- <div class="btn-group pull-right">
 				<button class="btn btn-default dropdown-toggle"
 					data-toggle="dropdown">
 					<i class=" glyphicon glyphicon-shopping-cart"></i><span
@@ -154,7 +154,7 @@
 					
 					<li><a href="#" onclick="openCart()">View Cart</a></li>
 				</ul>
-			</div>
+			</div> --%>
 			<!-- cart button ends -->
 		</div>
 	</div>
@@ -530,6 +530,19 @@
 														}
 														
 													</script></td>
+													
+													<td>
+
+										<button type="button" class="btn btn-default"
+											onclick="gotoLogin()">Goto Login Page</button> <script
+											type="text/javascript">
+												function gotoLogin() {
+
+													window.location = "Login.jsp";
+
+												}
+											</script>
+									</td>
 										</tr>
 									</table>
 

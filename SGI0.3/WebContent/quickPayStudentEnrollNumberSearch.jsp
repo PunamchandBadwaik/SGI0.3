@@ -100,11 +100,11 @@
 						class="hidden-sm hidden-xs"> <%-- <%=loginUser.getUserName()%> --%></span> <span
 						class="caret"></span>
 				</button>
-				<ul class="dropdown-menu">
-				<!-- <li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
-					<li class="divider"></li> -->
+				<!-- <ul class="dropdown-menu">
+				<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
-				</ul>
+				</ul> -->
 			</div>
 			<!-- user dropdown ends -->
 
@@ -313,10 +313,13 @@
 												<td>
 													<button type="submit" class="btn btn-success">Student
 														Fee Details</button>
-
+														
 												</td>
 
-
+												<td>
+												
+												<button type="button" class="btn btn-default"
+											onclick="gotoLogin()">Goto Login Page</button> </td>
 
 
 
@@ -441,7 +444,17 @@
 	<script src="js/jquery.history.js"></script>
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
+	
 
+
+										 <script type="text/javascript">
+												function gotoLogin() {
+
+													window.location = "Login.jsp";
+
+												}
+											</script>
+							
 
 </body>
 </html>
