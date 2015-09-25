@@ -381,7 +381,7 @@ public class LoginAction extends ActionSupport {
 
 			}
 		}
-		request.setAttribute("msg", "Please Enter Your old Password");
+		request.setAttribute("msg", "Please Enter The Valid Password");
 		return "failure";
 
 	}

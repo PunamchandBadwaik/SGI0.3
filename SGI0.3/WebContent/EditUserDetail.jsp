@@ -290,7 +290,24 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
+								<% 
+								
+								String emsg=(String)request.getAttribute("msg");
+								
+								if(emsg!="" && emsg!=null){ %>	
+								
+								<div class="alert alert-info"
+						style="font-weight: bold; font-size: medium; color: red;">
+
+						<%=emsg%>
+					</div>
+									
+								<%}else { %>
+								
 									<i class="glyphicon glyphicon-list-alt"></i> User Details
+									
+									
+									<%} %>
 								</h2>
 
 								<div class="box-icon">

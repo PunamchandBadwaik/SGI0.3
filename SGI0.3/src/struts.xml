@@ -179,7 +179,7 @@
 			method="validateChangePwdDetails">
 
 			<result name="success">EditUserDetail.jsp</result>
-			<result name="failure">UserNewPassDetail.jsp</result>
+			<result name="failure">EditUserDetail.jsp</result>
 
 		</action>
 
