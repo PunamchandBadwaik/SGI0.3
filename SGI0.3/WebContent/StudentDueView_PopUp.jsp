@@ -125,7 +125,7 @@
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
-											<td>Student Enrollment Number</td>
+											<td>Student UIN</td>
 											<td><s:property value="app1.enrollmentNumber" /></td>
 										</tr>
 										<tr>

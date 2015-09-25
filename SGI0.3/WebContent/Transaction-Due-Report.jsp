@@ -320,7 +320,7 @@
 										<thead>
 											<tr>
 												<th width="7%">Sr. No.</th>
-												<th>Student Enroll Number</th>
+												<th>Student UIN</th>
 												<th>Transaction ID</th>
 												<th>Mode Of Tranaction</th>
 												<th>Payee Name</th>

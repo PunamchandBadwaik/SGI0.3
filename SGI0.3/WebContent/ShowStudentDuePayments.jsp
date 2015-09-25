@@ -259,7 +259,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
-											<td>Student Enrollment Number</td>
+											<td>Student UIN </td>
 											<td><s:property value="app1.enrollmentNumber" /></td>
 										</tr>
 										<tr>
@@ -268,7 +268,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
 											<td><input type="hidden"
-												value='<s:property value="app1.isHostler" />' id="isHosteler" /></td>
+												value='<s:property value="app1.isHosteler" />' id="isHosteler" /></td>
 										</tr>
 
 									</table>
@@ -438,7 +438,6 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 														
 															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
 															
-															 
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
 															// alert("tuitionFeeBeingPaid now is"+tuitionFeeBeingPaid); 

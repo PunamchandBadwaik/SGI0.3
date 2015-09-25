@@ -235,7 +235,7 @@
 
 								<h2>
 									<i class="glyphicon glyphicon-info-sign"></i> Student
-									Enrollment Detail
+									UIN Number Detail
 								</h2>
 
 								<div class="box-icon">
@@ -294,7 +294,7 @@
 										<table class="table table-condensed">
 											<tr>
 											<tr>
-												<td style="font-weight: bold;">Enrollment Number</td>
+												<td style="font-weight: bold;">UIN Number</td>
 
 
 
@@ -302,7 +302,7 @@
 													hidden="hidden"> <input style="width: 400px;"
 													type="text" name="appBean1.enrollmentNumber"
 													class="form-control" required="required" id="enrollId"
-													placeholder="Enter Alphanumeric Enrollment Number"
+													placeholder="Enter UIN Number"
 													value='<s:property value="appBean1.enrollmentNumber" />'>
 
 
