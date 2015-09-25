@@ -24,6 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.lookup.LookupBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
@@ -97,6 +98,8 @@ public class AffBean implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<PaymentDuesBean> dueFeesSet;
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="affBean")
+	private Set<LookupBean> lookupBeans;
 
 	public Set<AppBean> getAplBeanSet() {
 		return aplBeanSet;

@@ -8,12 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
+import com.dexpert.feecollection.main.users.affiliated.AffBean;
 
 @Entity
 @Table(name = "fee_lookup_master")
@@ -29,6 +31,19 @@ public class LookupBean implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = FvBean.class)
 	@JoinColumn(name = "FeeLookupId_Fk", referencedColumnName = "lookupId")
 	private List<FvBean> fvBeansList;
+   
+	//
+	@ManyToOne(targetEntity=AffBean.class)
+	@JoinColumn(name="instId_Fk",referencedColumnName="instId")
+    private AffBean affBean;
+	
+	public AffBean getAffBean() {
+		return affBean;
+	}
+
+	public void setAffBean(AffBean affBean) {
+		this.affBean = affBean;
+	}
 
 	public List<FvBean> getFvBeansList() {
 		return fvBeansList;

@@ -436,7 +436,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 														
-															 var minimumAmountMustPaid=document.getElementById("isHoster").value=="Yes"?29000:10000;
+															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
 															
 															 
 															//alert("tuitionFeePending is"+tuitionFeePending);
