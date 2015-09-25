@@ -268,7 +268,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
 											<td><input type="hidden"
-												value='<s:property value="app1.isHostler" />' id="isHoster" /></td>
+												value='<s:property value="app1.isHostler" />' id="isHosteler" /></td>
 										</tr>
 
 									</table>

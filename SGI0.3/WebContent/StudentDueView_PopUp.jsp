@@ -85,68 +85,12 @@
 	%>
 
 	<!-- topbar starts -->
-	<div class="navbar navbar-default" role="navigation">
-
-		<div class="navbar-inner">
-			<button type="button" class="navbar-toggle pull-left animated flip">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-
-			<a href="http://www.feedesk.in/" target="blank"> <img
-				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
-				style="width: 150px; height: 53px; margin-left: 20px;" />
-			</a>
-
-
-			<!-- theme selector starts -->
-			<div class="btn-group pull-right theme-container">
-				<button class="btn btn-default dropdown-toggle"
-					data-toggle="dropdown">
-					<i class="glyphicon glyphicon-tint"></i><span
-						class="hidden-sm hidden-xs"> </span> <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" id="themes">
-					<li><a data-value="classic" href="#"><i class="whitespace"></i>
-							Classic</a></li>
-					<li><a data-value="cerulean" href="#"><i
-							class="whitespace"></i> Cerulean</a></li>
-					<li><a data-value="cyborg" href="#"><i class="whitespace"></i>
-							Cyborg</a></li>
-					<li><a data-value="simplex" href="#"><i class="whitespace"></i>
-							Simplex</a></li>
-					<li><a data-value="darkly" href="#"><i class="whitespace"></i>
-							Darkly</a></li>
-					<li><a data-value="lumen" href="#"><i class="whitespace"></i>
-							Lumen</a></li>
-					<li><a data-value="slate" href="#"><i class="whitespace"></i>
-							Slate</a></li>
-					<li><a data-value="spacelab" href="#"><i
-							class="whitespace"></i> Spacelab</a></li>
-					<li><a data-value="united" href="#"><i class="whitespace"></i>
-							United</a></li>
-				</ul>
-			</div>
-			<!-- theme selector ends -->
-
-		</div>
-	</div>
+	
 	<!-- topbar ends -->
 	<div class="ch-container">
 		<div class="row">
 
 
-			<noscript>
-				<div class="alert alert-block col-md-12">
-					<h4 class="alert-heading">Warning!</h4>
-
-					<p>
-						You need to have <a href="http://en.wikipedia.org/wiki/JavaScript"
-							target="_blank">JavaScript</a> enabled to use this site.
-					</p>
-				</div>
-			</noscript>
 
 			<div id="content" class="col-lg-10 col-sm-10">
 				<!-- content starts -->
@@ -203,7 +147,7 @@
 											<th>Net Due</th>
 											<th>Payment to Date</th>
 											<th></th>
-											<th>Payable Amount</th>
+											
 										</tr>
 
 
@@ -221,10 +165,7 @@
 												<%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
-
-
-
-												<td><s:property value="total_fee_amount" /></td>
+				                               <td><s:property value="total_fee_amount" /></td>
 												<td><s:set var="netDue">
 														<s:property value="netDue" />
 													</s:set> <s:if test='%{netDue=="0"}'>
@@ -262,11 +203,8 @@
 											<td><span
 												style="font-size: x-large; font-weight: bold; color: purple;"><s:property
 														value="paymentDone" /></span></td>
-											<td><span style="font-size: 20px; font-weight: bold;">Fees
-													To be Paid</span></td>
-											<td><input type="text" style="color:"
-												id="totalPaidAmount" readonly="readonly"></td>
-
+											
+											
 										</tr>
 
 									</table>

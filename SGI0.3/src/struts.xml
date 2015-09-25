@@ -645,16 +645,13 @@
 		<action name="ViewApplicantDue"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="viewStudentDues">
-
-			<result name="success">StudentDetail.jsp</result>
+	     <result name="success">StudentDueView_PopUp.jsp</result>
 			<result name="error">Login.jsp</result>
 		</action>
-
-		<action name="ViewApplicantDetail"
+       <action name="ViewApplicantDetail"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="viewApplicant">
-
-			<result name="success">View-Applicant.jsp</result>
+       <result name="success">View-Applicant.jsp</result>
 		</action>
 
 		<!-- <action name="StudentQuickPay" class="com.dexpert.feecollection.main.users.applicant.AppAction" 
