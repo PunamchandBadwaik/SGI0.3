@@ -281,12 +281,21 @@
 									<div class="row">
 										<div class="col-md-12">
 
+								<%
+															if (profile.contentEquals("Affiliated")) {
 
-											<button class="btn btn-sm btn-info pull-right"
+																System.out.print("Profile is ::" + profile);
+														%> <%-- <input type="hidden" name="aplInstId"
+														value="<%=loginUser.getAffBean().getInstId()%>"> --%>
+														<button class="btn btn-sm btn-info pull-right"
 												style="margin-right: 3%; float: right;"
 												onclick='window.open("getCollegeListForOperator", "CollegeForm", "width=500,height=700")'>
 												<i class="fa fa-plus"></i> Add Operator
-											</button>
+											</button> <%
+ 	}
+ %>
+								
+											
 										</div>
 									</div>
 

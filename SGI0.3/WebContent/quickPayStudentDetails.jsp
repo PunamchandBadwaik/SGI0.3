@@ -270,7 +270,7 @@
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
-											<td>Student Enrollment Number</td>
+											<td>Student UIN Number</td>
 											<td><s:property value="app1.enrollmentNumber" /> <input
 												type="hidden" id="enrollId"
 												value='<s:property value="app1.enrollmentNumber" />'>
@@ -448,9 +448,9 @@
 										</tr>
 
 										<tr>
-										<td > <input
+										<td > <!-- <input
 													type="button" class="btn btn-info" id="btnPayment"
-													value="Add To Cart" onclick="return validateFees(1)"></td>
+													value="Add To Cart" onclick="return validateFees(1)"> --></td>
 											<td colspan="8"><span style="float: right;"> <input
 													type="button" class="btn btn-danger" id="btnPayment"
 													value="Proceed to Payment" onclick="return validateFees(0)"></span>

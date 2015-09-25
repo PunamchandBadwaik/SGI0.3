@@ -231,7 +231,7 @@
 													if (!profile.contentEquals("Affiliated")) {
 												%>
 
-												<tr>
+												<%-- <tr>
 
 													<td>College Name</td>
 													<td colspan="2">
@@ -256,7 +256,11 @@
 
 													</td>
 
-												</tr>
+												</tr> --%>
+												
+												
+												
+												
 												<%
 													}
 												%>
@@ -264,7 +268,8 @@
 												<tr>
 
 													<td>Address</td>
-													<td colspan="2"><div id="the-basics"
+													<td colspan="2">
+													<input type="hidden" name="opInstId" value="<%=loginUser.getAffBean().getInstId() %>"/><div id="the-basics"
 															class="has-success">
 															<textarea required="required" id="CollegeName"
 																name="operatorBean.operatorAddress"
