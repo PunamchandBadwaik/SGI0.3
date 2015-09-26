@@ -189,10 +189,15 @@
 							<%
 								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
 
+									
+									
+									<li><a class="ajax-link" href="CollegeOperatorDetail"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+									
 
 
 							<%
@@ -535,7 +540,7 @@
 										<div class="controls">
 											<table>
 												<tr>
-													<td>Select Course</td>
+													<td><strong>Select Course</strong></td>
 													<td><select name="course" id="courseId"
 														onchange="courseSelected(this.value)" data-rel="chosen"
 														style="width: 240px;">
@@ -563,9 +568,9 @@
 									<div id="feeName">
 
 										<div class="controls">
-											<table>
+											<table >
 												<tr>
-													<td>Select Fee Name</td>
+													<td><strong>Select Fee Name</strong></td>
 													<td><select name="feeName" id="feeId" onchange=""
 														data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Fees---</option>
@@ -590,7 +595,7 @@
 										}
 									%>
 									<div>
-										<input type="button" onclick="searchDues()" value="Search">
+										<input type="button" onclick="searchDues()" class="btn btn-info" value="Search">
 
 									</div>
 									<div id="dueReport"></div>

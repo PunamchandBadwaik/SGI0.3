@@ -189,10 +189,9 @@
 							<%
 								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
 							
-							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							
 						
 							
 							<%
@@ -224,6 +223,17 @@
 								}
 							%>
 
+							<%
+								if (profile.contentEquals("Affiliated")){
+							%>
+							
+							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							<%
+								}
+							%>
 
 						</ul>
 					</div>
@@ -293,7 +303,7 @@
 												<thead>
 													<tr>
 														<th>Sr. No.</th>
-														<th>Enrollment Number</th>
+														<th>UIN </th>
 														<th></th>
 														<th>Original Dues</th>
 														<th></th>

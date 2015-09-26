@@ -72,6 +72,7 @@ public class AffBean implements Serializable {
 
 	// one to many relationship with Applicants (Students)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
+	@OrderBy(value="enrollmentNumber")
 	Set<AppBean> aplBeanSet;
 
 	// one to many relationship with College Operator (operator)
@@ -87,6 +88,7 @@ public class AffBean implements Serializable {
 	// one to one bidirectional relationship with student and college
 	// child
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
+	
 	private AppBean appBean;
 
 	@ManyToMany(cascade = CascadeType.ALL)

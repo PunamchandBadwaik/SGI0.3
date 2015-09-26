@@ -110,7 +110,7 @@
 
 								<div class="box-icon">
 
-									<a href="#" class="btn btn-minimize btn-round btn-default"><i
+									<a href="#" class="btn  btn-round btn-default"><i
 										class="glyphicon glyphicon-chevron-down"></i></a>
 
 								</div>
@@ -126,7 +126,7 @@
 										<tbody>
 											<tr>
 
-												<td><strong>Enrollment Number</strong></td>
+												<td><strong>UIN Number</strong></td>
 												<td><div id="the-basics" class="has-success">
 														<s:property value="appBean1.enrollmentNumber" />
 

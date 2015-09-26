@@ -34,7 +34,7 @@
 
 		<action name="getCollegeList"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
-			method="getCollegeList">
+			method="getAllClgList">
 
 			<result name="success">Admin-MyColleges.jsp</result>
 

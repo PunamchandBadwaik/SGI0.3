@@ -189,7 +189,7 @@
 							<%
 								if (profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
 							<%
 								}
 							%>
@@ -205,6 +205,18 @@
 								if (!profile.contentEquals("Affiliated")) {
 							%><li><a class="ajax-link" href="getInstDues"><i
 									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
+							<%
+								}
+							%>
+							
+								
+							<%
+								if (profile.contentEquals("Affiliated")){
+							%>
+							
+							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+							
 							<%
 								}
 							%>
@@ -303,7 +315,7 @@
 												<th>Student Name</th>
 												<th>Course Name</th>
 
-												<th>Place</th>
+												
 												<th>Institute Name</th>
 
 												<th>Actions</th>
@@ -324,17 +336,17 @@
 													<td class="center"><s:property value="aplFirstName" />&nbsp;<s:property
 															value="aplLstName" /></td>
 													<td class="center"><s:property value="course" /></td>
-													<td class="center"><s:property value="aplAddress" /></td>
+												
 													<td class="center"><s:property
 															value="affBean.instName" /></td>
 
 													<td class="center"><a class="btn btn-success btn-sm"
-														onclick="window.open('ViewApplicantDetail?applicantId=<s:property value="enrollmentNumber"  />','Applicant Detail','width=500 height=700')">
+														onclick="window.open('ViewApplicantDetail?applicantId=<s:property value="enrollmentNumber"  />','Applicant Detail','width=700 height=600')">
 															<i class="glyphicon glyphicon-zoom-in icon-white"></i>
 															View
 													</a>
-													<a class="btn btn-success btn-sm"
-														onclick="window.open('ViewApplicantDue?applicantId=<s:property value="enrollmentNumber"  />','Applicant Detail','width=500 height=700')">
+													<a class="btn btn-danger btn-sm"
+														onclick="window.open('ViewApplicantDue?applicantId=<s:property value="enrollmentNumber"  />','Applicant Detail','width=700 height=600')">
 															<i class="glyphicon glyphicon-zoom-in icon-white"></i>
 															view Dues
 													</a></td>

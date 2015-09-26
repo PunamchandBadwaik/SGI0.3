@@ -194,7 +194,7 @@ try{
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
 							<%
 								}
 							%>
@@ -225,6 +225,10 @@ try{
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%>
+							
+							
+							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="glyphicon glyphicon-home"></i><span> Report</span></a></li>
 
@@ -323,7 +327,7 @@ try{
 									
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='CollegeDueReport'">College
+											onclick="window.location='CollegeDueReport'">Students
 											Due Report</button>
 									</p>
 									<p class="btn-group">

@@ -297,7 +297,7 @@
 											<tr>
 												<th width="7%">Sr. No.</th>
 												<!-- <th>ID</th> -->
-												<th>University Name</th>
+												<th>Parent Inst. Name</th>
 												<th>Contact Person</th>
 												<th>Contact No.</th>
 												<th>Address</th>

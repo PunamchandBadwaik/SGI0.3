@@ -229,11 +229,19 @@ public class AffAction extends ActionSupport {
 	}
 
 	// get institute Details list
+	
+	
+	public String getAllClgList()
+	{
+		affInstList = affDao.getCollegesList();
+		return SUCCESS;
+	}
+	
 
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		affInstList = affDao.getCollegesList();
+		
 		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", loginBean.getAffBean().getInstId());
 		log.info("look up List Size is ::" + lookupBeanList.size());
 

@@ -211,7 +211,7 @@
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
 							<%
 								}
 							%>
@@ -359,7 +359,7 @@
 
 												<th>College Name</th>
 												<th>Address</th>
-												<th>University</th>
+												<th>Parent Inst. Name</th>
 
 												<th>Actions</th>
 											</tr>
@@ -426,7 +426,7 @@
 												<th width="7%">Sr. No.</th>
 
 												<th>College Name</th>
-												<th>University Name</th>
+												<th>Parent Inst. Name</th>
 												<th>Address</th>
 												<th>Actions</th>
 											</tr>

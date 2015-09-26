@@ -113,7 +113,7 @@
 
 								<div class="box-icon">
 
-									<a href="#" class="btn btn-minimize btn-round btn-default"><i
+									<a href="#" class="btn  btn-round btn-default"><i
 										class="glyphicon glyphicon-chevron-up"></i></a>
 
 								</div>
@@ -201,8 +201,8 @@
 													id="totalNetDues"> </span></td>
 
 											<td><span
-												style="font-size: x-large; font-weight: bold; color: purple;"><s:property
-														value="paymentDone" /></span></td>
+												style="font-size: x-large; font-weight: bolder; color: green;"><s:property
+														value="paymentDone" default="0.0"/></span></td>
 											
 											
 										</tr>
