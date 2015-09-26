@@ -30,15 +30,15 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	 */
 
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
-	public String SabPaisaURL = "http://192.168.1.116:8092/SabPaisa/";
-	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
-
 	/*
-	 * public String SabPaisaURL = "49.50.72.228:8080"; public String returnUrl
-	 * = "http://49.50.72.228:8080/SGI0.3/ReturnPage.jsp"; String
-	 * clientFailureUrl = "http://49.50.72.228:8080/SGI0.3/Login.jsp";
+	 * public String SabPaisaURL = "http://192.168.1.116:8092/SabPaisa/"; public
+	 * String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp"; String
+	 * clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
 	 */
+
+	public String SabPaisaURL = "49.50.72.228:8080/SabPaisa";
+	public String returnUrl = "http://49.50.72.228:8080/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://49.50.72.228:8080/SGI0.3/Login.jsp";
 
 	private static final long serialVersionUID = 1L;
 	HttpServletRequest request = ServletActionContext.getRequest();
@@ -304,45 +304,45 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
 		String dueString = request.getParameter("dueString").trim();
 
-		//try {
-			// insert details into transaction bean
-			TransactionBean tran = new TransactionBean();
-			tran.setInsId(studentDetails.getAffBeanStu().getInstId());
-			tran.setDueString(dueString);
-			tran.setPayeeAdd(studentDetails.getAplAddress());
-			tran.setPayeeEmail(studentDetails.getAplEmail());
-			tran.setPayeeMob(studentDetails.getAplMobilePri());
-			tran.setPayeeName(studentDetails.getAplFirstName());
-			tran.setStudentEnrollmentNumber(studentDetails.getEnrollmentNumber());
-			tran.setTransDate(date);
-			tran.setTxnId(txnId);
-			tran.setPayeeAmount(fee);
-			tran.setStatus("Pending");
-			//
-			dao.insertPaymentDetails(tran);
-			String name = studentDetails.getAplFirstName().concat(" ").concat(studentDetails.getAplLstName());
+		// try {
+		// insert details into transaction bean
+		TransactionBean tran = new TransactionBean();
+		tran.setInsId(studentDetails.getAffBeanStu().getInstId());
+		tran.setDueString(dueString);
+		tran.setPayeeAdd(studentDetails.getAplAddress());
+		tran.setPayeeEmail(studentDetails.getAplEmail());
+		tran.setPayeeMob(studentDetails.getAplMobilePri());
+		tran.setPayeeName(studentDetails.getAplFirstName());
+		tran.setStudentEnrollmentNumber(studentDetails.getEnrollmentNumber());
+		tran.setTransDate(date);
+		tran.setTxnId(txnId);
+		tran.setPayeeAmount(fee);
+		tran.setStatus("Pending");
+		//
+		dao.insertPaymentDetails(tran);
+		String name = studentDetails.getAplFirstName().concat(" ").concat(studentDetails.getAplLstName());
 
-			HashMap<String, String> hashMap = new HashMap<String, String>();
+		HashMap<String, String> hashMap = new HashMap<String, String>();
 
-			hashMap.put("enrollId", enrollmentId);
-			hashMap.put("txnID", txnId);
-			httpSession.setAttribute("dueStr", dueString);
-			httpSession.setAttribute("hmap", hashMap);
-			httpSession.getServletContext().setAttribute(txnId, httpSession);
+		hashMap.put("enrollId", enrollmentId);
+		hashMap.put("txnID", txnId);
+		httpSession.setAttribute("dueStr", dueString);
+		httpSession.setAttribute("hmap", hashMap);
+		httpSession.getServletContext().setAttribute(txnId, httpSession);
 
-			String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo=" + enrollmentId
-					+ "&client=SGI" + "&ru=" + returnUrl + "&Contact=" + studentDetails.getAplMobilePri()
-					+ "&failureURL=" + clientFailureUrl + "&Email=" + studentDetails.getAplEmail() + "&Add="
-					+ studentDetails.getAplAddress();
+		String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo=" + enrollmentId
+				+ "&client=SGI" + "&ru=" + returnUrl + "&Contact=" + studentDetails.getAplMobilePri() + "&failureURL="
+				+ clientFailureUrl + "&Email=" + studentDetails.getAplEmail() + "&Add="
+				+ studentDetails.getAplAddress();
 
-			request.setAttribute("sabPaisaURL", url);
+		request.setAttribute("sabPaisaURL", url);
 
-			// response.sendRedirect(url);
-			return SUCCESS;
-		//} catch (java.lang.NullPointerException e) {
-		//	request.setAttribute("msg", "Session Time Out");
-		//	return ERROR;
-		//}
+		// response.sendRedirect(url);
+		return SUCCESS;
+		// } catch (java.lang.NullPointerException e) {
+		// request.setAttribute("msg", "Session Time Out");
+		// return ERROR;
+		// }
 
 	}
 
