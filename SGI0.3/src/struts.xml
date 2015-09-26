@@ -852,7 +852,7 @@
 					
 			<action name="getQuickPayStudentRecordByOperator"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
-			method="quickPayStudentDuesDetail">
+			method="getParticularFeeDetailsOfStudentFromloginPage">
 
 			<result name="success">quickPayStudentDetails.jsp</result>
 			<result name="failure">quickPayStudentEnrollNumberSearch.jsp</result>

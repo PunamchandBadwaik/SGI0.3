@@ -319,7 +319,7 @@
 												<td>
 												
 												<button type="button" class="btn btn-default"
-											onclick="gotoLogin()">Goto Login Page</button> </td>
+											onclick="gotoLogin()">Back</button> </td>
 
 
 

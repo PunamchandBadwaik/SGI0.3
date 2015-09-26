@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
+<%@page import="java.util.*"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+
 <html lang="en">
 <head>
 <%-- <%
@@ -76,7 +78,14 @@
 
 </head>
 
-<body onload="getFeeName()">
+<body onload="">
+	<%
+
+HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
+
+
+%>
+	
 
 	<%
 		int i = 1;
@@ -105,12 +114,12 @@
 						class="hidden-sm hidden-xs"> <%-- <%=loginUser.getUserName()%> --%></span> <span
 						class="caret"></span>
 				</button>
-				<!-- <ul class="dropdown-menu">
+				<ul class="dropdown-menu">
 					<li><a id="saveProfileTagId" onclick=""
 						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
-				</ul> -->
+				</ul>
 			</div>
 			<!-- user dropdown ends -->
 
@@ -143,19 +152,7 @@
 				</ul>
 			</div>
 			<!-- theme selector ends -->
-			<!----Cart Button Starts--->
-			<%-- <div class="btn-group pull-right">
-				<button class="btn btn-default dropdown-toggle"
-					data-toggle="dropdown">
-					<i class=" glyphicon glyphicon-shopping-cart"></i><span
-						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu">
-					
-					<li><a href="#" onclick="openCart()">View Cart</a></li>
-				</ul>
-			</div> --%>
-			<!-- cart button ends -->
+
 		</div>
 	</div>
 	<!-- topbar ends -->
@@ -168,13 +165,18 @@
 					<div class="nav-canvas">
 						<div class="nav-sm nav nav-stacked"></div>
 						<ul class="nav nav-pills nav-stacked main-menu">
-							<%-- <li class="nav-header">Main</li>
-							<li><a class="ajax-link"
+							<li class="nav-header">Main</li>
+							<%-- <li><a class="ajax-link"
 								href='<%=session.getAttribute("dashLink").toString()%>'><i
 									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-							<li><a class="ajax-link" href="StudentEnrollmentNo.jsp"><i
-									class="fa fa-list-alt"></i><span> Students Fee Payment</span></a></li>
-							 --%><%-- <%
+							<%
+								if (!profile.contentEquals("Student")) {
+							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
+									class="fa fa-building"></i><span> Parent Institute</span></a></li>
+							<%
+								}
+							%> --%>
+							<%-- <%
 								if (!profile.contentEquals("Affiliated")){
 							%>
 							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
@@ -204,9 +206,9 @@
 							<%
 								}
 							%> --%>
-							<%-- <li><a class="ajax-link" href="Operator-Reports.jsp"><i
+							<li><a class="ajax-link" href="Operator-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-					 --%>	</ul>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -225,19 +227,12 @@
 			</noscript>
 
 			<div id="content" class="col-lg-10 col-sm-10">
-			<!-- 	<div class="row">
-					<div class="col-md-12">
-						<button class="btn btn-sm btn-info" style="float: right;"
-							onclick='window.open("AddStudentColleges", "Studetn Form", "width=500,height=600")'>
-							<i class="fa fa-plus"></i> Add Student
-						</button>
-
-						<button class="btn btn-sm btn-info"
-							style="margin-right: 3%; float: right;"
-							onclick='window.open("AddBulkStudent.jsp", "CollegeForm", "width=500,height=600")'>
-							<i class="fa fa-plus"></i> Add Bulk Student
-						</button>
-					</div>
+				<!-- content starts -->
+				<!-- 	<div>
+					<ul class="breadcrumb">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Dashboard</a></li>
+					</ul>
 				</div> -->
 
 
@@ -256,32 +251,24 @@
 										class="glyphicon glyphicon-chevron-up"></i></a>
 
 								</div>
-
-
-
-
 							</div>
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
-
-
 
 									<table class="table table-condensed"
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
-											<td>Student UIN Number</td>
-											<td><s:property value="app1.enrollmentNumber" /> <input
-												type="hidden" id="enrollId"
-												value='<s:property value="app1.enrollmentNumber" />'>
-
-											</td>
+											<td>Student Enrollment Number</td>
+											<td><s:property value="app1.enrollmentNumber" /></td>
 										</tr>
 										<tr>
 
 											<td>Student Name</td>
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
+											<td><input type="hidden"
+												value='<s:property value="app1.isHostler" />' id="isHosteler" /></td>
 										</tr>
 
 									</table>
@@ -316,12 +303,9 @@
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 
-												<td><s:property value="total_fee_amount" /> <input
-													type="hidden" id="completeFee[<%=i %>]"
-													value='<s:property value="total_fee_amount" />'></td>
 
 
-
+												<td><s:property value="total_fee_amount" /></td>
 												<td><s:set var="netDue">
 														<s:property value="netDue" />
 													</s:set> <s:if test='%{netDue=="0"}'>
@@ -351,8 +335,6 @@
 														var myCheckId = document.getElementById("checkId["+k+"]");
 														var v=document.getElementById("payableamount["+k+"]").value;
 														
-														
-														
 														if(myCheckId.checked){
 															
 															feeTxtId.value=v;
@@ -374,7 +356,6 @@
 																h=0;
 															}
 															else{
-															
 																h=document.getElementById("totalPaidAmount").value;
 																document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(feeTxtId.value);
 																feeTxtId.value=0;
@@ -393,9 +374,8 @@
 															
 															
 															for (j = 1; j <= <%=i%>; j++) {
-																
-																
-													 
+																/* alert("in loop");
+																alert(document.getElementById("FeePaid["+ j+ "]").value); */
 																if(document.getElementById("FeePaid["+j+"]").value=='NaN' || document.getElementById("FeePaid["+j+"]").value==''){
 																	g=g;
 																}
@@ -407,9 +387,7 @@
 																/* alert(g); */
 
 															}
-															
 															document.getElementById("totalPaidAmount").value=g; 
-															
 															
 															
 														}
@@ -428,52 +406,65 @@
 													Fees Amount</span></td>
 											<td><span
 												style="font-size: x-large; font-weight: bold; color: purple;">
-													<s:property value="totalNetFees" /> <input type="hidden"
-													value='<s:property value="totalNetFees" />'
-													id="totalNetDues">
+													<s:property value="totalNetFees" />
 											</span></td>
 											<td><span
 												style="font-size: x-large; font-weight: bold; color: purple;"><s:property
-														value="totalDueOFStudent" /> </span></td>
+														value="totalDueOFStudent" /> <input type="hidden"
+													value='<s:property value="totalDueOFStudent" />'
+													id="totalNetDues"> </span></td>
 
 											<td><span
 												style="font-size: x-large; font-weight: bold; color: purple;"><s:property
 														value="paymentDone" /></span></td>
-
 											<td><span style="font-size: 20px; font-weight: bold;">Fees
 													To be Paid</span></td>
-											<td><input type="text" id="totalPaidAmount"
-												readonly="readonly"></td>
+											<td><input type="text" style="color:"
+												id="totalPaidAmount" readonly="readonly"></td>
 
 										</tr>
 
 										<tr>
-										<td > <!-- <input
-													type="button" class="btn btn-info" id="btnPayment"
-													value="Add To Cart" onclick="return validateFees(1)"> --></td>
-											<td colspan="8"><span style="float: right;"> <input
+											<td colspan="9"><span style="float: right;"> <input
 													type="button" class="btn btn-danger" id="btnPayment"
-													value="Proceed to Payment" onclick="return validateFees(0)"></span>
+													value="Proceed to Payment" onclick="return validateFees()"></span>
 
 												<script type="text/javascript">
-														function validateFees(cart) {
-															var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
-															//alert("tuitionFeePending is"+tuitionFeePending);
+														
+												       function validateFees() {
+															 
+															 
+															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
+														
+															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
 															
+															 
+															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
 															// alert("tuitionFeeBeingPaid now is"+tuitionFeeBeingPaid); 
 															var totalBeingPaid =parseFloat(document.getElementById("totalPaidAmount").value);
 															//alert("totalBeingPaid is"+totalBeingPaid);
-															
 															var totalNetDue=parseFloat(document.getElementById("totalNetDues").value);
 															
+															var sequenceValidationCheckResult=true;
+															if(totalNetDue<0){
+																alert("Dues Must not be Less than 0");
+																return false;																
+																
+															}
+															
+															/* if(totalBeingPaid<29000){
+																alert("Please select a higher Fee and amount to pay");
+																return false;																
+																
+															} */															
 															
 															if(totalBeingPaid==0){
 																alert("Please select a Fee and amount to pay");
 																return false;																
 																
 															}
-															
+															/*
 															if(isNaN(tuitionFeeBeingPaid)){
 																
 																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
@@ -485,12 +476,63 @@
 																    tuitionFeeBeingPaid=0;
 																}
 															}
+															*/
+															if(totalBeingPaid<minimumAmountMustPaid){
+															alert("Please pay at least "+minimumAmountMustPaid);
+															return false;
+															}
+															var j=0;
+															var t=0;
+															for(j=1;j<<%=i%>;j++){
+																// if the fee in loop is not being paid in full
+																
+																var loopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+j+"]").value);
+																 if(isNaN(loopFeeBeingPaid)){
+																	 loopFeeBeingPaid=0;
+																 }
+																 var loopFeePending=parseFloat(document.getElementById("payableamount["+j+"]").value);
+																 if(isNaN(loopFeePending)){
+																	 loopFeePending=0;
+																 }																 
+																if(loopFeeBeingPaid<loopFeePending){
+																	
+																   	for (t=j+1;t<<%=i%>;t++){
+																		 var innerLoopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+t+"]").value);
+																		 if(isNaN(innerLoopFeeBeingPaid)){
+																			 innerLoopFeeBeingPaid=0;
+																		 }
+																   		if(innerLoopFeeBeingPaid>0){
+																   			sequenceValidationCheckResult=false;
+																			break;
+																   		}
+																   		else{
+																   			
+																   			sequenceValidationCheckResult=true;
+																   		}
+																   		
+																   	}
+																	
+																}
+																
+														   		if(sequenceValidationCheckResult==false){
+														   			break;
+														   		}
+																
+															}
+														/*
 															if(tuitionFeeBeingPaid<tuitionFeePending && tuitionFeeBeingPaid<totalBeingPaid){
 																
 																alert("Tuition Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
 																return false;
-															}
-															
+															}   
+															*/		 		 
+																										 
+																  
+													        if(sequenceValidationCheckResult==false){
+													        	
+													   			alert("Please clear Fees in top down order first");
+													   			return false;
+													        }
 															else{
 																
 																var t=1;
@@ -511,38 +553,16 @@
 																
 																
 																
-															var enrollId=document.getElementById("enrollId").value;
-															document.getElementById("paymentDueStr").value=dueStr;
-															var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId;
-																if(cart=="0")
-																	{
-																	//Don't Add to Cart and continue with payment
-																	
-																window.location="OperatorStudentPayment"+queryString;
-																	}
-																if(cart=="1")
-																	{
-																	window.open("addToCart"+queryString,"CartWindow","height=1080,width=700");
-																	}
+															
 																
+																document.getElementById("paymentDueStr").value=dueStr;
+																var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid;
+																window.location="StudentPayment"+queryString;
 																return true;
 															}
 														}
 														
 													</script></td>
-													
-													<td>
-
-										<button type="button" class="btn btn-default"
-											onclick="gotoLogin()">Goto Login Page</button> <script
-											type="text/javascript">
-												function gotoLogin() {
-
-													window.location = "Login.jsp";
-
-												}
-											</script>
-									</td>
 										</tr>
 									</table>
 
@@ -640,11 +660,6 @@
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-<script>
-function openCart()
-{
-	window.open("getCart","CartWindow","height=1080,width=700");
-	}
-</script>
+
 </body>
 </html>
