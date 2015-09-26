@@ -76,7 +76,7 @@
 
 </head>
 
-<body onload="getFeeName()">
+<body onload="">
 
 	<%
 		int i = 1;
@@ -270,7 +270,7 @@
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
-											<td>Student Enrollment Number</td>
+											<td>Student UIN Number</td>
 											<td><s:property value="app1.enrollmentNumber" /> <input
 												type="hidden" id="enrollId"
 												value='<s:property value="app1.enrollmentNumber" />'>
@@ -282,6 +282,9 @@
 											<td>Student Name</td>
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
+													<td><input type="hidden"
+												value='<s:property value="app1.isHosteler" />' id="isHosteler" /></td>
+													
 										</tr>
 
 									</table>

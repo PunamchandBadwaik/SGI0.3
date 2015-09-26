@@ -114,12 +114,12 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 						class="hidden-sm hidden-xs"> <%-- <%=loginUser.getUserName()%> --%></span> <span
 						class="caret"></span>
 				</button>
-				<ul class="dropdown-menu">
+				<!-- <ul class="dropdown-menu">
 					<li><a id="saveProfileTagId" onclick=""
 						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
-				</ul>
+				</ul> -->
 			</div>
 			<!-- user dropdown ends -->
 
@@ -521,6 +521,10 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 														}
 														
 													</script></td>
+													<td>
+												
+												<button type="button" class="btn btn-default"
+											onclick="gotoLogin()">Back</button> </td>
 										</tr>
 									</table>
 
@@ -617,7 +621,14 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 	<script src="js/jquery.history.js"></script>
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
+	 <script type="text/javascript">
+												function gotoLogin() {
 
+													window.location = "quickPayStudentEnrollNumberSearch.jsp";
+
+												}
+											</script>
+							
 
 </body>
 </html>
