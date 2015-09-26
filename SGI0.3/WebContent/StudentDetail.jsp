@@ -299,7 +299,7 @@
 											<tr>
 												<th width="7%">Sr. No.</th>
 												<th>UIN Number</th>
-                                                <th>Gr Number</th>
+                                                <th>GR Number</th>
 												<th>Student Name</th>
 												<th>Course Name</th>
 

@@ -25,10 +25,10 @@
 				<thead>
 					<tr>
 						<th width="7%">Sr. No.</th>
-						<th>Enrollment Number</th>
-
+						<th>Student UIN</th>
+                        <th>GR Number</th>
 						<th>Student Name</th>
-						<th>Mobile Number</th>
+						<th>Course Name</th>
 
 						<th>Place</th>
 						<th>Institute Name</th>
@@ -45,9 +45,11 @@
 						<tr>
 							<td><%=i%></td>
 							<td class="center"><s:property value="enrollmentNumber" /></td>
+							<td class="center"><s:property
+															value="grNumber" /></td>
 							<td class="center"><s:property value="aplFirstName" />&nbsp;<s:property
 									value="aplLstName" /></td>
-							<td class="center"><s:property value="aplMobilePri" /></td>
+							<td class="center"><s:property value="course" /></td>
 							<td class="center"><s:property value="aplAddress" /></td>
 							<td class="center"><s:property value="affBean.instName" /></td>
 
