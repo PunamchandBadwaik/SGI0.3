@@ -314,8 +314,16 @@ public class AppAction extends ActionSupport {
 		String enroll = new String();
 		try {
 			enroll = appBean1.getEnrollmentNumber();
-
+			appBean1 = aplDAO.getUserDetail(enroll);
+			getDuesOfStudent();
+			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Session Time Out");
+			return ERROR;
+		}
+
+
+		/*} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Enrollment is not exist");
 			return "failure";
 		}
@@ -337,7 +345,7 @@ public class AppAction extends ActionSupport {
 		}
 
 		//
-		return SUCCESS;
+		return SUCCESS;*/
 	}
 
 	public void getDuesOfStudent() {
