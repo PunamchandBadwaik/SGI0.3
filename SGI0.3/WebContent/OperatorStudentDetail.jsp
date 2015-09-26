@@ -151,7 +151,7 @@
 						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					
+
 					<li><a href="#" onclick="openCart()">View Cart</a></li>
 				</ul>
 			</div>
@@ -225,7 +225,7 @@
 			</noscript>
 
 			<div id="content" class="col-lg-10 col-sm-10">
-			<!-- 	<div class="row">
+				<!-- 	<div class="row">
 					<div class="col-md-12">
 						<button class="btn btn-sm btn-info" style="float: right;"
 							onclick='window.open("AddStudentColleges", "Studetn Form", "width=500,height=600")'>
@@ -448,9 +448,9 @@
 										</tr>
 
 										<tr>
-										<td > <input
-													type="button" class="btn btn-info" id="btnPayment"
-													value="Add To Cart" onclick="return validateFees(1)"></td>
+											<td><input type="button" class="btn btn-info"
+												id="btnPayment" value="Add To Cart"
+												onclick="return validateFees(1)"></td>
 											<td colspan="8"><span style="float: right;"> <input
 													type="button" class="btn btn-danger" id="btnPayment"
 													value="Proceed to Payment" onclick="return validateFees(0)"></span>
@@ -458,22 +458,35 @@
 												<script type="text/javascript">
 														function validateFees(cart) {
 															var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
-															//alert("tuitionFeePending is"+tuitionFeePending);
 															
+															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
+															
+															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
 															// alert("tuitionFeeBeingPaid now is"+tuitionFeeBeingPaid); 
 															var totalBeingPaid =parseFloat(document.getElementById("totalPaidAmount").value);
 															//alert("totalBeingPaid is"+totalBeingPaid);
-															
 															var totalNetDue=parseFloat(document.getElementById("totalNetDues").value);
 															
+															var sequenceValidationCheckResult=true;
+															if(totalNetDue<0){
+																alert("Dues Must not be Less than 0");
+																return false;																
+																
+															}
+															
+															/* if(totalBeingPaid<29000){
+																alert("Please select a higher Fee and amount to pay");
+																return false;																
+																
+															} */															
 															
 															if(totalBeingPaid==0){
 																alert("Please select a Fee and amount to pay");
 																return false;																
 																
 															}
-															
+															/*
 															if(isNaN(tuitionFeeBeingPaid)){
 																
 																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
@@ -485,12 +498,64 @@
 																    tuitionFeeBeingPaid=0;
 																}
 															}
+															*/
+															if(totalBeingPaid<minimumAmountMustPaid){
+															alert("Please pay at least "+minimumAmountMustPaid);
+															return false;
+															}
+															var j=0;
+															var t=0;
+															for(j=1;j<<%=i%>;j++){
+																// if the fee in loop is not being paid in full
+																
+																var loopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+j+"]").value);
+																 if(isNaN(loopFeeBeingPaid)){
+																	 loopFeeBeingPaid=0;
+																 }
+																 var loopFeePending=parseFloat(document.getElementById("payableamount["+j+"]").value);
+																 if(isNaN(loopFeePending)){
+																	 loopFeePending=0;
+																 }																 
+																if(loopFeeBeingPaid<loopFeePending){
+																	
+																   	for (t=j+1;t<<%=i%>;t++){
+																		 var innerLoopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+t+"]").value);
+																		 if(isNaN(innerLoopFeeBeingPaid)){
+																			 innerLoopFeeBeingPaid=0;
+																		 }
+																   		if(innerLoopFeeBeingPaid>0){
+																   			sequenceValidationCheckResult=false;
+																			break;
+																   		}
+																   		else{
+																   			
+																   			sequenceValidationCheckResult=true;
+																   		}
+																   		
+																   	}
+																	
+																}
+																
+														   		if(sequenceValidationCheckResult==false){
+														   			break;
+														   		}
+																
+															}
+														/*
 															if(tuitionFeeBeingPaid<tuitionFeePending && tuitionFeeBeingPaid<totalBeingPaid){
 																
 																alert("Tuition Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
 																return false;
-															}
-															
+															}   
+															*/		 		 
+																										 
+																  
+													        if(sequenceValidationCheckResult==false){
+													        	
+													   			alert("Please clear Fees in top down order first");
+													   			return false;
+													        }
+												
 															else{
 																
 																var t=1;
@@ -627,7 +692,7 @@
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-<script>
+	<script>
 function openCart()
 {
 	window.open("getCart","CartWindow","height=1080,width=700");
