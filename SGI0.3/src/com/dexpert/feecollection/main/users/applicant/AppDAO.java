@@ -106,6 +106,8 @@ public class AppDAO {
 
 		BreakString bs = new BreakString();
 		String k = bs.breakString(pp);
+		
+		log.info("String after Break Class : "+k);
 		String year = bs.getYear(k);
 		String course = bs.getCourse(k);
 		String yearCode = bs.getYearCode(course);

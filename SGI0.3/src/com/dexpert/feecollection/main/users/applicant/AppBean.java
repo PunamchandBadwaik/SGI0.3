@@ -26,13 +26,6 @@ import com.dexpert.feecollection.main.users.affiliated.AffBean;
 @Table(name = "applicant_details")
 public class AppBean implements Serializable {
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return "EnrollmentNumber =" + enrollmentNumber;
-	}
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String enrollmentNumber;
