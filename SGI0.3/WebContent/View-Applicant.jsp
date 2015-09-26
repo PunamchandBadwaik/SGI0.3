@@ -135,6 +135,47 @@
 											</tr>
 											<tr>
 
+												<td><strong>GR Number</strong></td>
+												<td><div id="the-basics" class="has-success">
+														<s:property value="appBean1.grNumber" default="Not Available"/>
+
+													</div></td>
+
+
+											</tr>
+											<tr>
+
+												<td><strong>Category</strong></td>
+												<td><div id="the-basics" class="has-success">
+														<s:property value="appBean1.category" default="Not Available"/>
+
+													</div></td>
+
+
+											</tr>
+											<tr>
+
+												<td><strong>Course</strong></td>
+												<td><div id="the-basics" class="has-success">
+														<s:property value="appBean1.course" default="Not Available"/>
+
+													</div></td>
+
+
+											</tr>
+											<tr>
+
+												<td><strong>Hostler</strong></td>
+												<td><div id="the-basics" class="has-success">
+														<s:property value="appBean1.isHosteler" default="No"/>
+
+													</div></td>
+
+
+											</tr>
+
+											<tr>
+
 												<td><strong>College Name</strong></td>
 												<td><div id="the-basics" class="has-success">
 														<s:property value="appBean1.affBeanStu.instName" />

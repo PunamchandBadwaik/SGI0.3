@@ -64,7 +64,7 @@ public class CalculateDues {
 			}
 			Collections.sort(values);
 
-			if (values.containsAll(list)) {
+			if (list.containsAll(values)) {
 
 				System.out.println("Amount is ::" + searchList.get(0).getAmount());
 				return searchList.get(0).getAmount();
