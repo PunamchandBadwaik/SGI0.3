@@ -29,7 +29,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	 * 
 	 */
 
-	//public String SabPaisaURL = "https://payonline.sabpaisa.in";
+	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 	public String SabPaisaURL = "http://192.168.1.116:8092/SabPaisa/";
 	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
 	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
@@ -143,7 +143,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			tran.setBulkPay(0);
 			//
 			dao.insertPaymentDetails(tran);
-			String name = studentDetails.getAplFirstName();
+			String name = studentDetails.getAplFirstName() + " " + studentDetails.getAplLstName();
 
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 

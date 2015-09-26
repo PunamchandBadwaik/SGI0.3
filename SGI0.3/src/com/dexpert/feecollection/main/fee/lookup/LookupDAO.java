@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
+import com.dexpert.feecollection.main.users.LoginBean;
 
 public class LookupDAO {
 	// Global Variables
@@ -117,12 +118,15 @@ public class LookupDAO {
 		}
 	}
 
-	public List<LookupBean> getListOfLookUpValues(String lookupScope) {
+	public List<LookupBean> getListOfLookUpValues(String lookupScope, Integer affId) {
 		Session session = factory.openSession();
+
 		try {
 
 			Criteria criteria = session.createCriteria(LookupBean.class);
 			criteria.add(Restrictions.eq("lookupScope", lookupScope));
+			criteria.add(Restrictions.eq("affBean.instId", affId));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			List<LookupBean> list = criteria.list();
 			return list;
 

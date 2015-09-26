@@ -10,8 +10,6 @@
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="registerInstitute">
 
-
-
 			<interceptor-ref name="defaultStack">
 				<param name="fileUpload.maximumSize">30000000</param>
 				<param name="contentType">text/html,text/plain,application/msword,text/richtext,application/pdf,image/jpeg</param>

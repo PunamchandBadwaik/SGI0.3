@@ -231,9 +231,10 @@ public class AffAction extends ActionSupport {
 	// get institute Details list
 
 	public String getCollegeList() {
-
+		HttpSession httpSession = request.getSession();
+		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		affInstList = affDao.getCollegesList();
-		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant");
+		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", loginBean.getAffBean().getInstId());
 		log.info("look up List Size is ::" + lookupBeanList.size());
 
 		return SUCCESS;
@@ -751,10 +752,10 @@ public class AffAction extends ActionSupport {
 		String collegeName = request.getParameter("collegeName");
 		String courseName = request.getParameter("courseName");
 		String feeName = request.getParameter("feeName");
-		//log.info("university name" + universityName);
-		//log.info("collegeName" + collegeName);
-		//log.info("courseName" + courseName);
-		//log.info("feeName" + feeName);
+		// log.info("university name" + universityName);
+		// log.info("collegeName" + collegeName);
+		// log.info("courseName" + courseName);
+		// log.info("feeName" + feeName);
 		// ////////////////////////////////////////////////////////////////////////////////////
 		// start of su admin custom due report
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
@@ -1079,20 +1080,20 @@ public class AffAction extends ActionSupport {
 			if (universityName != null && !universityName.isEmpty()) {
 				log.info(" for student Report ");
 				Integer universityId = parDAO.getUniversityId(universityName);
-				//ses.setAttribute("UniversityId", universityId);
+				// ses.setAttribute("UniversityId", universityId);
 				affBeansList = affDao.getCollegList(universityId);
 				log.info("List of college" + affBeansList.size());
 				return "collegeListForStudentReport";
 			}
 			parBeans = parDAO.getUniversityList();
 		}
-		if(ses.getAttribute("sesProfile").toString().contentEquals("Parent")&&forStudentReport != null
-				&& !forStudentReport.isEmpty()){
+		if (ses.getAttribute("sesProfile").toString().contentEquals("Parent") && forStudentReport != null
+				&& !forStudentReport.isEmpty()) {
 			Integer id = (Integer) ses.getAttribute("sesId");
 			affBeansList = affDao.getCollegList(id);
-			log.info("List of college" + affBeansList.size());	
+			log.info("List of college" + affBeansList.size());
 			return SUCCESS;
-			
+
 		}
 
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {

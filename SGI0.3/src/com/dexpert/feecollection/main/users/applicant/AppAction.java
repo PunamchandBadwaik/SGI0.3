@@ -171,7 +171,7 @@ public class AppAction extends ActionSupport {
 			log.info("4");
 			request.setAttribute("msg", "Enrollment Number Already Registered");
 			affInstList = affDAO.getCollegesList();
-			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant");
+			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", loginBean.getAffBean().getInstId());
 			return "failure";
 		}
 
@@ -235,7 +235,9 @@ public class AppAction extends ActionSupport {
 
 			log.info("File Name is ::" + fileUploadFileName);
 
-			//appBeansList = aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload, f + File.separator);
+			// appBeansList =
+			// aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload,
+			// f + File.separator);
 			appBeansList = aplDAO.importExcelFileToDatabase1(fileUploadFileName, fileUpload, f + File.separator);
 
 			request.setAttribute("msg", "Student Record Uploaded Successfully");
@@ -369,11 +371,14 @@ public class AppAction extends ActionSupport {
 		}
 		return SUCCESS;
 	}
-	
+
 	public String quickPayStudentDuesDetail() {
 
-		/*HttpSession httpSession = request.getSession();*/
-		/*LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");*/
+		/* HttpSession httpSession = request.getSession(); */
+		/*
+		 * LoginBean loginBean = (LoginBean)
+		 * httpSession.getAttribute("loginUserBean");
+		 */
 		String enroll = new String();
 		try {
 			enroll = appBean1.getEnrollmentNumber();
@@ -384,11 +389,12 @@ public class AppAction extends ActionSupport {
 		}
 		try {
 			appBean1 = aplDAO.getUserDetail(enroll);
-		/*	app1 = aplDAO.getStudentOpDues(appBean1.getEnrollmentNumber(), loginBean.getOperatorBean().getAffBean()
-					.getInstId());
-		*/
+			/*
+			 * app1 = aplDAO.getStudentOpDues(appBean1.getEnrollmentNumber(),
+			 * loginBean.getOperatorBean().getAffBean() .getInstId());
+			 */
 			app1 = aplDAO.getQuickPayStudentOpDues(appBean1.getEnrollmentNumber());
-			
+
 			// app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
 			totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
 			totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
@@ -405,17 +411,19 @@ public class AppAction extends ActionSupport {
 		//
 		return SUCCESS;
 	}
-    // student due view for college 
-	public String viewStudentDues(){
-    String enrollmentNumber=request.getParameter("applicantId").trim();	 
-    app1 = aplDAO.getStudentDues(enrollmentNumber);
-	feeList = aplDAO.getAllFeeDeatils();
-	totalDueOFStudent = aplDAO.totalDueFeeOfStudent(enrollmentNumber);
-	totalNetFees = aplDAO.totalfeesOfStudent(enrollmentNumber);
-	paymentDone = aplDAO.totalPaymentDone(enrollmentNumber);	 
-    return SUCCESS;	 
-    	 
-     }
+
+	// student due view for college
+	public String viewStudentDues() {
+		String enrollmentNumber = request.getParameter("applicantId").trim();
+		app1 = aplDAO.getStudentDues(enrollmentNumber);
+		feeList = aplDAO.getAllFeeDeatils();
+		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(enrollmentNumber);
+		totalNetFees = aplDAO.totalfeesOfStudent(enrollmentNumber);
+		paymentDone = aplDAO.totalPaymentDone(enrollmentNumber);
+		return SUCCESS;
+
+	}
+
 	public String showBulkTransDetail() {
 
 		String transactionId = request.getParameter("transId");
