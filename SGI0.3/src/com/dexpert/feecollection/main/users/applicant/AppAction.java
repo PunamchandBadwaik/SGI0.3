@@ -310,42 +310,50 @@ public class AppAction extends ActionSupport {
 	public String StudentDuesDetail() {
 
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		// LoginBean loginBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
 		String enroll = new String();
-		try {
-			enroll = appBean1.getEnrollmentNumber();
-			appBean1 = aplDAO.getUserDetail(enroll);
-			getDuesOfStudent();
-			return SUCCESS;
-		} catch (java.lang.NullPointerException e) {
-			request.setAttribute("msg", "Session Time Out");
-			return ERROR;
-		}
+		// try {
+		enroll = appBean1.getEnrollmentNumber();
 
+		httpSession.setAttribute("enroll", enroll);
+		appBean1 = aplDAO.getUserDetail(enroll);
 
-		/*} catch (java.lang.NullPointerException e) {
-			request.setAttribute("msg", "Enrollment is not exist");
-			return "failure";
-		}
-		try {
-			appBean1 = aplDAO.getUserDetail(enroll);
-			app1 = aplDAO.getStudentOpDues(appBean1.getEnrollmentNumber(), loginBean.getOperatorBean().getAffBean()
-					.getInstId());
-			// app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
-			totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
-			totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
-			paymentDone = aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
+		httpSession.setAttribute("sesProfile", "Student");
+		httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
 
-			// log.info("total net dues is ::" + totalNetFees);
+		httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
 
-		} catch (Exception e) {
-			request.setAttribute("msg", "Enrollment Number is Not Registered");
+		getDuesOfStudent();
+		return SUCCESS;
+		// } catch (java.lang.NullPointerException e) {
+		// request.setAttribute("msg", "Session Time Out");
+		// return ERROR;
+		// }
 
-			return "failure";
-		}
-
-		//
-		return SUCCESS;*/
+		/*
+		 * } catch (java.lang.NullPointerException e) {
+		 * request.setAttribute("msg", "Enrollment is not exist"); return
+		 * "failure"; } try { appBean1 = aplDAO.getUserDetail(enroll); app1 =
+		 * aplDAO.getStudentOpDues(appBean1.getEnrollmentNumber(),
+		 * loginBean.getOperatorBean().getAffBean() .getInstId()); // app1 =
+		 * aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
+		 * totalDueOFStudent =
+		 * aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
+		 * totalNetFees =
+		 * aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
+		 * paymentDone =
+		 * aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
+		 * 
+		 * // log.info("total net dues is ::" + totalNetFees);
+		 * 
+		 * } catch (Exception e) { request.setAttribute("msg",
+		 * "Enrollment Number is Not Registered");
+		 * 
+		 * return "failure"; }
+		 * 
+		 * // return SUCCESS;
+		 */
 	}
 
 	public void getDuesOfStudent() {

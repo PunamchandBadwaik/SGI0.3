@@ -780,7 +780,7 @@
 		<action name="OperatorStudentPayment"
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
 			method="operatorStudentPayment">
-			<result name="success">Success.jsp</result>
+			<result name="success">WaitToLoad.jsp</result>
 			<result name="error">Login.jsp</result>
 
 		</action>
@@ -845,19 +845,8 @@
 
 		</action>
 
-		<!-- getQuickPayStudentRecordByOperator -->
-					
-		<!-- 			
-			<action name="getQuickPayStudentRecordByOperator"
-			class="com.dexpert.feecollection.main.users.applicant.AppAction"
-			method="getParticularFeeDetailsOfStudentFromloginPage">
-
-			<result name="success">quickPayStudentDetails.jsp</result>
-			<result name="failure">quickPayStudentEnrollNumberSearch.jsp</result>
-
-
-		</action>
- -->
+	
+		
  		<!--getQuickPayStudentRecordByOperator -->
 					
 					

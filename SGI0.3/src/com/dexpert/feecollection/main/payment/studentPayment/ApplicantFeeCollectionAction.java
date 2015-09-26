@@ -31,8 +31,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 	public String SabPaisaURL = "http://192.168.1.116:8092/SabPaisa/";
-	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
+	public String returnUrl = "http://localhost:8082/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8082/SGI0.3/Login.jsp";
 
 	/*
 	 * public String SabPaisaURL = "49.50.72.228:8080"; public String returnUrl
@@ -304,7 +304,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
 		String dueString = request.getParameter("dueString").trim();
 
-		try {
+		//try {
 			// insert details into transaction bean
 			TransactionBean tran = new TransactionBean();
 			tran.setInsId(studentDetails.getAffBeanStu().getInstId());
@@ -339,10 +339,10 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 			// response.sendRedirect(url);
 			return SUCCESS;
-		} catch (java.lang.NullPointerException e) {
-			request.setAttribute("msg", "Session Time Out");
-			return ERROR;
-		}
+		//} catch (java.lang.NullPointerException e) {
+		//	request.setAttribute("msg", "Session Time Out");
+		//	return ERROR;
+		//}
 
 	}
 

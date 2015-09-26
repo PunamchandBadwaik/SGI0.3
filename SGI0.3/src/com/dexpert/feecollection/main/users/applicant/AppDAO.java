@@ -333,6 +333,7 @@ public class AppDAO {
 
 	public AppBean getUserDetail(String EnrId) {
 
+		log.info("Student Enrollment Number ::"+ EnrId);
 		Session session = factory.openSession();
 
 		try {

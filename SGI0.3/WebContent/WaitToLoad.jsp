@@ -9,7 +9,9 @@
 <body onload="CallFun()">
 
 
-Please wait while redirecting to SabPaisa...
+	<div style="text-align: center;">
+		<img src="img/loading.gif" title="img/loading.gif">
+	</div>
 
 	<%
 		String url = (String) request.getAttribute("sabPaisaURL");
@@ -24,7 +26,7 @@ function CallFun()
 			 
 			
  	window.location ="<%=url%>";
-			}, 50);
+			}, 5000);
 
 		}
 	</script>

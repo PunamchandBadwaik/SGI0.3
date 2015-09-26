@@ -5,7 +5,7 @@
 
 <html lang="en">
 <head>
-<%-- <%
+<%
 	//checking session
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
@@ -32,7 +32,7 @@
 	} else {
 		sessionID = session.getId();
 	}
-%> --%>
+%>
 <meta charset="utf-8">
 <title>FeeDesk</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -166,46 +166,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 						<div class="nav-sm nav nav-stacked"></div>
 						<ul class="nav nav-pills nav-stacked main-menu">
 							<li class="nav-header">Main</li>
-							<%-- <li><a class="ajax-link"
-								href='<%=session.getAttribute("dashLink").toString()%>'><i
-									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-							<%
-								if (!profile.contentEquals("Student")) {
-							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
-									class="fa fa-building"></i><span> Parent Institute</span></a></li>
-							<%
-								}
-							%> --%>
-							<%-- <%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
-									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
-									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="getInstDues"><i
-									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
-							<%
-								}
-							%> --%>
+				
 							<li><a class="ajax-link" href="Operator-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 						</ul>
@@ -227,13 +188,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 			</noscript>
 
 			<div id="content" class="col-lg-10 col-sm-10">
-				<!-- content starts -->
-				<!-- 	<div>
-					<ul class="breadcrumb">
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Dashboard</a></li>
-					</ul>
-				</div> -->
+				
 
 
 				<div class="row">
@@ -260,7 +215,10 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 										<tr>
 
 											<td>Student UIN Number</td>
-											<td><s:property value="app1.enrollmentNumber" /></td>
+											<td><s:property value="app1.enrollmentNumber" />
+											
+											
+											<input type="hidden" id="uin" value='<s:property value="app1.enrollmentNumber" />' /></td>
 										</tr>
 										<tr>
 
@@ -437,7 +395,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 														
 															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
-															
+															 var uinId =document.getElementById("uin").value;
 															 
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
@@ -556,8 +514,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															
 																
 																document.getElementById("paymentDueStr").value=dueStr;
-																var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid;
-																window.location="StudentPayment"+queryString;
+																var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+uinId;
+																window.location="OperatorStudentPayment"+queryString;
 																return true;
 															}
 														}

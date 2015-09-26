@@ -51,8 +51,8 @@
 
 		<br><br>
 	<div style="text-align: center;">
-		<img src="img/ajax-loaders/ajax-loader-6.gif"
-			title="img/ajax-loaders/ajax-loader-6.gif">
+		<img src="img/loading.gif"
+			title="img/loading.gif">
 	</div>
 
 		<script type="text/javascript">
