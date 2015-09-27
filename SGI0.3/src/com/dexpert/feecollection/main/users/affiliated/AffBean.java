@@ -86,11 +86,9 @@ public class AffBean implements Serializable {
 	@OrderBy(value = "feeId")
 	Set<FeeDetailsBean> feeSet;
 
-	// many to many relationship with FeeConfigs)
-		@ManyToMany(cascade = CascadeType.ALL)
-		@JoinTable(name = "affiliatedinstitute_fee_config_master", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "structure_id"))
-		@OrderBy(value = "feeId")
-		Set<FcBean> configSet;
+	/*// many to many relationship with FeeConfigs)
+		@OneToMany(cascade = CascadeType.ALL, mappedBy="structure_id")
+		Set<FcBean> configSet;*/
 	
 	// one to one bidirectional relationship with student and college
 	// child
@@ -289,13 +287,7 @@ public class AffBean implements Serializable {
 		return serialVersionUID;
 	}
 
-	public Set<FcBean> getConfigSet() {
-		return configSet;
-	}
-
-	public void setConfigSet(Set<FcBean> configSet) {
-		this.configSet = configSet;
-	}
+	
 	
 	
 

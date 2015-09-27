@@ -1,12 +1,20 @@
 package com.dexpert.feecollection.main.fee.config;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -42,6 +50,7 @@ public class FcAction extends ActionSupport {
 	private ArrayList<LookupBean> InstituteParamList = new ArrayList<LookupBean>();
 	private ArrayList<LookupBean> ApplicantParamList = new ArrayList<LookupBean>();
 	private ArrayList<LookupBean> ServiceParamList = new ArrayList<LookupBean>();
+	private ArrayList<String> SelectedInst = new ArrayList<String>();
 	private ArrayList<String> SelectedCourseParam = new ArrayList<String>();
 	private ArrayList<String> SelectedInstParam = new ArrayList<String>();
 	private ArrayList<String> SelectedAppParam = new ArrayList<String>();
@@ -51,6 +60,7 @@ public class FcAction extends ActionSupport {
 	private ArrayList<String> HeaderList = new ArrayList<String>();
 	ArrayList<FeeDetailsBean> fDfeeList = new ArrayList<FeeDetailsBean>();
 	public ArrayList<FeeDetailsBean> fDfeeList2 = new ArrayList<FeeDetailsBean>();
+	private ArrayList<AffBean>instituteList=new ArrayList<AffBean>();
 	LookupDAO lpDao = new LookupDAO();
 	FvDAO fvdao = new FvDAO();
 	FcDAO configdao = new FcDAO();
@@ -60,49 +70,8 @@ public class FcAction extends ActionSupport {
 	// ----------------------
 	// Action Methods Start
 	public String populateFeeForm() {
-
-		// Only Testing Something New !
-		ArrayList<String> valuesArray = new ArrayList<String>();
-		valuesArray.add("Indian");
-		valuesArray.add("Open");
-		valuesArray.add("LC");
-		valuesArray.add("No");
-		ComboList.add(valuesArray);
-		valuesArray = new ArrayList<String>();
-		valuesArray.add("Indian");
-		valuesArray.add("SC");
-		valuesArray.add("LC");
-		valuesArray.add("No");
-		ComboList.add(valuesArray);
-		valuesArray = new ArrayList<String>();
-		valuesArray.add("Indian");
-		valuesArray.add("ST");
-		valuesArray.add("LC");
-		valuesArray.add("No");
-		ComboList.add(valuesArray);
-		valuesArray = new ArrayList<String>();
-		valuesArray.add("Foreign");
-		valuesArray.add("Open");
-		valuesArray.add("LC");
-		valuesArray.add("No");
-		ComboList.add(valuesArray);
-		valuesArray = new ArrayList<String>();
-		valuesArray.add("Foreign");
-		valuesArray.add("SC");
-		valuesArray.add("LC");
-		valuesArray.add("No");
-		ComboList.add(valuesArray);
-		valuesArray = new ArrayList<String>();
-		valuesArray.add("Foreign");
-		valuesArray.add("ST");
-		valuesArray.add("LC");
-		valuesArray.add("No");
-		ComboList.add(valuesArray);
-
-		log.info("combolist is " + ComboList.toString());
-
-		// Done with testing
-
+		
+		instituteList=instDAO.getInstitutes("Relevant", null, null, null, null);
 		CourseParamList = lpDao.getLookupData("Scope", "Course", null, null);
 		InstituteParamList = lpDao.getLookupData("Scope", "Institute", null, null);
 		ApplicantParamList = lpDao.getLookupData("Scope", "Applicant", null, null);
@@ -228,6 +197,7 @@ public class FcAction extends ActionSupport {
 
 		// Set Object in Session for future use
 		ses.setAttribute("sesFeeDetails", feedetails);
+		ses.setAttribute("feeOwner", instDAO.viewInstDetail(Integer.parseInt(SelectedInst.get(0))));
 		// --
 
 		// Get Selected Parameters
@@ -421,6 +391,7 @@ public class FcAction extends ActionSupport {
 
 	public String SaveFee() {
 		FeeDetailsBean fee = (FeeDetailsBean) ses.getAttribute("sesFeeDetails");
+		Integer structId=configdao.getMaxStructure()+1;
 		//New Code for fee Update
 		Integer editFlag=0;
 		try
@@ -440,7 +411,9 @@ public class FcAction extends ActionSupport {
 		//
 		HashMap<Integer, ArrayList<Integer>> ComboMap = new HashMap<Integer, ArrayList<Integer>>();
 		ArrayList<FcBean> comboList = new ArrayList<FcBean>();
+		ArrayList<FcBean> comboList2 = new ArrayList<FcBean>();
 		ArrayList<Integer> combo = new ArrayList<Integer>();
+		
 		ComboMap = (HashMap<Integer, ArrayList<Integer>>) ses.getAttribute("sesComboMap");
 		FcBean comboBean = new FcBean();
 		uids.removeAll(Collections.singleton(null));
@@ -456,15 +429,35 @@ public class FcAction extends ActionSupport {
 				temp.setValueId(combo.get(j));
 				temp.setAmount(comboBean.getAmount());
 				temp.setFeedetailbean(fee);
+				temp.setStructure_id(structId);
+				if(i==1)
+				{
+					comboList2.add(temp);
+				}
 				comboList.add(temp);
 			}
 
 		}
 		log.info("final combos are " + comboList.toString());
 		fee.setConfigs(comboList);
-		configdao.saveFeeDetails(fee);
+		AffBean feeOwner=(AffBean) ses.getAttribute("feeOwner");
+		
+		Set<FcBean>configSet=new HashSet<FcBean>(comboList2);
+		FeeStructureData structbean=new FeeStructureData();
+		//configdao.saveFeeDetails(fee);
 		// configdao.insertFeeBulk(comboList);
-
+		try {
+			AffBean updatedbean=instDAO.getOneCollegeRecord(feeOwner.getInstId());
+			//updatedbean.setConfigSet(configSet);
+			updatedbean.getFeeSet().add(fee);
+			instDAO.saveOrUpdate(updatedbean, null);
+			structbean.setInst_id(updatedbean.getInstId());
+			structbean.setStructure_id(structId);
+			configdao.saveFeeStructure(structbean);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 		request.setAttribute("msg", "Fee Saved Successfully");
 		return SUCCESS;
 	}
@@ -1471,6 +1464,23 @@ public class FcAction extends ActionSupport {
 		this.fDfeeList2 = fDfeeList2;
 	}
 
+	public ArrayList<AffBean> getInstituteList() {
+		return instituteList;
+	}
+
+	public void setInstituteList(ArrayList<AffBean> instituteList) {
+		this.instituteList = instituteList;
+	}
+
+	public ArrayList<String> getSelectedInst() {
+		return SelectedInst;
+	}
+
+	public void setSelectedInst(ArrayList<String> selectedInst) {
+		SelectedInst = selectedInst;
+	}
+
+	
 	// Getter Setters End
 
 }

@@ -168,6 +168,24 @@ Integer count=0;%>
 											<tbody>
 												<tr>
 													
+													<td>Fee Owner</td>
+													<td><div class="control-group">
+
+
+															<div class="controls">
+																<s:select theme="simple" list="instituteList"
+																	listValue="instName" listKey="instId"
+																	 data-rel="chosen"
+																	cssStyle="width:60%" cssClass="form-control"
+																	name="SelectedInst"></s:select>
+
+															</div>
+														</div></td>
+
+												</tr>
+											
+												<tr>
+													
 													<td>Fee Payable By</td>
 													<td><div class="control-group">
 

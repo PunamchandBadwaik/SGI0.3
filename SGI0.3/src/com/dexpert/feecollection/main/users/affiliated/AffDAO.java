@@ -58,7 +58,7 @@ public class AffDAO {
 	static Boolean isExist = false;
 	ParDAO parDAO = new ParDAO();
 	boolean isInserted = true;
-
+	HttpSession httpSession = ServletActionContext.getRequest().getSession();
 	// static ArrayList<AffBean> existingCollegeList = new ArrayList<AffBean>();
 
 	// End of Global Variables
@@ -107,7 +107,6 @@ public class AffDAO {
 
 			}
 			session.beginTransaction();
-
 			session.saveOrUpdate(affInstBean);
 
 			session.getTransaction().commit();
@@ -134,6 +133,19 @@ public class AffDAO {
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
+			if(filterKey.contentEquals("Relevant"))
+			{
+				
+				if(httpSession.getAttribute("sesProfile").toString().contentEquals("Parent"))
+				{
+					ParBean parent=new ParBean();
+					Integer parId=Integer.parseInt(httpSession.getAttribute("sesId").toString());
+					ParDAO prdao=new ParDAO();
+					parent=prdao.viewUniversity(parId);
+					instList=new ArrayList<AffBean>(parent.getAffBeanOneToManySet());
+					return instList;
+				}
+			}
 			Criteria InstSearchCr = session.createCriteria(AffBean.class);
 			if (filterKey.contentEquals("NONE")) {
 				log.info("Showing All Affiliated Institutes");

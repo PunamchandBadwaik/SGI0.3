@@ -43,6 +43,7 @@
 		<mapping class="com.dexpert.feecollection.main.fee.config.FcBean" />
 		<mapping class="com.dexpert.feecollection.main.fee.PaymentDuesBean" />
 		<mapping class="com.dexpert.feecollection.main.fee.config.FeeDetailsBean" />
+		<mapping class="com.dexpert.feecollection.main.fee.config.FeeStructureData" />
 		<mapping
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionBean" />
 		

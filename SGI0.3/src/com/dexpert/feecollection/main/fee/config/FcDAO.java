@@ -8,8 +8,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -80,6 +82,24 @@ public class FcDAO {
 	}
 	
 	public void saveFeeDetails(FeeDetailsBean savedata) {
+		// Declarations
+
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			session.saveOrUpdate(savedata);
+			session.getTransaction().commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			// close session
+			session.close();
+		}
+	}
+	public void saveFeeStructure(FeeStructureData savedata) {
 		// Declarations
 
 		// Open session from session factory
@@ -233,6 +253,29 @@ public class FcDAO {
 		return feeName;
 	}
 	
+	public Integer getMaxStructure()
+	{// Declarations
+
+	// Open session from session factory
+	Session session = factory.openSession();
+	try {
+		DetachedCriteria maxId = DetachedCriteria.forClass(FcBean.class)
+			    .setProjection( Projections.max("structure_id") );
+			Criteria cr=session.createCriteria(FcBean.class)
+			    .add( Property.forName("structure_id").eq(maxId) );
+			FcBean temp=(FcBean) cr.list().get(0);   
+			Integer maxCount=temp.getStructure_id();
+			   log.info("new structure id is "+maxCount+1);
+			   return maxCount;
+	} catch (Exception e) {
+		e.printStackTrace();
+		return 0;
+	} finally {
+		// close session
+		session.close();
+	}
+		
+	}
 
 	// DAO Methods End
 }
