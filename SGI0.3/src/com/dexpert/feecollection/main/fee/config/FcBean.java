@@ -28,7 +28,7 @@ public class FcBean implements Serializable {
 	
 	private Integer comboId,valueId;
 	private Double amount;
-	
+	private Integer structure_id;
 
 	
 //	//one to many Unidirectional relationship
@@ -85,6 +85,14 @@ public class FcBean implements Serializable {
 
 	public void setAmount(Double amount) {
 		this.amount = amount;
+	}
+
+	public Integer getStructure_id() {
+		return structure_id;
+	}
+
+	public void setStructure_id(Integer structure_id) {
+		this.structure_id = structure_id;
 	}
 	
 	

@@ -30,7 +30,6 @@ public class FeeDetailsBean implements Serializable {
 	private String ins_param,cou_param,app_param,ser_param;
 	//private Boolean forApplicant=false,forInstitute=false,cal_mode=false;
 	private Integer forApplicant,forInstitute,cal_mode;
-
 	@Transient
 	Integer genericFlag;
 	

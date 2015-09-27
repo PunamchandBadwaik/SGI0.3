@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
+import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
@@ -79,12 +80,18 @@ public class AffBean implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
 	Set<OperatorBean> OptrBeanSet;
 
-	// one to many relationship with FeeDetails)
+	// many to many relationship with FeeDetails)
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "affiliatedinstitute_feedetails", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "feeId"))
 	@OrderBy(value = "feeId")
 	Set<FeeDetailsBean> feeSet;
 
+	// many to many relationship with FeeConfigs)
+		@ManyToMany(cascade = CascadeType.ALL)
+		@JoinTable(name = "affiliatedinstitute_fee_config_master", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "structure_id"))
+		@OrderBy(value = "feeId")
+		Set<FcBean> configSet;
+	
 	// one to one bidirectional relationship with student and college
 	// child
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
@@ -281,5 +288,15 @@ public class AffBean implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public Set<FcBean> getConfigSet() {
+		return configSet;
+	}
+
+	public void setConfigSet(Set<FcBean> configSet) {
+		this.configSet = configSet;
+	}
+	
+	
 
 }
