@@ -313,7 +313,7 @@ public class AppAction extends ActionSupport {
 		// LoginBean loginBean = (LoginBean)
 		// httpSession.getAttribute("loginUserBean");
 		String enroll = new String();
-		// try {
+		try {
 		enroll = appBean1.getEnrollmentNumber();
 
 		httpSession.setAttribute("enroll", enroll);
@@ -326,10 +326,10 @@ public class AppAction extends ActionSupport {
 
 		getDuesOfStudent();
 		return SUCCESS;
-		// } catch (java.lang.NullPointerException e) {
-		// request.setAttribute("msg", "Session Time Out");
-		// return ERROR;
-		// }
+	} catch (Exception e) {
+	 request.setAttribute("msg", "Please Enter Valid UIN");
+	 return "failure";
+	}
 
 		/*
 		 * } catch (java.lang.NullPointerException e) {

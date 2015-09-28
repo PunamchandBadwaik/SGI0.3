@@ -45,7 +45,7 @@ public class BreakString {
 			}
 
 			else {
-				System.out.println("Breaked String is ::" + string);
+				System.out.println("String is ::" + string);
 				z = z + string.concat("~");
 			}
 		}

@@ -294,7 +294,7 @@
 										<table class="table table-condensed">
 											<tr>
 											<tr>
-												<td style="font-weight: bold;">UIN Number</td>
+												<td style="font-weight: bold;">UIN </td>
 
 
 
@@ -302,7 +302,7 @@
 													hidden="hidden"> <input style="width: 400px;"
 													type="text" name="appBean1.enrollmentNumber"
 													class="form-control" required="required" id="enrollId"
-													placeholder="Enter UIN Number"
+													placeholder="Enter UIN "
 													value='<s:property value="appBean1.enrollmentNumber" />'>
 
 

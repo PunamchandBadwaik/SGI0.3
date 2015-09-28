@@ -27,7 +27,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 		String txnId = request.getParameter("txnID");
 		String payMode = request.getParameter("payMode");
 
-		//try {
+		try {
 			HttpSession httpSession = (HttpSession) request.getServletContext().getAttribute(txnId);
 			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 			
@@ -78,10 +78,10 @@ public class RetrieveUserSessionAction extends ActionSupport {
 				}
 			}
 
-		//} catch (java.lang.NullPointerException e) {
-		//	request.setAttribute("msg", "Session Time Out");
-			//return ERROR;
-		//}
+		} catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Session Time Out");
+			return ERROR;
+		}
 
 	}
 
