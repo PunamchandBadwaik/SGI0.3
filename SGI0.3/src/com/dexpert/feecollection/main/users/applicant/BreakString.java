@@ -1,4 +1,4 @@
-package com.dexpert.feecollection.main.fee.lookup.values;
+package com.dexpert.feecollection.main.users.applicant;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;

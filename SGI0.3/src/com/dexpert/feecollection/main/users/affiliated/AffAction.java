@@ -434,7 +434,7 @@ public class AffAction extends ActionSupport {
 		Integer instId = Integer.parseInt(request.getParameter("collId").trim());
 		AffBean instbean = affDao.getOneCollegeRecord(instId);
 		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
-		feeList = feeDAO.GetFees("payee", "institute", null, null);
+		feeList = feeDAO.GetFees("payee", "institute", null, null,null);
 		for (int j = 0; j < instfeeList.size(); j++) {
 
 			for (int i = 0; i < feeList.size(); i++) {
@@ -477,7 +477,7 @@ public class AffAction extends ActionSupport {
 			// Get College Data
 			collegedata = affDao.getOneCollegeRecord(id);
 			// Get Fees in Set
-			feelist = feeDAO.GetFees("ids", null, null, FeeIdsInt);
+			feelist = feeDAO.GetFees("ids", null, null, FeeIdsInt,null);
 			Set<FeeDetailsBean> feeset = collegedata.getFeeSet();
 			Set<AffFeePropBean> propSet = collegedata.getFeeProps();
 			for (int i = 0; i < feelist.size(); i++) {
@@ -717,7 +717,7 @@ public class AffAction extends ActionSupport {
 
 			AffFeePropBean propBean = tempIt.next();
 			PaymentDuesBean due = new PaymentDuesBean();
-			FeeDetailsBean feedetail = feeDAO.GetFees("id", null, propBean.getFeeId(), null).get(0);
+			FeeDetailsBean feedetail = feeDAO.GetFees("id", null, propBean.getFeeId(), null,null).get(0);
 			List<FcBean> configs = new ArrayList<FcBean>();
 			configs = feedetail.getConfigs();
 			HashMap<Integer, Double> configMap = new HashMap<Integer, Double>();

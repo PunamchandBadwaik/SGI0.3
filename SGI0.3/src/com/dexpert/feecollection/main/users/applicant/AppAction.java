@@ -263,7 +263,7 @@ public class AppAction extends ActionSupport {
 	}
 
 	public void updateStudentDue() {
-
+        
 		List<Integer> feeIdes = new ArrayList<Integer>();
 		String applicableFeeString = aplDAO.getApplicableFeesString(appBean1.getCourse());
 		log.info("Applicable fee string" + applicableFeeString);

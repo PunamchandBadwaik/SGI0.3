@@ -99,7 +99,7 @@ public class FcAction extends ActionSupport {
 
 		// Validate fee name
 		ArrayList<FeeDetailsBean> templist = new ArrayList<FeeDetailsBean>();
-		templist = configdao.GetFees("name", feedetails.getFeeName().trim(), null, null);
+		templist = configdao.GetFees("name", feedetails.getFeeName().trim(), null, null,null);
 		if (!templist.isEmpty()) {
 			request.setAttribute("reqAlertFlag2", true);
 			return ERROR;
@@ -463,7 +463,7 @@ public class FcAction extends ActionSupport {
 	}
 
 	public String GetFeesAll() {
-		fDfeeList2 = configdao.GetFees("ALL", null, null, null);
+		fDfeeList2 = configdao.GetFees("ALL", null, null, null,null);
 		log.info(fDfeeList2.toString());
 		return SUCCESS;
 	}
@@ -499,7 +499,7 @@ public class FcAction extends ActionSupport {
 				calcParamMap.put(calbean.getComboId(), calbean);
 			}
 		}
-		fDfeeList = configdao.GetFees("id", null, id, null);
+		fDfeeList = configdao.GetFees("id", null, id, null,null);
 		FeeDetailsBean fdBean = new FeeDetailsBean();
 		fdBean = fDfeeList.get(0);
 		ListMultimap<Integer, FcBean> comboMap = ArrayListMultimap.create();
@@ -576,7 +576,7 @@ public class FcAction extends ActionSupport {
 		Integer id = Integer.parseInt(request.getParameter("reqFeeId").trim());
 		ses.setAttribute("sesFeeEditFlag",1);
 		HashMap<Integer, ArrayList<Integer>> comboMapEdit = new HashMap<Integer, ArrayList<Integer>>();
-		fDfeeList = configdao.GetFees("id", null, id, null);
+		fDfeeList = configdao.GetFees("id", null, id, null,null);
 		FeeDetailsBean fdBean = new FeeDetailsBean();
 		fdBean = fDfeeList.get(0);
 		ses.setAttribute("sesFeeDetails", fdBean);

@@ -45,7 +45,6 @@ import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
-import com.dexpert.feecollection.main.fee.lookup.values.BreakString;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
@@ -108,9 +107,13 @@ public class AppDAO {
 		String k = bs.breakString(pp);
 		
 		log.info("String after Break Class : "+k);
-		String year = bs.getYear(k);
+		/*String year = bs.getYear(k);
 		String course = bs.getCourse(k);
-		String yearCode = bs.getYearCode(course);
+		String yearCode = bs.getYearCode(course);*/
+		String year = "2014";
+		String course ="MBA 1";
+		String yearCode="11";
+		
 		// log.info("Original String element is ::" + pp);
 		// log.info("Break String element is ::" + k);
 		// log.info("Year is ::" + year);
@@ -200,6 +203,7 @@ public class AppDAO {
 	public void getDuesDetail(AppBean appBean) {
 		AffDAO affDao = new AffDAO();
 		// FvBean fvBean = new FvBean();
+		Integer structureId=affDao.getStrutureId(appBean.getAffBeanStu().getInstId());
 		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
 		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
@@ -220,7 +224,7 @@ public class AppDAO {
 
 			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
 			log.info("fee name " + feeDetailsBean.getFeeName());
-			Double amt = CalculateDues.calculateFeeStudent(list, feeDetailsBean.getFeeId());
+			Double amt = CalculateDues.calculateFeeStudent(list, feeDetailsBean.getFeeId(),structureId);
 			fcBean.setAmount(amt);
 			addToDuesTable(appBean, fcBean, feeDetailsBean);
 		}

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -17,13 +18,14 @@ import org.hibernate.criterion.Restrictions;
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
+import com.dexpert.feecollection.main.users.affiliated.AffDAO;
 import com.google.common.collect.ArrayListMultimap;
 
 public class FcDAO {
 	// Global Declarations
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(LookupDAO.class.getName());
-
+    AffDAO affDAO=new AffDAO();
 	// Global Declarations End
 	// DAO Methods
 	public void insertFeeBulk(ArrayList<FcBean> savelist) {
@@ -118,7 +120,8 @@ public class FcDAO {
 		}
 	}
 
-	public ArrayList<FeeDetailsBean> GetFees(String filterKey, String filterValue, Integer id, ArrayList<Integer> ids) {
+	@SuppressWarnings("deprecation")
+	public ArrayList<FeeDetailsBean> GetFees(String filterKey, String filterValue, Integer id, ArrayList<Integer> ids,Integer structureId) {
 		// Declarations
 		ArrayList<FeeDetailsBean> ResultList = new ArrayList<FeeDetailsBean>();
 		// Open session from session factory
@@ -142,8 +145,12 @@ public class FcDAO {
 			} else if (filterKey.contentEquals("ids")) {
 				feeCr.add(Restrictions.in("feeId", ids));
 			}
+			
+			if(structureId!=null){
+			feeCr.createAlias("configs","conf",CriteriaSpecification.LEFT_JOIN);
+			feeCr.add(Restrictions.eq("conf.structure_id",structureId ));
 			feeCr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-
+			}
 			Iterator<FeeDetailsBean> feeIt = feeCr.list().iterator();
 			while (feeIt.hasNext()) {
 				ResultList.add(feeIt.next());
@@ -164,9 +171,12 @@ public class FcDAO {
 		FeeDetailsBean feeDetail = new FeeDetailsBean();
 		List<FcBean> combinations = new ArrayList<FcBean>();
 		List<FcBean> searchList = new ArrayList<FcBean>();
+		
+		
+		
 		// Get Fee From fee_details table
 		try {
-			feeDetail = GetFees("id", null, feeId, null).get(0);
+			feeDetail = GetFees("id", null, feeId, null,null).get(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.info("Incorrect Fee ID");
