@@ -164,12 +164,12 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
 						<div class="nav-sm nav nav-stacked"></div>
-						<ul class="nav nav-pills nav-stacked main-menu">
+						<%-- <ul class="nav nav-pills nav-stacked main-menu">
 							<li class="nav-header">Main</li>
 				
 							<li><a class="ajax-link" href="Operator-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-						</ul>
+						</ul> --%>
 					</div>
 				</div>
 			</div>
