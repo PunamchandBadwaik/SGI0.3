@@ -127,7 +127,8 @@ public class LookupDAO {
 		try {
             Criteria criteria = session.createCriteria(LookupBean.class);
 			criteria.add(Restrictions.eq("lookupScope", lookupScope));
-			criteria.createCriteria("fvBeansList", "fv");
+			criteria.add(Restrictions.in("lookupId",lookupIdes ));
+			criteria.createAlias("fvBeansList", "fv",CriteriaSpecification.LEFT_JOIN);
 			criteria.setFetchMode("fvBeansList",FetchMode.JOIN );
 			criteria.add(Restrictions.in("fv.feeValueId", valueIdes));
 		    criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

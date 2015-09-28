@@ -243,16 +243,11 @@ public class AffAction extends ActionSupport {
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		Integer structureId = affDao.getStrutureId(loginBean.getAffBean().getInstId());
 		log.info("Struture id" + structureId);
-		/*List<Integer> valueIdes = feeDAO.getLookupValue(structureId);
+		List<Integer> valueIdes = feeDAO.getLookupValue(structureId);
 		log.info("value ides got from fee config table::::::" + valueIdes);
-		*/
-		List<Integer> valueIdes=new ArrayList<Integer>();
-		valueIdes.add(1);valueIdes.add(2);valueIdes.add(3);valueIdes.add(4);
-		
 		List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 		log.info("look up param list::::::" + lookUpParamList);
-		
-		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList,valueIdes);
+		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
 		log.info("look up List Size is ::" + lookupBeanList.size());
 
 		return SUCCESS;
