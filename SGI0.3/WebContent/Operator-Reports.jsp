@@ -144,6 +144,12 @@ try{
 				</ul>
 			</div>
 			<!-- theme selector ends -->
+		<%
+								if (profile.contentEquals("CollegeOperator")) {
+							%>			
+			
+			
+			
 	<!----Cart Button Starts--->
 			<div class="btn-group pull-right">
 				<button class="btn btn-default dropdown-toggle"
@@ -157,6 +163,11 @@ try{
 				</ul>
 			</div>
 			<!-- cart button ends -->
+			
+			
+			<%
+								}
+							%>	
 		</div>
 	</div>
 	<!-- topbar ends -->

@@ -267,7 +267,7 @@
 							<div class="box-header well">
 								<h2>
 									<i class="glyphicon glyphicon-list-alt"></i> &nbsp;Total
-									Universities
+									Parent Institutes
 								</h2>
 
 								<div class="box-icon">
@@ -284,7 +284,7 @@
 										<div class="col-md-12">
 											<button class="btn btn-sm btn-info pull-right"
 												onclick='window.open("UniversityForm.jsp", "UniversityForm", "width=500,height=900")'>
-												<i class="fa fa-plus"></i> Add University
+												<i class="fa fa-plus"></i> Add Parent Institute
 											</button>
 										</div>
 									</div>

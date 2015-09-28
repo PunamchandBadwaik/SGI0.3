@@ -106,7 +106,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> New University
+										<i class="glyphicon glyphicon-info-sign"></i> New Parent Institute
 										Form
 									</h2>
 
@@ -134,10 +134,10 @@
 											<tbody>
 												<tr>
 
-													<td>University Name</td>
+													<td>Parent Inst. Name</td>
 													<td><div id="the-basics" class="has-success">
 															<input required="required" id="instName"
-																name="parBean.parInstName" placeholder="University Name"
+																name="parBean.parInstName" placeholder="Parent Inst. Name"
 																type="text" class="form-control">
 														</div></td>
 
@@ -148,7 +148,7 @@
 													<td><div id="the-basics" class="has-success">
 															<textarea required="required" id="instAddress"
 																name="parBean.parInstAddress"
-																placeholder="University Address" 
+																placeholder="Parent Inst. Address" 
 																class="form-control"></textarea>
 
 														</div></td>
@@ -171,7 +171,7 @@
 													<td>Email</td>
 													<td><div id="the-basics" class="has-success">
 															<input id="instEmail" name="parBean.parInstEmail"
-																placeholder="University Email" type="text"
+																placeholder="Parent Inst. Email" type="text"
 																class="form-control">
 
 														</div></td>

@@ -104,7 +104,7 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-info-sign"></i> University
+									<i class="glyphicon glyphicon-info-sign"></i> Parent Inst.
 									Details
 								</h2>
 
@@ -131,7 +131,7 @@
 										<tbody>
 											<tr>
 
-												<td style="font-weight: bold;">University Name</td>
+												<td style="font-weight: bold;">Parent Inst. Name</td>
 												<td><s:property value="parBean.parInstName" /></td>
 
 											</tr>
@@ -185,7 +185,7 @@
 					<div class="col-md-12">
 						<button class="btn btn-success"
 							onclick='window.location="LockFeature.jsp"'>Edit
-							University Info</button>
+							Parent Inst. Info</button>
 						
 
 						<button onclick="window.close()" class="btn btn-info">Close

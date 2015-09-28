@@ -201,12 +201,12 @@
 												%>
 												<tr>
 
-													<td>University Name</td>
+													<td>Parent Inst. Name</td>
 													<td colspan="2">
 														<div id="the-basics" class="has-success">
 															<select data-rel="chosen" name="parInstId"
 																style="width: 300px;">
-																<option value="">--Select University--</option>
+																<option value="">--Select Parent Inst.--</option>
 																<s:iterator value="parBeansList">
 
 																	<option value='<s:property value="parInstId" />'><s:property
