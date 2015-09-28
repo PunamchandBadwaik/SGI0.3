@@ -15,11 +15,11 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
+import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
-
 import com.opensymphony.xwork2.ActionSupport;
 
 public class SaAction extends ActionSupport {
@@ -80,6 +80,15 @@ public class SaAction extends ActionSupport {
 		}
 
 		superAdmin = saDAO.saveOrUpdate(superAdmin);
+		
+		
+		//code to send msg
+		String user = username;
+		String pass = password;
+		String msg = "UserId :" + user + "" + " Passsword : " + pass;
+		SendSMS sms = new SendSMS();
+		sms.sendSMS(superAdmin.getMobileNum(), msg);
+		
 		// -----Code for sending email//--------------------
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(superAdmin.getEmailId(), "Welcome To FeeDesk!", username, password,
