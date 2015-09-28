@@ -38,6 +38,7 @@ import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
+import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
@@ -94,6 +95,8 @@ public class AffAction extends ActionSupport {
 	AppDAO appDAO = new AppDAO();
 	List<Object[]> totalDuesOFCollege = new ArrayList<Object[]>();
 	AffBean affBean = new AffBean();
+	FvDAO fvDAO = new FvDAO();
+	List<FvBean> lookUpvalueList;
 
 	// End of Global Variables
 
@@ -229,20 +232,27 @@ public class AffAction extends ActionSupport {
 	}
 
 	// get institute Details list
-	
-	
-	public String getAllClgList()
-	{
+
+	public String getAllClgList() {
 		affInstList = affDao.getCollegesList();
 		return SUCCESS;
 	}
-	
 
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		Integer structureId = affDao.getStrutureId(loginBean.getAffBean().getInstId());
+		log.info("Struture id" + structureId);
+		/*List<Integer> valueIdes = feeDAO.getLookupValue(structureId);
+		log.info("value ides got from fee config table::::::" + valueIdes);
+		*/
+		List<Integer> valueIdes=new ArrayList<Integer>();
+		valueIdes.add(1);valueIdes.add(2);valueIdes.add(3);valueIdes.add(4);
 		
-		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", loginBean.getAffBean().getInstId());
+		List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
+		log.info("look up param list::::::" + lookUpParamList);
+		
+		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList,valueIdes);
 		log.info("look up List Size is ::" + lookupBeanList.size());
 
 		return SUCCESS;
@@ -1575,6 +1585,14 @@ public class AffAction extends ActionSupport {
 
 	public void setAffBean(AffBean affBean) {
 		this.affBean = affBean;
+	}
+
+	public List<FvBean> getLookUpvalueList() {
+		return lookUpvalueList;
+	}
+
+	public void setLookUpvalueList(List<FvBean> lookUpvalueList) {
+		this.lookUpvalueList = lookUpvalueList;
 	}
 
 	// End of Getter Setter Methods

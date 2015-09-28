@@ -1,6 +1,7 @@
 package com.dexpert.feecollection.main.fee.lookup.values;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -96,6 +97,19 @@ public class FvDAO {
 		Integer courseId = (Integer) criteria.list().iterator().next();
 		session.close();
 		return courseId;
+	}
+	public List<Integer> getListOfValueBeans(List<Integer> listOfValue)
+	{
+	Session session=factory.openSession();	
+	Criteria criteria=session.createCriteria(FvBean.class);
+	criteria.add(Restrictions.in("feeValueId", listOfValue));
+	criteria.setProjection(Projections.groupProperty("lookupname.lookupId"));
+	criteria.setProjection(Projections.property("lookupname.lookupId"));
+	criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+	List<Integer> lookUpparamId=criteria.list();
+	log.info("look up param list"+lookUpparamId);
+	session.close();
+	return lookUpparamId;	
 	}
 	// DAO Methods End
 

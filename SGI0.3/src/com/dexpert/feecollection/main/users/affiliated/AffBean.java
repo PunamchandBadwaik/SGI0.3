@@ -42,6 +42,8 @@ public class AffBean implements Serializable {
 	@Id
 	@GeneratedValue(generator = "g1")
 	private Integer instId;
+	
+	
 
 	@Column(unique = true)
 	private String instName;
@@ -83,6 +85,7 @@ public class AffBean implements Serializable {
 	// many to many relationship with FeeDetails)
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "affiliatedinstitute_feedetails", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "feeId"))
+	@Column(name="sequenceId")
 	@OrderBy(value = "feeId")
 	Set<FeeDetailsBean> feeSet;
 
@@ -98,6 +101,7 @@ public class AffBean implements Serializable {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "affiliated_values", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "value_id"))
+	
 	Set<FvBean> collegeParamvalues;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -105,8 +109,6 @@ public class AffBean implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<PaymentDuesBean> dueFeesSet;
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="affBean")
-	private Set<LookupBean> lookupBeans;
 
 	public Set<AppBean> getAplBeanSet() {
 		return aplBeanSet;

@@ -28,22 +28,11 @@ public class LookupBean implements Serializable {
 	private String lookupScope, lookupName, lookupType, lookupDesc;
 
 	// one to many unidirectional relationship with fee look up values
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = FvBean.class)
-	@JoinColumn(name = "FeeLookupId_Fk", referencedColumnName = "lookupId")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="lookupname")
 	private List<FvBean> fvBeansList;
    
-	//
-	@ManyToOne(targetEntity=AffBean.class)
-	@JoinColumn(name="instId_Fk",referencedColumnName="instId")
-    private AffBean affBean;
 	
-	public AffBean getAffBean() {
-		return affBean;
-	}
-
-	public void setAffBean(AffBean affBean) {
-		this.affBean = affBean;
-	}
+	
 
 	public List<FvBean> getFvBeansList() {
 		return fvBeansList;

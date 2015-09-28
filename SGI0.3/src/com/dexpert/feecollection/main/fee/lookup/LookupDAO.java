@@ -6,8 +6,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -118,15 +121,16 @@ public class LookupDAO {
 		}
 	}
 
-	public List<LookupBean> getListOfLookUpValues(String lookupScope, Integer affId) {
+	public List<LookupBean> getListOfLookUpValues(String lookupScope, List<Integer> lookupIdes, List<Integer> valueIdes) {
 		Session session = factory.openSession();
 
 		try {
-
-			Criteria criteria = session.createCriteria(LookupBean.class);
+            Criteria criteria = session.createCriteria(LookupBean.class);
 			criteria.add(Restrictions.eq("lookupScope", lookupScope));
-			criteria.add(Restrictions.eq("affBean.instId", affId));
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.createCriteria("fvBeansList", "fv");
+			criteria.setFetchMode("fvBeansList",FetchMode.JOIN );
+			criteria.add(Restrictions.in("fv.feeValueId", valueIdes));
+		    criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			List<LookupBean> list = criteria.list();
 			return list;
 

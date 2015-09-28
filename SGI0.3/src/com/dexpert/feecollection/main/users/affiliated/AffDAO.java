@@ -43,6 +43,7 @@ import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
+import com.dexpert.feecollection.main.fee.config.FeeStructureData;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
@@ -770,6 +771,26 @@ public class AffDAO {
 			session.close();
 			// TODO: handle exception
 		}
+	}
+	
+	public Integer getStrutureId(Integer instId)
+	{
+	Integer structureId=null;
+	Session session=factory.openSession();	
+	try{
+	Criteria criteria=session.createCriteria(FeeStructureData.class);
+	criteria.add(Restrictions.eq("inst_id", instId)).setProjection(Projections.property("structure_id"));
+	structureId=(Integer)criteria.list().iterator().next();	
+	log.info("struture id is"+structureId);
+	return structureId;
+	}catch(NoSuchElementException nse)
+	{
+	nse.printStackTrace();
+	return structureId;	
+	}
+	finally{
+	session.close();	
+	}	
 	}
 
 }

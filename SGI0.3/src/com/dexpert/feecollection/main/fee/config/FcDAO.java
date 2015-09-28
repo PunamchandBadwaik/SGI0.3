@@ -53,7 +53,6 @@ public class FcDAO {
 		}
 	}
 
-	
 	public void deleteFeeBulk(ArrayList<FcBean> remlist) {
 		// Declarations
 
@@ -80,7 +79,7 @@ public class FcDAO {
 			session.close();
 		}
 	}
-	
+
 	public void saveFeeDetails(FeeDetailsBean savedata) {
 		// Declarations
 
@@ -99,6 +98,7 @@ public class FcDAO {
 			session.close();
 		}
 	}
+
 	public void saveFeeStructure(FeeStructureData savedata) {
 		// Declarations
 
@@ -252,29 +252,37 @@ public class FcDAO {
 		session.close();
 		return feeName;
 	}
-	
-	public Integer getMaxStructure()
-	{// Declarations
 
-	// Open session from session factory
-	Session session = factory.openSession();
-	try {
-		DetachedCriteria maxId = DetachedCriteria.forClass(FcBean.class)
-			    .setProjection( Projections.max("structure_id") );
-			Criteria cr=session.createCriteria(FcBean.class)
-			    .add( Property.forName("structure_id").eq(maxId) );
-			FcBean temp=(FcBean) cr.list().get(0);   
-			Integer maxCount=temp.getStructure_id();
-			   log.info("new structure id is "+maxCount+1);
-			   return maxCount;
-	} catch (Exception e) {
-		e.printStackTrace();
-		return 0;
-	} finally {
-		// close session
-		session.close();
+	public Integer getMaxStructure() {// Declarations
+
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			DetachedCriteria maxId = DetachedCriteria.forClass(FcBean.class).setProjection(
+					Projections.max("structure_id"));
+			Criteria cr = session.createCriteria(FcBean.class).add(Property.forName("structure_id").eq(maxId));
+			FcBean temp = (FcBean) cr.list().get(0);
+			Integer maxCount = temp.getStructure_id();
+			log.info("new structure id is " + maxCount + 1);
+			return maxCount;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			// close session
+			session.close();
+		}
+
 	}
-		
+
+	public List<Integer> getLookupValue(Integer structureId) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(FcBean.class);
+		criteria.add(Restrictions.eq("structure_id", structureId));
+		criteria.setProjection(Projections.distinct(Projections.property("valueId")));
+		List<Integer> lookupValuesId = criteria.list();
+		session.close();
+		return lookupValuesId;
 	}
 
 	// DAO Methods End
