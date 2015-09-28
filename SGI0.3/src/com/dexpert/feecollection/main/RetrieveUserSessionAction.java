@@ -36,7 +36,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 			String studentEnrollmentNo = (String) hm.get("enrollId");
 			String sgiTxnId = hm.get("txnID").toString();
 
-			if (RPS.equals("0"))
+			if (RPS.equals("Ok")||RPS.equals("0"))
 
 			{
 
