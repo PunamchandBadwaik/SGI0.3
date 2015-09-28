@@ -167,12 +167,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12">
+						<div class="col-md-12" align="center">
 
-							<button type="submit" class="btn btn-success">Save Fee
+						<!-- 	<button type="submit" class="btn btn-success">Save Fee
 								Details</button>
-
-							<button onclick="window.close()" class="btn btn-info">Close
+ -->
+							<button onclick="window.close()"  class="btn btn-info">Close
 							</button>
 
 						</div>
