@@ -51,8 +51,7 @@
 
 		<br><br>
 	<div style="text-align: center;">
-		<img src="img/loading.gif"
-			title="img/loading.gif">
+		<img src="img/loading.gif" title="img/loading.gif" height="300px" width="400px" >
 	</div>
 
 		<script type="text/javascript">
@@ -61,7 +60,7 @@
 				
 				 window.setTimeout(function(){
 						window.location = "RetrieveUserSession?RPS=<%=msg%>&txnID=<%=transId%>&payMode=<%=payMode%>";
-								}, 7000);
+								}, 5000);
 			}
 		</script>
 </body>

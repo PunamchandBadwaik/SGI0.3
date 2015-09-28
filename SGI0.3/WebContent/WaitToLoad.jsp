@@ -10,7 +10,7 @@
 
 
 	<div style="text-align: center;">
-		<img src="img/loading.gif" title="img/loading.gif" height="200px" width="300px">
+		<img src="img/loading.gif" title="img/loading.gif" height="300px" width="400px" >
 	</div>
 
 	<%
@@ -26,7 +26,7 @@ function CallFun()
 			 
 			
  	window.location ="<%=url%>";
-			},05);
+			}, 05);
 
 		}
 	</script>
