@@ -307,6 +307,37 @@ public class AppAction extends ActionSupport {
 
 	}
 
+	
+/*	College Operator getting the Student dues Detail*/
+	
+	public String  operatorGettingTheStudentDuesDetail() {
+
+		HttpSession httpSession = request.getSession();
+		LoginBean loginBean = (LoginBean)
+		httpSession.getAttribute("loginUserBean");
+		String enroll = new String();
+		try {
+		enroll = appBean1.getEnrollmentNumber();
+
+		httpSession.setAttribute("enroll", enroll);
+		appBean1 = aplDAO.getUserDetail(enroll);
+
+		/*httpSession.setAttribute("sesProfile", "Student");
+		httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
+
+		httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
+*/
+		getDuesOfStudent();
+		return SUCCESS;
+	} catch (Exception e) {
+	 request.setAttribute("msg", "Please Enter Valid UIN");
+	 return "failure";
+	}
+	}
+
+
+	
+	
 	public String StudentDuesDetail() {
 
 		HttpSession httpSession = request.getSession();

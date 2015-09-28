@@ -837,7 +837,7 @@
 
 		<action name="getStudentRecordByOperator"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
-			method="StudentDuesDetail">
+			method="operatorGettingTheStudentDuesDetail"> <!--  StudentDuesDetail -->
 
 			<result name="success">OperatorStudentDetail.jsp</result>
 			<result name="failure">StudentEnrollmentNo.jsp</result>
