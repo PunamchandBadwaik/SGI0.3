@@ -10,9 +10,12 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+
 import java.util.Set;
 
 import javax.crypto.BadPaddingException;
@@ -51,7 +54,7 @@ import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
-import com.google.common.collect.ArrayListMultimap;
+
 
 public class AppDAO {
 
@@ -59,6 +62,9 @@ public class AppDAO {
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(AppDAO.class.getName());
 	AffDAO aff = new AffDAO();
+	AffDAO affDAO = new AffDAO();
+	FcDAO fcDAO = new FcDAO();
+	FvDAO fvDAO = new FvDAO();
 
 	// End of Global Variables
 
@@ -105,12 +111,16 @@ public class AppDAO {
 
 		BreakString bs = new BreakString();
 		String k = bs.breakString(pp);
-		
-		log.info("String after Break Class : "+k);
-		String year = bs.getYear(k);
-		String course = bs.getCourse(k);
-		String yearCode = bs.getYearCode(course);
-		
+
+		log.info("String after Break Class : " + k);
+		/*
+		 * String year = bs.getYear(k); String course = bs.getCourse(k); String
+		 * yearCode = bs.getYearCode(course);
+		 */
+		String year = "2014";
+		String course = "11th Science";
+		String yearCode = "11";
+
 		// log.info("Original String element is ::" + pp);
 		// log.info("Break String element is ::" + k);
 		// log.info("Year is ::" + year);
@@ -200,7 +210,7 @@ public class AppDAO {
 	public void getDuesDetail(AppBean appBean) {
 		AffDAO affDao = new AffDAO();
 		// FvBean fvBean = new FvBean();
-		Integer structureId=affDao.getStrutureId(appBean.getAffBeanStu().getInstId());
+		Integer structureId = affDao.getStrutureId(appBean.getAffBeanStu().getInstId());
 		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
 		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
@@ -217,12 +227,12 @@ public class AppDAO {
 
 		}
 		Collections.sort(list);
-		CalculateDues calDue=new CalculateDues();
+		CalculateDues calDue = new CalculateDues();
 		while (feeDetailIterator.hasNext()) {
-       
+
 			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
 			log.info("fee name " + feeDetailsBean.getFeeName());
-			Double amt =calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(),structureId);
+			Double amt = calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(), structureId);
 			fcBean.setAmount(amt);
 			addToDuesTable(appBean, fcBean, feeDetailsBean);
 		}
@@ -337,7 +347,7 @@ public class AppDAO {
 
 	public AppBean getUserDetail(String EnrId) {
 
-		log.info("Student Enrollment Number ::"+ EnrId);
+		log.info("Student Enrollment Number ::" + EnrId);
 		Session session = factory.openSession();
 
 		try {
@@ -375,6 +385,21 @@ public class AppDAO {
 
 	public ArrayList<AppBean> importExcelFileToDatabase1(String fileUploadFileName, File fileUpload, String path)
 			throws Exception {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		HttpSession httpSession = request.getSession();
+		List<Integer> valueList = new ArrayList<Integer>();
+		List<Integer> paramList = new ArrayList<Integer>();
+		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+
+		Integer str_id = affDAO.getStrutureId(lgBean.getAffBean().getInstId());
+		valueList = fcDAO.getLookupValue(str_id);
+
+		paramList = fvDAO.getListOfValueBeans(valueList);
+		Iterator<Integer> paramIterator = paramList.iterator();
+		while (paramIterator.hasNext()) {
+			Integer integer = (Integer) paramIterator.next();
+			System.out.println(integer);
+		}
 
 		// ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
 
@@ -386,69 +411,65 @@ public class AppDAO {
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 
 		ArrayList<ArrayList<String>> StudentSet = new ArrayList<ArrayList<String>>();
+
+		LinkedHashMap<Integer, ArrayList<Object>> map = new LinkedHashMap<Integer, ArrayList<Object>>();
+
 		try {
 
-			// for (int i = 0; i < xssfWorkbook.getNumberOfSheets(); i++) {
-			// hssfSheet = xssfWorkbook.getSheetAt(i);
 			Iterator<Row> rows = hssfSheet.rowIterator();
+
+			int j = 0;
+			String stringVal;
+			long numVal;
+			XSSFCell cell;
+
 			while (rows.hasNext()) {
 				XSSFRow row = (XSSFRow) rows.next();
 
 				if (row.getRowNum() == 0) {
 					continue;
 				}
-				int i = 1;
-				// log.info("Row Number ::" + row.getRowNum());
 				Iterator<Cell> cells = row.cellIterator();
-				ArrayList<String> al = new ArrayList<String>();
-				;
+				ArrayList<Object> tempArrayList = new ArrayList<Object>();
+
+				// System.out.print(">>" + j + " ");
 				while (cells.hasNext()) {
-					XSSFCell cell = (XSSFCell) cells.next();
+
+					cell = (XSSFCell) cells.next();
 
 					switch (cell.getCellType()) {
 
-					case Cell.CELL_TYPE_STRING:
-
+					case XSSFCell.CELL_TYPE_STRING:
+						stringVal = cell.getStringCellValue();
+						// System.out.print(stringVal + " ");
+						tempArrayList.add(stringVal);
 						break;
 
-					case Cell.CELL_TYPE_NUMERIC:
+					case XSSFCell.CELL_TYPE_NUMERIC:
+						numVal = (long) cell.getNumericCellValue();
+						tempArrayList.add(numVal);
+						// System.out.print(numVal + " ");
 						break;
 
 					}
 
-					// log.info(cell.toString());
-					// log.info("::: " + i + " >> " + cell);
-					al.add(cell.toString());
-
-					i++;
-
 				}
-				StudentSet.add(al);
-				log.info(al);
+				map.put(j, tempArrayList);
+				// System.out.println();
+
+				j++;
 
 			}
-			log.info("Size ::" + StudentSet.size());
-			// AddListRecordToAppBean(StudentSet);
-			// }
-			Iterator<ArrayList<String>> iterator = StudentSet.iterator();
 
+			ArrayList<Integer> arrayList = new ArrayList<Integer>(map.keySet());
+
+			Iterator<Integer> iterator = arrayList.iterator();
 			while (iterator.hasNext()) {
-				ArrayList<java.lang.String> arrayList = (ArrayList<java.lang.String>) iterator.next();
+				Integer integer = (Integer) iterator.next();
+				ArrayList<Object> aa = map.get(integer);
 
-				AppBean appBean = new AppBean();
-
-				appBean.setEnrollmentNumber(arrayList.get(0));
-				appBean.setGrNumber(arrayList.get(1));
-				appBean.setAplFirstName(arrayList.get(2));
-				appBean.setAplLstName(arrayList.get(3));
-				appBean.setGender(arrayList.get(4));
-				appBean.setAplAddress(arrayList.get(5));
-				appBean.setAplMobilePri(arrayList.get(6));
-				appBean.setAplMobileSec(arrayList.get(7));
-				appBean.setAplEmail(arrayList.get(8));
-
-				log.info(" " + appBean);
-
+				System.out.println(integer);
+				System.out.println(aa);
 			}
 
 		} catch (Exception e) {

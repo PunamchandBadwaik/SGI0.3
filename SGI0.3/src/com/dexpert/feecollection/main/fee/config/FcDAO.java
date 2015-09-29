@@ -149,8 +149,9 @@ public class FcDAO {
 			if(structureId!=null){
 			feeCr.createAlias("configs","conf",CriteriaSpecification.LEFT_JOIN);
 			feeCr.add(Restrictions.eq("conf.structure_id",structureId ));
-			feeCr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			
 			}
+			feeCr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			Iterator<FeeDetailsBean> feeIt = feeCr.list().iterator();
 			while (feeIt.hasNext()) {
 				ResultList.add(feeIt.next());

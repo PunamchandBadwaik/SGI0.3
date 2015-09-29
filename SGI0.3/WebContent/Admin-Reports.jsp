@@ -213,20 +213,14 @@ try{
 							<%
 								}
 							%> --%>
-							<%
-								if (profile.contentEquals("Parent")){
-							%><li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-							<%
-								}
-							%>
+							
 
 
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%>
-							
-							
+
+
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
@@ -237,16 +231,16 @@ try{
 							<%
 								}
 							%>
-							
-								
-							
+
+
+
 							<%
 								if (profile.contentEquals("SU")){
 							%>
 							<li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
-						
-							
+
+
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 
@@ -255,6 +249,19 @@ try{
 							<%
 								}
 							%>
+
+							<%
+								if (profile.contentEquals("Parent")) {
+							%>
+							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
+									class="fa fa-building"></i><span> College Operator</span></a></li>
+							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
+									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							<%
+								}
+							%>
+
+
 
 
 						</ul>
@@ -323,8 +330,8 @@ try{
 											onclick="window.location='TranactionReport'">Transaction
 											Report</button>
 									</p>
-									
-									
+
+
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
 											onclick="window.location='CollegeDueReport'">Students
@@ -332,11 +339,11 @@ try{
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='getValForDropDown'">Custom  College
-											Due Report</button>
+											onclick="window.location='getValForDropDown'">Custom
+											College Due Report</button>
 									</p>
-									
-									
+
+
 
 
 									<%
@@ -354,8 +361,8 @@ try{
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='getValForDropDown'">Custom  College
-											Due Report</button>
+											onclick="window.location='getValForDropDown'">Custom
+											College Due Report</button>
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get Transaction Report"
@@ -376,7 +383,7 @@ try{
 									<%
 										if (profile.contentEquals("SU")){
 									%>
-									 <p class="btn-group">
+									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Report"
 											onclick="window.location='ShowCollegeReport'">College
 											Report</button>
@@ -396,18 +403,18 @@ try{
 											Report</button>
 									</p>
 
-                                   <p class="btn-group">
+									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
-											onclick="window.location='getValForDropDown'">Custom  College
-											Due Report</button>
+											onclick="window.location='getValForDropDown'">Custom
+											College Due Report</button>
 									</p>
-									
-                                 <p class="btn-group">
+
+									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
 											onclick="window.location='getValForStudentReport?forStudentReport=true'">Student
-											 Report</button>
+											Report</button>
 									</p>
-									
+
 
 
 
