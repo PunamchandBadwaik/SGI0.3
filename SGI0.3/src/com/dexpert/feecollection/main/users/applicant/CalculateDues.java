@@ -27,7 +27,7 @@ public class CalculateDues {
 	 */
 	// public static Double calculateFeeStudent(Integer valueId1, Integer
 	// valueId2, Integer valueId3, Integer feeId) {
-	public static Double calculateFeeStudent(ArrayList<Integer> list, Integer feeId, Integer strId) {
+	public  Double calculateFeeStudent(ArrayList<Integer> list, Integer feeId, Integer strId) {
 		FeeDetailsBean feeDetail = new FeeDetailsBean();
 		List<FcBean> combinations = new ArrayList<FcBean>();
 		List<FcBean> searchList = new ArrayList<FcBean>();
@@ -67,8 +67,9 @@ public class CalculateDues {
 			for (int i = 0; i < searchList.size(); i++) {
 				values.add(searchList.get(i).getValueId());
 			}
+			logger.info("values"+values);
 			Collections.sort(values);
-			logger.info("values is from db" + values);
+			
 			if (values.containsAll(list)) {
 
 				System.out.println("Amount is ::" + searchList.get(0).getAmount());

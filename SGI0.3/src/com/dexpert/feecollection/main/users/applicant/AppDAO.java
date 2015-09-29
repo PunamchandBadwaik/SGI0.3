@@ -220,11 +220,12 @@ public class AppDAO {
 
 		}
 		Collections.sort(list);
+		CalculateDues calDue=new CalculateDues();
 		while (feeDetailIterator.hasNext()) {
-
+       
 			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
 			log.info("fee name " + feeDetailsBean.getFeeName());
-			Double amt = CalculateDues.calculateFeeStudent(list, feeDetailsBean.getFeeId(),structureId);
+			Double amt =calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(),structureId);
 			fcBean.setAmount(amt);
 			addToDuesTable(appBean, fcBean, feeDetailsBean);
 		}
