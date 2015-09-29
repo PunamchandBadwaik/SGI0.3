@@ -444,7 +444,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															var totalBeingPaid =parseFloat(document.getElementById("totalPaidAmount").value);
 															//alert("totalBeingPaid is"+totalBeingPaid);
 															var totalNetDue=parseFloat(document.getElementById("totalNetDues").value);
-															
+															totalBeingPaid=isNaN(totalBeingPaid)?0:totalBeingPaid;
 															var sequenceValidationCheckResult=true;
 															if(totalNetDue<0){
 																alert("Dues Must not be Less than 0");

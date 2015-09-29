@@ -36,7 +36,7 @@ public class CalculateDues {
 		// Get Fee From fee_details table
 		logger.info("FeeIdes" + feeId);
 		try {
-			feeDetail = dao.GetFees("id", null, feeId, null, null).get(0);
+			feeDetail = dao.GetFees("id", null, feeId, null, strId).get(0);
 		} catch (Exception e) {
 
 			// log.info("Incorrect Fee ID");
@@ -67,7 +67,7 @@ public class CalculateDues {
 			for (int i = 0; i < searchList.size(); i++) {
 				values.add(searchList.get(i).getValueId());
 			}
-			logger.info("values"+values);
+			
 			Collections.sort(values);
 			
 			if (values.containsAll(list)) {
