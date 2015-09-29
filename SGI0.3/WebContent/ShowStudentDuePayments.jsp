@@ -1,7 +1,12 @@
 <!DOCTYPE html >
+<%@page import="com.dexpert.feecollection.main.users.applicant.AppBean"%>
+<%@page import="com.opensymphony.xwork2.ognl.OgnlValueStack"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@page import="java.util.*"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ page import="org.apache.struts2.views.jsp.TagUtils"%>
+<%@ page import="com.opensymphony.xwork2.util.*"%>
+<%@page import="com.dexpert.feecollection.main.fee.PaymentDuesBean"%>
 
 <html lang="en">
 <head>
@@ -80,12 +85,14 @@
 
 <body onload="">
 	<%
-
+ValueStack vs =TagUtils.getStack(pageContext);
+AppBean appBean =(AppBean)vs.findValue("app1");
+	
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 
 %>
-	
+
 
 	<%
 		int i = 1;
@@ -259,7 +266,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
-											<td>Student UIN </td>
+											<td>Student UIN</td>
 											<td><s:property value="app1.enrollmentNumber" /></td>
 										</tr>
 										<tr>
@@ -268,7 +275,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
 											<td><input type="hidden"
-												value='<s:property value="app1.isHosteler" />' id="isHosteler" /></td>
+												value='<s:property value="app1.isHosteler" />'
+												id="isHosteler" /></td>
 										</tr>
 
 									</table>
@@ -286,10 +294,122 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<th>Payable Amount</th>
 										</tr>
 
+										<%Iterator<PaymentDuesBean> itr=appBean.getPaymentDues().iterator(); 
+                                           while(itr.hasNext()){
+                                       PaymentDuesBean paymentDue=itr.next();
+                                    	  %>
+
+										<tr>
+
+											<td><%=i%></td>
+											<td style="display: none"><%=paymentDue.getFeeId() %><input
+												type="hidden" value='<%=paymentDue.getFeeId() %>'
+												id="feeId[<%=i%>]"></td>
+											<td><%=paymentDue.getFeeName() %></td>
+											<%-- <td><s:property value="payee" /></td>
+												<td><s:property value="dueDate" /></td>
+												<td><s:property value="dateCalculated" /></td> --%>
+											<td><%=paymentDue.getTotal_fee_amount()%></td>
+											<%double netDue=paymentDue.getNetDue(); %>
+											<% if(netDue==0){%>
+											<td><span style="color: green; font-weight: bold;">Fees
+													Completed</span></td>
+											<%}%><%else{%>
+											<td><%=netDue %>
+											
+											</td>
+											<%} %>
+											 <input type="hidden" value='<%=netDue %>'
+													id="payableamount[<%=i%>]"/>
+											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
+											<td><div class="checkbox">
+													<label> <input type="checkbox"
+														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
+														class="btn btn-check">Check to Add to Payment
+													</label>
+												</div></td>
+											<td><input type="text" style="display: none;"
+												name="FeePaid" id="FeePaid[<%=i%>]"
+												onchange="callFun(this.value)"> <script
+													type="text/javascript">
+													
+													function showTextBox(k) {
+														
+														var feeTxtId = document.getElementById("FeePaid["+k+"]");
+														var myCheckId = document.getElementById("checkId["+k+"]");
+														var v=document.getElementById("payableamount["+k+"]").value;
+														
+														if(myCheckId.checked){
+															
+															feeTxtId.value=v;
+															var h=0;
+															if(document.getElementById("totalPaidAmount").value=='NaN' || document.getElementById("totalPaidAmount").value==''){
+																h=0;
+															}
+															else{
+																h=document.getElementById("totalPaidAmount").value;
+															}
+															document.getElementById("totalPaidAmount").value=parseFloat(h)+parseFloat(feeTxtId.value);
+															feeTxtId.style.display = myCheckId.checked ? "block" : "none";
+														}
+														else{
+															
+															
+															var h=0;
+															if(document.getElementById("totalPaidAmount").value=='NaN' || document.getElementById("totalPaidAmount").value==''){
+																h=0;
+															}
+															else{
+																h=document.getElementById("totalPaidAmount").value;
+																document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(feeTxtId.value);
+																feeTxtId.value=0;
+															}
+															
+															feeTxtId.style.display = myCheckId.checked ? "block" : "none";	
+														}
+														
+			
+													}
+													
+													</script> <script type="text/javascript">
+														function callFun(fee) {
+															var j = 1;
+															var g = 0;
+															
+															
+															for (j = 1; j <= <%=i%>; j++) {
+																/* alert("in loop");
+																alert(document.getElementById("FeePaid["+ j+ "]").value); */
+																if(document.getElementById("FeePaid["+j+"]").value=='NaN' || document.getElementById("FeePaid["+j+"]").value==''){
+																	g=g;
+																}
+																else{
+																	g=g+parseFloat(document.getElementById("FeePaid["+j+"]").value);
+																}
+																
+																
+																/* alert(g); */
+
+															}
+															document.getElementById("totalPaidAmount").value=g; 
+															
+															
+														}
+													</script> <input type="hidden" name="paymentDueStr"
+												id="paymentDueStr" value="" /></td>
+											<%
+													i++;
+														k = i;
+												%>
+
+										</tr>
+										<%} %>
 
 
 
-										<s:iterator value="app1.paymentDues">
+
+
+										<%-- <s:iterator value="app1.paymentDues">
 
 
 											<tr>
@@ -299,28 +419,30 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 													type="hidden" value='<s:property value="feeId" />'
 													id="feeId[<%=i%>]"></td>
 												<td><s:property value="feeName" /></td>
-												<%-- <td><s:property value="payee" /></td>
+												<td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
-												<td><s:property value="dateCalculated" /></td> --%>
-
-
-
-												<td><s:property value="total_fee_amount" /></td>
+												<td><s:property value="dateCalculated" /></td>
+                                                  <td>
+                                               
+											  <s:property value="total_fee_amount" /> 
+												 
+												 
+												 </td> 
 												<td><s:set var="netDue">
 														<s:property value="netDue" />
 													</s:set> <s:if test='%{netDue=="0"}'>
 														<span style="color: green; font-weight: bold;">Fees
 															Completed</span>
 													</s:if> <s:else>
-														<s:property value="netDue" />
-													</s:else> <input type="hidden" value='<s:property value="netDue" />'
-													id="payableamount[<%=i%>]"></td>
+														<s:property value="netDue" /></s:else>
+													 <input type="hidden" value='<s:property value="netDue" />'
+													id="payableamount[<%=i%>]"/></td>
 
 
 												<td><s:property value="payments_to_date" /></td>
 												<td><div class="checkbox">
-														<label> <input type="checkbox"
-															id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
+		                                          <label> <input type="checkbox"
+														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
 															class="btn btn-check">Check to Add to Payment
 														</label>
 													</div></td>
@@ -399,7 +521,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 												%>
 
 											</tr>
-										</s:iterator>
+										</s:iterator> --%>
 										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
