@@ -818,5 +818,18 @@ public class AffDAO {
 			session.close();
 		}
 	}
+	
+	public List<Integer> getFeeIdesOfInst(Integer instId){
+		List<Integer>  feeList=new ArrayList<Integer>();
+		Session session=factory.openSession();
+		Criteria criteria=session.createCriteria(FeeStructureData.class);
+		if(instId!=null){
+		criteria.add(Restrictions.eq("inst_id",instId));	
+		}
+	    criteria.setProjection(Projections.property("fee_id"));
+		feeList=criteria.list();
+		session.close();
+		return feeList;
+	}
 
 }

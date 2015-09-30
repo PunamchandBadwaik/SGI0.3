@@ -199,7 +199,7 @@ public class FcDAO {
 		List<FcBean> combinations = new ArrayList<FcBean>();
 		List<FcBean> searchList = new ArrayList<FcBean>();
 		
-		
+	
 		
 		// Get Fee From fee_details table
 		try {
@@ -282,7 +282,12 @@ public class FcDAO {
 		if (feeIdes != null && feeIdes.size() > 0 && (!feeIdes.isEmpty())) {
 			criteria.add(Restrictions.in("feeId", feeIdes)).setProjection(Projections.property("feeName"))
 					.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		} else {
+		}else if(feeIdes.size()<1){
+		List<String> feeName=new ArrayList<String>();	
+		return feeName;
+		} 
+		
+		else {
 			criteria.setProjection(Projections.property("feeName")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		}
 		List<String> feeName = criteria.list();
@@ -321,6 +326,7 @@ public class FcDAO {
 		session.close();
 		return lookupValuesId;
 	}
+	
 
 	// DAO Methods End
 }

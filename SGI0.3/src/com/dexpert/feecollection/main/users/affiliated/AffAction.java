@@ -242,7 +242,7 @@ public class AffAction extends ActionSupport {
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(),null);
+		List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(), null);
 		log.info("Struture id" + structureIdes);
 		List<Integer> valueIdes = feeDAO.getLookupValue(structureIdes);
 		log.info("value ides got from fee config table::::::" + valueIdes);
@@ -435,7 +435,7 @@ public class AffAction extends ActionSupport {
 		Integer instId = Integer.parseInt(request.getParameter("collId").trim());
 		AffBean instbean = affDao.getOneCollegeRecord(instId);
 		ArrayList<FeeDetailsBean> instfeeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
-		feeList = feeDAO.GetFees("payee", "institute", null, null,null);
+		feeList = feeDAO.GetFees("payee", "institute", null, null, null);
 		for (int j = 0; j < instfeeList.size(); j++) {
 
 			for (int i = 0; i < feeList.size(); i++) {
@@ -450,45 +450,43 @@ public class AffAction extends ActionSupport {
 
 		return SUCCESS;
 	}
+
 	public String CloneFeesValidate() {
 		Integer instId = Integer.parseInt(request.getParameter("instId").trim());
-		
+
 		AffBean instbean = affDao.getOneCollegeRecord(instId);
 		ses.setAttribute("sesCloneBean", instbean);
-		
-		if(instbean.getFeeSet().size()>0)
-		{
+
+		if (instbean.getFeeSet().size() > 0) {
 			request.setAttribute("msg", "Cloning only allowed for institutes which do not have fees already associated");
 			request.setAttribute("redirectlink", "window.close()");
 			return ERROR;
 		}
-		affInstList=affDao.getInstitutes("NONE", null, null, null, null);
-		Iterator<AffBean>instIt=affInstList.iterator();
-		while(instIt.hasNext())
-		{
-			AffBean temp=instIt.next();
-			if(temp.getInstId()==instId)
-			{
+		affInstList = affDao.getInstitutes("NONE", null, null, null, null);
+		Iterator<AffBean> instIt = affInstList.iterator();
+		while (instIt.hasNext()) {
+			AffBean temp = instIt.next();
+			if (temp.getInstId() == instId) {
 				instIt.remove();
 			}
 		}
-		
+
 		return SUCCESS;
 	}
-	
-	public String CloneFees() throws Exception{
-		AffBean destInst=(AffBean) ses.getAttribute("sesCloneBean");
+
+	public String CloneFees() throws Exception {
+		AffBean destInst = (AffBean) ses.getAttribute("sesCloneBean");
 		ses.removeAttribute("sesCloneBean");
-		AffBean instbean=affDao.getOneCollegeRecord(affInstBean.getInstId());
-		ArrayList<FeeDetailsBean>feeList=new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
-		Set<FeeDetailsBean>feeSet=new HashSet<FeeDetailsBean>(feeList);
-		ArrayList<FeeStructureData>structures=new ArrayList<FeeStructureData>(affDao.getInstStructures(instbean.getInstId()));
-		ArrayList<FeeStructureData>newStructures=new ArrayList<FeeStructureData>();
-		Iterator<FeeStructureData>structIt=structures.iterator();
-		while(structIt.hasNext())
-		{
-			FeeStructureData temp=structIt.next();
-			FeeStructureData newstruct=new FeeStructureData();
+		AffBean instbean = affDao.getOneCollegeRecord(affInstBean.getInstId());
+		ArrayList<FeeDetailsBean> feeList = new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
+		Set<FeeDetailsBean> feeSet = new HashSet<FeeDetailsBean>(feeList);
+		ArrayList<FeeStructureData> structures = new ArrayList<FeeStructureData>(affDao.getInstStructures(instbean
+				.getInstId()));
+		ArrayList<FeeStructureData> newStructures = new ArrayList<FeeStructureData>();
+		Iterator<FeeStructureData> structIt = structures.iterator();
+		while (structIt.hasNext()) {
+			FeeStructureData temp = structIt.next();
+			FeeStructureData newstruct = new FeeStructureData();
 			newstruct.setFee_id(temp.getFee_id());
 			newstruct.setStructure_id(temp.getStructure_id());
 			newstruct.setInst_id(destInst.getInstId());
@@ -497,11 +495,12 @@ public class AffAction extends ActionSupport {
 		feeDAO.insertFeeStructureBulk(newStructures);
 		destInst.setFeeSet(feeSet);
 		affDao.saveOrUpdate(destInst, null);
-		
+
 		request.setAttribute("msg", "Fees successfully Cloned");
 		request.setAttribute("redirectlink", "window.close()");
 		return SUCCESS;
 	}
+
 	public String AddFees() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
 			BadPaddingException {
@@ -529,7 +528,7 @@ public class AffAction extends ActionSupport {
 			// Get College Data
 			collegedata = affDao.getOneCollegeRecord(id);
 			// Get Fees in Set
-			feelist = feeDAO.GetFees("ids", null, null, FeeIdsInt,null);
+			feelist = feeDAO.GetFees("ids", null, null, FeeIdsInt, null);
 			Set<FeeDetailsBean> feeset = collegedata.getFeeSet();
 			Set<AffFeePropBean> propSet = collegedata.getFeeProps();
 			for (int i = 0; i < feelist.size(); i++) {
@@ -769,7 +768,7 @@ public class AffAction extends ActionSupport {
 
 			AffFeePropBean propBean = tempIt.next();
 			PaymentDuesBean due = new PaymentDuesBean();
-			FeeDetailsBean feedetail = feeDAO.GetFees("id", null, propBean.getFeeId(), null,null).get(0);
+			FeeDetailsBean feedetail = feeDAO.GetFees("id", null, propBean.getFeeId(), null, null).get(0);
 			List<FcBean> configs = new ArrayList<FcBean>();
 			configs = feedetail.getConfigs();
 			HashMap<Integer, Double> configMap = new HashMap<Integer, Double>();
@@ -1176,11 +1175,13 @@ public class AffAction extends ActionSupport {
 
 					listOfCourse = affDao.getListOfCourses(null,
 							parDAO.getIdesOfAllCollege((Integer) ses.getAttribute("UniversityId")));
+					ses.setAttribute("collegeIdFRep", null);
 					log.info("list of course" + listOfCourse.size());
 					return "listOfCourse";
 				}
 
 				Integer id = affDao.getCollegeId(collegeName);
+				ses.setAttribute("collegeIdFRep", id);
 				log.info("id of the college is" + id);
 				listOfCourse = affDao.getListOfCourses(id, null);
 				log.info("list of course" + listOfCourse.size());
@@ -1188,19 +1189,17 @@ public class AffAction extends ActionSupport {
 			}
 			if (courseName != null && !courseName.isEmpty()) {
 				if (courseName.contentEquals("All")) {
-					feeNameList = feeDAO.getFeeNames(null);
+					Integer collegeIdFR = (Integer) ses.getAttribute("collegeIdFRep");
+					feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
 					log.info("fee name list size" + feeNameList.size());
+					ses.removeAttribute("collegeIdFRep");
 					return "feeName";
 
 				}
-				String applicableFeeString = appDAO.getApplicableFeesString(courseName);
-				String[] FeeIdArray = applicableFeeString.split("~");
-				List<Integer> feeIdes = new ArrayList<Integer>();
-				for (String feeId : FeeIdArray) {
-					feeIdes.add(Integer.parseInt(feeId));
-				}
-				feeNameList = feeDAO.getFeeNames(feeIdes);
+				Integer collegeIdFR = (Integer) ses.getAttribute("collegeIdFRep");
+				feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
 				log.info("fee name list size" + feeNameList.size());
+				ses.removeAttribute("collegeIdFRep");
 				return "feeName";
 
 			}
@@ -1224,11 +1223,13 @@ public class AffAction extends ActionSupport {
 				if (collegeName.contentEquals("All")) {
 
 					listOfCourse = affDao.getListOfCourses(null, parDAO.getIdesOfAllCollege(universityId));
+					ses.setAttribute("collegeIdFRep", null);
 					log.info("list of course" + listOfCourse.size());
 					return "listOfCourse";
 				}
 
 				Integer id = affDao.getCollegeId(collegeName);
+				ses.setAttribute("collegeIdFRep", id);
 				log.info("id of the college is" + id);
 				listOfCourse = affDao.getListOfCourses(id, null);
 				log.info("list of course" + listOfCourse.size());
@@ -1236,19 +1237,16 @@ public class AffAction extends ActionSupport {
 			}
 			if (courseName != null && !courseName.isEmpty()) {
 				if (courseName.contentEquals("All")) {
-					feeNameList = feeDAO.getFeeNames(null);
+					Integer collegeIdFR = (Integer) ses.getAttribute("collegeIdFRep");
+					feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
 					log.info("fee name list size" + feeNameList.size());
+					ses.removeAttribute("collegeIdFRep");
 					return "feeName";
-
 				}
-				String applicableFeeString = appDAO.getApplicableFeesString(courseName);
-				String[] FeeIdArray = applicableFeeString.split("~");
-				List<Integer> feeIdes = new ArrayList<Integer>();
-				for (String feeId : FeeIdArray) {
-					feeIdes.add(Integer.parseInt(feeId));
-				}
-				feeNameList = feeDAO.getFeeNames(feeIdes);
+				Integer collegeIdFR = (Integer) ses.getAttribute("collegeIdFRep");
+				feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
 				log.info("fee name list size" + feeNameList.size());
+				ses.removeAttribute("collegeIdFRep");
 				return "feeName";
 
 			}
@@ -1269,19 +1267,14 @@ public class AffAction extends ActionSupport {
 				// if user selects all course then generate correspondent
 				// feeName
 				if (courseName.contentEquals("All")) {
-					feeNameList = feeDAO.getFeeNames(null);
+					Integer collegeIdFR = (Integer) ses.getAttribute("sesId");
+					feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
 					log.info("fee name list size" + feeNameList.size());
 					return "feeName";
-
 				}
 				// if user select specific course
-				String applicableFeeString = appDAO.getApplicableFeesString(courseName);
-				String[] FeeIdArray = applicableFeeString.split("~");
-				List<Integer> feeIdes = new ArrayList<Integer>();
-				for (String feeId : FeeIdArray) {
-					feeIdes.add(Integer.parseInt(feeId));
-				}
-				feeNameList = feeDAO.getFeeNames(feeIdes);
+				Integer collegeIdFR = (Integer) ses.getAttribute("sesId");
+				feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
 				log.info("fee name list size" + feeNameList.size());
 				return "feeName";
 			}

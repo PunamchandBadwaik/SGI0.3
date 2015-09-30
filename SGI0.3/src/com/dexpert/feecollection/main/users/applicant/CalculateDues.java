@@ -32,9 +32,9 @@ public class CalculateDues {
 		List<FcBean> combinations = new ArrayList<FcBean>();
 		List<FcBean> searchList = new ArrayList<FcBean>();
 		
-		logger.info("number of values send from student From" + list);
+		
 		// Get Fee From fee_details table
-		logger.info("FeeIdes" + feeId);
+	
 		try {
 			feeDetail = dao.GetFees("id", null, feeId, null, strId).get(0);
 		} catch (Exception e) {
