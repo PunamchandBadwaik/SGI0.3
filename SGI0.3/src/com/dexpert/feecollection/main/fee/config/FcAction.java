@@ -99,11 +99,11 @@ public class FcAction extends ActionSupport {
 
 		// Validate fee name
 		ArrayList<FeeDetailsBean> templist = new ArrayList<FeeDetailsBean>();
-		templist = configdao.GetFees("name", feedetails.getFeeName().trim(), null, null,null);
+		/*templist = configdao.GetFees("name", feedetails.getFeeName().trim(), null, null,null);
 		if (!templist.isEmpty()) {
 			request.setAttribute("reqAlertFlag2", true);
 			return ERROR;
-		}
+		}*/
 
 		// Local Declarations
 		ArrayList<String> SelCouParVal1 = new ArrayList<String>();
@@ -450,7 +450,20 @@ public class FcAction extends ActionSupport {
 			AffBean updatedbean=instDAO.getOneCollegeRecord(feeOwner.getInstId());
 			//updatedbean.setConfigSet(configSet);
 			updatedbean.getFeeSet().add(fee);
-			instDAO.saveOrUpdate(updatedbean, null);
+			
+			updatedbean=instDAO.saveOrUpdate(updatedbean, null);
+			ArrayList<FeeDetailsBean>feeList=new ArrayList<FeeDetailsBean>(updatedbean.getFeeSet());
+			Iterator<FeeDetailsBean> feeIt=feeList.iterator();
+			while(feeIt.hasNext())
+			{
+				FeeDetailsBean temp=feeIt.next();
+				if(temp.getFeeName().contentEquals(fee.getFeeName()))
+				{
+					structbean.setFee_id(temp.getFeeId());
+					break;
+				}
+			}
+			
 			structbean.setInst_id(updatedbean.getInstId());
 			structbean.setStructure_id(structId);
 			configdao.saveFeeStructure(structbean);

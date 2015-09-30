@@ -388,7 +388,7 @@
 													<button class="btn btn-sm btn-warning"
 															onclick='window.open("ViewCollegeFees?instId=<s:property value="instId"/>", "CollegeForm", "width=700,height=500")'>
 															Associated Fees</button></td>
-													</td>
+													
 
 													<%-- <td class="center"><a class="btn btn-success btn-sm"
 														title="Button To Display College Detail"
@@ -399,8 +399,8 @@
 														onclick='window.open("GetAllInsParameters?instId=<s:property value="instId"/>", "CollegeForm", "width=500,height=700")'>
 															<i class="glyphicon glyphicon-cog icon-white"></i>
 															Configure
-													</a>
-														<button class="btn btn-sm btn-warning"
+													</a> --%>
+														<%-- <button class="btn btn-sm btn-warning"
 															onclick='window.open("ViewCollegeFees?instId=<s:property value="instId"/>", "CollegeForm", "width=500,height=700")'>
 															Associated Fees</button></td> --%>
 												</tr>
@@ -451,7 +451,7 @@
 														title="Button To Display College Detail"							onclick="showDetails(<c:out value="${aff.instId}" />)">
 															<i class="glyphicon glyphicon-zoom-in icon-white"></i>
 															View
-													</a></td>
+													</a>
 													<%-- 	<td class="center"><a class="btn btn-success btn-sm"
 														title="Button To Display College Detail"
 														onclick="showDetails(<c:out value="${aff.instId}" />)">
@@ -462,10 +462,13 @@
 														onclick='window.open("GetAllInsParameters?instId=<c:out value="${aff.instId}" />", "CollegeForm", "width=500,height=700")'>
 															<i class="glyphicon glyphicon-cog icon-white"></i>
 															Configure
-													</a>
+													</a>--%>
 														<button class="btn btn-sm btn-warning"
+															onclick='window.open("CloneFeesValidate?instId=<c:out value="${aff.instId}" />", "CollegeForm", "width=500,height=700")'>
+															Clone Fees</button>
+															<%-- <button class="btn btn-sm btn-warning"
 															onclick='window.open("ViewCollegeFees?instId=<c:out value="${aff.instId}" />", "CollegeForm", "width=500,height=700")'>
-															Associated Fees</button></td> --%>
+															Associate Fees</button> --%></td> 
 												</tr>
 
 												<%

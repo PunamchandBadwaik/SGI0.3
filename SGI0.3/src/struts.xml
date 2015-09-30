@@ -362,6 +362,18 @@
 			method="viewCollegeDetail">
 			<result name="success">CollegeFeeDetails.jsp</result>
 		</action>
+		<action name="CloneFeesValidate"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="CloneFeesValidate">
+			<result name="success">CloneFees.jsp</result>
+			<result name="error">Success.jsp</result>
+		</action>
+		<action name="cloneFees"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="CloneFees">
+			<result name="success">Success.jsp</result>
+			<result name="error">CloneFees.jsp</result>
+		</action>
 
 		<action name="GetAllInsParameters"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"

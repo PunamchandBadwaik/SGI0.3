@@ -119,6 +119,32 @@ public class FcDAO {
 			session.close();
 		}
 	}
+	public void insertFeeStructureBulk(ArrayList<FeeStructureData> savelist) {
+		// Declarations
+
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			session.beginTransaction();
+			for (int i = 0; i < savelist.size(); i++) {
+				FeeStructureData savebean = new FeeStructureData();
+				savebean = savelist.get(i);
+				session.save(savebean);
+				if (i % 20 == 0) { // 20, same as the JDBC batch size
+					// flush a batch of inserts and release memory:
+					session.flush();
+					session.clear();
+				}
+			}
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			// close session
+			session.close();
+		}
+	}
 
 	@SuppressWarnings("deprecation")
 	public ArrayList<FeeDetailsBean> GetFees(String filterKey, String filterValue, Integer id, ArrayList<Integer> ids,Integer structureId) {

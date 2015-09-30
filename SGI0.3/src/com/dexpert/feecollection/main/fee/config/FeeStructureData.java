@@ -18,6 +18,7 @@ public class FeeStructureData {
 	private Integer id;
 	private Integer inst_id;
 	private Integer structure_id;
+	private Integer fee_id;
 	public Integer getId() {
 		return id;
 	}
@@ -35,6 +36,12 @@ public class FeeStructureData {
 	}
 	public void setStructure_id(Integer structure_id) {
 		this.structure_id = structure_id;
+	}
+	public Integer getFee_id() {
+		return fee_id;
+	}
+	public void setFee_id(Integer fee_id) {
+		this.fee_id = fee_id;
 	}
 	
 	

@@ -792,5 +792,26 @@ public class AffDAO {
 	session.close();	
 	}	
 	}
+	
+	public ArrayList<FeeStructureData> getInstStructures(Integer instId)
+	{
+		// Declarations
+		ArrayList<FeeStructureData>resList=new ArrayList<FeeStructureData>();
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			Criteria cr=session.createCriteria(FeeStructureData.class);
+			cr.add(Restrictions.eq("inst_id", instId));
+			resList=new ArrayList<FeeStructureData>(cr.list());
+			return resList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return resList;
+
+		} finally {
+			// close session
+			session.close();
+		}
+	}
 
 }

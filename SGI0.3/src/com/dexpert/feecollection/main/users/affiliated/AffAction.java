@@ -35,6 +35,7 @@ import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.config.FeeStructureData;
 import com.dexpert.feecollection.main.fee.lookup.LookupBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
@@ -449,7 +450,58 @@ public class AffAction extends ActionSupport {
 
 		return SUCCESS;
 	}
-
+	public String CloneFeesValidate() {
+		Integer instId = Integer.parseInt(request.getParameter("instId").trim());
+		
+		AffBean instbean = affDao.getOneCollegeRecord(instId);
+		ses.setAttribute("sesCloneBean", instbean);
+		
+		if(instbean.getFeeSet().size()>0)
+		{
+			request.setAttribute("msg", "Cloning only allowed for institutes which do not have fees already associated");
+			request.setAttribute("redirectlink", "window.close()");
+			return ERROR;
+		}
+		affInstList=affDao.getInstitutes("NONE", null, null, null, null);
+		Iterator<AffBean>instIt=affInstList.iterator();
+		while(instIt.hasNext())
+		{
+			AffBean temp=instIt.next();
+			if(temp.getInstId()==instId)
+			{
+				instIt.remove();
+			}
+		}
+		
+		return SUCCESS;
+	}
+	
+	public String CloneFees() throws Exception{
+		AffBean destInst=(AffBean) ses.getAttribute("sesCloneBean");
+		ses.removeAttribute("sesCloneBean");
+		AffBean instbean=affDao.getOneCollegeRecord(affInstBean.getInstId());
+		ArrayList<FeeDetailsBean>feeList=new ArrayList<FeeDetailsBean>(instbean.getFeeSet());
+		Set<FeeDetailsBean>feeSet=new HashSet<FeeDetailsBean>(feeList);
+		ArrayList<FeeStructureData>structures=new ArrayList<FeeStructureData>(affDao.getInstStructures(instbean.getInstId()));
+		ArrayList<FeeStructureData>newStructures=new ArrayList<FeeStructureData>();
+		Iterator<FeeStructureData>structIt=structures.iterator();
+		while(structIt.hasNext())
+		{
+			FeeStructureData temp=structIt.next();
+			FeeStructureData newstruct=new FeeStructureData();
+			newstruct.setFee_id(temp.getFee_id());
+			newstruct.setStructure_id(temp.getStructure_id());
+			newstruct.setInst_id(destInst.getInstId());
+			newStructures.add(newstruct);
+		}
+		feeDAO.insertFeeStructureBulk(newStructures);
+		destInst.setFeeSet(feeSet);
+		affDao.saveOrUpdate(destInst, null);
+		
+		request.setAttribute("msg", "Fees successfully Cloned");
+		request.setAttribute("redirectlink", "window.close()");
+		return SUCCESS;
+	}
 	public String AddFees() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
 			BadPaddingException {
