@@ -25,7 +25,7 @@ public class FeeDetailsBean implements Serializable {
 	@GeneratedValue(generator = "g11")
 	private Integer feeId;
 	
-	@Column(unique = true)
+	
 	private String feeName;
 	private String ins_param,cou_param,app_param,ser_param;
 	//private Boolean forApplicant=false,forInstitute=false,cal_mode=false;
