@@ -55,7 +55,6 @@ import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
 
-
 public class AppDAO {
 
 	// Declare Global Variables Here
@@ -113,13 +112,13 @@ public class AppDAO {
 		String k = bs.breakString(pp);
 
 		log.info("String after Break Class : " + k);
-		/*
-		 * String year = bs.getYear(k); String course = bs.getCourse(k); String
-		 * yearCode = bs.getYearCode(course);
-		 */
-		String year = "2014";
-		String course = "11th Science";
-		String yearCode = "11";
+		 String year = bs.getYear(k); 
+		 String course = bs.getCourse(k); 
+		
+		 
+		//String year = "2014";
+		//String course = "11th Science";
+		//String yearCode = "11";
 
 		// log.info("Original String element is ::" + pp);
 		// log.info("Break String element is ::" + k);
@@ -127,13 +126,13 @@ public class AppDAO {
 		// log.info("Course is ::" + course);
 		// log.info("YearCode is ::" + yearCode);
 
-		appBean.setYear(year);
-		appBean.setCourse(course);
-		appBean.setYearCode(yearCode);
+		//appBean.setYear(year);
+		//appBean.setCourse(course);
+		//appBean.setYearCode(yearCode);
 
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-		String EnrollNo = en.generateEnrollmentNum(year, course);
+		String EnrollNo = en.generateEnrollmentNum(appBean.getStartYear(), course);
 		appBean.setEnrollmentNumber(EnrollNo);
 
 		// log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
@@ -156,7 +155,7 @@ public class AppDAO {
 		affBean.getAplBeanSet().add(appBean);
 		try {
 			Transaction tx = session.beginTransaction();
-			session.saveOrUpdate(appBean);
+			session.save(appBean);
 			tx.commit();
 
 			// for text msg
@@ -231,7 +230,7 @@ public class AppDAO {
 		while (feeDetailIterator.hasNext()) {
 
 			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
-			List<Integer> structureIdes=affDao.getStrutureId(instId, feeDetailsBean.getFeeId());
+			List<Integer> structureIdes = affDao.getStrutureId(instId, feeDetailsBean.getFeeId());
 			log.info("fee name " + feeDetailsBean.getFeeName());
 			Double amt = calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(), structureIdes.get(0));
 			fcBean.setAmount(amt);
@@ -392,7 +391,7 @@ public class AppDAO {
 		List<Integer> paramList = new ArrayList<Integer>();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 
-		List<Integer> str_ids = affDAO.getStrutureId(lgBean.getAffBean().getInstId(),null);
+		List<Integer> str_ids = affDAO.getStrutureId(lgBean.getAffBean().getInstId(), null);
 		valueList = fcDAO.getLookupValue(str_ids);
 
 		paramList = fvDAO.getListOfValueBeans(valueList);
@@ -470,22 +469,20 @@ public class AppDAO {
 				AppBean appBean = new AppBean();
 				ArrayList<Object> aa = map.get(integer);
 
-				
-				appBean.setEnrollmentNumber(aa.get(0).toString());
-				appBean.setGrNumber(aa.get(1).toString());
-				appBean.setAplFirstName(aa.get(2).toString());
-				appBean.setAplLstName(aa.get(3).toString());
-				
-				appBean.setGender(aa.get(4).toString());
-				
-				appBean.setAplFirstName(aa.get(5).toString());
-				
-				appBean.setAplFirstName(aa.get(6).toString());
-				
-				appBean.setAplFirstName(aa.get(7).toString());
-				
-				
-				
+				appBean.setGrNumber(aa.get(0).toString());
+				appBean.setAplFirstName(aa.get(1).toString());
+				appBean.setAplLstName(aa.get(2).toString());
+
+				appBean.setGender(aa.get(3).toString());
+
+				appBean.setAplAddress(aa.get(4).toString());
+
+				appBean.setAplMobilePri(aa.get(5).toString());
+
+				appBean.setAplMobileSec(aa.get(6).toString());
+				appBean.setStartYear(aa.get(7).toString());
+
+				addBulkData(appBean);
 			}
 
 		} catch (Exception e) {
@@ -680,7 +677,7 @@ public class AppDAO {
 			loginBean.setUserName(appBean.getEnrollmentNumber());
 
 			// to Encrypt Password
-			PasswordEncryption.encrypt(String.valueOf(appBean.getYear().substring(0, 4)));
+			PasswordEncryption.encrypt(String.valueOf(appBean.getStartYear().substring(0, 4)));
 			String encryptedPwd = PasswordEncryption.encStr;
 
 			loginBean.setPassword(encryptedPwd);
@@ -704,7 +701,7 @@ public class AppDAO {
 
 				} else {
 					String user = appBean.getEnrollmentNumber();
-					String pass = appBean.getYear().substring(0, 4);
+					String pass = appBean.getStartYear().substring(0, 4);
 					String msg = "UserId :" + user + "" + " Passsword : " + pass;
 					SendSMS sms = new SendSMS();
 					sms.sendSMS(appBean.getAplMobilePri(), msg);
@@ -722,7 +719,7 @@ public class AppDAO {
 				} else {
 					EmailSessionBean email = new EmailSessionBean();
 					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getYear().substring(0, 4),
+							appBean.getStartYear().substring(0, 4),
 							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
 
 				}
