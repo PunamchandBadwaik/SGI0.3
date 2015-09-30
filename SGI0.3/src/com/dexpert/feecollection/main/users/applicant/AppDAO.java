@@ -210,7 +210,7 @@ public class AppDAO {
 	public void getDuesDetail(AppBean appBean) {
 		AffDAO affDao = new AffDAO();
 		// FvBean fvBean = new FvBean();
-		Integer structureId = affDao.getStrutureId(appBean.getAffBeanStu().getInstId());
+		Integer instId = appBean.getAffBeanStu().getInstId();
 		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(appBean.getAffBeanStu().getInstId());
 		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
@@ -231,8 +231,9 @@ public class AppDAO {
 		while (feeDetailIterator.hasNext()) {
 
 			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
+			List<Integer> structureIdes=affDao.getStrutureId(instId, feeDetailsBean.getFeeId());
 			log.info("fee name " + feeDetailsBean.getFeeName());
-			Double amt = calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(), structureId);
+			Double amt = calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(), structureIdes.get(0));
 			fcBean.setAmount(amt);
 			addToDuesTable(appBean, fcBean, feeDetailsBean);
 		}
@@ -391,7 +392,7 @@ public class AppDAO {
 		List<Integer> paramList = new ArrayList<Integer>();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 
-		Integer str_id = affDAO.getStrutureId(lgBean.getAffBean().getInstId());
+		List<Integer> str_id = affDAO.getStrutureId(lgBean.getAffBean().getInstId(),null);
 		valueList = fcDAO.getLookupValue(str_id);
 
 		paramList = fvDAO.getListOfValueBeans(valueList);

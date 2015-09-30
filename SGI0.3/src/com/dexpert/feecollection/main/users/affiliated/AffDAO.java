@@ -773,20 +773,25 @@ public class AffDAO {
 		}
 	}
 	
-	public Integer getStrutureId(Integer instId)
+	public List<Integer> getStrutureId(Integer instId,Integer feeId)
 	{
-	Integer structureId=null;
+	List<Integer> structureIdes=new ArrayList<Integer>();
 	Session session=factory.openSession();	
 	try{
 	Criteria criteria=session.createCriteria(FeeStructureData.class);
-	criteria.add(Restrictions.eq("inst_id", instId)).setProjection(Projections.property("structure_id"));
-	structureId=(Integer)criteria.list().iterator().next();	
-	log.info("struture id is"+structureId);
-	return structureId;
+	if(feeId!=null){
+	criteria.add(Restrictions.eq("inst_id", instId)).add(Restrictions.eq("fee_id",feeId));
+	}else{
+	criteria.add(Restrictions.eq("inst_id", instId));
+	}
+	criteria.setProjection(Projections.property("structure_id"));
+	structureIdes=criteria.list();	
+	log.info("struture id is"+structureIdes);
+	return structureIdes;
 	}catch(NoSuchElementException nse)
 	{
 	nse.printStackTrace();
-	return structureId;	
+	return structureIdes;	
 	}
 	finally{
 	session.close();	

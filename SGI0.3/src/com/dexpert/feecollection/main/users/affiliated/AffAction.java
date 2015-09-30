@@ -242,9 +242,9 @@ public class AffAction extends ActionSupport {
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		Integer structureId = affDao.getStrutureId(loginBean.getAffBean().getInstId());
-		log.info("Struture id" + structureId);
-		List<Integer> valueIdes = feeDAO.getLookupValue(structureId);
+		List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(),null);
+		log.info("Struture id" + structureIdes);
+		List<Integer> valueIdes = feeDAO.getLookupValue(structureIdes);
 		log.info("value ides got from fee config table::::::" + valueIdes);
 		List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 		log.info("look up param list::::::" + lookUpParamList);

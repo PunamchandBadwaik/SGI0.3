@@ -312,10 +312,10 @@ public class FcDAO {
 
 	}
 
-	public List<Integer> getLookupValue(Integer structureId) {
+	public List<Integer> getLookupValue(List<Integer> structureIdes) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(FcBean.class);
-		criteria.add(Restrictions.eq("structure_id", structureId));
+		criteria.add(Restrictions.in("structure_id", structureIdes));
 		criteria.setProjection(Projections.distinct(Projections.property("valueId")));
 		List<Integer> lookupValuesId = criteria.list();
 		session.close();

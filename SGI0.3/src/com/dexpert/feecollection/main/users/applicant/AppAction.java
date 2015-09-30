@@ -171,9 +171,9 @@ public class AppAction extends ActionSupport {
 			log.info("4");
 			request.setAttribute("msg", "Enrollment Number Already Registered");
 			affInstList = affDAO.getCollegesList();
-			Integer structureId = affDao.getStrutureId(loginBean.getAffBean().getInstId());
-			log.info("Struture id" + structureId);
-			List<Integer> valueIdes = fcDAO.getLookupValue(structureId);
+			List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(),null);
+			log.info("Struture id" + structureIdes);
+			List<Integer> valueIdes = fcDAO.getLookupValue(structureIdes);
 			log.info("value ides got from fee config table::::::" + valueIdes);
 			List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 			log.info("look up param list::::::" + lookUpParamList);
