@@ -23,10 +23,10 @@
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-	if (cookie.getName().equals("user"))
-		usercookie = cookie.getValue();
-	if (cookie.getName().equals("JSESSIONID"))
-		sessionID = cookie.getValue();
+			if (cookie.getName().equals("user"))
+				usercookie = cookie.getValue();
+			if (cookie.getName().equals("JSESSIONID"))
+				sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
@@ -105,7 +105,7 @@
 			<%
 				if (msg != null)
 
-									{
+				{
 			%>
 
 			<div
@@ -152,16 +152,16 @@
 														<%
 															if (profile.contentEquals("Affiliated"))
 
-																																																																											{
+															{
 
-																																																																												System.out.print("Profile is ::" + profile);
+																System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
 
-      	{
+ 	{
  %> <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
 														<%
@@ -183,76 +183,15 @@
 															id='<s:property value="lookupId" />'
 															name="applicantParamValue"
 															<%-- onchange="hideEnrollNo('<s:property value="lookupId" />','<s:property value="lookupName" />')" --%>
-															style="width: 240px;" required="required">
+															style="width: 240px;"
+															required="required">
 																<option value="">--Select--</option>
 																<s:iterator value="#x.fvBeansList">
 																	<option value='<s:property value="feeValueId"/>'><s:property
 																			value="value" /></option>
 
 																</s:iterator>
-														</select> <script type="text/javascript">
-															function hideEnrollNo(
-																	id,
-																	lookupName) {
-																//alert("id ::"+id);
-
-																var course = document
-																		.getElementById(id).value;
-
-																if (lookupName == 'Class') {
-
-																	if (course == 'FE'
-																			|| course == 'MBA 1'
-																			|| course == 'ME 1'
-																			|| course == '1'
-																			|| course == '3'
-																			|| course == '6'
-																			|| course == '4'
-																			|| course == '13') {
-
-																		document
-																				.getElementById("enrollDiv").style.display = "none";
-																		document
-																				.getElementById("labelId").style.display = "none";
-																		document
-																				.getElementById("enrollTextId").required = false;
-
-																	} else {
-
-																		var xmlhttp;
-																		if (window.XMLHttpRequest) {
-																			xmlhttp = new XMLHttpRequest();
-																		} else {
-																			xmlhttp = new ActiveXObject(
-																					"Microsoft.XMLHTTP");
-																		}
-																		xmlhttp.onreadystatechange = function() {
-																			if (xmlhttp.readyState == 4
-																					&& xmlhttp.status == 200) {
-																				document
-																						.getElementById("enrollDiv").innerHTML = xmlhttp.responseText;
-																				document
-																						.getElementById("enrollDiv").style.display = "block";
-																				document
-																						.getElementById("labelId").style.display = "block";
-																				document
-																						.getElementById("enrollTextId").required = true;
-
-																			}
-																		}
-																		xmlhttp
-																				.open(
-																						"GET",
-																						"StudentAjaxRollNo.jsp",
-																						true);
-																		xmlhttp
-																				.send();
-
-																	}
-																}
-
-															}
-														</script></td>
+														</select></td>
 
 													</tr>
 
@@ -262,116 +201,14 @@
 													<td>GR Number</td>
 													<td colspan="2"><div id="the-basics"
 															class="has-success">
-															<input type="text" id="CollegeName" name="appBean1.grNumber"
-																placeholder="GR Number" class="form-control"><s:property
-																	value="appBean1.grNumber" />
+															<input type="text" id="CollegeName"
+																name="appBean1.grNumber" placeholder="GR Number"
+																class="form-control">
+															<s:property value="appBean1.grNumber" />
 
 														</div></td>
 
 												</tr>
-
-												<%-- 	<tr>
-
-													<td>Course</td>
-													<td colspan="2"><div id="the-basics"
-															class="has-success">
-															<div class="box-content">
-																<div class="control-group">
-																	<div class="controls">
-																		<select name="appBean1.course" id="courseId"
-																			onchange="hideEnrollNo()" data-rel="chosen"
-																			style="width: 240px;">
-																			<option value="">---Select Course---</option>
-																			<option value="FE">FE</option>
-																			<option value="SE">SE</option>
-																			<option value="SED">SE (Direct)</option>
-
-																			<option value="TE">TE</option>
-																			<option value="BE">BE</option>
-																			<option value="MBA 1">MBA 1</option>
-																			<option value="MBA 2">MBA 2</option>
-
-																			<option value="ME 1">ME 1</option>
-																			<option value="ME 2">ME 2</option>
-
-																			<option value="BPhFY">First Year B.Pharm</option>
-																			<option value="BPhSY">Second Year B.Pharm</option>
-																			<option value="BPhSYD">Second Year(Direct)
-																				B.Pharm</option>
-																			<option value="BPhTY">Third Year B.Pharm</option>
-																			<option value="BPhFnY">Final Year B.Pharm</option>
-																			<option value="MPhFY">First Year M.Pharm</option>
-																			<option value="MPhFnY">Final Year M.Pharm</option>
-
-																			<!-- <option value="MPhSY">Second Year M.Pharm</option>
-																			<option value="MPhSYD">Second Year(Direct) M.Pharm</option>
-																			<option value="MPhTY">Third Year M.Pharm</option> -->
-
-
-																		</select>
-
-																	</div>
-																</div>
-															</div>
-														</div> <script type="text/javascript">
-															function hideEnrollNo() {
-																var course = document
-																		.getElementById("courseId").value;
-
-																if (course == 'FE'
-																		|| course == 'SED'
-																		|| course == 'MBA 1'
-																		|| course == 'ME 1'
-																		|| course == 'BPhFY'
-																		|| course == 'MPhFY'
-																		|| course == 'BPhSYD'
-																		|| course == 'MPhSYD') {
-
-																	document
-																			.getElementById("enrollDiv").style.display = "none";
-																	document
-																			.getElementById("labelId").style.display = "none";
-																	document
-																			.getElementById("enrollTextId").required = false;
-
-																} else {
-
-																	var xmlhttp;
-																	if (window.XMLHttpRequest) {
-																		xmlhttp = new XMLHttpRequest();
-																	} else {
-																		xmlhttp = new ActiveXObject(
-																				"Microsoft.XMLHTTP");
-																	}
-																	xmlhttp.onreadystatechange = function() {
-																		if (xmlhttp.readyState == 4
-																				&& xmlhttp.status == 200) {
-																			document
-																					.getElementById("enrollDiv").innerHTML = xmlhttp.responseText;
-																			document
-																					.getElementById("enrollDiv").style.display = "block";
-																			document
-																					.getElementById("labelId").style.display = "block";
-																			document
-																					.getElementById("enrollTextId").required = true;
-
-																		}
-																	}
-																	xmlhttp
-																			.open(
-																					"GET",
-																					"StudentAjaxRollNo.jsp",
-																					true);
-																	xmlhttp
-																			.send();
-
-																}
-
-															}
-														</script></td>
-
-												</tr>
- --%>
 
 
 
@@ -379,13 +216,15 @@
 
 												<tr>
 
-													<td id="labelId" style="display: none;">Student
-														Enrollment No.</td>
+													<td>Start Year</td>
 													<td colspan="2">
 
 														<div id="the-basics" class="has-success">
-
-															<div id="enrollDiv"></div>
+															<input required="required" 
+																name="appBean1.startYear"
+																value='<s:property value="appBean1.startYear"/>'
+																placeholder="Start Year(Ex. 2009)" type="text"
+																class="form-control">
 														</div>
 													</td>
 

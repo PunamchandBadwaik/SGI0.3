@@ -30,7 +30,7 @@ public class AppBean implements Serializable {
 	@Id
 	private String enrollmentNumber;
 	private String aplFirstName, aplLstName, aplEmail, aplAddress, aplMobilePri, aplMobileSec, gender, category,
-			course, year, yearCode, grNumber,isHosteler;
+			course, year, yearCode, grNumber,isHosteler,startYear;
 
 	public String getCategory() {
 		return category;
@@ -203,6 +203,14 @@ public class AppBean implements Serializable {
 
 	public void setIsHosteler(String isHosteler) {
 		this.isHosteler = isHosteler;
+	}
+
+	public String getStartYear() {
+		return startYear;
+	}
+
+	public void setStartYear(String startYear) {
+		this.startYear = startYear;
 	}
 
 	

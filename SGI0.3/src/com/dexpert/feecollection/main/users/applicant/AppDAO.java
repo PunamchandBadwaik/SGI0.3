@@ -392,8 +392,8 @@ public class AppDAO {
 		List<Integer> paramList = new ArrayList<Integer>();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 
-		List<Integer> str_id = affDAO.getStrutureId(lgBean.getAffBean().getInstId(),null);
-		valueList = fcDAO.getLookupValue(str_id);
+		List<Integer> str_ids = affDAO.getStrutureId(lgBean.getAffBean().getInstId(),null);
+		valueList = fcDAO.getLookupValue(str_ids);
 
 		paramList = fvDAO.getListOfValueBeans(valueList);
 		Iterator<Integer> paramIterator = paramList.iterator();
@@ -467,10 +467,25 @@ public class AppDAO {
 			Iterator<Integer> iterator = arrayList.iterator();
 			while (iterator.hasNext()) {
 				Integer integer = (Integer) iterator.next();
+				AppBean appBean = new AppBean();
 				ArrayList<Object> aa = map.get(integer);
 
-				System.out.println(integer);
-				System.out.println(aa);
+				
+				appBean.setEnrollmentNumber(aa.get(0).toString());
+				appBean.setGrNumber(aa.get(1).toString());
+				appBean.setAplFirstName(aa.get(2).toString());
+				appBean.setAplLstName(aa.get(3).toString());
+				
+				appBean.setGender(aa.get(4).toString());
+				
+				appBean.setAplFirstName(aa.get(5).toString());
+				
+				appBean.setAplFirstName(aa.get(6).toString());
+				
+				appBean.setAplFirstName(aa.get(7).toString());
+				
+				
+				
 			}
 
 		} catch (Exception e) {
