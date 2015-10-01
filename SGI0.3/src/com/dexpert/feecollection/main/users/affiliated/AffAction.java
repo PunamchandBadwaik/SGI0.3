@@ -1280,7 +1280,7 @@ public class AffAction extends ActionSupport {
 			}
 			Integer id = (Integer) ses.getAttribute("sesId") == null ? affDao.getCollegeId(collegeName) : (Integer) ses
 					.getAttribute("sesId");
-			log.info("id is" + id);
+			
 			listOfCourse = affDao.getListOfCourses(id, null);
 			log.info("list of course" + listOfCourse.size());
 			return SUCCESS;
