@@ -36,7 +36,7 @@ public class LoginAction extends ActionSupport {
 	// Declare Global Variables Here
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpServletResponse response = ServletActionContext.getResponse();
-	static Logger log = Logger.getLogger(AffAction.class.getName());
+	static Logger log = Logger.getLogger(LoginAction.class.getName());
 
 	HttpSession httpSession = ServletActionContext.getRequest().getSession();
 	LoginBean loginBean = new LoginBean();
@@ -85,7 +85,8 @@ public class LoginAction extends ActionSupport {
 
 	private SaBean saBean = new SaBean();
 	private SaDAO saDAO = new SaDAO();
-
+    private AffDAO affDAO=new AffDAO();
+    private ParDAO parDAO=new ParDAO();
 	// End of Global Variables
 
 	// ---------------------------------------------------
@@ -162,7 +163,7 @@ public class LoginAction extends ActionSupport {
 			log.info("password frm Database is ::" + decrypedText);
 			log.info("4");
 		}
-		try {
+		/*try {*/
 			if (loginBean.getUserName().equals(loginBean.getUserName()) && loginBean.getPassword().equals(decrypedText)) {
 				log.info("valid User name and Password");
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
@@ -176,13 +177,16 @@ public class LoginAction extends ActionSupport {
 					httpSession.setAttribute("sesProfile", "Affiliated");
 					httpSession.setAttribute("dashLink", "index-College.jsp");
 					httpSession.setAttribute("sesId", lgbean.getAffBean().getInstId());
+					List<Object[]> studentsDues=affDAO.getTotalDueOfStudents( lgbean.getAffBean().getInstId());
+					httpSession.setAttribute("duesArray",(Object [] )studentsDues.iterator().next());
 					return "college";
 				} else if (lgbean.getParBean() != null) {
 					log.info("Valid University");
 					httpSession.setAttribute("sesId", lgbean.getParBean().getParInstId());
 					httpSession.setAttribute("sesProfile", "Parent");
-					httpSession.setAttribute("dashLink", "index-University.jsp");
-					return "university";
+				    httpSession.setAttribute("dashLink", "index-University.jsp");
+				    parDAO.getTotDuesOFStudOFAllColl(lgbean.getParBean().getParInstId());
+				   return "university";
 				} else if (lgbean.getSaBean() != null) {
 					log.info("Valid Super Admin");
 					httpSession.setAttribute("sesProfile", "SU");
@@ -222,12 +226,12 @@ public class LoginAction extends ActionSupport {
 				return INPUT;
 
 			}
-		} catch (java.lang.NullPointerException e) {
+		/*} *//*catch (java.lang.NullPointerException e) {
 
 			request.setAttribute("msg", "Session Time Out");
 
 			return ERROR;
-		}
+		}*/
 
 	}
 

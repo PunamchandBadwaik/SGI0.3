@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import javassist.bytecode.stackmap.BasicBlock.Catch;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.persistence.criteria.CriteriaBuilder.In;
@@ -33,9 +35,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 
 import COM.rsa.Intel.cr;
 
@@ -50,6 +54,7 @@ import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
 import com.dexpert.feecollection.main.users.parent.ParBean;
 import com.dexpert.feecollection.main.users.parent.ParDAO;
+import com.mchange.v2.codegen.bean.Property;
 
 public class AffDAO {
 
@@ -60,6 +65,7 @@ public class AffDAO {
 	ParDAO parDAO = new ParDAO();
 	boolean isInserted = true;
 	HttpSession httpSession = ServletActionContext.getRequest().getSession();
+
 	// static ArrayList<AffBean> existingCollegeList = new ArrayList<AffBean>();
 
 	// End of Global Variables
@@ -134,16 +140,14 @@ public class AffDAO {
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
-			if(filterKey.contentEquals("Relevant"))
-			{
-				
-				if(httpSession.getAttribute("sesProfile").toString().contentEquals("Parent"))
-				{
-					ParBean parent=new ParBean();
-					Integer parId=Integer.parseInt(httpSession.getAttribute("sesId").toString());
-					ParDAO prdao=new ParDAO();
-					parent=prdao.viewUniversity(parId);
-					instList=new ArrayList<AffBean>(parent.getAffBeanOneToManySet());
+			if (filterKey.contentEquals("Relevant")) {
+
+				if (httpSession.getAttribute("sesProfile").toString().contentEquals("Parent")) {
+					ParBean parent = new ParBean();
+					Integer parId = Integer.parseInt(httpSession.getAttribute("sesId").toString());
+					ParDAO prdao = new ParDAO();
+					parent = prdao.viewUniversity(parId);
+					instList = new ArrayList<AffBean>(parent.getAffBeanOneToManySet());
 					return instList;
 				}
 			}
@@ -772,42 +776,38 @@ public class AffDAO {
 			// TODO: handle exception
 		}
 	}
-	
-	public List<Integer> getStrutureId(Integer instId,Integer feeId)
-	{
-	List<Integer> structureIdes=new ArrayList<Integer>();
-	Session session=factory.openSession();	
-	try{
-	Criteria criteria=session.createCriteria(FeeStructureData.class);
-	if(feeId!=null){
-	criteria.add(Restrictions.eq("inst_id", instId)).add(Restrictions.eq("fee_id",feeId));
-	}else{
-	criteria.add(Restrictions.eq("inst_id", instId));
+
+	public List<Integer> getStrutureId(Integer instId, Integer feeId) {
+		List<Integer> structureIdes = new ArrayList<Integer>();
+		Session session = factory.openSession();
+		try {
+			Criteria criteria = session.createCriteria(FeeStructureData.class);
+			if (feeId != null) {
+				criteria.add(Restrictions.eq("inst_id", instId)).add(Restrictions.eq("fee_id", feeId));
+			} else {
+				criteria.add(Restrictions.eq("inst_id", instId));
+			}
+			criteria.setProjection(Projections.property("structure_id"));
+			structureIdes = criteria.list();
+			log.info("struture id is" + structureIdes);
+			return structureIdes;
+		} catch (NoSuchElementException nse) {
+			nse.printStackTrace();
+			return structureIdes;
+		} finally {
+			session.close();
+		}
 	}
-	criteria.setProjection(Projections.property("structure_id"));
-	structureIdes=criteria.list();	
-	log.info("struture id is"+structureIdes);
-	return structureIdes;
-	}catch(NoSuchElementException nse)
-	{
-	nse.printStackTrace();
-	return structureIdes;	
-	}
-	finally{
-	session.close();	
-	}	
-	}
-	
-	public ArrayList<FeeStructureData> getInstStructures(Integer instId)
-	{
+
+	public ArrayList<FeeStructureData> getInstStructures(Integer instId) {
 		// Declarations
-		ArrayList<FeeStructureData>resList=new ArrayList<FeeStructureData>();
+		ArrayList<FeeStructureData> resList = new ArrayList<FeeStructureData>();
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
-			Criteria cr=session.createCriteria(FeeStructureData.class);
+			Criteria cr = session.createCriteria(FeeStructureData.class);
 			cr.add(Restrictions.eq("inst_id", instId));
-			resList=new ArrayList<FeeStructureData>(cr.list());
+			resList = new ArrayList<FeeStructureData>(cr.list());
 			return resList;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -818,18 +818,54 @@ public class AffDAO {
 			session.close();
 		}
 	}
-	
-	public List<Integer> getFeeIdesOfInst(Integer instId){
-		List<Integer>  feeList=new ArrayList<Integer>();
-		Session session=factory.openSession();
-		Criteria criteria=session.createCriteria(FeeStructureData.class);
-		if(instId!=null){
-		criteria.add(Restrictions.eq("inst_id",instId));	
+
+	public List<Integer> getFeeIdesOfInst(Integer instId) {
+		List<Integer> feeList = new ArrayList<Integer>();
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(FeeStructureData.class);
+		if (instId != null) {
+			criteria.add(Restrictions.eq("inst_id", instId));
 		}
-	    criteria.setProjection(Projections.property("fee_id"));
-		feeList=criteria.list();
+		criteria.setProjection(Projections.property("fee_id"));
+		feeList = criteria.list();
 		session.close();
 		return feeList;
 	}
 
+	public List<Object[]> getTotalDueOfStudents(Integer collegeId) {
+	   List<Object[]> duesArray =null;
+	    DetachedCriteria dc = DetachedCriteria.forClass(AppBean.class);
+		dc.add(Restrictions.eq("affBeanStu.instId", collegeId)).setProjection(Projections.property("enrollmentNumber"));
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(AffBean.class, "inst");
+		try {
+			criteria.createAlias("inst.aplBeanSet", "student");
+			criteria.createAlias("student.paymentDues", "payDueBean");
+			criteria.add(Subqueries.propertyIn("student.enrollmentNumber", dc));
+			criteria.add(Subqueries.propertyIn("payDueBean.appBean.enrollmentNumber", dc));
+			criteria.add(Restrictions.eq("instId", collegeId));
+			criteria.setProjection(Projections.projectionList().add(Projections.property("inst.instName"))
+					.add(Projections.sum("payDueBean.total_fee_amount"))
+					.add(Projections.sum("payDueBean.payments_to_date")).add(Projections.sum("payDueBean.netDue")));
+			duesArray = criteria.list();
+			log.info("inside try");
+		} catch (Exception ex) {
+			log.info("inside catch");
+			criteria.add(Restrictions.eq("instId", collegeId));
+			criteria.setProjection(Projections.property("inst.instName"));
+			String instName =(String) criteria.list().iterator().next();
+			Object obj[] = new Object[4];
+			obj[0]=instName;
+			obj[1] = 0;
+			obj[2] = 0;
+			obj[3] = 0;
+			duesArray= new ArrayList<Object[]>();duesArray.add(obj);
+			
+		} finally {
+			session.close();
+
+		}
+		log.info("Total amount is" + duesArray.iterator().next()[1]);
+		return duesArray;
+	}
 }

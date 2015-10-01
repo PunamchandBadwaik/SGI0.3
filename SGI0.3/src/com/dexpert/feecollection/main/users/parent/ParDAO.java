@@ -1,4 +1,3 @@
-
 package com.dexpert.feecollection.main.users.parent;
 
 import java.io.File;
@@ -23,9 +22,13 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+
+import COM.rsa.Intel.cr;
 
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
@@ -34,13 +37,14 @@ import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
+import com.dexpert.feecollection.main.users.applicant.AppBean;
 import com.dexpert.feecollection.main.users.superadmin.SaBean;
 
 public class ParDAO {
 
 	// Declare Global Variables Here
 	public static SessionFactory factory = ConnectionClass.getFactory();
-	static Logger log = Logger.getLogger(AffDAO.class.getName());
+	static Logger log = Logger.getLogger(ParDAO.class.getName());
 
 	// End of Global Variables
 
@@ -218,14 +222,40 @@ public class ParDAO {
 	}
 
 	public Integer getUniversityId(String universityName) {
-		Integer universityId=null;
-		if(universityName!=null &&!universityName.isEmpty()&&!universityName.contentEquals("")){
-		Session session = factory.openSession();
-		universityId=(Integer)session.createCriteria(ParBean.class).add(Restrictions.eq("parInstName", universityName))
-				.setProjection(Projections.id()).list().iterator().next();
+		Integer universityId = null;
+		if (universityName != null && !universityName.isEmpty() && !universityName.contentEquals("")) {
+			Session session = factory.openSession();
+			universityId = (Integer) session.createCriteria(ParBean.class)
+					.add(Restrictions.eq("parInstName", universityName)).setProjection(Projections.id()).list()
+					.iterator().next();
 		}
-	        return universityId;
-	
+		return universityId;
+
 	}
 
+	public void getTotDuesOFStudOFAllColl(Integer parentInstId) {
+		List<Object[]> duesArray =null;
+		DetachedCriteria dc = DetachedCriteria.forClass(AffBean.class);
+		dc.add(Restrictions.eq("parBeanAff.parInstId", parentInstId));
+		dc.setProjection(Projections.id());
+		DetachedCriteria dc2 = DetachedCriteria.forClass(AppBean.class);
+		dc.add(Subqueries.propertyEq("affBeanStu.instId", dc)).
+		setProjection(Projections.property("enrollmentNumber"));
+		Session session = factory.openSession();
+		Criteria criteria=session.createCriteria(ParBean.class,"parent");
+		criteria.createAlias("parent.affBeanOneToManySet", "inst");
+        criteria.createAlias("inst.aplBeanSet", "student");
+        criteria.createAlias("student.paymentDues", "payDueBean");
+        criteria.add(Subqueries.propertyIn("student.enrollmentNumber", dc2));
+		criteria.add(Subqueries.propertyIn("payDueBean.appBean.enrollmentNumber", dc2));
+		criteria.add(Restrictions.eq("parInstId",parentInstId));
+	    criteria.setProjection(Projections.projectionList().add(Projections.property("parent.parInstName"))
+				.add(Projections.sum("payDueBean.total_fee_amount"))
+				.add(Projections.sum("payDueBean.payments_to_date")).add(Projections.sum("payDueBean.netDue")));
+		duesArray = criteria.list();
+	
+
+	
+
+}
 }

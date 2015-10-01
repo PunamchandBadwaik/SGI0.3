@@ -659,7 +659,8 @@ public class AffAction extends ActionSupport {
 		// collegeDueReport = (ArrayList<PaymentDuesBean>)
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
-
+         popUp=request.getParameter("popUp")==null?false:true;
+        
 		if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
 			collegeId = (Integer) ses.getAttribute("sesId");
 			String courseName = request.getParameter("courseName");
@@ -667,7 +668,8 @@ public class AffAction extends ActionSupport {
 			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
 			if (enrollmentNumber.size() < 1) {
 				totalDuesOfStudent = new ArrayList<Object[]>();
-				return "success";
+				String result=popUp==true?"popUp":"success";
+				return result;
 			}
 			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
 			log.info("List size is");
@@ -684,7 +686,9 @@ public class AffAction extends ActionSupport {
 				log.info("total original due " + totalOriginalDues);
 				log.info("total paid " + totalPaymentToDate);
 			}
-			return SUCCESS;
+			
+			String result=popUp==true?"popUp":"success";
+			return result;
 
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")
 				|| ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
@@ -1349,6 +1353,13 @@ public class AffAction extends ActionSupport {
 		}
 
 		return SUCCESS;
+	}
+	public void getTotalDuesOfStudents()
+	{
+	//read the college id from session
+	Integer instId=(Integer)ses.getAttribute("sesId");
+	affDao.getTotalDueOfStudents(instId);	
+		
 	}
 
 	// End of Action Methods
