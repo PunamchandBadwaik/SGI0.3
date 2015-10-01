@@ -213,7 +213,7 @@
 						</div>
 						<div class="col-md-12">
 							<button type="submit" class="btn btn-success">Save
-								University</button>
+								</button>
 
 							<button onclick="window.close()" class="btn btn-info">Close
 							</button>
