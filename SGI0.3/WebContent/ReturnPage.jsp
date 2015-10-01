@@ -40,12 +40,9 @@
 		successful, will automatically redirected your home page...</div>
 
 
-
-
 	<%
 		} else {
 	%>
-
 
 
 
@@ -58,24 +55,11 @@
 	<div align="center">Sorry, your transaction has been declined due
 		to some reason, will automatically redirected your home page...</div>
 
-
-
-
-
 	<%
 		}
+		else if (pgRespCode.equals("Ok")) {
 	%>
 
-
-
-
-
-
-
-
-	<%
-		if (pgRespCode.equals("Ok")) {
-	%>
 
 	<div align="center">Congratulations, your payment has been
 		successful, will automatically redirected your home page...</div>

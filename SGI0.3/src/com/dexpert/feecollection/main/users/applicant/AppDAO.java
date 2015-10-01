@@ -10,12 +10,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-
 import java.util.Set;
 
 import javax.crypto.BadPaddingException;
@@ -54,6 +52,7 @@ import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
+import com.mysql.fabric.xmlrpc.base.Array;
 
 public class AppDAO {
 
@@ -112,23 +111,12 @@ public class AppDAO {
 		String k = bs.breakString(pp);
 
 		log.info("String after Break Class : " + k);
-		 String year = bs.getYear(k); 
-		 String course = bs.getCourse(k); 
-		
-		 
-		//String year = "2014";
-		//String course = "11th Science";
-		//String yearCode = "11";
+		String year = bs.getYear(k);
+		String course = bs.getCourse(k);
 
-		// log.info("Original String element is ::" + pp);
-		// log.info("Break String element is ::" + k);
-		// log.info("Year is ::" + year);
-		// log.info("Course is ::" + course);
-		// log.info("YearCode is ::" + yearCode);
-
-		//appBean.setYear(year);
-		//appBean.setCourse(course);
-		//appBean.setYearCode(yearCode);
+		// appBean.setYear(year);
+		appBean.setCourse(course);
+		// appBean.setYearCode(yearCode);
 
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
@@ -395,15 +383,7 @@ public class AppDAO {
 		valueList = fcDAO.getLookupValue(str_ids);
 
 		paramList = fvDAO.getListOfValueBeans(valueList);
-		Iterator<Integer> paramIterator = paramList.iterator();
-		while (paramIterator.hasNext()) {
-			Integer integer = (Integer) paramIterator.next();
-			System.out.println(integer);
-		}
 
-		// ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
-
-		// AffDAO affDAO = new AffDAO();
 		FileInputStream fileInputStream = new FileInputStream(fileUpload);
 
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
@@ -420,6 +400,10 @@ public class AppDAO {
 
 			int j = 0;
 			String stringVal;
+			String blankData;
+			String errorData;
+			String booleanData;
+
 			long numVal;
 			XSSFCell cell;
 
@@ -441,19 +425,47 @@ public class AppDAO {
 
 					case XSSFCell.CELL_TYPE_STRING:
 						stringVal = cell.getStringCellValue();
-						// System.out.print(stringVal + " ");
+						System.out.println(stringVal);
 						tempArrayList.add(stringVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_NUMERIC:
 						numVal = (long) cell.getNumericCellValue();
 						tempArrayList.add(numVal);
-						// System.out.print(numVal + " ");
+						System.out.println(numVal);
+						break;
+
+					case XSSFCell.CELL_TYPE_BLANK:
+						blankData = cell.getStringCellValue();
+						tempArrayList.add(blankData);
+						System.out.println(blankData);
+						break;
+
+					case XSSFCell.CELL_TYPE_ERROR:
+						errorData = cell.getStringCellValue();
+						tempArrayList.add(errorData);
+						System.out.println(errorData);
+						break;
+
+					case XSSFCell.CELL_TYPE_BOOLEAN:
+						booleanData = cell.getStringCellValue();
+						tempArrayList.add(booleanData);
+						System.out.println(booleanData);
 						break;
 
 					}
+				}
+
+				log.info("Array List size is ::" + tempArrayList.size());
+
+				Iterator<Integer> paramIterator = paramList.iterator();
+				while (paramIterator.hasNext()) {
+					Integer lookupId = (Integer) paramIterator.next();
+
+					// System.out.print(" " + lookupId+" ");
 
 				}
+
 				map.put(j, tempArrayList);
 				// System.out.println();
 
@@ -462,7 +474,7 @@ public class AppDAO {
 			}
 
 			ArrayList<Integer> arrayList = new ArrayList<Integer>(map.keySet());
-
+			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
 			Iterator<Integer> iterator = arrayList.iterator();
 			while (iterator.hasNext()) {
 				Integer integer = (Integer) iterator.next();
@@ -472,17 +484,26 @@ public class AppDAO {
 				appBean.setGrNumber(aa.get(0).toString());
 				appBean.setAplFirstName(aa.get(1).toString());
 				appBean.setAplLstName(aa.get(2).toString());
-
 				appBean.setGender(aa.get(3).toString());
-
 				appBean.setAplAddress(aa.get(4).toString());
-
 				appBean.setAplMobilePri(aa.get(5).toString());
-
 				appBean.setAplMobileSec(aa.get(6).toString());
-				appBean.setStartYear(aa.get(7).toString());
+				appBean.setAplEmail(aa.get(7).toString());
+				appBean.setStartYear(aa.get(8).toString());
 
-				addBulkData(appBean);
+				appBeansList.add(appBean);
+
+			}
+
+			Iterator<AppBean> iterator2 = appBeansList.iterator();
+			log.info("appBean List Size " + appBeansList.size());
+			while (iterator2.hasNext()) {
+				AppBean appBean = (AppBean) iterator2.next();
+
+				// System.out.println(appBean.getGrNumber());
+
+				// /addBulkData(appBean);
+
 			}
 
 		} catch (Exception e) {
@@ -650,7 +671,13 @@ public class AppDAO {
 	public ArrayList<AppBean> addBulkData(AppBean appBean) throws InvalidKeyException, NoSuchAlgorithmException,
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
+
 		HttpServletRequest request = ServletActionContext.getRequest();
+
+		// generating enrollment Number
+		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
+		String EnrollNo = en.generateEnrollmentNum(appBean.getStartYear(), appBean.getCourse());
+		appBean.setEnrollmentNumber(EnrollNo);
 
 		HttpSession httpSession = request.getSession();
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
@@ -693,7 +720,7 @@ public class AppDAO {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
-			updateStudentDue(appBean);
+			// updateStudentDue(appBean);
 			try {
 
 				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
