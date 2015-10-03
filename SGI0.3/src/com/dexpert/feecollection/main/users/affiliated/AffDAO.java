@@ -191,11 +191,14 @@ public class AffDAO {
 	}
 
 	// get direct child i.e. college list
-	public List<AffBean> getCollegesList() {
+	public List<AffBean> getCollegesList(Integer parentInsId) {
 
 		Session session = factory.openSession();
 
 		Criteria criteria = session.createCriteria(AffBean.class);
+		if(parentInsId!=null){
+		criteria.add(Restrictions.eq("parBeanAff.parInstId",parentInsId));	
+		}
 		criteria.addOrder(Order.asc("instName"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<AffBean> affBeansList = criteria.list();

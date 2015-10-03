@@ -72,7 +72,7 @@ public class AffBean implements Serializable {
 	@ManyToOne(targetEntity = ParBean.class)
 	@JoinColumn(name = "University_Id_Fk", referencedColumnName = "parInstId")
 	ParBean parBeanAff;
-
+	
 	// one to many relationship with Applicants (Students)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
 	@OrderBy(value="enrollmentNumber")

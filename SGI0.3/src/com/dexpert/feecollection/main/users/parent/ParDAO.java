@@ -233,16 +233,17 @@ public class ParDAO {
 
 	}
 
-	public void getTotDuesOFStudOFAllColl(Integer parentInstId) {
+	public List<Object[]> getTotDuesOFStudOFAllColl(Integer parentInstId) {
 		List<Object[]> duesArray =null;
 		DetachedCriteria dc = DetachedCriteria.forClass(AffBean.class);
 		dc.add(Restrictions.eq("parBeanAff.parInstId", parentInstId));
 		dc.setProjection(Projections.id());
 		DetachedCriteria dc2 = DetachedCriteria.forClass(AppBean.class);
-		dc.add(Subqueries.propertyEq("affBeanStu.instId", dc)).
+		dc2.add(Subqueries.propertyIn("affBeanStu.instId", dc)).
 		setProjection(Projections.property("enrollmentNumber"));
 		Session session = factory.openSession();
 		Criteria criteria=session.createCriteria(ParBean.class,"parent");
+		try{
 		criteria.createAlias("parent.affBeanOneToManySet", "inst");
         criteria.createAlias("inst.aplBeanSet", "student");
         criteria.createAlias("student.paymentDues", "payDueBean");
@@ -253,9 +254,26 @@ public class ParDAO {
 				.add(Projections.sum("payDueBean.total_fee_amount"))
 				.add(Projections.sum("payDueBean.payments_to_date")).add(Projections.sum("payDueBean.netDue")));
 		duesArray = criteria.list();
-	
+		return duesArray;
+		}catch(Exception ex){
+			criteria.add(Restrictions.eq("parInstId", parentInstId));
+			criteria.setProjection(Projections.property("parent.parInstName"));
+			String parentInstName =(String) criteria.list().iterator().next();
+			Object obj[] = new Object[4];
+			obj[0]=parentInstName;
+			obj[1] = 0;
+			obj[2] = 0;
+			obj[3] = 0;
+			duesArray= new ArrayList<Object[]>();duesArray.add(obj);
+			return duesArray;	
+			
+		}
+	finally{
+		
+		session.close();
+	}
+    
 
-	
 
 }
 }

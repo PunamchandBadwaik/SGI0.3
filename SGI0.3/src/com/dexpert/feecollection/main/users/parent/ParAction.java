@@ -7,6 +7,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -16,12 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.Session;
 
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
 import com.dexpert.feecollection.main.users.affiliated.AffAction;
+import com.dexpert.feecollection.main.users.affiliated.AffBean;
+import com.dexpert.feecollection.main.users.affiliated.AffDAO;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class ParAction extends ActionSupport {
@@ -34,11 +38,11 @@ public class ParAction extends ActionSupport {
 
 	ParDAO parDAO = new ParDAO();
 	private File fileUpload;
-
+    AffDAO affDAO=new AffDAO();
 	private String fileUploadFileName;
 	private Integer fileSize;
 	private String contentType;
-
+    private List<List<Object[]>> AllChildInstDues=new ArrayList<List<Object[]>>();
 	// End of Global Variables
 
 	// ---------------------------------------------------
@@ -124,7 +128,20 @@ public class ParAction extends ActionSupport {
 		parBean = parDAO.viewUniversity(id);
 		return SUCCESS;
 	}
-
+   public String getDueOFStAtInstLevel()
+   {
+	   Integer parentInsId=(Integer)request.getSession().getAttribute("sesId");
+	   List<Integer> childInstIdes= parDAO.getIdesOfAllCollege(parentInsId);  
+	   Iterator<Integer> itr=childInstIdes.iterator();
+	   while (itr.hasNext()) {
+		Integer instId =  itr.next();
+		List<Object[]> oneInstDue=affDAO.getTotalDueOfStudents(instId);
+		AllChildInstDues.add(oneInstDue);
+	   }
+	   log.info("number of inst"+AllChildInstDues.size());
+	   
+	   return SUCCESS;
+   }
 	// End of Action Methods
 
 	// ---------------------------------------------------
@@ -178,5 +195,15 @@ public class ParAction extends ActionSupport {
 	public void setParBeansList(List<ParBean> parBeansList) {
 		this.parBeansList = parBeansList;
 	}
+
+	public List<List<Object[]>> getAllChildInstDues() {
+		return AllChildInstDues;
+	}
+
+	public void setAllChildInstDues(List<List<Object[]>> allChildInstDues) {
+		AllChildInstDues = allChildInstDues;
+	}
+	
+	
 
 }

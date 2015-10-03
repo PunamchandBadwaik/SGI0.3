@@ -83,7 +83,7 @@
 
 		<action name="ShowCollegeReport"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
-			method="getCollegeList">
+			method="getAllClgList">
 
 
 			<result name="success">
@@ -130,6 +130,11 @@
 			class="com.dexpert.feecollection.main.users.parent.ParAction" method="getUniversityDetail">
 
 			<result name="success">CollegeForm.jsp</result>
+		</action>
+		<action name="dueAtInstLevel"
+			class="com.dexpert.feecollection.main.users.parent.ParAction" method="getDueOFStAtInstLevel">
+
+			<result name="success">All_Inst_Dues_Popup.jsp</result>
 		</action>
 
 

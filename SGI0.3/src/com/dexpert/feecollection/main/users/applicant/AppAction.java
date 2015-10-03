@@ -159,7 +159,7 @@ public class AppAction extends ActionSupport {
 			} catch (java.util.NoSuchElementException e) {
 
 				request.setAttribute("msg", "Please Set Fees for Student");
-				affInstList = affDAO.getCollegesList();
+				affInstList = affDAO.getCollegesList(null);
 				return "feeNotSet";
 			}
 
@@ -170,7 +170,7 @@ public class AppAction extends ActionSupport {
 		} else {
 			log.info("4");
 			request.setAttribute("msg", "Enrollment Number Already Registered");
-			affInstList = affDAO.getCollegesList();
+			affInstList = affDAO.getCollegesList(null);
 			List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(),null);
 			log.info("Struture id" + structureIdes);
 			List<Integer> valueIdes = fcDAO.getLookupValue(structureIdes);

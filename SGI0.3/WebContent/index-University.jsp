@@ -262,16 +262,18 @@
 					</div>
 				</div>
 				<!--/row-->
-			<%-- 	<div class=" row">
+				 <div class=" row">
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<a data-toggle="tooltip"
 							title="1 new student requests. Click here to view"
 							class="well top-block" href="#"
-							onclick='window.open("LockFeature.jsp", "Dail Report", "width=1920,height=1080");'>
-							<i class="glyphicon glyphicon-user blue"></i>
-
-							<div>Total Student Requests</div>
-							<div>1</div> <span class="notification">1</span>
+							onclick='window.open("dueAtInstLevel", "Dail Report", "width=1100,height=500");'>
+							<!-- <i class="glyphicon glyphicon-user blue"></i> --> <i
+							class="fa fa-inr green"></i> <%
+ 	                  Object [] dueArray = ( Object []) session.getAttribute("duesArrayForParent");
+                                        %>
+							<div>Total Dues Remaining</div>
+							<div> <%=dueArray[3]==null?0.0:dueArray[3]%> </div> <!-- <span class="notification">1</span> -->
 						</a>
 					</div>
 
@@ -279,16 +281,16 @@
 						<a data-toggle="tooltip"
 							title="0 new payments by colleges. Click here to view"
 							class="well top-block" href="#"
-							onclick='window.open("LockFeature.jsp", "University Report", "height=1080,width=1920")'>
+							onclick='window.open("dueAtInstLevel", "University Report", "height=500,width=1100")'>
 							<i class="fa fa-inr green"></i>
 
-							<div>Total Payments Made This Month</div>
-							<div>0</div> <span class="notification green">0</span>
+							<div>Total Payments Done</div>
+							<div> <%=dueArray[2]==null?0.0:dueArray[2]%> </div> <!--  <span class="notification green">0</span> -->
 						</a>
 					</div>
 
 
-				</div> --%>
+				</div>
 				<!--/row-->
 				<!-- content ends -->
 			</div>

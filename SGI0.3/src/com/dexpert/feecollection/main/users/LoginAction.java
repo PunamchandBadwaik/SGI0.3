@@ -163,7 +163,7 @@ public class LoginAction extends ActionSupport {
 			log.info("password frm Database is ::" + decrypedText);
 			log.info("4");
 		}
-		/*try {*/
+		try {
 			if (loginBean.getUserName().equals(loginBean.getUserName()) && loginBean.getPassword().equals(decrypedText)) {
 				log.info("valid User name and Password");
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
@@ -185,8 +185,9 @@ public class LoginAction extends ActionSupport {
 					httpSession.setAttribute("sesId", lgbean.getParBean().getParInstId());
 					httpSession.setAttribute("sesProfile", "Parent");
 				    httpSession.setAttribute("dashLink", "index-University.jsp");
-				    parDAO.getTotDuesOFStudOFAllColl(lgbean.getParBean().getParInstId());
-				   return "university";
+				    List<Object[]> viewstudentDuesForPar=parDAO.getTotDuesOFStudOFAllColl(lgbean.getParBean().getParInstId());
+				    httpSession.setAttribute("duesArrayForParent",(Object[])viewstudentDuesForPar.iterator().next());
+				    return "university";
 				} else if (lgbean.getSaBean() != null) {
 					log.info("Valid Super Admin");
 					httpSession.setAttribute("sesProfile", "SU");
@@ -226,12 +227,12 @@ public class LoginAction extends ActionSupport {
 				return INPUT;
 
 			}
-		/*} *//*catch (java.lang.NullPointerException e) {
+		} catch (java.lang.NullPointerException e) {
 
 			request.setAttribute("msg", "Session Time Out");
 
 			return ERROR;
-		}*/
+		}
 
 	}
 

@@ -235,10 +235,21 @@ public class AffAction extends ActionSupport {
 	// get institute Details list
 
 	public String getAllClgList() {
-		affInstList = affDao.getCollegesList();
+		HttpSession httpSession = request.getSession();
+		
+		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		Integer parentId=loginBean.getProfile().contentEquals("Parent")?loginBean.getParBean().getParInstId():null;
+		
+		
+		affInstList = affDao.getCollegesList(parentId);
 		return SUCCESS;
 	}
 
+	
+	
+	
+	
+	
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");

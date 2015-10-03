@@ -128,7 +128,7 @@ public class OperatorAction extends ActionSupport {
 	// Getting All Records of College Operators
 	public String getListOfCollegeOperators() {
 
-		listAffBean = affDAO.getCollegesList();
+		listAffBean = affDAO.getCollegesList(null);
 
 
 		listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator();
