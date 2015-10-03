@@ -48,7 +48,7 @@ public class FvBean implements Serializable {
 	@ManyToOne(targetEntity=LookupBean.class)
 	@JoinColumn(name = "FeeLookupId_Fk", referencedColumnName = "lookupId")
 	private LookupBean lookupname;
-
+	
 	public FcBean getFcBean() {
 		return fcBean;
 	}

@@ -2,18 +2,22 @@ package com.dexpert.feecollection.main.users.applicant;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.crypto.BadPaddingException;
@@ -35,8 +39,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+
+import COM.rsa.jsafe.v;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -371,6 +378,34 @@ public class AppDAO {
 
 	}
 
+	@SuppressWarnings("finally")
+	public FvBean checkFeeValue(Integer lookupId, String element) {
+
+		Session session = factory.openSession();
+		FvBean bean = new FvBean();
+		List<FvBean> list = new ArrayList<FvBean>();
+		try {
+			log.info("cell Value::" + element + "::" + lookupId);
+			Criteria criteria = session.createCriteria(FvBean.class);
+			criteria.add(Restrictions.eq("value", element));
+			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
+			list = criteria.list();
+			if (list.size() > 0) {
+				log.info("Matched");
+				Iterator<FvBean> iterator = list.iterator();
+				FvBean fvBean = iterator.next();
+				bean.setFeeValueId(fvBean.getFeeValueId());
+				bean.setValue(fvBean.getValue());
+
+				return bean;
+			}
+		} finally {
+			session.close();
+		}
+		return null;
+
+	}
+
 	public ArrayList<AppBean> importExcelFileToDatabase1(String fileUploadFileName, File fileUpload, String path)
 			throws Exception {
 		HttpServletRequest request = ServletActionContext.getRequest();
@@ -390,19 +425,15 @@ public class AppDAO {
 
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 
-		ArrayList<ArrayList<String>> StudentSet = new ArrayList<ArrayList<String>>();
-
-		LinkedHashMap<Integer, ArrayList<Object>> map = new LinkedHashMap<Integer, ArrayList<Object>>();
-
+		// LinkedHashMap<Integer, ArrayList<Object>> map = new
+		// LinkedHashMap<Integer, ArrayList<Object>>();
+		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>();
 		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
 
 			int j = 0;
 			String stringVal;
-			String blankData;
-			String errorData;
-			String booleanData;
 
 			long numVal;
 			XSSFCell cell;
@@ -416,7 +447,13 @@ public class AppDAO {
 				Iterator<Cell> cells = row.cellIterator();
 				ArrayList<Object> tempArrayList = new ArrayList<Object>();
 
+				List<FvBean> fvBeansList = new ArrayList<FvBean>();
+
+				LinkedHashMap<ArrayList<Object>, List<FvBean>> rowMap = new LinkedHashMap<ArrayList<Object>, List<FvBean>>();
+
 				// System.out.print(">>" + j + " ");
+
+				int i = 0;
 				while (cells.hasNext()) {
 
 					cell = (XSSFCell) cells.next();
@@ -435,52 +472,70 @@ public class AppDAO {
 						System.out.println(numVal);
 						break;
 
-					case XSSFCell.CELL_TYPE_BLANK:
-						blankData = cell.getStringCellValue();
-						tempArrayList.add(blankData);
-						System.out.println(blankData);
-						break;
-
-					case XSSFCell.CELL_TYPE_ERROR:
-						errorData = cell.getStringCellValue();
-						tempArrayList.add(errorData);
-						System.out.println(errorData);
-						break;
-
-					case XSSFCell.CELL_TYPE_BOOLEAN:
-						booleanData = cell.getStringCellValue();
-						tempArrayList.add(booleanData);
-						System.out.println(booleanData);
-						break;
-
 					}
+					i++;
+
+					Iterator<Integer> paramIterator = paramList.iterator();
+					while (paramIterator.hasNext()) {
+						FvBean bean = new FvBean();
+						String tempString = "";
+						Integer lookupId = (Integer) paramIterator.next();
+
+						switch (cell.getCellType()) {
+
+						case XSSFCell.CELL_TYPE_STRING:
+							tempString = row.getCell(i - 1).toString();
+							break;
+
+						case XSSFCell.CELL_TYPE_NUMERIC:
+							tempString = row.getCell(i - 1).toString();
+							break;
+
+						}
+
+						String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf("."))
+								: tempString;
+
+						bean = checkFeeValue(lookupId, x);
+
+						if (bean != null) {
+							fvBeansList.add(bean);
+
+						}
+
+						log.info("Fv Bean List size ::" + fvBeansList.size());
+					}
+
 				}
+				rowMap.put(tempArrayList, fvBeansList);
+				log.info("temp Arryalist Size ::" + tempArrayList.size());
 
-				log.info("Array List size is ::" + tempArrayList.size());
-
-				Iterator<Integer> paramIterator = paramList.iterator();
-				while (paramIterator.hasNext()) {
-					Integer lookupId = (Integer) paramIterator.next();
-
-					// System.out.print(" " + lookupId+" ");
-
-				}
-
-				map.put(j, tempArrayList);
-				// System.out.println();
+				appBeanMap.put(j, rowMap);
 
 				j++;
 
 			}
-
-			ArrayList<Integer> arrayList = new ArrayList<Integer>(map.keySet());
+			log.info("AppBEan Map size ::" + appBeanMap.size());
+			ArrayList<Integer> arrayList = new ArrayList<Integer>(appBeanMap.keySet());
 			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
 			Iterator<Integer> iterator = arrayList.iterator();
-			while (iterator.hasNext()) {
-				Integer integer = (Integer) iterator.next();
-				AppBean appBean = new AppBean();
-				ArrayList<Object> aa = map.get(integer);
+			log.info("Array list  ::" + arrayList.size());
 
+			while (iterator.hasNext()) {
+				log.info("AppBean Map");
+				Integer integer = (Integer) iterator.next();
+				Map<ArrayList<Object>, List<FvBean>> rMap = appBeanMap.get(integer);
+				log.info("R map ::" + rMap.size());
+				Set<ArrayList<Object>> set = rMap.keySet();
+				log.info("Set  ::" + set.size());
+				ArrayList<Object> aa = new ArrayList<Object>(set.iterator().next());
+				log.info("Arraylist ::" + aa.size());
+				Collection<List<FvBean>> list = rMap.values();
+				log.info("Collection ::" + list.size());
+
+				Set<FvBean> paramSet = new HashSet<FvBean>((List<FvBean>) list.iterator().next());
+
+				AppBean appBean = new AppBean();
 				appBean.setGrNumber(aa.get(0).toString());
 				appBean.setAplFirstName(aa.get(1).toString());
 				appBean.setAplLstName(aa.get(2).toString());
@@ -490,6 +545,7 @@ public class AppDAO {
 				appBean.setAplMobileSec(aa.get(6).toString());
 				appBean.setAplEmail(aa.get(7).toString());
 				appBean.setStartYear(aa.get(8).toString());
+				appBean.setApplicantParamValues(paramSet);
 
 				appBeansList.add(appBean);
 
@@ -500,9 +556,9 @@ public class AppDAO {
 			while (iterator2.hasNext()) {
 				AppBean appBean = (AppBean) iterator2.next();
 
-				// System.out.println(appBean.getGrNumber());
+				System.out.println(appBean.getGrNumber());
 
-				// /addBulkData(appBean);
+				addBulkData(appBean);
 
 			}
 
