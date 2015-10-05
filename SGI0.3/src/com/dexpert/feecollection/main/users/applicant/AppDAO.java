@@ -127,7 +127,7 @@ public class AppDAO {
 
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-		String EnrollNo = en.generateEnrollmentNum(appBean.getStartYear(), course);
+		String EnrollNo = en.generateEnrollmentNum(appBean);
 		appBean.setEnrollmentNumber(EnrollNo);
 
 		// log.info("Enrollment Number is ::" + appBean.getEnrollmentNumber());
@@ -434,6 +434,7 @@ public class AppDAO {
 
 			int j = 0;
 			String stringVal;
+			String blankVal;
 
 			long numVal;
 			XSSFCell cell;
@@ -472,6 +473,12 @@ public class AppDAO {
 						System.out.println(numVal);
 						break;
 
+					case XSSFCell.CELL_TYPE_BLANK:
+						blankVal = cell.getStringCellValue();
+						tempArrayList.add(blankVal);
+						System.out.println(blankVal);
+						break;
+
 					}
 					i++;
 
@@ -479,16 +486,19 @@ public class AppDAO {
 					while (paramIterator.hasNext()) {
 						FvBean bean = new FvBean();
 						String tempString = "";
+						Long tempNum = null;
 						Integer lookupId = (Integer) paramIterator.next();
 
 						switch (cell.getCellType()) {
 
 						case XSSFCell.CELL_TYPE_STRING:
+
 							tempString = row.getCell(i - 1).toString();
 							break;
 
 						case XSSFCell.CELL_TYPE_NUMERIC:
 							tempString = row.getCell(i - 1).toString();
+
 							break;
 
 						}
@@ -502,6 +512,7 @@ public class AppDAO {
 							fvBeansList.add(bean);
 
 						}
+						
 
 						log.info("Fv Bean List size ::" + fvBeansList.size());
 					}
@@ -519,19 +530,19 @@ public class AppDAO {
 			ArrayList<Integer> arrayList = new ArrayList<Integer>(appBeanMap.keySet());
 			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
 			Iterator<Integer> iterator = arrayList.iterator();
-			log.info("Array list  ::" + arrayList.size());
+			log.info("AppBean Array list  ::" + arrayList.size());
 
 			while (iterator.hasNext()) {
-				log.info("AppBean Map");
+				//log.info("AppBean Map");
 				Integer integer = (Integer) iterator.next();
 				Map<ArrayList<Object>, List<FvBean>> rMap = appBeanMap.get(integer);
-				log.info("R map ::" + rMap.size());
+				//log.info("R map ::" + rMap.size());
 				Set<ArrayList<Object>> set = rMap.keySet();
-				log.info("Set  ::" + set.size());
+				//log.info("Set  ::" + set.size());
 				ArrayList<Object> aa = new ArrayList<Object>(set.iterator().next());
-				log.info("Arraylist ::" + aa.size());
+				//log.info("Arraylist ::" + aa.size());
 				Collection<List<FvBean>> list = rMap.values();
-				log.info("Collection ::" + list.size());
+				//log.info("Collection ::" + list.size());
 
 				Set<FvBean> paramSet = new HashSet<FvBean>((List<FvBean>) list.iterator().next());
 
@@ -552,7 +563,7 @@ public class AppDAO {
 			}
 
 			Iterator<AppBean> iterator2 = appBeansList.iterator();
-			log.info("appBean List Size " + appBeansList.size());
+			//log.info("appBean List Size " + appBeansList.size());
 			while (iterator2.hasNext()) {
 				AppBean appBean = (AppBean) iterator2.next();
 
@@ -732,7 +743,7 @@ public class AppDAO {
 
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
-		String EnrollNo = en.generateEnrollmentNum(appBean.getStartYear(), appBean.getCourse());
+		String EnrollNo = en.generateEnrollmentNum(appBean);
 		appBean.setEnrollmentNumber(EnrollNo);
 
 		HttpSession httpSession = request.getSession();
@@ -776,7 +787,7 @@ public class AppDAO {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
-			// updateStudentDue(appBean);
+			 updateStudentDue(appBean);
 			try {
 
 				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")

@@ -91,7 +91,7 @@ public class FvDAO {
 	}
 	
 	public Integer getCourseId(String courseName) {
-		log.info("course name is"+courseName);
+		log.info("course name is :: "+courseName);
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(FvBean.class);
 		criteria.add(Restrictions.eq("value", courseName)).setProjection(Projections.id());
