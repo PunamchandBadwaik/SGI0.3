@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
+import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
@@ -51,8 +52,9 @@ public class OperatorAction extends ActionSupport {
 	public String registerCollegeOperatorAction() throws InvalidKeyException, NoSuchAlgorithmException,
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
+		HttpSession httpSession = request.getSession();
 		// AffDAO affDAO = new AffDAO();
-
+		loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		String username = new String();
 		// generate credentials for admin login
 		try {
@@ -83,25 +85,19 @@ public class OperatorAction extends ActionSupport {
 
 		operatorBean.setLoginBean(creds);
 
-		Integer instId = Integer.parseInt(opInstId);
+		affBean = affDAO.viewInstDetail(loginBean.getAffBean().getInstId());
 
-		
-		
-		
-		affBean = affDAO.viewInstDetail(instId);
+		/*
+		 * log.info("Institutre Name is ::" + affBean.getInstName());
+		 * 
+		 * operatorBean.setCollegeName(affBean.getInstName());
+		 */
 
-		/*log.info("Institutre Name is ::" + affBean.getInstName());
-
-		operatorBean.setCollegeName(affBean.getInstName());*/
-	
-		
 		affBean.getOptrBeanSet().add(operatorBean);
 		operatorBean.setAffBean(affBean);
-		
+
 		affDAO.saveOrUpdate(affBean, null);
 
-		
-		
 		/*
 		 * if (creds.getProfile().equals("CollegeOperator")) {
 		 * 
@@ -112,6 +108,14 @@ public class OperatorAction extends ActionSupport {
 		 */
 
 		OperatorDao.registerCollegeOperatorDao(operatorBean);
+
+		// code to send msg
+		String user = username;
+		String pass = password;
+		String msg = "UserId :" + user + "" + " Passsword : " + pass;
+		SendSMS sms = new SendSMS();
+		sms.sendSMS(operatorBean.getOperatorContact(), msg);
+
 		// -----Code for sending email//--------------------
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(operatorBean.getOperatorEmail(), "Welcome To FeeDesk!", username, password,
@@ -130,9 +134,7 @@ public class OperatorAction extends ActionSupport {
 
 		listAffBean = affDAO.getCollegesList(null);
 
-
 		listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator();
-
 
 		return SUCCESS;
 	}

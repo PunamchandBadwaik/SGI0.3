@@ -53,6 +53,7 @@ import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
+import com.dexpert.feecollection.main.fee.lookup.LookupBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
@@ -391,11 +392,14 @@ public class AppDAO {
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
 			if (list.size() > 0) {
+				LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
 				Iterator<FvBean> iterator = list.iterator();
 				FvBean fvBean = iterator.next();
 				bean.setFeeValueId(fvBean.getFeeValueId());
 				bean.setValue(fvBean.getValue());
+				lookupBean.setLookupId(lookupId);
+				bean.setLookupname(lookupBean);
 
 				return bean;
 			}
@@ -463,20 +467,20 @@ public class AppDAO {
 
 					case XSSFCell.CELL_TYPE_STRING:
 						stringVal = cell.getStringCellValue();
-						System.out.println(stringVal);
+						// System.out.println(stringVal);
 						tempArrayList.add(stringVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_NUMERIC:
 						numVal = (long) cell.getNumericCellValue();
 						tempArrayList.add(numVal);
-						System.out.println(numVal);
+						// System.out.println(numVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_BLANK:
 						blankVal = cell.getStringCellValue();
 						tempArrayList.add(blankVal);
-						System.out.println(blankVal);
+						// System.out.println(blankVal);
 						break;
 
 					}
@@ -512,7 +516,6 @@ public class AppDAO {
 							fvBeansList.add(bean);
 
 						}
-						
 
 						log.info("Fv Bean List size ::" + fvBeansList.size());
 					}
@@ -533,16 +536,16 @@ public class AppDAO {
 			log.info("AppBean Array list  ::" + arrayList.size());
 
 			while (iterator.hasNext()) {
-				//log.info("AppBean Map");
+				// log.info("AppBean Map");
 				Integer integer = (Integer) iterator.next();
 				Map<ArrayList<Object>, List<FvBean>> rMap = appBeanMap.get(integer);
-				//log.info("R map ::" + rMap.size());
+				// log.info("R map ::" + rMap.size());
 				Set<ArrayList<Object>> set = rMap.keySet();
-				//log.info("Set  ::" + set.size());
+				// log.info("Set  ::" + set.size());
 				ArrayList<Object> aa = new ArrayList<Object>(set.iterator().next());
-				//log.info("Arraylist ::" + aa.size());
+				// log.info("Arraylist ::" + aa.size());
 				Collection<List<FvBean>> list = rMap.values();
-				//log.info("Collection ::" + list.size());
+				// log.info("Collection ::" + list.size());
 
 				Set<FvBean> paramSet = new HashSet<FvBean>((List<FvBean>) list.iterator().next());
 
@@ -563,11 +566,11 @@ public class AppDAO {
 			}
 
 			Iterator<AppBean> iterator2 = appBeansList.iterator();
-			//log.info("appBean List Size " + appBeansList.size());
+			// log.info("appBean List Size " + appBeansList.size());
 			while (iterator2.hasNext()) {
 				AppBean appBean = (AppBean) iterator2.next();
 
-				System.out.println(appBean.getGrNumber());
+				// System.out.println(appBean.getGrNumber());
 
 				addBulkData(appBean);
 
@@ -787,7 +790,7 @@ public class AppDAO {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
-			 updateStudentDue(appBean);
+			getDuesDetail(appBean);
 			try {
 
 				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")

@@ -308,7 +308,7 @@
 														value="<%=loginUser.getAffBean().getInstId()%>"> --%>
 														<button class="btn btn-sm btn-info pull-right"
 												style="margin-right: 3%; float: right;"
-												onclick='window.open("getCollegeListForOperator", "CollegeForm", "width=500,height=700")'>
+												onclick='window.open("CollegeOperatorForm.jsp", "CollegeForm", "width=500,height=700")'>
 												<i class="fa fa-plus"></i> Add Operator
 											</button> <%
  	}

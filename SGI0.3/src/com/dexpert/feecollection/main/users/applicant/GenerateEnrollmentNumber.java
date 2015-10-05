@@ -81,13 +81,14 @@ public class GenerateEnrollmentNumber {
 
 	}
 
-	public String getNewEnrollmentNumber(String preEnrollmentNumber, Integer feeValueId) {
+	public String getNewEnrollmentNumber(String preEnrollmentNumber) {
 		// log.info("inside generate enrollment number");
 		String enrollmentNumber = "";
 		Session session = factory.openSession();
-		String query = "select enrollmentNumber from fee_values_master inner join applicant_values on  fee_values_master.feeValueId=applicant_values.value_id  where feeValueId=:feeId and enrollmentNumber like:enrollmentNumber ";
+		// feeValueId=:feeId and
+		String query = "select enrollmentNumber from fee_values_master inner join applicant_values on  fee_values_master.feeValueId=applicant_values.value_id  where enrollmentNumber like:enrollmentNumber ";
 		SQLQuery sqlQuery = session.createSQLQuery(query);
-		sqlQuery.setParameter("feeId", feeValueId);
+		//sqlQuery.setParameter("feeId", feeValueId);
 		sqlQuery.setParameter("enrollmentNumber", preEnrollmentNumber + "%");
 		sqlQuery.setCacheable(false);
 		List<String> enrollmentNumberList = sqlQuery.list();
@@ -116,7 +117,7 @@ public class GenerateEnrollmentNumber {
 
 	public String getEnrollNum(Integer count) {
 		if (count.equals(0)) {
-			String newValue = "001";
+			String newValue = "00001";
 			return newValue;
 
 		} else {
@@ -124,11 +125,11 @@ public class GenerateEnrollmentNumber {
 				Integer incVal = count + 1;
 
 				String newValue = String.valueOf(incVal);
-				String increment = newValue.length() == 1 ? "00" + newValue : newValue.length() == 2 ? "0" + newValue
-						: newValue.length() == 3 ? newValue : newValue;
+				String increment = newValue.length() == 1 ? "0000" + newValue : newValue.length() == 2 ? "000" + newValue
+						: newValue.length() == 3 ?"00"+newValue : newValue.length()==4?"0"+newValue:newValue;
 				return increment;
 			} catch (java.lang.NullPointerException e) {
-				String newValue = "001";
+				String newValue = "00001";
 				return newValue;
 			}
 		}
@@ -152,14 +153,13 @@ public class GenerateEnrollmentNumber {
 
 		// Integer feevalueId = fvDAO.getCourseId(course);
 
-		Integer feevalueId = getFeeValueId(paramSet);
+		//Integer feevalueId = getFeeValueId(paramSet);
 
-		String feeValueIdStr = feevalueId.toString().length() == 1 ? "0" + feevalueId.toString() : feevalueId
-				.toString();
+		//String feeValueIdStr = feevalueId.toString().length() == 1 ? "0" + feevalueId.toString() : feevalueId
+				//.toString();
 		String twoDigitStartYear = startYear.substring(2, 4);
 
-		String enrollmentNumber = getNewEnrollmentNumber(universityId + collegeId + twoDigitStartYear + feeValueIdStr,
-				feevalueId);
+		String enrollmentNumber = getNewEnrollmentNumber(universityId + collegeId + twoDigitStartYear); //+ feeValueIdStr);
 
 		return enrollmentNumber;
 	}

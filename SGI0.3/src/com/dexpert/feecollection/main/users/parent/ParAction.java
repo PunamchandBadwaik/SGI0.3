@@ -20,6 +20,7 @@ import org.apache.struts2.ServletActionContext;
 import org.hibernate.Session;
 
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
+import com.dexpert.feecollection.main.communication.sms.SendSMS;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
@@ -102,6 +103,15 @@ public class ParAction extends ActionSupport {
 		}
 
 		parBean = parDAO.saveOrUpdate(parBean, f + File.separator);
+	
+		
+		//code to send msg
+				String user = username;
+				String pass = password;
+				String msg = "UserId :" + user + "" + " Passsword : " + pass;
+				SendSMS sms = new SendSMS();
+				sms.sendSMS(parBean.getParInstContact(), msg);
+		
 		// -----Code for sending email//--------------------
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(parBean.getParInstEmail(), "Welcome To FeeDesk!", username, password,
