@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -42,7 +43,14 @@ public class PaymentDuesBean implements Serializable {
 	@ManyToOne(targetEntity=AppBean.class)
 	@JoinColumn(name = "enrollmentNumber_Fk", referencedColumnName = "enrollmentNumber")
 	private AppBean appBean;
-	
+	@Transient
+	private Integer sequenceId;
+	public Integer getSequenceId() {
+		return sequenceId;
+	}
+	public void setSequenceId(Integer sequenceId) {
+		this.sequenceId = sequenceId;
+	}
 	public AppBean getAppBean() {
 		return appBean;
 	}

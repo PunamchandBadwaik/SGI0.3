@@ -8,9 +8,12 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -392,9 +395,24 @@ public class AppAction extends ActionSupport {
 		 * // return SUCCESS;
 		 */
 	}
+	public Set<PaymentDuesBean> addSeqOfFees(Set<PaymentDuesBean> paymentDues,Integer instId)
+	{
+	Set<PaymentDuesBean> payDueSetWithSeqId=new HashSet<PaymentDuesBean>() ;
+	Iterator<PaymentDuesBean> itr=paymentDues.iterator();
+	while(itr.hasNext()){
+	PaymentDuesBean payDues=itr.next();
+	Integer sequenceId=fcDAO.getSequenceOfFee(instId,payDues.getFeeId());
+	payDues.setSequenceId(sequenceId);
+	payDueSetWithSeqId.add(payDues);
+	}
+	return payDueSetWithSeqId;	
+	}
 
 	public void getDuesOfStudent() {
 		app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
+		Set<PaymentDuesBean> paymentDues=app1.getPaymentDues();
+		paymentDues=addSeqOfFees(paymentDues,app1.getAffBeanStu().getInstId());
+		app1.setPaymentDues(paymentDues);
 		feeList = aplDAO.getAllFeeDeatils();
 		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
 		totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());

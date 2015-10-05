@@ -87,7 +87,6 @@
 	<%
 ValueStack vs =TagUtils.getStack(pageContext);
 AppBean appBean =(AppBean)vs.findValue("app1");
-	
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 
@@ -305,8 +304,9 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td style="display: none"><%=paymentDue.getFeeId() %><input
 												type="hidden" value='<%=paymentDue.getFeeId() %>'
 												id="feeId[<%=i%>]"></td>
+												<% hm.put(i,paymentDue.getSequenceId()); %>
 											<td><%=paymentDue.getFeeName() %></td>
-											<%-- <td><s:property value="payee" /></td>
+			                                    <%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 											<td><%=paymentDue.getTotal_fee_amount()%></td>
@@ -336,8 +336,12 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 													function showTextBox(k) {
 														
 														var feeTxtId = document.getElementById("FeePaid["+k+"]");
+														//alert('feeTxtId is '+feeTxtId);
 														var myCheckId = document.getElementById("checkId["+k+"]");
+														//alert('myCheckId is '+myCheckId);
 														var v=document.getElementById("payableamount["+k+"]").value;
+														//alert('v is '+v);
+														var d = parseFloat(document.getElementById("FeePaid["+k+"]").value);
 														
 														if(myCheckId.checked){
 															
@@ -356,14 +360,21 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															
 															
 															var h=0;
+															
+															if(isNaN(d)){																
+																d=0;
+															}
 															if(document.getElementById("totalPaidAmount").value=='NaN' || document.getElementById("totalPaidAmount").value==''){
 																h=0;
 															}
 															else{
 																h=document.getElementById("totalPaidAmount").value;
-																document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(feeTxtId.value);
+																//document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(feeTxtId.value);
+																														document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(d);
 																feeTxtId.value=0;
 															}
+															
+															
 															
 															feeTxtId.style.display = myCheckId.checked ? "block" : "none";	
 														}
@@ -619,6 +630,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																	
 																   	for (t=j+1;t<<%=i%>;t++){
 																		 var innerLoopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+t+"]").value);
+																		 
 																		 if(isNaN(innerLoopFeeBeingPaid)){
 																			 innerLoopFeeBeingPaid=0;
 																		 }

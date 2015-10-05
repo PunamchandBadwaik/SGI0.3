@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -326,7 +327,16 @@ public class FcDAO {
 		session.close();
 		return lookupValuesId;
 	}
-	
+	public Integer getSequenceOfFee(Integer instId,Integer feeId)
+	{
+	Session session=factory.openSession();
+	String query="SELECT sequenceId FROM sgi.affiliatedinstitute_feedetails where feeId=:feeId and inst_id=:insId";
+	SQLQuery sqlQuery=session.createSQLQuery(query);	
+	sqlQuery.setParameter("feeId",feeId);
+	sqlQuery.setParameter("insId",instId);
+	Integer sequenceId=(Integer)sqlQuery.list().iterator().next();
+	return sequenceId;
+	}
 
 	// DAO Methods End
 }

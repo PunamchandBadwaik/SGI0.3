@@ -165,10 +165,10 @@
 								<div class="box-content row">
 									<div class="col-lg-12 col-md-12 animated fadeIn">
 
-										<s:if test='%{totalDuesOfStudent.isEmpty()|| totalDuesOfStudent.size()<1}'>
+										<s:if test='%{AllChildInstDues.isEmpty()|| AllChildInstDues.size()<1}'>
 											<div
 												style="color: red; text-align: center; font-weight: bold; font-size: medium;">
-												No Due Available For This College</div>
+												No Due Available </div>
 										</s:if>
 										<s:else>
 											<table
@@ -176,7 +176,7 @@
 												<thead>
 													<tr>
 														<th>Sr. No.</th>
-														<th> Student UIN</th>
+														<th>Inst Name</th>
 														<th></th>
 														<th>Original Dues</th>
 														<th></th>
@@ -192,7 +192,9 @@
 													<%
 														int i = 1;
 													%>
-													<s:iterator value="totalDuesOfStudent" var="duesArray">
+													
+													<s:iterator value="AllChildInstDues" var="Parent">
+													<s:iterator value="#Parent" var="duesArray">
 														<tr>
 															<td><%=i%></td>
 
@@ -202,13 +204,13 @@
 
 															<td></td>
 															<td class="center">Rs. <s:property
-																	value="#duesArray[2]" default="0" /></td>
+																	value="#duesArray[1]" default="0" /></td>
 															<td></td>
 															<td class="center">Rs. <s:property
-																	value="#duesArray[3]" default="0" /></td>
+																	value="#duesArray[2]" default="0" /></td>
 															<td></td>
 															<td colspan="2" class="center">Rs. <s:property
-																	value="#duesArray[1]" default="0" /></td>
+																	value="#duesArray[3]" default="0" /></td>
 
 														</tr>
 
@@ -216,7 +218,8 @@
 															i++;
 														%>
 													</s:iterator>
-													<tr>
+													</s:iterator>
+													<%-- <tr>
 														<td></td>
 														<td></td>
 														<td><span style="font-weight: bold;">Total Original Due</span></td>
@@ -228,7 +231,7 @@
 
 
 													</tr>
-												</tbody>
+							 --%>					</tbody>
 											</table>
 											<table
 												class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
@@ -237,7 +240,12 @@
 
 											</table>
 										</s:else>
-                                           </div>
+
+
+
+
+
+									</div>
 
 
 								</div>
