@@ -51,7 +51,7 @@
 
 		<mapping class="com.dexpert.feecollection.challan.TransactionBean" />
 		<mapping class="com.dexpert.feecollection.main.payment.studentPayment.BulkPaymentBean" />
-
+        <mapping class="com.dexpert.feecollection.main.users.affiliated.CollegeCourses" />
 
 
 	</session-factory>

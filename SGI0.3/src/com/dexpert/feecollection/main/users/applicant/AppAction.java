@@ -209,6 +209,7 @@ public class AppAction extends ActionSupport {
 
 		String apId = request.getParameter("applicantId");
 		appBean1 = aplDAO.viewApplicantDetail(apId);
+		
 		return SUCCESS;
 	}
 

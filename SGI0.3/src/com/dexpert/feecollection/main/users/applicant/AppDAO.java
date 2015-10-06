@@ -77,6 +77,8 @@ public class AppDAO {
 	// ---------------------------------------------------
 
 	// DAO Methods Here
+	
+	
 	public FvBean getfeeValue(Integer feeValueId) {
 		Session session = factory.openSession();
 		try {
@@ -386,11 +388,13 @@ public class AppDAO {
 		FvBean bean = new FvBean();
 		List<FvBean> list = new ArrayList<FvBean>();
 		try {
-			log.info("cell Value::" + element + "::" + lookupId);
+			log.info("cell Value ::" + element + " " + lookupId);
 			Criteria criteria = session.createCriteria(FvBean.class);
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
+			
+			
 			if (list.size() > 0) {
 				LookupBean lookupBean = new LookupBean();
 				log.info("Matched");

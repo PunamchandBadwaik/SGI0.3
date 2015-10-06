@@ -35,6 +35,47 @@
 %>
 <meta charset="utf-8">
 <title>FeeDesk</title>
+
+<style type="text/css">
+#tags {
+	float: left;
+	border: 1px solid #ccc;
+	padding: 5px;
+	font-family: Arial;
+}
+
+#tags span.tag {
+	cursor: pointer;
+	display: block;
+	float: left;
+	color: #fff;
+	background: #689;
+	padding: 5px;
+	padding-right: 25px;
+	margin: 4px;
+}
+
+#tags span.tag:hover {
+	opacity: 0.7;
+}
+
+#tags span.tag:after {
+	position: absolute;
+	content: "x";
+	border: 1px solid;
+	padding: 0 4px;
+	margin: 3px 0 10px 5px;
+	font-size: 10px;
+}
+
+#tags input {
+	background: #eee;
+	border: 0;
+	margin: 4px;
+	padding: 7px;
+	width: auto;
+}
+</style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description"
 	content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
@@ -106,7 +147,7 @@
 			<%
 				if (msg != null)
 
-																		{
+																							{
 			%>
 
 			<div
@@ -126,7 +167,7 @@
 
 
 				<div class="row">
-					<form action="registerInstitute" enctype="multipart/form-data"
+					<form action="registerInstitute" enctype="multipart/form-data" id="myForm"
 						method="post">
 						<div class="box col-md-12">
 							<div class="box-inner">
@@ -156,8 +197,8 @@
 													<th>
 														<%
 															if (profile.contentEquals("Parent")){
-																																																																																																										System.out.println("profile is :"+profile);
-																																																																																																																																																																																		System.out.println("Parent Class Table");
+																																																																																																																																																																						System.out.println("profile is :"+profile);
+																																																																																																																																																																																																																																														System.out.println("Parent Class Table");
 														%> <input type="hidden" name="parInstId"
 														value="<%=loginUser.getParBean().getParInstId()%>">
 														<%
@@ -196,8 +237,8 @@
 												</tr>
 												<%
 													if (profile.contentEquals("SU")){
-																																																																																												System.out.println("profile is :"+profile);
-																																																																																																																																																																				System.out.println("Parent Class Table");
+																																																																																																																																														System.out.println("profile is :"+profile);
+																																																																																																																																																																																																																						System.out.println("Parent Class Table");
 												%>
 												<tr>
 
@@ -236,7 +277,6 @@
 
 												</tr>
 												<tr>
-
 													<td>Principal's Name</td>
 													<td><div id="the-basics" class="has-success">
 															<input id="PrinciName" name="affInstBean.contactPerson"
@@ -293,7 +333,7 @@
 													<td colspan="2"><div id="the-basics"
 															class="has-success">
 
-														<%-- 	<s:file name="fileUpload"
+															<%-- 	<s:file name="fileUpload"
 																value="affInstBean.fileUploadFileName" size="40"
 																cssClass="form-control" label="Upload File" /> --%>
 
@@ -320,7 +360,7 @@
 							</div>
 						</div>
 						<div class="col-md-12">
-							<button type="submit" class="btn btn-success">Save
+							<button type="button" onclick="saveValues()"    class="btn btn-success">Save
 								College</button>
 
 							<button onclick="window.close()" class="btn btn-info">Close
@@ -415,11 +455,57 @@
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-	<script>
-		//window.onunload = function() {
-		//	window.opener.document.location.reload();
-		//	setTimeout(window.close(), 100);
-		//}
+	<script type="text/javascript">
+		
+		var values = {};
+
+		$(function() {
+
+			$('#tags input').on('keyup', function(e) {
+			if (/(188|13)/.test(e.which)) {
+
+					var txt = this.value.replace(",", '');
+					AddToArray(txt);
+					if (txt) {
+						$(this).before('<span class="tag">' + txt + '</span>');
+					}
+					this.value = "";
+				}
+			})
+
+			$('#tags').on('click', '.tag', function() {
+
+				RemoveFromValues($(this).text());
+				$(this).remove();
+			});
+
+		});
+
+		function AddToArray(value) {
+		 /* alert("value received from jquery function "+value); */
+			values[value] = value;
+			 
+			/*  alert(JSON.stringify(values));  */
+
+		}
+
+		function RemoveFromValues(value) {
+			delete values[value];
+			
+		}
+
+		function saveValues() {
+			var dataArray = new Array;
+			for ( var value in values) {
+				dataArray.push(values[value]);
+			}
+			document.getElementById("cou").value=dataArray;
+			document.getElementById("myForm").submit();
+			<%-- window.location = "saveParamValues?values=" + dataArray
+					+ "&paramId=" + id+"&view=<%=view%>" --%>;
+		}	
+		
+	
 	</script>
 </body>
 </html>

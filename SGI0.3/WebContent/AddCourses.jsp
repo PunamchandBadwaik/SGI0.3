@@ -4,6 +4,8 @@
 <html lang="en">
 <head>
 <%
+	boolean view=false;
+	Boolean alertflag=false;
 	//checking session
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean"); String profile=(String)session.getAttribute("sesProfile");
@@ -28,6 +30,18 @@
 		}
 	} else {
 		sessionID = session.getId();
+	}
+	int i=1;
+	try
+	{
+		if(request.getParameter("view").contentEquals("true"))
+		{
+	view=true;
+		}
+	}
+	catch(Exception e)
+	{
+		e.printStackTrace();
 	}
 %>
 <meta charset="utf-8">
@@ -73,6 +87,46 @@
 <!-- The fav icon -->
 <link rel="shortcut icon" href="img/favicon.ico">
 
+<style type="text/css">
+#tags {
+	float: left;
+	border: 1px solid #ccc;
+	padding: 5px;
+	font-family: Arial;
+}
+
+#tags span.tag {
+	cursor: pointer;
+	display: block;
+	float: left;
+	color: #fff;
+	background: #689;
+	padding: 5px;
+	padding-right: 25px;
+	margin: 4px;
+}
+
+#tags span.tag:hover {
+	opacity: 0.7;
+}
+
+#tags span.tag:after {
+	position: absolute;
+	content: "x";
+	border: 1px solid;
+	padding: 0 4px;
+	margin: 3px 0 10px 5px;
+	font-size: 10px;
+}
+
+#tags input {
+	background: #eee;
+	border: 0;
+	margin: 4px;
+	padding: 7px;
+	width: auto;
+}
+</style>
 </head>
 
 <body>
@@ -99,18 +153,19 @@
 				<div></div>
 
 
-
 				<div class="row">
+
 					<div class="box col-md-12">
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-info-sign"></i> Applicant Profile
+									<i class="glyphicon glyphicon-info-sign"></i>
+							Enter All Courses
 								</h2>
 
 								<div class="box-icon">
 
-									<a href="#" class="btn  btn-round btn-default"><i
+									<a href="#" class="btn btn-minimize btn-round btn-default"><i
 										class="glyphicon glyphicon-chevron-down"></i></a>
 
 								</div>
@@ -118,154 +173,23 @@
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 
+
 									<table class="table table-condensed">
 										<thead>
 
-
 										</thead>
 										<tbody>
-											<tr>
-
-												<td><strong>UIN Number</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.enrollmentNumber" />
-
+                                       <tr>
+												<td>Enter Courses</td>
+												<td><div id="tags">
+														<input type="text" value=""
+															placeholder="Enter Course Name" />
 													</div></td>
-
 											</tr>
-											<tr>
-
-												<td><strong>GR Number</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.grNumber"
-															default="Not Available" />
-
-													</div></td>
-
-
-											</tr>
-
-											<%-- <s:iterator value="lookupBeanList">
- --%>
-											<s:iterator value="appBean1.applicantParamValues" var="x">
-												<tr>
-													<td><strong><s:property value="#x.lookupname.lookupName" /></strong>
-
-													</td>
-													<td><s:property value="value" /></td>
-
-												</tr>
-
-
-
-
-											</s:iterator>
-											<%-- 	<tr>
-
-												<td><strong>Category</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.category"
-															default="Not Available" />
-
-													</div></td>
-
-
-											</tr>
-											<tr>
-
-												<td><strong>Course</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.course"
-															default="Not Available" />
-
-													</div></td>
-
-
-											</tr> --%>
-											<tr>
-
-												<td><strong>Hostler</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.isHosteler" default="No" />
-
-													</div></td>
-
-
-											</tr>
-
-											<tr>
-
-												<td><strong>College Name</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.affBeanStu.instName" />
-
-													</div></td>
-
-											</tr>
-											<tr>
-
-												<td><strong>Name</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.aplFirstName" />
-														<s:property value="appBean1.aplLstName" />
-													</div></td>
-
-											</tr>
-											<tr>
-
-												<td><strong>Gender</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.gender" />
-
-													</div></td>
-
-											</tr>
-
-											<tr>
-
-												<td><strong>Primary Mobile Number</strong></td>
-												<td><div id="the-basics" class="has-success">
-
-														<s:property value="appBean1.aplMobilePri" />
-													</div></td>
-
-											</tr>
-											<tr>
-
-												<td><strong>Secondary Mobile Number</strong></td>
-												<td><div id="the-basics" class="has-success">
-
-														<s:property value="appBean1.aplMobileSec" />
-													</div></td>
-
-											</tr>
-											<tr>
-
-												<td><strong>Email</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.aplEmail" />
-
-													</div></td>
-
-											</tr>
-											<tr>
-
-												<td><strong>Address</strong></td>
-												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.aplAddress" />
-
-													</div></td>
-
-											</tr>
-
-
-
-
-
-
-
 										</tbody>
 									</table>
+
+
 								</div>
 
 
@@ -273,12 +197,11 @@
 						</div>
 					</div>
 					<div class="col-md-12">
-						<button type="button" class="btn btn-success"
-							onclick='window.location="LockFeature.jsp"'>Edit Profile</button>
-
+						<button type="button" onclick="saveValues()"
+							class="btn btn-success">Save</button>
 						<button onclick="window.close()" class="btn btn-info">Close
 						</button>
-
+						
 					</div>
 
 				</div>
@@ -369,10 +292,51 @@
 	<script src="js/charisma.js"></script>
 
 	<script>
-		function OpenSummaryInParent() {
-			window.opener.location.reload(true);
-			window.close();
+		
+		var values = {};
 
+		$(function() {
+
+			$('#tags input').on('keyup', function(e) {
+			if (/(188|13)/.test(e.which)) {
+
+					var txt = this.value.replace(",", '');
+					AddToArray(txt);
+					if (txt) {
+						$(this).before('<span class="tag">' + txt + '</span>');
+					}
+					this.value = "";
+				}
+			})
+
+			$('#tags').on('click', '.tag', function() {
+
+				RemoveFromValues($(this).text());
+				$(this).remove();
+			});
+
+		});
+
+		function AddToArray(value) {
+			/* alert("value received from jquery function "+value); */
+			values[value] = value;
+			/* alert(JSON.stringify(values)); */
+
+		}
+
+		function RemoveFromValues(value) {
+			delete values[value];
+
+		}
+
+		function saveValues() {
+		
+			var dataArray = new Array;
+			for ( var value in values) {
+				dataArray.push(values[value]);
+			}
+			window.location = "saveCourses?values=" + dataArray;
+				
 		}
 	</script>
 </body>

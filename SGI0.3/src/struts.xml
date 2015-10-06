@@ -351,7 +351,11 @@
 
 
 
-
+         <action name="saveCourses"
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="saveCourses">
+			<result name="success">CourseAddedSuccessFully.jsp</result>
+		</action>
 		<action name="getStudentList"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="getStudentList">

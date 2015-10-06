@@ -24,10 +24,12 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
+import org.apache.struts2.views.jsp.TagUtils;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
@@ -49,6 +51,7 @@ import com.dexpert.feecollection.main.users.operator.OperatorDao;
 import com.dexpert.feecollection.main.users.parent.ParBean;
 import com.dexpert.feecollection.main.users.parent.ParDAO;
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.util.ValueStack;
 
 public class AffAction extends ActionSupport {
 
@@ -99,7 +102,9 @@ public class AffAction extends ActionSupport {
 	AffBean affBean = new AffBean();
 	FvDAO fvDAO = new FvDAO();
 	List<FvBean> lookUpvalueList;
-
+    String courses;
+    
+    
 	// End of Global Variables
 
 	// ---------------------------------------------------
@@ -112,13 +117,14 @@ public class AffAction extends ActionSupport {
 		// log.info("paramset is "+affInstBean.getParamvalues().toString());
 		List<String> instNameList = affDao.getCollegeNameList(affInstBean.getInstName());
 		/* log.info("List Size is ::" + instNameList.size()); */
-
+		
 		ParDAO parDao = new ParDAO();
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		if (instNameList.isEmpty()) {
-
+		
 			if (parInstId == null) {
+				
 				parBeansList = parDao.getUniversityList();
 				request.setAttribute("msg", "Please Select University");
 				return "failure";
@@ -211,6 +217,7 @@ public class AffAction extends ActionSupport {
 		// else forward error message on input page
 
 		else {
+			log.info("courses"+courses);
 			log.info("College NAME ALREADY AVAILABLE");
 			parBeansList = parDao.getUniversityList();
 			request.setAttribute("msg", "Institute Name is Already Registered");
@@ -1382,7 +1389,28 @@ public class AffAction extends ActionSupport {
 	affDao.getTotalDueOfStudents(instId);	
 		
 	}
-
+     public String saveCourses()
+     {
+     String courses=request.getParameter("values");
+     String [] courseArray=courses.split(",");
+     Integer instId=(Integer)ses.getAttribute("sesId");
+     ArrayList<String> courseArrayList=new ArrayList<String>(Arrays.asList(courseArray));
+     Iterator<String> itr=courseArrayList.iterator();
+     while (itr.hasNext()) {
+		String courseName =itr.next();
+		CollegeCourses collCourse=new CollegeCourses();
+		collCourse.setCourseName(courseName);
+		//validate course name
+		boolean isCourseNameAlreadySaved=affDao.courseNameAlreadySaved(courseName, instId);
+	    log.info("couses already saved"+isCourseNameAlreadySaved);
+		if(isCourseNameAlreadySaved==false){
+		affDao.saveCollegeCourses(collCourse, instId);
+	    }
+     }
+     String message="Courses Saved SuccessFully";
+     request.setAttribute("msg",message);
+     return SUCCESS;	 
+     }
 	// End of Action Methods
 	// ---------------------------------------------------
 
@@ -1667,5 +1695,15 @@ public class AffAction extends ActionSupport {
 		this.lookUpvalueList = lookUpvalueList;
 	}
 
+	public String getCourses() {
+		return courses;
+	}
+
+	public void setCourses(String courses) {
+		this.courses = courses;
+	}
+
+	
+	
 	// End of Getter Setter Methods
 }

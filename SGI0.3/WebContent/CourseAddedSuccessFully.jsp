@@ -1,20 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+<%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<!--
-        ===
-        This comment should NOT be removed.
 
-        Charisma v2.0.0
-
-        Copyright 2012-2014 Muhammad Usman
-        Licensed under the Apache License v2.0
-        http://www.apache.org/licenses/LICENSE-2.0
-
-        http://usman.it
-        http://twitter.com/halalit_usman
-        ===
-    -->
 <meta charset="utf-8">
 <title>FeeDesk</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,7 +35,8 @@
 <link href='css/jquery.iphone.toggle.css' rel='stylesheet'>
 <link href='css/uploadify.css' rel='stylesheet'>
 <link href='css/animate.min.css' rel='stylesheet'>
-
+<link href="bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
 <!-- jQuery -->
 <script src="bower_components/jquery/jquery.min.js"></script>
 
@@ -58,137 +49,27 @@
 <link rel="shortcut icon" href="img/favicon.ico">
 
 </head>
-
 <body>
-	<div class="ch-container">
-	
-	
-	<!-- <div style="text-align: center;">
 
-	<img src="img/feeDesk_logo.png"
-	title="img/feeDesk_logo.png" height="50" width="150px">
-	</div> -->
-	
-		<div class="row">
-
-			<div class="row">
-				<div class="col-md-12 center login-header">
-
-				
-					<h2> Welcome To FeeDesk  <!-- <a href="http://www.feedesk.in/"> <img src="img/feeDesk_logo.png"
-	title="img/feeDesk_logo.png" height="50" width="200px"></a> --></h2>
-				</div>
-				<!--/span-->
-			</div>
-			<!--/row-->
-
-			<div class="row">
-				<div class="well col-md-5 center login-box">
-
-					<%
-						String msg = (String) request.getAttribute("msg");
-						String success = (String) request.getAttribute("success");
-					%>
-					<%
-						if (success != null) {
-					%>
-					<div class="alert alert-info"
-						style="font-weight: bold; font-size: medium; color: green;">
-
-						<%=success%>
-					</div>
-
-					<%
-						}
-					%>
+	<%
+		String msg = (String) request.getAttribute("msg");
+		/* String link=(String)request.getAttribute("redirectlink"); */
+	%>
 
 
+	<%
+		if (msg != null) {
+	%>
 
 
-					<%
-						if (msg != null) {
-					%>
-					<div class="alert alert-info"
-						style="font-weight: bold; font-size: medium; color: red;">
-
-						<%=msg%>
-					</div>
-
-					<%
-						} else {
-					%>
-					<div class="alert alert-info">Please login with your Username
-						and Password.</div>
-					<%
-						}
-					%>
-
-
-
-
-
-
-
-
-
-					<form class="form-horizontal" action="LoginUser" method="post">
-						<fieldset>
-							<div class="input-group input-group-lg">
-								<span class="input-group-addon"><i
-									class="glyphicon glyphicon-user red"></i></span> <input type="text"
-									name="loginBean.userName" class="form-control"
-									required="required" placeholder="Username">
-							</div>
-							<div class="clearfix"></div>
-							<br>
-
-							<div class="input-group input-group-lg">
-								<span class="input-group-addon"><i
-									class="glyphicon glyphicon-lock red"></i></span> <input
-									type="password" name="loginBean.password" class="form-control"
-									required="required" placeholder="Password">
-							</div>
-							<div class="clearfix"></div>
-
-							<div class="input-prepend">
-								<label class="remember" for="remember"><input
-									type="checkbox" id="remember"> Remember me</label>
-							</div>
-
-							<!-- <div class="input-prepend">
-
-								<a href="StudentQuickPayMod">Click for Quick Pay </a>
-
-							</div> -->
-
-							<div class="input-prepend">
-
-								<a href="quickPayStudentEnrollNumberSearch.jsp">Click for
-									Quick Pay </a>
-
-							</div>
-
-							<div class="input-prepend">
-
-								<a href="ForgetPassword.jsp">Click for Forgot Password</a>
-
-							</div>
-							<div class="clearfix"></div>
-
-							<p class="center col-md-5">
-								<button type="submit" class="btn btn-primary">Login</button>
-							</p>
-						</fieldset>
-					</form>
-				</div>
-				<!--/span-->
-			</div>
-			<!--/row-->
-		</div>
-		<!--/fluid-row-->
-
+	<div
+		style="color: green; text-align: center; font-weight: bold; font-size: x-large;">
+		<%=msg%>
 	</div>
-	<!--/.fluid-container-->
+
+	<%
+		}
+	%>
 
 	<!-- external javascript -->
 
@@ -199,6 +80,7 @@
 	<!-- calender plugin -->
 	<script src='bower_components/moment/min/moment.min.js'></script>
 	<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+
 	<!-- data table plugin -->
 	<script src='js/jquery.dataTables.min.js'></script>
 
@@ -225,7 +107,5 @@
 	<script src="js/jquery.history.js"></script>
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
-
-
 </body>
 </html>
