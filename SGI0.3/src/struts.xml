@@ -616,6 +616,7 @@
 			method="getCollegeList">
 
 			<result name="success">StudentForm.jsp</result>
+			<result name="error">AddStudentError.jsp</result>
 		</action>
 
 

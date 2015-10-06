@@ -901,5 +901,14 @@ public class AffDAO {
 		courseNameAlreadySaved = collegeCourses.size() > 0 ? true : courseNameAlreadySaved;
 		return courseNameAlreadySaved;
 	}
+	public List<CollegeCourses> getAllCourseOfInst(Integer instId) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(CollegeCourses.class);
+		criteria.add(Restrictions.eq("affBean.instId", instId)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<CollegeCourses> collegeCourses = criteria.list();
+		session.close();
+		return collegeCourses;
+	}
+	
 
 }

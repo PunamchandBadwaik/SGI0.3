@@ -103,7 +103,7 @@ public class AffAction extends ActionSupport {
 	FvDAO fvDAO = new FvDAO();
 	List<FvBean> lookUpvalueList;
     String courses;
-    
+    List<CollegeCourses> allCourseOfInst;
     
 	// End of Global Variables
 
@@ -272,14 +272,21 @@ public class AffAction extends ActionSupport {
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(), null);
 		log.info("Struture id" + structureIdes);
+		try{
 		List<Integer> valueIdes = feeDAO.getLookupValue(structureIdes);
 		log.info("value ides got from fee config table::::::" + valueIdes);
 		List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 		log.info("look up param list::::::" + lookUpParamList);
 		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
 		log.info("look up List Size is ::" + lookupBeanList.size());
-
+        allCourseOfInst=affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
 		return SUCCESS;
+		}catch(Exception ex)
+		{
+		String message="Please configure the Fee Before Adding the Student";
+		request.setAttribute("msg", message);
+		return ERROR;	
+		}
 	}
 
 	// get collgege list based on university ID
@@ -1703,6 +1710,15 @@ public class AffAction extends ActionSupport {
 		this.courses = courses;
 	}
 
+	public List<CollegeCourses> getAllCourseOfInst() {
+		return allCourseOfInst;
+	}
+
+	public void setAllCourseOfInst(List<CollegeCourses> allCourseOfInst) {
+		this.allCourseOfInst = allCourseOfInst;
+	}
+
+	
 	
 	
 	// End of Getter Setter Methods

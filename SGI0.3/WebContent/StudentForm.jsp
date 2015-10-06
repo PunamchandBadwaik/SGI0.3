@@ -197,6 +197,24 @@
 
 												</s:iterator>
 												<tr>
+												<td>Courses</td>
+												<td colspan="2"><select data-rel="chosen"
+							                             name="appBean1.course"
+															style="width: 240px;"
+															required="required">
+																<option value="">--Select--</option>
+																<s:iterator value="allCourseOfInst">
+																	<option value='<s:property value="courseName"/>'><s:property
+																			value="courseName" /></option>
+
+																</s:iterator>
+														</select></td>
+												
+												
+												</tr>
+												
+												
+												<tr>
 
 													<td>GR Number</td>
 													<td colspan="2"><div id="the-basics"

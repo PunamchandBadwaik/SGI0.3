@@ -262,6 +262,8 @@
 							</div>
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
+								  <input type="button" class="btn btn-info" style="float: right;" value="Add Course" onclick="window.open('AddCourses.jsp','AddCourses',' width=600 height=400')">
+							
 									<h1>
 										Welcome
 										<%=loginUser.getAffBean().getInstName()%><br> <small>
@@ -275,8 +277,7 @@
 										use the cart option in the top bar to view and edit your 
 										current payable amount.</p>
 
-                            <input type="button" value="AddCourse" onclick="window.open('AddCourses.jsp','AddCourses',' width=600 height=400')">
-								</div>
+                          	</div>
 
 
 							</div>
