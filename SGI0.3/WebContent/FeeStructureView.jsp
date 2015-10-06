@@ -108,7 +108,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> Fee Structure
+										<i class="glyphicon glyphicon-info-sign"></i> Fee Structure for <s:property value="feedetails.feeName"/> of <s:property value="instbean.instName"/>
 									</h2>
 
 									<div class="box-icon">

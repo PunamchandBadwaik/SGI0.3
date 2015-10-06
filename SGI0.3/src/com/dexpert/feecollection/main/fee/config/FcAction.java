@@ -42,6 +42,7 @@ public class FcAction extends ActionSupport {
 	private FeeDetailsBean feedetails;
 	private String feePayee, cal_mode;
 	private FcBean fcbean1;
+	private AffBean instbean;
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpServletResponse response = ServletActionContext.getResponse();
 	static Logger log = Logger.getLogger(FcAction.class.getName());
@@ -655,6 +656,7 @@ public class FcAction extends ActionSupport {
 		Integer id = Integer.parseInt(request.getParameter("reqFeeId").trim());
 		Integer insId = Integer.parseInt(request.getParameter("reqInsId").trim());
 		AffBean feeowner=instDAO.getOneCollegeRecord(insId);
+		
 		ses.setAttribute("feeOwner", feeowner);
 		ses.setAttribute("sesFeeEditFlag",1);
 		ses.setAttribute("sesAddMode", "predefined");
@@ -662,6 +664,8 @@ public class FcAction extends ActionSupport {
 		fDfeeList = configdao.GetFees("id", null, id, null,null);
 		FeeDetailsBean fdBean = new FeeDetailsBean();
 		fdBean = fDfeeList.get(0);
+		feedetails=fdBean;
+		instbean=feeowner;
 		ses.setAttribute("sesFeeDetails", fdBean);
 		ListMultimap<Integer, FcBean> comboMap = ArrayListMultimap.create();
 		List<FcBean> comboList = new ArrayList<FcBean>();
@@ -1589,6 +1593,14 @@ public class FcAction extends ActionSupport {
 
 	public void setSelectedFee(ArrayList<String> selectedFee) {
 		this.selectedFee = selectedFee;
+	}
+
+	public AffBean getInstbean() {
+		return instbean;
+	}
+
+	public void setInstbean(AffBean instbean) {
+		this.instbean = instbean;
 	}
 
 	
