@@ -48,6 +48,8 @@ import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.communication.email.EmailSessionBean;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FeeStructureData;
+import com.dexpert.feecollection.main.fee.lookup.LookupBean;
+import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.RandomPasswordGenerator;
@@ -73,6 +75,9 @@ public class AffDAO {
 	// ---------------------------------------------------
 
 	// DAO Methods Here
+
+
+
 	// saveOrUpdate()
 	@SuppressWarnings("resource")
 	public AffBean saveOrUpdate(AffBean affInstBean, String path) throws InvalidKeyException, NoSuchAlgorithmException,
@@ -196,8 +201,8 @@ public class AffDAO {
 		Session session = factory.openSession();
 
 		Criteria criteria = session.createCriteria(AffBean.class);
-		if(parentInsId!=null){
-		criteria.add(Restrictions.eq("parBeanAff.parInstId",parentInsId));	
+		if (parentInsId != null) {
+			criteria.add(Restrictions.eq("parBeanAff.parInstId", parentInsId));
 		}
 		criteria.addOrder(Order.asc("instName"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -836,8 +841,8 @@ public class AffDAO {
 	}
 
 	public List<Object[]> getTotalDueOfStudents(Integer collegeId) {
-	   List<Object[]> duesArray =null;
-	    DetachedCriteria dc = DetachedCriteria.forClass(AppBean.class);
+		List<Object[]> duesArray = null;
+		DetachedCriteria dc = DetachedCriteria.forClass(AppBean.class);
 		dc.add(Restrictions.eq("affBeanStu.instId", collegeId)).setProjection(Projections.property("enrollmentNumber"));
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AffBean.class, "inst");
@@ -856,14 +861,15 @@ public class AffDAO {
 			log.info("inside catch");
 			criteria.add(Restrictions.eq("instId", collegeId));
 			criteria.setProjection(Projections.property("inst.instName"));
-			String instName =(String) criteria.list().iterator().next();
+			String instName = (String) criteria.list().iterator().next();
 			Object obj[] = new Object[4];
-			obj[0]=instName;
+			obj[0] = instName;
 			obj[1] = 0;
 			obj[2] = 0;
 			obj[3] = 0;
-			duesArray= new ArrayList<Object[]>();duesArray.add(obj);
-			
+			duesArray = new ArrayList<Object[]>();
+			duesArray.add(obj);
+
 		} finally {
 			session.close();
 

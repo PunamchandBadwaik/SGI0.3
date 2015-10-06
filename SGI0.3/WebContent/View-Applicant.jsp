@@ -137,17 +137,35 @@
 
 												<td><strong>GR Number</strong></td>
 												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.grNumber" default="Not Available"/>
+														<s:property value="appBean1.grNumber"
+															default="Not Available" />
 
 													</div></td>
 
 
 											</tr>
-											<tr>
+
+											<%-- <s:iterator value="lookupBeanList">
+ --%>
+											<s:iterator value="appBean1.applicantParamValues" var="x">
+												<tr>
+													<td><strong><s:property value="#x.lookupname.lookupName" /></strong>
+
+													</td>
+													<td><s:property value="value" /></td>
+
+												</tr>
+
+
+
+
+											</s:iterator>
+											<%-- 	<tr>
 
 												<td><strong>Category</strong></td>
 												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.category" default="Not Available"/>
+														<s:property value="appBean1.category"
+															default="Not Available" />
 
 													</div></td>
 
@@ -157,17 +175,18 @@
 
 												<td><strong>Course</strong></td>
 												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.course" default="Not Available"/>
+														<s:property value="appBean1.course"
+															default="Not Available" />
 
 													</div></td>
 
 
-											</tr>
+											</tr> --%>
 											<tr>
 
 												<td><strong>Hostler</strong></td>
 												<td><div id="the-basics" class="has-success">
-														<s:property value="appBean1.isHosteler" default="No"/>
+														<s:property value="appBean1.isHosteler" default="No" />
 
 													</div></td>
 

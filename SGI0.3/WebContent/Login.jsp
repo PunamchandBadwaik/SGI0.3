@@ -61,11 +61,22 @@
 
 <body>
 	<div class="ch-container">
+	
+	
+	<!-- <div style="text-align: center;">
+
+	<img src="img/feeDesk_logo.png"
+	title="img/feeDesk_logo.png" height="50" width="150px">
+	</div> -->
+	
 		<div class="row">
 
 			<div class="row">
 				<div class="col-md-12 center login-header">
-					<h2>Welcome To Sanjivani Group Of Institutes</h2>
+
+				
+					<h2> Welcome To FeeDesk  <!-- <a href="http://www.feedesk.in/"> <img src="img/feeDesk_logo.png"
+	title="img/feeDesk_logo.png" height="50" width="200px"></a> --></h2>
 				</div>
 				<!--/span-->
 			</div>
@@ -76,7 +87,7 @@
 
 					<%
 						String msg = (String) request.getAttribute("msg");
-						String success=(String) request.getAttribute("success");
+						String success = (String) request.getAttribute("success");
 					%>
 					<%
 						if (success != null) {
@@ -88,12 +99,12 @@
 					</div>
 
 					<%
-						} 
+						}
 					%>
-					
-					
-					
-					
+
+
+
+
 					<%
 						if (msg != null) {
 					%>
@@ -106,8 +117,8 @@
 					<%
 						} else {
 					%>
-					<div class="alert alert-info">Please login with
-						your Username and Password.</div>
+					<div class="alert alert-info">Please login with your Username
+						and Password.</div>
 					<%
 						}
 					%>
@@ -149,13 +160,14 @@
 								<a href="StudentQuickPayMod">Click for Quick Pay </a>
 
 							</div> -->
-							
+
 							<div class="input-prepend">
 
-								<a href="quickPayStudentEnrollNumberSearch.jsp">Click for Quick Pay </a>
+								<a href="quickPayStudentEnrollNumberSearch.jsp">Click for
+									Quick Pay </a>
 
 							</div>
-							
+
 							<div class="input-prepend">
 
 								<a href="ForgetPassword.jsp">Click for Forgot Password</a>

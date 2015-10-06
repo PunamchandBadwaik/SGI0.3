@@ -96,7 +96,7 @@ public class GenerateEnrollmentNumber {
 
 		if (enrollmentNumberList.size() < 1) {
 			log.info("list size is less than");
-			return preEnrollmentNumber + "001";
+			return preEnrollmentNumber + "00001";
 		} else if (enrollmentNumberList.size() >= 1) {
 			// log.info("list size is gretter than 1");
 			// log.info("Number of enrollment Number" + enrollmentNumberList);

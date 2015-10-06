@@ -20,19 +20,15 @@ public class ExcelTemplateDAO {
 		LookupDAO lpdao = new LookupDAO();
 		ArrayList<LookupBean> applicantParam = lpdao.getLookupData("Scope", "Applicant", null, null);
 		ArrayList<String> paramStr = new ArrayList<String>();
-		paramStr.add("Enrollment Number");
+		paramStr.add("GR Number");
 		paramStr.add("First Name");
 		paramStr.add("Last Name");
 		paramStr.add("Gender");
-		paramStr.add("Category");
 		paramStr.add("Address");
 		paramStr.add("Primary Mobile");
 		paramStr.add("Secondary Mobile");
-		paramStr.add("Admission Year");
-		paramStr.add("Course");
-		paramStr.add("Branch");
 		paramStr.add("Email Id");
-
+	
 		try {
 
 			Row header = xssfSheet.createRow(0);

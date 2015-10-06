@@ -313,7 +313,7 @@
 												<th>UIN Number</th>
                                                 <th>GR Number</th>
 												<th>Student Name</th>
-												<th>Course Name</th>
+												
 
 												
 												<th>Institute Name</th>
@@ -335,7 +335,7 @@
 															value="grNumber" /></td>		
 													<td class="center"><s:property value="aplFirstName" />&nbsp;<s:property
 															value="aplLstName" /></td>
-													<td class="center"><s:property value="course" /></td>
+													
 												
 													<td class="center"><s:property
 															value="affBean.instName" /></td>
