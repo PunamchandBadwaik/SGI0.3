@@ -73,7 +73,7 @@
 	<%
 		if (link != null) {
 	%>
-<center><a class="btn btn-info btn-sm"  href=<%=link%>>Okay!</a></center>
+<center><a class="btn btn-info btn-sm"  href="#" onclick=<%=link %>>Okay!</a></center>
 <%
 		}
 	%>
