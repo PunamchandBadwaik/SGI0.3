@@ -11,5 +11,11 @@
 	
 	<div
 		style="color: red; font-size: x-large; font-weight: bold; text-align: center;"><%=message %></div>
+		<%String addCourseButton=(String)request.getAttribute("addCourse"); 
+		if(addCourseButton!=null && addCourseButton.contentEquals("true"))
+		{%>
+		<center><a  href="AddCourses.jsp">click to add course</a></center>	
+		<%}%>
+		
 </body>
 </html>

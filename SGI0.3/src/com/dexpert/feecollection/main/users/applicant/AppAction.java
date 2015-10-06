@@ -181,6 +181,7 @@ public class AppAction extends ActionSupport {
 			List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 			log.info("look up param list::::::" + lookUpParamList);
 			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant",lookUpParamList,valueIdes);
+			affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
 			return "failure";
 		}
 

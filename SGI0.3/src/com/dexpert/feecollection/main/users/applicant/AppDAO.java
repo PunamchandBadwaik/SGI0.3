@@ -226,8 +226,7 @@ public class AppDAO {
 		Collections.sort(list);
 		CalculateDues calDue = new CalculateDues();
 		while (feeDetailIterator.hasNext()) {
-
-			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
+            feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
 			List<Integer> structureIdes = affDao.getStrutureId(instId, feeDetailsBean.getFeeId());
 			log.info("fee name " + feeDetailsBean.getFeeName());
 			Double amt = calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(), structureIdes.get(0));

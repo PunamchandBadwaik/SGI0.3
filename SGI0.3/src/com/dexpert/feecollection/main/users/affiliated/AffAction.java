@@ -280,9 +280,17 @@ public class AffAction extends ActionSupport {
 		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
 		log.info("look up List Size is ::" + lookupBeanList.size());
         allCourseOfInst=affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
-		return SUCCESS;
-		}catch(Exception ex)
+        return SUCCESS;
+		}
+		catch(NullPointerException npe){
+			String message="Please Add the Courses Before Adding the Student ";
+			request.setAttribute("addCourse","true");
+			request.setAttribute("msg", message);
+			return ERROR;		
+		}
+		catch(Exception ex)
 		{
+		ex.printStackTrace();	
 		String message="Please configure the Fee Before Adding the Student";
 		request.setAttribute("msg", message);
 		return ERROR;	
