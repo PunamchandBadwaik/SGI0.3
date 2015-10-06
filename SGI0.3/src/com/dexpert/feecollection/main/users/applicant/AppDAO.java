@@ -572,7 +572,7 @@ public class AppDAO {
 			while (iterator2.hasNext()) {
 				AppBean appBean = (AppBean) iterator2.next();
 
-				// System.out.println(appBean.getGrNumber());
+				System.out.println(appBean.getGrNumber() + appBean.getAplMobilePri());
 
 				addBulkData(appBean);
 
