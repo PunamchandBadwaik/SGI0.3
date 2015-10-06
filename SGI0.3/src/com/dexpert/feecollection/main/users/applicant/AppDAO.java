@@ -77,8 +77,7 @@ public class AppDAO {
 	// ---------------------------------------------------
 
 	// DAO Methods Here
-	
-	
+
 	public FvBean getfeeValue(Integer feeValueId) {
 		Session session = factory.openSession();
 		try {
@@ -117,15 +116,15 @@ public class AppDAO {
 		// to get college record based on id to create relationship
 		affBean = aff.viewInstDetail(aplInstId);
 
-		BreakString bs = new BreakString();
-		String k = bs.breakString(pp);
+		// BreakString bs = new BreakString();
+		// String k = bs.breakString(pp);
 
-		log.info("String after Break Class : " + k);
-		String year = bs.getYear(k);
-		String course = bs.getCourse(k);
+		// log.info("String after Break Class : " + k);
+		// String year = bs.getYear(k);
+		// String course = bs.getCourse(k);
 
 		// appBean.setYear(year);
-		appBean.setCourse(course);
+		// appBean.setCourse(course);
 		// appBean.setYearCode(yearCode);
 
 		// generating enrollment Number
@@ -138,7 +137,7 @@ public class AppDAO {
 		loginBean.setUserName(appBean.getEnrollmentNumber());
 
 		// to Encrypt Password
-		PasswordEncryption.encrypt(String.valueOf(year));
+		PasswordEncryption.encrypt(String.valueOf(appBean.getStartYear()));
 		String encryptedPwd = PasswordEncryption.encStr;
 
 		loginBean.setPassword(encryptedPwd);
@@ -166,7 +165,7 @@ public class AppDAO {
 				} else {
 
 					String user = appBean.getEnrollmentNumber();
-					String pass = year;
+					String pass = appBean.getStartYear();
 					String msg = "UserId :" + user + "" + " Passsword : " + pass;
 					SendSMS sms = new SendSMS();
 					sms.sendSMS(appBean.getAplMobilePri(), msg);
@@ -185,7 +184,8 @@ public class AppDAO {
 				} else {
 
 					EmailSessionBean email = new EmailSessionBean();
-					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(), year,
+					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
+							appBean.getStartYear(),
 							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
 
 				}
@@ -226,7 +226,7 @@ public class AppDAO {
 		Collections.sort(list);
 		CalculateDues calDue = new CalculateDues();
 		while (feeDetailIterator.hasNext()) {
-            feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
+			feeDetailsBean = (FeeDetailsBean) feeDetailIterator.next();
 			List<Integer> structureIdes = affDao.getStrutureId(instId, feeDetailsBean.getFeeId());
 			log.info("fee name " + feeDetailsBean.getFeeName());
 			Double amt = calDue.calculateFeeStudent(list, feeDetailsBean.getFeeId(), structureIdes.get(0));
@@ -392,8 +392,7 @@ public class AppDAO {
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
-			
-			
+
 			if (list.size() > 0) {
 				LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
