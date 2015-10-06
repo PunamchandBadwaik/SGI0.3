@@ -877,4 +877,28 @@ public class AffDAO {
 		log.info("Total amount is" + duesArray.iterator().next()[1]);
 		return duesArray;
 	}
+	
+	
+	public void saveCollegeCourses(CollegeCourses courses, Integer instId) {
+		AffBean affBean = new AffBean();
+		affBean.setInstId(instId);
+		courses.setAffBean(affBean);
+		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.save(courses);
+		tx.commit();
+		session.close();
+	}
+
+	public boolean courseNameAlreadySaved(String courseName, Integer instId) {
+		boolean courseNameAlreadySaved = false;
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(CollegeCourses.class);
+		criteria.add(Restrictions.eq("courseName",courseName)).add(Restrictions.eq("affBean.instId", instId));
+		List<CollegeCourses> collegeCourses = criteria.list();
+		session.close();
+		courseNameAlreadySaved = collegeCourses.size() > 0 ? true : courseNameAlreadySaved;
+		return courseNameAlreadySaved;
+	}
+
 }

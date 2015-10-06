@@ -272,10 +272,10 @@
 										payment methods such as Cash, Cheque, Online Banking,
 										Credit/Debit Card, NEFT & RTGS. Please use the menu list on
 										the left sidebar to use the features of the portal. You can
-										use the cart option in the top bar to view and edit your
+										use the cart option in the top bar to view and edit your 
 										current payable amount.</p>
 
-
+                            <input type="button" value="AddCourse" onclick="window.open('AddCourses.jsp','AddCourses',' width=600 height=400')">
 								</div>
 
 

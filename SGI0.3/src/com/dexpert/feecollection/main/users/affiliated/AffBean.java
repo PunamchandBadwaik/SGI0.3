@@ -109,6 +109,17 @@ public class AffBean implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<PaymentDuesBean> dueFeesSet;
+	
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="affBean")
+	private Set<CollegeCourses> collegeCourses;
+
+	public Set<CollegeCourses> getCollegeCourses() {
+		return collegeCourses;
+	}
+
+	public void setCollegeCourses(Set<CollegeCourses> collegeCourses) {
+		this.collegeCourses = collegeCourses;
+	}
 
 	public Set<AppBean> getAplBeanSet() {
 		return aplBeanSet;
