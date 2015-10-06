@@ -57,11 +57,12 @@ public class OperatorDao {
 
 	}
 
-	public static List<OperatorBean> getAllRecordsOfCollegeOperator() {
+	public static List<OperatorBean> getAllRecordsOfCollegeOperator(Integer InstId) {
 		Session session = factory.openSession();
 		List<OperatorBean> listOfOptrRecords = new ArrayList<OperatorBean>();
 		try {
 			Criteria criteria = session.createCriteria(OperatorBean.class);
+			criteria.add(Restrictions.eq("affBean.instId", InstId));
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			listOfOptrRecords = criteria.list();
 			return listOfOptrRecords;

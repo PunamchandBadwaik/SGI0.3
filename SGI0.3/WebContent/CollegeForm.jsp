@@ -360,7 +360,7 @@
 							</div>
 						</div>
 						<div class="col-md-12">
-							<button type="button" onclick="saveValues()"    class="btn btn-success">Save
+							<button type="submit" class="btn btn-success">Save
 								College</button>
 
 							<button onclick="window.close()" class="btn btn-info">Close
@@ -455,57 +455,6 @@
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-	<script type="text/javascript">
-		
-		var values = {};
 
-		$(function() {
-
-			$('#tags input').on('keyup', function(e) {
-			if (/(188|13)/.test(e.which)) {
-
-					var txt = this.value.replace(",", '');
-					AddToArray(txt);
-					if (txt) {
-						$(this).before('<span class="tag">' + txt + '</span>');
-					}
-					this.value = "";
-				}
-			})
-
-			$('#tags').on('click', '.tag', function() {
-
-				RemoveFromValues($(this).text());
-				$(this).remove();
-			});
-
-		});
-
-		function AddToArray(value) {
-		 /* alert("value received from jquery function "+value); */
-			values[value] = value;
-			 
-			/*  alert(JSON.stringify(values));  */
-
-		}
-
-		function RemoveFromValues(value) {
-			delete values[value];
-			
-		}
-
-		function saveValues() {
-			var dataArray = new Array;
-			for ( var value in values) {
-				dataArray.push(values[value]);
-			}
-			document.getElementById("cou").value=dataArray;
-			document.getElementById("myForm").submit();
-			<%-- window.location = "saveParamValues?values=" + dataArray
-					+ "&paramId=" + id+"&view=<%=view%>" --%>;
-		}	
-		
-	
-	</script>
 </body>
 </html>
