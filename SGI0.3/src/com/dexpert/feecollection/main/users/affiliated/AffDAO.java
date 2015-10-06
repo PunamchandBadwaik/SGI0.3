@@ -114,6 +114,7 @@ public class AffDAO {
 
 			}
 			session.beginTransaction();
+			
 			session.saveOrUpdate(affInstBean);
 
 			session.getTransaction().commit();

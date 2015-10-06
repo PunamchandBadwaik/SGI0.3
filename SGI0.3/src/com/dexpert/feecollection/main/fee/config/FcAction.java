@@ -50,7 +50,9 @@ public class FcAction extends ActionSupport {
 	private ArrayList<LookupBean> InstituteParamList = new ArrayList<LookupBean>();
 	private ArrayList<LookupBean> ApplicantParamList = new ArrayList<LookupBean>();
 	private ArrayList<LookupBean> ServiceParamList = new ArrayList<LookupBean>();
+	private ArrayList<FeeDetailsBean> feeList = new ArrayList<FeeDetailsBean>();
 	private ArrayList<String> SelectedInst = new ArrayList<String>();
+	private ArrayList<String> selectedFee = new ArrayList<String>();
 	private ArrayList<String> SelectedCourseParam = new ArrayList<String>();
 	private ArrayList<String> SelectedInstParam = new ArrayList<String>();
 	private ArrayList<String> SelectedAppParam = new ArrayList<String>();
@@ -76,10 +78,12 @@ public class FcAction extends ActionSupport {
 		InstituteParamList = lpDao.getLookupData("Scope", "Institute", null, null);
 		ApplicantParamList = lpDao.getLookupData("Scope", "Applicant", null, null);
 		ServiceParamList = lpDao.getLookupData("Scope", "Service", null, null);
+		feeList=configdao.GetFees("ALL", null, null, null, null);
 		ses.setAttribute("CourseParams", CourseParamList);
 		ses.setAttribute("InsParams", InstituteParamList);
 		ses.setAttribute("AppParams", ApplicantParamList);
 		ses.setAttribute("SerParams", ServiceParamList);
+		
 
 		return SUCCESS;
 	}
@@ -129,9 +133,11 @@ public class FcAction extends ActionSupport {
 		ArrayList<Integer[]> Combos = new ArrayList<Integer[]>();
 
 		String paramString = " ";
-
+		String addMode=request.getParameter("feeAddMode");
+		ses.setAttribute("sesAddMode", addMode);
 		// ---
-
+		if(addMode.contentEquals("new"))
+		{
 		// Set Fee Payee
 		if (feePayee.contentEquals("1")) {
 			feedetails.setForInstitute(1);
@@ -150,8 +156,14 @@ public class FcAction extends ActionSupport {
 		} else {
 			return ERROR;
 		}
+		}
+		else
+		{
+			Integer feeId=Integer.parseInt(selectedFee.get(0));
+			feedetails=configdao.GetFees("id", null, feeId, null, null).get(0);
+		}
 		// --
-
+		
 		// Set Fee Parameters
 		if (SelectedCourseParam.size() > 0) {
 			paramString = " ";
@@ -392,6 +404,7 @@ public class FcAction extends ActionSupport {
 	public String SaveFee() {
 		FeeDetailsBean fee = (FeeDetailsBean) ses.getAttribute("sesFeeDetails");
 		Integer structId=configdao.getMaxStructure()+1;
+		String feeAddMode=ses.getAttribute("sesAddMode").toString();
 		//New Code for fee Update
 		Integer editFlag=0;
 		try
@@ -404,9 +417,25 @@ public class FcAction extends ActionSupport {
 		}
 		if(editFlag==1)
 		{
-			ses.setAttribute("sesFeeEditFlag", 0); 
+			ses.setAttribute("sesFeeEditFlag", 0);
+			structId=(Integer)ses.getAttribute("sesStructId");
+			log.info("Struct ID is "+structId);
 			ArrayList<FcBean>oldCombos=new ArrayList<FcBean>(fee.getConfigs());
-			 configdao.deleteFeeBulk(oldCombos);
+			ArrayList<FcBean>staleCombos=new ArrayList<FcBean>();
+			Iterator<FcBean>comboIt=oldCombos.iterator();
+			while(comboIt.hasNext())
+			{
+				FcBean t=comboIt.next();
+				if(t.getStructure_id()==structId)
+				{
+					comboIt.remove();
+					staleCombos.add(t);
+				}
+			}
+			log.info("Old Combos are "+oldCombos.toString());
+			fee.setConfigs(oldCombos);
+			configdao.saveFeeDetails(fee);
+			 configdao.deleteFeeBulk(staleCombos);
 		}
 		//
 		HashMap<Integer, ArrayList<Integer>> ComboMap = new HashMap<Integer, ArrayList<Integer>>();
@@ -423,12 +452,13 @@ public class FcAction extends ActionSupport {
 			comboBean = uids.get(i);
 			log.info("getting combo number " + comboBean.getComboId() + " from comboMap");
 			combo = ComboMap.get(comboBean.getComboId());
+			log.info("Valu from comboMap is "+combo.toString());
 			for (int j = 0; j < combo.size(); j++) {
 				FcBean temp = new FcBean();
 				temp.setComboId(comboBean.getComboId());
 				temp.setValueId(combo.get(j));
 				temp.setAmount(comboBean.getAmount());
-				temp.setFeedetailbean(fee);
+				//temp.setFeedetailbean(fee);
 				temp.setStructure_id(structId);
 				if(i==1)
 				{
@@ -439,7 +469,16 @@ public class FcAction extends ActionSupport {
 
 		}
 		log.info("final combos are " + comboList.toString());
-		fee.setConfigs(comboList);
+		if(feeAddMode.contentEquals("predefined"))
+		{
+			log.info("predefined ");
+		fee.getConfigs().addAll(comboList);
+		}
+		else 
+		{
+			fee.setConfigs(comboList);
+		}
+		
 		AffBean feeOwner=(AffBean) ses.getAttribute("feeOwner");
 		
 		Set<FcBean>configSet=new HashSet<FcBean>(comboList2);
@@ -449,6 +488,21 @@ public class FcAction extends ActionSupport {
 		try {
 			AffBean updatedbean=instDAO.getOneCollegeRecord(feeOwner.getInstId());
 			//updatedbean.setConfigSet(configSet);
+			if(editFlag==1)
+			{
+				
+				Set<FeeDetailsBean>exisFees=new HashSet<FeeDetailsBean>(updatedbean.getFeeSet());
+				Iterator<FeeDetailsBean>feeIter=exisFees.iterator();
+				while(feeIter.hasNext())
+				{
+					FeeDetailsBean temp=feeIter.next();
+					if(temp.getFeeId()==fee.getFeeId())
+					{
+						feeIter.remove();
+					}
+				}
+				updatedbean.setFeeSet(exisFees);
+			}
 			updatedbean.getFeeSet().add(fee);
 			
 			updatedbean=instDAO.saveOrUpdate(updatedbean, null);
@@ -466,18 +520,30 @@ public class FcAction extends ActionSupport {
 			
 			structbean.setInst_id(updatedbean.getInstId());
 			structbean.setStructure_id(structId);
+			if(editFlag!=1)
+			{
 			configdao.saveFeeStructure(structbean);
+			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		ses.removeAttribute("sesFeeDetails");
 		request.setAttribute("msg", "Fee Saved Successfully");
 		return SUCCESS;
 	}
 
 	public String GetFeesAll() {
 		fDfeeList2 = configdao.GetFees("ALL", null, null, null,null);
+		instituteList=instDAO.getInstitutes("Relevant", null, null, null, null);
 		log.info(fDfeeList2.toString());
+		return SUCCESS;
+	}
+	public String GetFeesAll2()
+	{
+		
+		
 		return SUCCESS;
 	}
 
@@ -587,7 +653,11 @@ public class FcAction extends ActionSupport {
 	
 	public String ViewFeeStruct() {
 		Integer id = Integer.parseInt(request.getParameter("reqFeeId").trim());
+		Integer insId = Integer.parseInt(request.getParameter("reqInsId").trim());
+		AffBean feeowner=instDAO.getOneCollegeRecord(insId);
+		ses.setAttribute("feeOwner", feeowner);
 		ses.setAttribute("sesFeeEditFlag",1);
+		ses.setAttribute("sesAddMode", "predefined");
 		HashMap<Integer, ArrayList<Integer>> comboMapEdit = new HashMap<Integer, ArrayList<Integer>>();
 		fDfeeList = configdao.GetFees("id", null, id, null,null);
 		FeeDetailsBean fdBean = new FeeDetailsBean();
@@ -599,6 +669,17 @@ public class FcAction extends ActionSupport {
 		if (fdBean.getConfigs().size() > 0) {
 
 			comboList = fdBean.getConfigs();
+			Integer structId=configdao.getFeeStructure(insId, id);
+			ses.setAttribute("sesStructId", structId);
+			Iterator<FcBean>comboIt=comboList.iterator();
+			while(comboIt.hasNext())
+			{
+				FcBean t=comboIt.next();
+				if(t.getStructure_id()!=structId)
+				{
+					comboIt.remove();
+				}
+			}
 			for (int i = 0; i < comboList.size(); i++) {
 
 				FcBean temp = new FcBean();
@@ -647,6 +728,7 @@ public class FcAction extends ActionSupport {
 				}
 				temp.add(tempList.get(0).getAmount().toString());
 				comboMapEdit.put(tempList.get(0).getComboId(), tempids);
+				log.info("Temp list value id is "+tempids.toString());
 				log.info("String generated is "+temp);
 				tempbody.add(temp);
 			}
@@ -1492,6 +1574,24 @@ public class FcAction extends ActionSupport {
 	public void setSelectedInst(ArrayList<String> selectedInst) {
 		SelectedInst = selectedInst;
 	}
+
+	public ArrayList<FeeDetailsBean> getFeeList() {
+		return feeList;
+	}
+
+	public void setFeeList(ArrayList<FeeDetailsBean> feeList) {
+		this.feeList = feeList;
+	}
+
+	public ArrayList<String> getSelectedFee() {
+		return selectedFee;
+	}
+
+	public void setSelectedFee(ArrayList<String> selectedFee) {
+		this.selectedFee = selectedFee;
+	}
+
+	
 
 	
 	// Getter Setters End

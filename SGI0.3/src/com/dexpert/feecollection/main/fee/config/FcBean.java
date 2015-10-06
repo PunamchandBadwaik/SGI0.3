@@ -41,7 +41,6 @@ public class FcBean implements Serializable {
 	
 	//One to one unidirectional with feedetails
 	@OneToOne(cascade = CascadeType.ALL, targetEntity = FeeDetailsBean.class)
-	@JoinColumn(name = "fee_id_fk", referencedColumnName = "feeId")
 	private FeeDetailsBean feedetailbean;
 	
 	

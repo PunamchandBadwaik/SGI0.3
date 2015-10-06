@@ -96,7 +96,7 @@
 	<!-- topbar starts -->
 	<%
 		Integer headCount = 4;
-			Integer colCount = 0;
+		Integer colCount = 0;
 	%>
 	<!-- topbar ends -->
 	<div class="ch-container">
@@ -159,7 +159,7 @@ Integer count=0;%>
 											<thead>
 
 												<tr>
-													
+
 													<th></th>
 													<th></th>
 
@@ -167,15 +167,14 @@ Integer count=0;%>
 											</thead>
 											<tbody>
 												<tr>
-													
+
 													<td>Fee Owner</td>
 													<td><div class="control-group">
 
 
 															<div class="controls">
 																<s:select theme="simple" list="instituteList"
-																	listValue="instName" listKey="instId"
-																	 data-rel="chosen"
+																	listValue="instName" listKey="instId" data-rel="chosen"
 																	cssStyle="width:60%" cssClass="form-control"
 																	name="SelectedInst"></s:select>
 
@@ -183,16 +182,16 @@ Integer count=0;%>
 														</div></td>
 
 												</tr>
-											
+
 												<tr>
 													
 													<td>Fee Payable By</td>
-													<td><div class="control-group">
+													<td><div class="control-group" id="divFeePayeeSelect">
 
 
 															<div class="controls">
-																<select required="required" id="selectError1" class="form-control"
-																	data-rel="chosen" name="feePayee">
+																<select required="required" id="selectFeePayee"
+																	class="form-control" data-rel="chosen" name="feePayee">
 																	<option value="1">College</option>
 																	<option value="2">Student</option>
 																</select>
@@ -201,25 +200,43 @@ Integer count=0;%>
 
 												</tr>
 												<tr>
-													
+
 													<td>Fee Name</td>
-													<td><div id="the-basics" class="has-success">
-															<input required="required" id="District/Area"
+													<td>
+													<input hidden="hidden" id="inputFeeMode" name="feeAddMode" value="new">
+														<div style='display: none' class="control-group" id="divFeeSelect">
+
+
+															<div class="controls" >
+																<s:select theme="simple" list="feeList"
+																	listValue="feeName" listKey="feeId"
+																	cssStyle="width:60%" requiredLabel="required"
+																	name="selectedFee"></s:select>
+																<button type="button" id="buttonNewFee" class="btn btn-info btn-sm"
+																	onclick="toggleFeeMode()">Add New Fee</button>
+
+															</div>
+														</div>
+														<div  id="divFeeInput">
+															<input id="inputFeeName"
 																placeholder="Give a Unique Name" type="text"
-																class="form-control" name="feedetails.feeName">
-														</div></td>
+																 name="feedetails.feeName">
+																 <button type="button" id="buttonNewFee" class="btn btn-info btn-sm"
+																	onclick="toggleFeeMode()">Select Predefined Fee</button>
+														</div>
+													</td>
 
 												</tr>
 
 
 												<tr>
-													
+
 													<td>Select Course Parameters</td>
 													<td><div class="control-group">
 
 
 															<div class="controls">
-																<s:select  theme="simple" list="CourseParamList"
+																<s:select theme="simple" list="CourseParamList"
 																	listValue="lookupName" listKey="lookupId"
 																	multiple="CourseParamList" data-rel="chosen"
 																	cssStyle="width:60%" cssClass="form-control"
@@ -230,7 +247,7 @@ Integer count=0;%>
 
 												</tr>
 												<tr>
-													
+
 													<td>Select College Parameters</td>
 													<td><div class="control-group">
 
@@ -247,7 +264,7 @@ Integer count=0;%>
 
 												</tr>
 												<tr>
-													
+
 													<td>Select Student Parameters</td>
 													<td><div class="control-group">
 
@@ -266,7 +283,7 @@ Integer count=0;%>
 
 												</tr>
 												<tr>
-													
+
 													<td>Select Service Parameters</td>
 
 													<td><div class="control-group">
@@ -283,14 +300,14 @@ Integer count=0;%>
 														</div></td>
 												</tr>
 												<tr>
-													
+
 													<td>Select Fee Calculation Parameter</td>
-													<td><div class="control-group">
+													<td><div class="control-group" id="divCalMode">
 															<div class="controls">
-																<select required="required" id="selectError1" class="form-control"
-																	data-rel="chosen" name="cal_mode">
+																<select required="required" id="selectCalMode"
+																	class="form-control" data-rel="chosen" name="cal_mode">
 																	<option value="1">Per Student</option>
-																	
+
 																	<option value="0">Fixed</option>
 
 																</select>
@@ -425,6 +442,41 @@ Integer count=0;%>
 			{
 			alert("Fee Name already taken Please use different name");
 			}
+		}
+		
+		function toggleFeeMode()
+		{
+			var f=document.getElementById("divFeeSelect");
+			var e = document.getElementById("divFeeInput");
+			var g=document.getElementById("inputFeeName");
+			var h=document.getElementById("inputFeeMode");
+			var i=document.getElementById("divFeePayeeSelect");
+			var j=document.getElementById("selectFeePayee");
+			var k=document.getElementById("divCalMode");
+			var l=document.getElementById("selectCalMode");
+		       if(e.style.display == 'none')
+		          {
+		    	   e.style.display = 'block';
+		       		f.style.display="none";
+		       		g.setAttribute("required", "required");
+		       		h.setAttribute("value", "new");
+		       		i.style.display='block';
+		       		l.setAttribute("required", "required");
+		       		j.setAttribute("required", "required");
+		       		k.style.display='block';
+		          }
+		       else
+		    	   {
+		    	   h.setAttribute("value", "predefined");
+		    	   e.style.display = 'none';
+		          g.removeAttribute("required"); 
+		          f.style.display="block";
+		          i.style.display='none';
+		       		l.removeAttribute("required"); 
+		       		j.removeAttribute("required"); 
+		       		k.style.display='none';
+		    	   }
+		       		
 		}
 	</script>
 </body>

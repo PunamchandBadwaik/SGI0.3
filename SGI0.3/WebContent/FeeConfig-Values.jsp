@@ -291,52 +291,7 @@
 						</div>
 					</div>
 				</div>
-				<!--/row-->
-
-				<!-- Fee Parameters Row -->
-				<!-- <div class="row" id="FeeParametersBox" style="display: none">
-					<div class="box col-md-12">
-						<div class="box-inner">
-							<div class="box-header well">
-								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> Fee Parameters
-								</h2>
-
-								<div class="box-icon">
-
-									<a href="#" class="btn btn-minimize btn-round btn-default"><i
-										class="glyphicon glyphicon-chevron-up"></i></a>
-
-								</div>
-							</div>
-							<div class="box-content row">
-								<div class="col-lg-12 col-md-12 animated fadeIn">
-
-									-Content
-
-									<p class="btn-group">
-									<div class="btn-group">
-										<button
-											onclick='window.open("ParamForm.jsp", "Admin Report", "height=1080,width=1000")'
-											class="btn btn-default ">Add New Parameter</button>
-
-									</div>
-									<button class="btn btn-default"
-										onclick='window.open("Admin-Report.html", "Admin Report", "height=1080,width=1920")'>Search
-										Parameters</button>
-
-									
-
-								</div>
-
-
-							</div>
-						</div>
-					</div>
-				</div> -->
-				<!--/row-->
-
-				<!--/row-->
+				
 				<!-- Fee Values Row -->
 				<div class="row" id="FeeValuesBox">
 					<div class="box col-md-12">
@@ -378,7 +333,50 @@
 											</tr>
 										</thead>
 										<tbody>
-											<s:iterator value="fDfeeList2">
+										<s:iterator var="insIt" value="instituteList">
+											<s:iterator value="feeSet">
+												<tr>
+													<td><%=i%></td>
+													<td><s:property value="feeId" /></td>
+													<td><s:property value="feeName" /> for <s:property value="instName" /></td>
+													<td><s:set var="app">
+															<s:property value="forApplicant" />
+														</s:set> <s:set var="ins">
+															<s:property value="forInstitute" />
+														</s:set> <s:if test="%{#app==1}">Student</s:if> <s:if
+															test="%{#ins==1}">College</s:if></td>
+												 <td class="center"><a class="btn btn-success btn-sm"
+														href="#" onclick='window.open("getFeeStructure?reqFeeId=<s:property value='feeId' />&reqInsId=<s:property value='instId' />")' 
+														> <i
+															class="glyphicon glyphicon-zoom-in icon-white"></i> View Structure
+													</a> <a class="btn btn-info btn-sm" href="#"
+														data-toggle="popover" data-content=""
+														title="Feature Locked"
+														<%-- onclick='window.open("getFeeStructureEdit?reqFeeId=<s:property value='feeId' />&reqInsId=<s:property value='instId' />")' --%>> <i
+															class="glyphicon glyphicon-zoom-in icon-white"></i> Edit
+													</a> <a class="btn btn-danger btn-sm" href="#"
+														data-toggle="popover" data-content=""
+														title="Feature Locked"> <i
+															class="glyphicon glyphicon-zoom-in icon-white"></i>
+															Delete
+													</a></td>
+												</tr>
+												<%
+													i++;
+												%>
+												</s:iterator>
+											</s:iterator>
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+											<%-- <s:iterator value="fDfeeList2">
 
 												<tr>
 													<td><%=i%></td>
@@ -408,7 +406,7 @@
 												<%
 													i++;
 												%>
-											</s:iterator>
+											</s:iterator> --%>
 
 
 										</tbody>

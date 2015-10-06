@@ -25,7 +25,7 @@ import com.google.common.collect.ArrayListMultimap;
 public class FcDAO {
 	// Global Declarations
 	public static SessionFactory factory = ConnectionClass.getFactory();
-	static Logger log = Logger.getLogger(LookupDAO.class.getName());
+	static Logger log = Logger.getLogger(FcDAO.class.getName());
     AffDAO affDAO=new AffDAO();
 	// Global Declarations End
 	// DAO Methods
@@ -306,7 +306,7 @@ public class FcDAO {
 			Criteria cr = session.createCriteria(FcBean.class).add(Property.forName("structure_id").eq(maxId));
 			FcBean temp = (FcBean) cr.list().get(0);
 			Integer maxCount = temp.getStructure_id();
-			log.info("new structure id is " + maxCount + 1);
+			log.info("new structure id is " + (maxCount + 1));
 			return maxCount;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -336,6 +336,31 @@ public class FcDAO {
 	sqlQuery.setParameter("insId",instId);
 	Integer sequenceId=(Integer)sqlQuery.list().iterator().next();
 	return sequenceId;
+	}
+	
+	public Integer getFeeStructure(Integer instId,Integer feeId)
+	{
+		// Declarations
+		Integer structureId=null;
+		// Open session from session factory
+		Session session = factory.openSession();
+		try {
+			Criteria cr=session.createCriteria(FeeStructureData.class);
+			cr.add(Restrictions.eq("inst_id", instId));
+			cr.add(Restrictions.eq("fee_id", feeId));
+			FeeStructureData temp=(FeeStructureData) cr.list().get(0);
+			structureId=temp.getStructure_id();
+			return structureId;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return structureId;
+		} finally {
+			
+			// close session
+			session.close();
+			
+		}
 	}
 
 	// DAO Methods End
