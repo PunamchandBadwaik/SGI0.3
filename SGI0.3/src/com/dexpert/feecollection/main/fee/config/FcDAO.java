@@ -329,13 +329,18 @@ public class FcDAO {
 	}
 	public Integer getSequenceOfFee(Integer instId,Integer feeId)
 	{
+	Integer sequenceId=null;
 	Session session=factory.openSession();
+	try{
 	String query="SELECT sequenceId FROM sgi.affiliatedinstitute_feedetails where feeId=:feeId and inst_id=:insId";
 	SQLQuery sqlQuery=session.createSQLQuery(query);	
 	sqlQuery.setParameter("feeId",feeId);
 	sqlQuery.setParameter("insId",instId);
-	Integer sequenceId=(Integer)sqlQuery.list().iterator().next();
+	sequenceId=(Integer)sqlQuery.list().iterator().next();
 	return sequenceId;
+	}catch(Exception ex){
+	return sequenceId;	
+	}
 	}
 	
 	public Integer getFeeStructure(Integer instId,Integer feeId)
