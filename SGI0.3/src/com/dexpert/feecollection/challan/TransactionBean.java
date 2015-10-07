@@ -24,6 +24,15 @@ public class TransactionBean {
 	private String status;
 	private String dueString;
 	private Integer bulkPay;
+	private String allowPayCode;
+
+	public String getAllowPayCode() {
+		return allowPayCode;
+	}
+
+	public void setAllowPayCode(String allowPayCode) {
+		this.allowPayCode = allowPayCode;
+	}
 
 	public String getDueString() {
 		return dueString;

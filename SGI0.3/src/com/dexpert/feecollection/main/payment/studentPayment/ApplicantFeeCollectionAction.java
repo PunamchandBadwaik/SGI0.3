@@ -125,6 +125,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			/* String user = request.getParameter("feeName"); */
 			Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
 			String dueString = request.getParameter("dueString").trim();
+			String allowPayCode=request.getParameter("allowToPayFee").trim();
 
 			// insert details into transaction bean
 			TransactionBean tran = new TransactionBean();
@@ -140,6 +141,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			tran.setPayeeAmount(fee);
 			tran.setStatus("Pending");
 			tran.setBulkPay(0);
+			tran.setAllowPayCode(allowPayCode);
 			//
 			dao.insertPaymentDetails(tran);
 			String name = studentDetails.getAplFirstName() + " " + studentDetails.getAplLstName();

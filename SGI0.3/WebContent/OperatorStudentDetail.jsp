@@ -488,6 +488,13 @@
 																return false;																
 																
 															}
+													if(document.getElementById("totalPaidAmount").value=='NaN' || document.getElementById("totalPaidAmount").value==''){
+															
+														alert("Please select a Fee and amount to pay");
+																return false;																
+																
+															} 
+															 
 															
 															/* if(totalBeingPaid<29000){
 																alert("Please select a higher Fee and amount to pay");
@@ -514,6 +521,8 @@
 															}
 															*/
 															if(totalBeingPaid<minimumAmountMustPaid){
+																
+																
 																
 														 var allowPayFee=document.getElementById("allowTOPay").value;
 																
@@ -592,11 +601,11 @@
 																		}
 																		//alert("due str prepared is"+dueStr);
 																		
-																		
+																		var allowToPayFee=document.getElementById("allowTOPay").value;
 																		
 																	var enrollId=document.getElementById("enrollId").value;
 																	document.getElementById("paymentDueStr").value=dueStr;
-																	var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId;
+																	var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId+"&allowToPayFee="+allowToPayFee;
 																		if(cart=="0")
 																			{
 																			//Don't Add to Cart and continue with payment
@@ -691,10 +700,10 @@
 																//alert("due str prepared is"+dueStr);
 																
 																
-																
+															var allowToPayFee=document.getElementById("allowTOPay").value;	
 															var enrollId=document.getElementById("enrollId").value;
 															document.getElementById("paymentDueStr").value=dueStr;
-															var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId;
+															var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId+"&allowToPayFee="+allowToPayFee;
 																if(cart=="0")
 																	{
 																	//Don't Add to Cart and continue with payment
