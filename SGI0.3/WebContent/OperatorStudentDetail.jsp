@@ -454,12 +454,23 @@
 											<td><input type="button" class="btn btn-info"
 												id="btnPayment" value="Add To Cart"
 												onclick="return validateFees(1)"></td>
+												
+												<!-- <td><input type="button" class="btn btn-info"
+												id="btnPayment" value="Allow TO Pay"></td> -->
+												<td><input type="text" class="btn btn-info"
+												 placeholder="Enter The Code" id="allowTOPay" name="allowTOPay" ></td>
+												
 											<td colspan="8"><span style="float: right;"> <input
 													type="button" class="btn btn-danger" id="btnPayment"
 													value="Proceed to Payment" onclick="return validateFees(0)"></span>
 
 												<script type="text/javascript">
 														function validateFees(cart) {
+															
+															/* var allowPayFee=document.getElementById("allowTOPay").value;
+															
+															if(allowPayFee!=""&& allowPayFee!=null){}
+															 */
 															var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 															
 															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
@@ -503,9 +514,111 @@
 															}
 															*/
 															if(totalBeingPaid<minimumAmountMustPaid){
-															alert("Please pay at least "+minimumAmountMustPaid);
-															return false;
-															}
+																
+														 var allowPayFee=document.getElementById("allowTOPay").value;
+																
+																if(allowPayFee!=""&& allowPayFee!=null){
+																	
+																	alert("procced");
+																	
+																	var j=0;
+																	var t=0;
+																	for(j=1;j<<%=i%>;j++){
+																		// if the fee in loop is not being paid in full
+																		
+																		var loopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+j+"]").value);
+																		 if(isNaN(loopFeeBeingPaid)){
+																			 loopFeeBeingPaid=0;
+																		 }
+																		 var loopFeePending=parseFloat(document.getElementById("payableamount["+j+"]").value);
+																		 if(isNaN(loopFeePending)){
+																			 loopFeePending=0;
+																		 }																 
+																		if(loopFeeBeingPaid<loopFeePending){
+																			
+																		   	for (t=j+1;t<<%=i%>;t++){
+																				 var innerLoopFeeBeingPaid=parseFloat(document.getElementById("FeePaid["+t+"]").value);
+																				 if(isNaN(innerLoopFeeBeingPaid)){
+																					 innerLoopFeeBeingPaid=0;
+																				 }
+																		   		if(innerLoopFeeBeingPaid>0){
+																		   			sequenceValidationCheckResult=false;
+																					break;
+																		   		}
+																		   		else{
+																		   			
+																		   			sequenceValidationCheckResult=true;
+																		   		}
+																		   		
+																		   	}
+																			
+																		}
+																		
+																   		if(sequenceValidationCheckResult==false){
+																   			break;
+																   		}
+																		
+																	}
+																/*
+																	if(tuitionFeeBeingPaid<tuitionFeePending && tuitionFeeBeingPaid<totalBeingPaid){
+																		
+																		alert("Tuition Fees must be cleared ahead of paying any other Fees, please reassign payable amounts!");
+																		return false;
+																	}   
+																	*/		 		 
+																												 
+																		  
+															        if(sequenceValidationCheckResult==false){
+															        	
+															   			alert("Please clear Fees in top down order first");
+															   			return false;
+															        }
+														
+																	else{
+																		
+																		var t=1;
+																		var dueStr="";
+																		for(t=1;t<<%=i%>;t++){
+																			if(t==<%=i-1%>){
+																				if(document.getElementById("FeePaid["+t+"]").value!=''){
+																					dueStr=dueStr+document.getElementById("feeId["+t+"]").value+"~"+document.getElementById("FeePaid["+t+"]").value;
+																				}
+																			}
+																			else{
+																				if(document.getElementById("FeePaid["+t+"]").value!=''){
+																					dueStr=dueStr+document.getElementById("feeId["+t+"]").value+"~"+document.getElementById("FeePaid["+t+"]").value+"!";
+																			  }
+																			}
+																		}
+																		//alert("due str prepared is"+dueStr);
+																		
+																		
+																		
+																	var enrollId=document.getElementById("enrollId").value;
+																	document.getElementById("paymentDueStr").value=dueStr;
+																	var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+enrollId;
+																		if(cart=="0")
+																			{
+																			//Don't Add to Cart and continue with payment
+																			
+																		window.location="OperatorStudentPayment"+queryString;
+																			}
+																		if(cart=="1")
+																			{
+																			window.open("addToCart"+queryString,"CartWindow","height=1080,width=700");
+																			}
+																		
+																		return true;
+																	}
+
+																	
+																}else{ 
+																	alert("Please pay at least "+minimumAmountMustPaid);
+																	return false;
+																}
+																
+															
+															} 
 															var j=0;
 															var t=0;
 															for(j=1;j<<%=i%>;j++){
