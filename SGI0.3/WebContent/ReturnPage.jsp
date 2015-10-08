@@ -13,7 +13,7 @@
 	<%
 		String payMode = request.getParameter("payMode");
 
-		String pgRespCode = request.getParameter("pgRespCode");
+		String pgRespCode = request.getParameter("pgRespCode")==null?"DEF":request.getParameter("pgRespCode");
 		String atomTxnId = request.getParameter("atomTxnNo");
 		String sabPaisaTxnId = request.getParameter("SabPaisaTxId");
 
@@ -25,7 +25,7 @@
 		String lstName = request.getParameter("lastName");
 		String mobile = request.getParameter("mobileNo");
 		String email = request.getParameter("email");
-		String pgName = request.getParameter("pg");
+		String pgName = request.getParameter("pg")==null?"":request.getParameter("pg");
 	%>
 
 

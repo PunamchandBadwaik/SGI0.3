@@ -103,7 +103,7 @@ public class GenerateEnrollmentNumber {
 			Long maxEnrollmentNumber = sortSetOfEnrollmentNumberAndReturnMax(enrollmentNumberList);
 			// log.info("Max enrollmentNumber" + maxEnrollmentNumber);
 			Integer count = maxEnrollmentNumber.toString().length() == 10 ? Integer.parseInt(maxEnrollmentNumber
-					.toString().substring(7)) : Integer.parseInt(maxEnrollmentNumber.toString().substring(8));
+					.toString().substring(5)) : Integer.parseInt(maxEnrollmentNumber.toString().substring(6));
 			// log.info("value before increment" + count);
 			log.info("value after cutting" + count);
 			String nextValue = getEnrollNum(count);
