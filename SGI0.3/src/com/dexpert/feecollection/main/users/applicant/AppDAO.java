@@ -469,20 +469,20 @@ public class AppDAO {
 
 					case XSSFCell.CELL_TYPE_STRING:
 						stringVal = cell.getStringCellValue();
-						// System.out.println(stringVal);
+						System.out.println("String :: " + stringVal);
 						tempArrayList.add(stringVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_NUMERIC:
 						numVal = (long) cell.getNumericCellValue();
 						tempArrayList.add(numVal);
-						// System.out.println(numVal);
+						System.out.println("NUmber ::" + numVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_BLANK:
 						blankVal = cell.getStringCellValue();
 						tempArrayList.add(blankVal);
-						// System.out.println(blankVal);
+						System.out.println("Blank ::" + blankVal);
 						break;
 
 					}
@@ -492,7 +492,7 @@ public class AppDAO {
 					while (paramIterator.hasNext()) {
 						FvBean bean = new FvBean();
 						String tempString = "";
-						Long tempNum = null;
+
 						Integer lookupId = (Integer) paramIterator.next();
 
 						switch (cell.getCellType()) {
@@ -500,15 +500,17 @@ public class AppDAO {
 						case XSSFCell.CELL_TYPE_STRING:
 
 							tempString = row.getCell(i - 1).toString();
+							log.info(" >>" + tempString);
 							break;
 
 						case XSSFCell.CELL_TYPE_NUMERIC:
 							tempString = row.getCell(i - 1).toString();
-
+							log.info(" >>>>" + tempString);
 							break;
 
 						}
 
+						log.info("temp String is ::" + tempString);
 						String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf("."))
 								: tempString;
 
@@ -572,7 +574,8 @@ public class AppDAO {
 			while (iterator2.hasNext()) {
 				AppBean appBean = (AppBean) iterator2.next();
 
-				System.out.println(appBean.getGrNumber() + appBean.getAplMobilePri());
+				// System.out.println(appBean.getGrNumber() +
+				// appBean.getAplMobilePri());
 
 				addBulkData(appBean);
 

@@ -149,7 +149,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> College Total
+										<i class="glyphicon glyphicon-info-sign"></i> Institute Total
 										Dues
 
 									</h2>
@@ -168,7 +168,7 @@
 										<s:if test='%{totalDuesOfStudent.isEmpty()|| totalDuesOfStudent.size()<1}'>
 											<div
 												style="color: red; text-align: center; font-weight: bold; font-size: medium;">
-												No Due Available For This College</div>
+												No Due Available For This Institute</div>
 										</s:if>
 										<s:else>
 											<table

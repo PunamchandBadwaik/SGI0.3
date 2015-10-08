@@ -131,11 +131,15 @@ public class OperatorAction extends ActionSupport {
 
 	// Getting All Records of College Operators
 	public String getListOfCollegeOperators() {
-		HttpSession httpSession=request.getSession();
+		HttpSession httpSession = request.getSession();
 		loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		listAffBean = affDAO.getCollegesList(null);
-
-		listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator(loginBean.getAffBean().getInstId());
+		try {
+			Integer instId = loginBean.getAffBean().getInstId();
+			listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator(instId);
+		} catch (java.lang.NullPointerException e) {
+			listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator(null);
+		}
 
 		return SUCCESS;
 	}

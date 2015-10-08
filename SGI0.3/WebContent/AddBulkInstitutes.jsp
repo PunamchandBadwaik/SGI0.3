@@ -148,7 +148,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> Bulk College Add
+										<i class="glyphicon glyphicon-info-sign"></i> Bulk Institute Add
 
 									</h2>
 

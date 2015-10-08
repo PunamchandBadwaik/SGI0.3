@@ -87,7 +87,7 @@ catch(Exception e)
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-info-sign"></i> College Fee
+									<i class="glyphicon glyphicon-info-sign"></i> Institute Fee
 									Details
 								</h2>
 

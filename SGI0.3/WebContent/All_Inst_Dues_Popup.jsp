@@ -149,7 +149,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> College Total
+										<i class="glyphicon glyphicon-info-sign"></i> Institute Total
 										Dues
 
 									</h2>

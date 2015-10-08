@@ -129,7 +129,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> Configure College
+										<i class="glyphicon glyphicon-info-sign"></i> Configure Institute
 									</h2>
 
 									<div class="box-icon">
@@ -175,7 +175,7 @@
 						</div>
 						<div class="col-md-12">
 							<button type="submit" class="btn btn-success"
-								>Save College</button>
+								>Save Institute</button>
 
 							<button onclick="window.close()" class="btn btn-info">Close
 							</button>

@@ -245,7 +245,7 @@
 							<%
 								if (profile.contentEquals("SU")){
 							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							<%
 								}
 							%>
@@ -266,7 +266,7 @@
 								if (profile.contentEquals("Parent")) {
 							%>
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 							<%
@@ -320,7 +320,7 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> All Colleges
+									<i class="glyphicon glyphicon-list-alt"></i> All Institutes
 								</h2>
 
 								<div class="box-icon">
@@ -343,7 +343,7 @@
 											<button class="btn btn-sm btn-info pull-right"
 												style="margin-right: 3%; float: right;"
 												onclick='window.open("GetUniversityDetail", "CollegeForm", "width=500,height=700")'>
-												<i class="fa fa-plus"></i> Add College
+												<i class="fa fa-plus"></i> Add Institute
 											</button>
 										</div>
 									</div>
@@ -359,7 +359,7 @@
 											<tr>
 												<th width="7%">Sr. No.</th>
 
-												<th>College Name</th>
+												<th>Institute Name</th>
 												<th>Address</th>
 												<th>Parent Inst. Name</th>
 

@@ -173,7 +173,7 @@
 							<div class="box-inner">
 								<div class="box-header well">
 									<h2>
-										<i class="glyphicon glyphicon-info-sign"></i> New College Form
+										<i class="glyphicon glyphicon-info-sign"></i> New Institute Form
 									</h2>
 
 									<div class="box-icon">
