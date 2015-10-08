@@ -222,7 +222,7 @@ try{
 
 
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="glyphicon glyphicon-home"></i><span> Report</span></a></li>
 
@@ -238,7 +238,7 @@ try{
 								if (profile.contentEquals("SU")){
 							%>
 							<li><a class="ajax-link" href="UniversityDetailRecord"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 
 
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
@@ -254,7 +254,7 @@ try{
 								if (profile.contentEquals("Parent")) {
 							%>
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 							<%
@@ -356,13 +356,13 @@ try{
 
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Report"
-											onclick="window.location='ShowCollegeReport'">College
+											onclick="window.location='ShowCollegeReport'">Institute
 											Report</button>
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
 											onclick="window.location='getValForDropDown'">Custom
-											College Due Report</button>
+											Institute Due Report</button>
 									</p>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get Transaction Report"
@@ -385,7 +385,7 @@ try{
 									%>
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Report"
-											onclick="window.location='ShowCollegeReport'">College
+											onclick="window.location='ShowCollegeReport'">Institute
 											Report</button>
 									</p>
 
@@ -406,7 +406,7 @@ try{
 									<p class="btn-group">
 										<button class="btn btn-default" title="Get College Due Report"
 											onclick="window.location='getValForDropDown'">Custom
-											College Due Report</button>
+											Institute Due Report</button>
 									</p>
 
 									<p class="btn-group">

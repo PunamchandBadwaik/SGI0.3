@@ -215,7 +215,7 @@
 							<%
 								if (profile.contentEquals("SU")) {
 							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
@@ -228,7 +228,7 @@
 							%>
 							
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 							<%
@@ -270,7 +270,7 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> College Due Report
+									<i class="glyphicon glyphicon-list-alt"></i> Institute Due Report
 									Detail
 								</h2>
 
@@ -295,7 +295,7 @@
 										<s:if test='%{totalDuesOfStudent.isEmpty()|| totalDuesOfStudent.size()<1}'>
 											<div
 												style="color: red; text-align: center; font-weight: bold; font-size: medium;">
-												No Due Available For This College</div>
+												No Due Available For This Institute</div>
 										</s:if>
 										<s:else>
 											<table

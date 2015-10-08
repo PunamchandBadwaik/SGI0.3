@@ -118,8 +118,8 @@
 						<option value="">---select----</option>
 						<option value="SU">Super Admin</option>
 						<option value="Parent">University</option>
-						<option value="Affiliated">College</option>
-						<option value="CollegeOperator">CollegeOperator</option>
+						<option value="Affiliated">Institute</option>
+						<option value="CollegeOperator">InstituteOperator</option>
 						</select></td></tr>
 						<tr><td>Email Id</td><td><input type="email"
 									name="emailId" class="form-control"

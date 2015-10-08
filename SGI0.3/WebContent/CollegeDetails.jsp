@@ -104,7 +104,7 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-info-sign"></i> College Details
+									<i class="glyphicon glyphicon-info-sign"></i> Institute Details
 								</h2>
 
 								<div class="box-icon">
@@ -137,7 +137,7 @@
 											</tr>
 											<tr>
 
-												<td style="font-weight: bold;">College Name</td>
+												<td style="font-weight: bold;">Institute Name</td>
 												<td><s:property value="affInstBean.instName" /></td>
 
 											</tr>
@@ -204,7 +204,7 @@
 					<div class="col-md-12">
 						<button class="btn btn-success"
 							onclick="updateCollege(<s:property value="affInstBean.instId" />)">Edit
-							College Info</button>
+							Institute Info</button>
 
 
 

@@ -181,7 +181,7 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> All Colleges
+									<i class="glyphicon glyphicon-list-alt"></i> All Institutes
 								</h2>
 
 								<div class="box-icon">
@@ -197,7 +197,7 @@
 										<div class="col-md-12">
 											<button class="btn btn-sm btn-info pull-right"
 												onclick='window.open("CollegeForm.jsp", "CollegeForm", "width=500,height=900")'>
-												<i class="fa fa-plus"></i> Add College
+												<i class="fa fa-plus"></i> Add Institute
 											</button>
 										</div>
 									</div>
@@ -208,7 +208,7 @@
 											<tr>
 												<th width="7%" >Sr. No.</th>
 												<th>ID</th>
-												<th>College Name</th>
+												<th>Institute Name</th>
 												<th>Place</th>
 												<th>Actions</th>
 											</tr>

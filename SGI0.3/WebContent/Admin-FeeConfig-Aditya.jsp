@@ -156,7 +156,7 @@
 							<li><a class="ajax-link" href="index-Admin.jsp"><i
 									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
 							<li><a class="ajax-link" href="getCollegeList"><i
-									class="fa fa-building"></i><span> My Colleges</span></a></li>
+									class="fa fa-building"></i><span> My Institutes</span></a></li>
 							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
 									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.html"><i
@@ -357,7 +357,7 @@
 											<tr>
 												<td>1</td>
 												<td>Admission Fee</td>
-												<td>College</td>
+												<td>Institute</td>
 												<td class="center"><a class="btn btn-success btn-sm"
 													href="#"> <i
 														class="glyphicon glyphicon-zoom-in icon-white"></i> View
@@ -370,7 +370,7 @@
 											<tr>
 												<td>2</td>
 												<td>Affiliation Fee</td>
-												<td>College</td>
+												<td>Institute</td>
 												<td class="center"><a class="btn btn-success btn-sm"
 													href="#"> <i
 														class="glyphicon glyphicon-zoom-in icon-white"></i> View
@@ -383,7 +383,7 @@
 											<tr>
 												<td>3</td>
 												<td>Examination Fee</td>
-												<td>College</td>
+												<td>Institute</td>
 												<td class="center"><a class="btn btn-success btn-sm"
 													href="#"> <i
 														class="glyphicon glyphicon-zoom-in icon-white"></i> View
@@ -397,7 +397,7 @@
 											<tr>
 												<td>4</td>
 												<td>Renewal Fee</td>
-												<td>College</td>
+												<td>Institute</td>
 												<td class="center"><a class="btn btn-success btn-sm"
 													href="#"> <i
 														class="glyphicon glyphicon-zoom-in icon-white"></i> View
