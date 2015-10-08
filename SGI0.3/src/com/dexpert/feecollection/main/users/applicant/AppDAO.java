@@ -433,7 +433,7 @@ public class AppDAO {
 
 		// LinkedHashMap<Integer, ArrayList<Object>> map = new
 		// LinkedHashMap<Integer, ArrayList<Object>>();
-		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>();
+		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>(3000);
 		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
@@ -535,7 +535,7 @@ public class AppDAO {
 			}
 			log.info("AppBEan Map size ::" + appBeanMap.size());
 			ArrayList<Integer> arrayList = new ArrayList<Integer>(appBeanMap.keySet());
-			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>();
+			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>(3000);
 			Iterator<Integer> iterator = arrayList.iterator();
 			log.info("AppBean Array list  ::" + arrayList.size());
 
@@ -580,6 +580,102 @@ public class AppDAO {
 				addBulkData(appBean);
 
 			}
+
+		} catch (Exception e) {
+
+		}
+
+		return null;
+
+	}
+	public ArrayList<AppBean> importExcelFileToTempDataBase(String fileUploadFileName, File fileUpload, String path)
+			throws Exception {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		HttpSession httpSession = request.getSession();
+		List<Integer> valueList = new ArrayList<Integer>();
+		List<Integer> paramList = new ArrayList<Integer>();
+		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+
+		List<Integer> str_ids = affDAO.getStrutureId(lgBean.getAffBean().getInstId(), null);
+		valueList = fcDAO.getLookupValue(str_ids);
+
+		paramList = fvDAO.getListOfValueBeans(valueList);
+
+		FileInputStream fileInputStream = new FileInputStream(fileUpload);
+
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
+
+		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
+
+		// LinkedHashMap<Integer, ArrayList<Object>> map = new
+		// LinkedHashMap<Integer, ArrayList<Object>>();
+		//LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>();
+		try {
+
+			Iterator<Row> rows = hssfSheet.rowIterator();
+
+			int j = 0;
+			String stringVal;
+			String blankVal;
+
+			long numVal;
+			XSSFCell cell;
+
+			while (rows.hasNext()) {
+				XSSFRow row = (XSSFRow) rows.next();
+
+				if (row.getRowNum() == 0) {
+					continue;
+				}
+				Iterator<Cell> cells = row.cellIterator();
+				ArrayList<Object> tempArrayList = new ArrayList<Object>();
+
+				/*List<FvBean> fvBeansList = new ArrayList<FvBean>();
+
+				LinkedHashMap<ArrayList<Object>, List<FvBean>> rowMap = new LinkedHashMap<ArrayList<Object>, List<FvBean>>();
+*/
+				// System.out.print(">>" + j + " ");
+
+				int i = 0;
+				while (cells.hasNext()) {
+
+					cell = (XSSFCell) cells.next();
+
+					switch (cell.getCellType()) {
+
+					case XSSFCell.CELL_TYPE_STRING:
+						stringVal = cell.getStringCellValue();
+						System.out.println("String :: " + stringVal);
+						tempArrayList.add(stringVal);
+						break;
+
+					case XSSFCell.CELL_TYPE_NUMERIC:
+						numVal = (long) cell.getNumericCellValue();
+						tempArrayList.add(numVal);
+						System.out.println("NUmber ::" + numVal);
+						break;
+
+					case XSSFCell.CELL_TYPE_BLANK:
+						blankVal = cell.getStringCellValue();
+						tempArrayList.add(blankVal);
+						System.out.println("Blank ::" + blankVal);
+						break;
+
+					}
+					i++;
+
+				
+					
+				}
+				
+				
+
+				j++;
+
+			}
+			
+			
+			
 
 		} catch (Exception e) {
 
@@ -828,7 +924,8 @@ public class AppDAO {
 			} catch (java.lang.NullPointerException e) {
 
 			}
-
+			session.flush();
+	        session.clear();
 			session.close();
 
 		}
