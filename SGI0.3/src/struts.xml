@@ -804,6 +804,15 @@
 			method="operatorStudentPayment">
 			<result name="success">WaitToLoad.jsp</result>
 			<result name="error">Login.jsp</result>
+			</action>
+			<!-- quickPayStudentPayment -->
+			
+		<action name="quickPayStdPayment"
+			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
+			method="quickPayStudentPayment">
+			<result name="success">WaitToLoad.jsp</result>
+			<result name="error">Login.jsp</result>	
+			
 
 		</action>
 		<action name="PayBulk"
@@ -830,6 +839,9 @@
 			<result name="success">TransactionResponsePage.jsp</result>
 
 		</action>
+		
+		
+		
 
 		<action name="RetrieveUserSession"
 			class="com.dexpert.feecollection.main.RetrieveUserSessionAction"
@@ -851,6 +863,18 @@
 			<result name="success">StudentEnrollmentNo.jsp</result>
 
 		</action>
+
+
+		<action name="feeDeskReturnPage" class="com.dexpert.feecollection.main.users.LoginAction"
+			method="feeDeskReturnPageAction">
+
+			<result name="success">feedeskReturnPage.jsp</result>
+
+		</action>
+		
+
+
+
 
 	</package>
 

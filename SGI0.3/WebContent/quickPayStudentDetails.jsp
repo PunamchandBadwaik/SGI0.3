@@ -394,7 +394,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 														
-															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
+															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
 															 var uinId =document.getElementById("uin").value;
 															 
 															//alert("tuitionFeePending is"+tuitionFeePending);
@@ -422,7 +422,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																return false;																
 																
 															}
-															/*
+															
 															if(isNaN(tuitionFeeBeingPaid)){
 																
 																if(totalBeingPaid==0 || isNaN(totalBeingPaid)){
@@ -434,7 +434,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																    tuitionFeeBeingPaid=0;
 																}
 															}
-															*/
+														
 															if(totalBeingPaid<minimumAmountMustPaid){
 															alert("Please pay at least "+minimumAmountMustPaid);
 															return false;
@@ -515,7 +515,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																
 																document.getElementById("paymentDueStr").value=dueStr;
 																var queryString="?dueString="+dueStr+"&totalPaidAmount="+totalBeingPaid+"&enrollmentId="+uinId;
-																window.location="OperatorStudentPayment"+queryString;
+																window.location="quickPayStdPayment"+queryString;
 																return true;
 															}
 														}

@@ -174,6 +174,78 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		}
 
 	}
+	
+	public String quickPayStudentPayment() throws IOException {
+		HttpSession httpSession = request.getSession();
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		Date date = new Date(timestamp.getTime());
+		AppBean studentDetails = new AppBean();
+		try {
+
+			String enrollmentNumber = request.getParameter("enrollmentId").trim();
+			studentDetails = appDAO.getUserDetail(enrollmentNumber);
+
+			String txnId = Idgenerator.transxId();
+			/* String user = request.getParameter("feeName"); */
+			Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
+			String dueString = request.getParameter("dueString").trim();
+			//String allowPayCode=request.getParameter("allowToPayFee").trim();
+
+			// insert details into transaction bean
+			TransactionBean tran = new TransactionBean();
+			tran.setInsId(studentDetails.getAffBeanStu().getInstId());
+			tran.setDueString(dueString);
+			tran.setPayeeAdd(studentDetails.getAplAddress());
+			tran.setPayeeEmail(studentDetails.getAplEmail());
+			tran.setPayeeMob(studentDetails.getAplMobilePri());
+			tran.setPayeeName(studentDetails.getAplFirstName());
+			tran.setStudentEnrollmentNumber(studentDetails.getEnrollmentNumber());
+			tran.setTransDate(date);
+			tran.setTxnId(txnId);
+			tran.setPayeeAmount(fee);
+			tran.setStatus("Pending");
+			tran.setBulkPay(0);
+			//tran.setAllowPayCode(allowPayCode);
+			//
+			dao.insertPaymentDetails(tran);
+			String name = studentDetails.getAplFirstName() + " " + studentDetails.getAplLstName();
+
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+
+			hashMap.put("enrollId", enrollmentNumber);
+			hashMap.put("txnID", txnId);
+			httpSession.setAttribute("dueStr", dueString);
+			httpSession.setAttribute("hmap", hashMap);
+			httpSession.getServletContext().setAttribute(txnId, httpSession);
+			String clientName="";
+			int instId=studentDetails.getAffBeanStu().getInstId();
+			if(instId==1){
+			clientName="SGI";	
+			}else if(instId==2){
+			clientName="LPS";	
+			}
+
+			String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo="
+					+ enrollmentNumber + "&client="+clientName+"&ru=" + returnUrl + "&Contact="
+					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl + "&Email="
+					+ studentDetails.getAplEmail() + "&Add=" + studentDetails.getAplAddress();
+
+			request.setAttribute("sabPaisaURL", url);
+			return SUCCESS;
+		} catch (java.lang.NullPointerException e) {
+			request.setAttribute("msg", "Session Time Out");
+			return ERROR;
+		}
+
+	}
+
+
+	
+	
+	
+	
+	
+	
 
 	public String operatorStudentPaymentBulk() throws IOException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -267,6 +339,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	}
 
+	
 	// jumping to payment Gateway
 
 	/*
