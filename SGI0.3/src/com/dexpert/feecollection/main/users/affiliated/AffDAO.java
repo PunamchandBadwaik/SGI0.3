@@ -709,7 +709,7 @@ public class AffDAO {
 		return affBeans;
 
 	}
-
+    // lagacy method 
 	public List<String> getListOfCourses(Integer collegeId, List<Integer> listOfCollegeId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AppBean.class);
@@ -722,6 +722,21 @@ public class AffDAO {
 		List<String> ListOfCourse = criteria.list();
 		session.clear();
 		return ListOfCourse;
+	}
+	//new method for getting cources of the 
+	public List<String> getCoursesOFCollege(Integer instId,List<Integer> instIdes)
+	{
+	Session session=factory.openSession();	
+	Criteria criteria=session.createCriteria(CollegeCourses.class);
+	if(instId!=null){
+	criteria.add(Restrictions.eq("affBean.instId",instId));
+	}else if(instIdes!=null&&instIdes.size()>0) {
+	criteria.add(Restrictions.in("affBean.instId",instIdes));	
+	}
+	criteria.setProjection(Projections.property("courseName"));
+	List<String> listOfCourses=criteria.list();
+	session.close();
+	return listOfCourses;
 	}
 
 	public List<Object[]> findDueOfFees(String feeName, List<String> enrollmentNumber) {

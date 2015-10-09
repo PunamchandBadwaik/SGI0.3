@@ -481,6 +481,7 @@
 
 										<div class="controls">
 											<table>
+												<p class="btn-group">
 												<tr>
 													<td>Select Course</td>
 													<td><select name="appBean1.course" id="courseId"
@@ -490,21 +491,7 @@
 
 
 												</tr>
-
-											</table>
-
-										</div>
-
-
-
-
-									</div>
-									</p>
-									<p class="btn-group">
-									<div id="feeName">
-
-										<div class="controls">
-											<table>
+												</p>
 												<tr>
 													<td>Select Fee Name</td>
 													<td><select name="appBean1.course" id="feeId"
@@ -515,6 +502,8 @@
 													</select></td>
 
 												</tr>
+								
+
 											</table>
 
 										</div>
@@ -523,7 +512,8 @@
 
 
 									</div>
-									</P>
+									</p>
+									
 
 
 
@@ -542,7 +532,7 @@
 												<tr>
 													<td><strong>Select Course</strong></td>
 													<td><select name="course" id="courseId"
-														onchange="courseSelected(this.value)" data-rel="chosen"
+														onchange="" data-rel="chosen"
 														style="width: 240px;">
 
 															<option value="">---Select Course---</option>
@@ -565,6 +555,7 @@
 									</div>
 									</p>
 									<p class="btn-group">
+									
 									<div id="feeName">
 
 										<div class="controls">
@@ -574,7 +565,9 @@
 													<td><select name="feeName" id="feeId" onchange=""
 														data-rel="chosen" style="width: 240px;">
 															<option value="">---Select Fees---</option>
-
+                                                            <s:iterator value="feeNameList" status="var">
+														    <option value="<s:property/>"><s:property /></option>
+															</s:iterator>
 
 													</select></td>
 

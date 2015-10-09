@@ -20,7 +20,7 @@ public class CollegeCourses {
 	private String courseName;
     @ManyToOne(targetEntity=AffBean.class)
     @JoinColumn(name="inst_Fk" ,referencedColumnName="instId")
-    private AffBean affBean;
+    private AffBean affBean;  
 	public Integer getCousesId() {
 		return cousesId;
 	}

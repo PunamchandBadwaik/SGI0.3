@@ -1268,9 +1268,8 @@ public class AffAction extends ActionSupport {
 			if (collegeName != null && !collegeName.isEmpty()) {
 
 				if (collegeName.contentEquals("All")) {
-
-					listOfCourse = affDao.getListOfCourses(null, parDAO.getIdesOfAllCollege(universityId));
-					ses.setAttribute("collegeIdFRep", null);
+                    listOfCourse = affDao.getCoursesOFCollege(null, parDAO.getIdesOfAllCollege(universityId));
+					feeNameList=feeDAO.getFeeNames(affDao.getFeeIdesOfInst(null));
 					log.info("list of course" + listOfCourse.size());
 					return "listOfCourse";
 				}
@@ -1278,8 +1277,8 @@ public class AffAction extends ActionSupport {
 				Integer id = affDao.getCollegeId(collegeName);
 				ses.setAttribute("collegeIdFRep", id);
 				log.info("id of the college is" + id);
-				listOfCourse = affDao.getListOfCourses(id, null);
-				log.info("list of course" + listOfCourse.size());
+				listOfCourse = affDao.getCoursesOFCollege(id, null);
+				feeNameList=feeDAO.getFeeNames(affDao.getFeeIdesOfInst(id));
 				return "listOfCourse";
 			}
 			if (courseName != null && !courseName.isEmpty()) {
@@ -1308,27 +1307,10 @@ public class AffAction extends ActionSupport {
 
 		// start of drop down generation for college
 		else if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
-
-			// user selects course name
-			if (courseName != null && !courseName.isEmpty()) {
-				// if user selects all course then generate correspondent
-				// feeName
-				if (courseName.contentEquals("All")) {
-					Integer collegeIdFR = (Integer) ses.getAttribute("sesId");
-					feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
-					log.info("fee name list size" + feeNameList.size());
-					return "feeName";
-				}
-				// if user select specific course
-				Integer collegeIdFR = (Integer) ses.getAttribute("sesId");
-				feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(collegeIdFR));
-				log.info("fee name list size" + feeNameList.size());
-				return "feeName";
-			}
 			Integer id = (Integer) ses.getAttribute("sesId") == null ? affDao.getCollegeId(collegeName) : (Integer) ses
 					.getAttribute("sesId");
-			
-			listOfCourse = affDao.getListOfCourses(id, null);
+			listOfCourse = affDao.getCoursesOFCollege(id, null);
+			feeNameList=feeDAO.getFeeNames(affDao.getFeeIdesOfInst(id));
 			log.info("list of course" + listOfCourse.size());
 			return SUCCESS;
 
