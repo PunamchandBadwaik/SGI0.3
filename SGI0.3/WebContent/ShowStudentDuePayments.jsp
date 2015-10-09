@@ -1,4 +1,5 @@
 <!DOCTYPE html >
+<%-- <%@page import="org.apache.jasper.compiler.Node.DoBodyAction"%> --%>
 <%@page import="com.dexpert.feecollection.main.users.applicant.AppBean"%>
 <%@page import="com.opensymphony.xwork2.ognl.OgnlValueStack"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
@@ -297,7 +298,12 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
                                            while(itr.hasNext()){
                                        PaymentDuesBean paymentDue=itr.next();
                                     	  %>
-
+                                    	  
+                                    	  <%double totalDue=paymentDue.getTotal_fee_amount() ;%>
+										<%if(totalDue!=0) {%>
+											<%-- <td><td><span style="color: green; font-weight: bold;">Fees
+													NOT Applicable</span></td> </td> --%>
+											
 										<tr>
 
 											<td><%=i%></td>
@@ -310,15 +316,20 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 											<td><%=paymentDue.getTotal_fee_amount()%></td>
+											<%-- <%double totalDue=paymentDue.getTotal_fee_amount() ;%> --%>
+											<%-- <%if(totalDue==0) {%>
+											<td><td><span style="color: green; font-weight: bold;">Fees
+													NOT Applicable</span></td> </td>
+											<%}%> --%>
 											<%double netDue=paymentDue.getNetDue(); %>
-											<% if(netDue==0){%>
+											<% if(netDue==0&&totalDue>0){%>
 											<td><span style="color: green; font-weight: bold;">Fees
 													Completed</span></td>
-											<%}%><%else{%>
+											<%}%><%-- <%else{%> --%>
 											<td><%=netDue %>
 											
 											</td>
-											<%} %>
+											<%-- <%} %> --%>
 											 <input type="hidden" value='<%=netDue %>'
 													id="payableamount[<%=i%>]"/>
 											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
@@ -533,6 +544,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 											</tr>
 										</s:iterator> --%>
+										
+										<%}%>
 										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total

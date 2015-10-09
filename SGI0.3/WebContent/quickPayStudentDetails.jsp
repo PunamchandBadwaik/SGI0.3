@@ -1,7 +1,14 @@
 <!DOCTYPE html >
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
+<%@page import="com.opensymphony.xwork2.ognl.OgnlValueStack"%>
 <%@page import="java.util.*"%>
+<%@page import="com.dexpert.feecollection.main.users.applicant.AppBean"%>
+
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ page import="org.apache.struts2.views.jsp.TagUtils"%>
+<%@ page import="com.opensymphony.xwork2.util.*"%>
+<%@page import="com.dexpert.feecollection.main.fee.PaymentDuesBean"%>
+
 
 <html lang="en">
 <head>
@@ -81,9 +88,12 @@
 <body onload="">
 	<%
 
+	ValueStack vs =TagUtils.getStack(pageContext);
+	AppBean appBean =(AppBean)vs.findValue("app1");
+
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
-
+	
 %>
 	
 
@@ -244,12 +254,144 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<th>Payable Amount</th>
 										</tr>
 
+										<%Iterator<PaymentDuesBean> itr=appBean.getPaymentDues().iterator(); 
+                                           while(itr.hasNext()){
+                                       PaymentDuesBean paymentDue=itr.next();
+                                    	  %>
+                                    	  
+                                    	  <%double totalDue=paymentDue.getTotal_fee_amount() ;%>
+										<%if(totalDue!=0) {%>
+											<%-- <td><td><span style="color: green; font-weight: bold;">Fees
+													NOT Applicable</span></td> </td> --%>
+											
+										<tr>
 
+											<td><%=i%></td>
+											<td style="display: none"><%=paymentDue.getFeeId() %><input
+												type="hidden" value='<%=paymentDue.getFeeId() %>'
+												id="feeId[<%=i%>]"></td>
+												<% hm.put(i,paymentDue.getSequenceId()); %>
+											<td><%=paymentDue.getFeeName() %></td>
+			                                    <%-- <td><s:property value="payee" /></td>
+												<td><s:property value="dueDate" /></td>
+												<td><s:property value="dateCalculated" /></td> --%>
+											<td><%=paymentDue.getTotal_fee_amount()%></td>
+											<%-- <%double totalDue=paymentDue.getTotal_fee_amount() ;%> --%>
+											<%-- <%if(totalDue==0) {%>
+											<td><td><span style="color: green; font-weight: bold;">Fees
+													NOT Applicable</span></td> </td>
+											<%}%> --%>
+											<%double netDue=paymentDue.getNetDue(); %>
+											<% if(netDue==0&&totalDue>0){%>
+											<td><span style="color: green; font-weight: bold;">Fees
+													Completed</span></td>
+											<%}%><%-- <%else{%> --%>
+											<td><%=netDue %>
+											
+											</td>
+											<%-- <%} %> --%>
+											 <input type="hidden" value='<%=netDue %>'
+													id="payableamount[<%=i%>]"/>
+											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
+											<td><div class="checkbox">
+													<label> <input type="checkbox"
+														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
+														class="btn btn-check">Check to Add to Payment
+													</label>
+												</div></td>
+											<td><input type="text" style="display: none;"
+												name="FeePaid" id="FeePaid[<%=i%>]"
+												onchange="callFun(this.value)"> <script
+													type="text/javascript">
+													
+													function showTextBox(k) {
+														
+														var feeTxtId = document.getElementById("FeePaid["+k+"]");
+														//alert('feeTxtId is '+feeTxtId);
+														var myCheckId = document.getElementById("checkId["+k+"]");
+														//alert('myCheckId is '+myCheckId);
+														var v=document.getElementById("payableamount["+k+"]").value;
+														//alert('v is '+v);
+														var d = parseFloat(document.getElementById("FeePaid["+k+"]").value);
+														
+														if(myCheckId.checked){
+															
+															feeTxtId.value=v;
+															var h=0;
+															if(document.getElementById("totalPaidAmount").value=='NaN' || document.getElementById("totalPaidAmount").value==''){
+																h=0;
+															}
+															else{
+																h=document.getElementById("totalPaidAmount").value;
+															}
+															document.getElementById("totalPaidAmount").value=parseFloat(h)+parseFloat(feeTxtId.value);
+															feeTxtId.style.display = myCheckId.checked ? "block" : "none";
+														}
+														else{
+															
+															
+															var h=0;
+															
+															if(isNaN(d)){																
+																d=0;
+															}
+															if(document.getElementById("totalPaidAmount").value=='NaN' || document.getElementById("totalPaidAmount").value==''){
+																h=0;
+															}
+															else{
+																h=document.getElementById("totalPaidAmount").value;
+																//document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(feeTxtId.value);
+																														document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(d);
+																feeTxtId.value=0;
+															}
+															
+															
+															
+															feeTxtId.style.display = myCheckId.checked ? "block" : "none";	
+														}
+														
+			
+													}
+													
+													</script> <script type="text/javascript">
+														function callFun(fee) {
+															var j = 1;
+															var g = 0;
+															
+															
+															for (j = 1; j <= <%=i%>; j++) {
+																/* alert("in loop");
+																alert(document.getElementById("FeePaid["+ j+ "]").value); */
+																if(document.getElementById("FeePaid["+j+"]").value=='NaN' || document.getElementById("FeePaid["+j+"]").value==''){
+																	g=g;
+																}
+																else{
+																	g=g+parseFloat(document.getElementById("FeePaid["+j+"]").value);
+																}
+																
+																
+																/* alert(g); */
 
+															}
+															document.getElementById("totalPaidAmount").value=g; 
+															
+															
+														}
+													</script> <input type="hidden" name="paymentDueStr"
+												id="paymentDueStr" value="" /></td>
+											<%
+													i++;
+														k = i;
+												%>
 
-										<s:iterator value="app1.paymentDues">
+										</tr>
+										<%} %>
+										
+										<%} %>
 
+										<%-- <s:iterator value="app1.paymentDues">
 
+											
 											<tr>
 
 												<td><%=i%></td>
@@ -257,9 +399,9 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 													type="hidden" value='<s:property value="feeId" />'
 													id="feeId[<%=i%>]"></td>
 												<td><s:property value="feeName" /></td>
-												<%-- <td><s:property value="payee" /></td>
+												<td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
-												<td><s:property value="dateCalculated" /></td> --%>
+												<td><s:property value="dateCalculated" /></td>
 
 
 
@@ -358,7 +500,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 											</tr>
 										</s:iterator>
-										<tr>
+ --%>										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
 													Fees Amount</span></td>
