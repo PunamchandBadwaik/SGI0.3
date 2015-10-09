@@ -249,7 +249,8 @@ public class AppAction extends ActionSupport {
 			// appBeansList =
 			// aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload,
 			// f + File.separator);
-			appBeansList = aplDAO.importExcelFileToDatabase1(fileUploadFileName, fileUpload, f + File.separator);
+		//	appBeansList = aplDAO.importExcelFileToDatabase1(fileUploadFileName, fileUpload, f + File.separator);
+			appBeansList = aplDAO.generateTempTable(fileUploadFileName, fileUpload, f + File.separator);
 
 			request.setAttribute("msg", "Student Record Uploaded Successfully");
 

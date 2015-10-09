@@ -2,6 +2,8 @@ package com.dexpert.feecollection.main.users.applicant;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -391,7 +393,7 @@ public class AppDAO {
 		// element = element.replaceAll("(^\\h*)|(\\h*$)", "");
 		element = element.trim();
 		try {
-			 
+
 			Criteria criteria = session.createCriteria(FvBean.class);
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
@@ -417,6 +419,178 @@ public class AppDAO {
 
 	}
 
+	public List<AppBean> generateTempTable(String fileUploadFileName, File fileUpload, String string)
+			throws IOException {
+
+		FileInputStream fileInputStream = new FileInputStream(fileUpload);
+
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
+
+		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
+		Session session = factory.openSession();
+
+		try {
+			Iterator<Row> rows = hssfSheet.rowIterator();
+			XSSFCell cell;
+			ArrayList<String> columnList = new ArrayList<String>();
+			while (rows.hasNext()) {
+				XSSFRow row = (XSSFRow) rows.next();
+				Iterator<Cell> cells = row.cellIterator();
+				while (cells.hasNext()) {
+					cell = (XSSFCell) cells.next();
+					if (row.getRowNum() == 0) {
+						columnList.add(cell.getStringCellValue());
+						continue;
+
+					}
+
+				}
+
+			}
+			columnList.add("IsProcessed");
+			columnList.add("Status");
+			String dynSQL = new String();
+			String t;
+			Iterator<String> iterator = columnList.iterator();
+
+			while (iterator.hasNext()) {
+				String string2 = (String) iterator.next();
+
+				string2 = string2.replaceAll("\\s", "_");
+
+				dynSQL = dynSQL + "," + string2 + " varchar(255)";
+
+			}
+
+			dynSQL = dynSQL.substring(1, dynSQL.length());
+			session.createSQLQuery(
+					"CREATE TABLE temp_imported_data (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL + " )")
+					.executeUpdate();
+
+			importExcelFileToDatabase2(fileUploadFileName, fileUpload, string);
+
+		} catch (Exception e) {
+
+		}
+		return null;
+
+	}
+
+	public ArrayList<AppBean> importExcelFileToDatabase2(String fileUploadFileName, File fileUpload, String path)
+			throws Exception {
+		Session session = factory.openSession();
+		HttpServletRequest request = ServletActionContext.getRequest();
+		HttpSession httpSession = request.getSession();
+		List<Integer> valueList = new ArrayList<Integer>();
+		List<Integer> paramList = new ArrayList<Integer>();
+		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+
+		List<Integer> str_ids = affDAO.getStrutureId(lgBean.getAffBean().getInstId(), null);
+		valueList = fcDAO.getLookupValue(str_ids);
+
+		paramList = fvDAO.getListOfValueBeans(valueList);
+
+		FileInputStream fileInputStream = new FileInputStream(fileUpload);
+
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
+
+		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
+
+		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>(
+				4000);
+		try {
+
+			Iterator<Row> rows = hssfSheet.rowIterator();
+
+			int j = 0;
+			String stringVal;
+			String blankVal;
+
+			Long numVal;
+			XSSFCell cell;
+
+			while (rows.hasNext()) {
+				XSSFRow row = (XSSFRow) rows.next();
+
+				if (row.getRowNum() == 0) {
+					continue;
+				}
+				Iterator<Cell> cells = row.cellIterator();
+				ArrayList<Object> tempArrayList = new ArrayList<Object>();
+
+				List<FvBean> fvBeansList = new ArrayList<FvBean>();
+
+				LinkedHashMap<ArrayList<Object>, List<FvBean>> rowMap = new LinkedHashMap<ArrayList<Object>, List<FvBean>>();
+
+				// System.out.print(">>" + j + " ");
+
+				int i = 0;
+				while (cells.hasNext()) {
+
+					cell = (XSSFCell) cells.next();
+
+					switch (cell.getCellType()) {
+
+					case XSSFCell.CELL_TYPE_STRING:
+						stringVal = cell.getStringCellValue();
+						// System.out.println("String :: " + stringVal);
+						stringVal = stringVal.replaceAll("\\u00A0", "");
+						// element = element.replaceAll("(^\\h*)|(\\h*$)", "");
+
+						tempArrayList.add(stringVal.trim());
+						break;
+
+					case XSSFCell.CELL_TYPE_NUMERIC:
+						numVal = (long) cell.getNumericCellValue();
+						String tempSt = numVal.toString().replaceAll("\\u00A0", "");
+
+						tempArrayList.add(tempSt.trim());
+
+						// System.out.println("NUmber ::" + numVal);
+						break;
+
+					case XSSFCell.CELL_TYPE_BLANK:
+						blankVal = cell.getStringCellValue();
+						blankVal.toString().replaceAll("\\u00A0", "");
+						tempArrayList.add(blankVal.trim());
+						// System.out.println("Blank ::" + blankVal);
+						break;
+
+					}
+					i++;
+
+				}
+				String insertParam = new String();
+
+				Iterator<Object> iterator = tempArrayList.iterator();
+
+				while (iterator.hasNext()) {
+					String ss = (String) iterator.next();
+
+					// ss = ss.replaceAll("\\s", "_");
+
+					insertParam = insertParam + "," + "'" + ss + "'";
+
+				}
+				Transaction tx = session.beginTransaction();
+				insertParam = insertParam.substring(1, insertParam.length());
+				String sql = "INSERT INTO temp_imported_data VALUES(null," + insertParam + ",'N',null )";
+				SQLQuery sqlQuery = session.createSQLQuery(sql);
+
+				sqlQuery.executeUpdate();
+				tx.commit();
+				// log.info("insert string ::" + insertParam);
+
+			}
+
+		} catch (Exception e) {
+
+		}
+
+		return null;
+
+	}
+
 	public ArrayList<AppBean> importExcelFileToDatabase1(String fileUploadFileName, File fileUpload, String path)
 			throws Exception {
 		HttpServletRequest request = ServletActionContext.getRequest();
@@ -436,8 +610,6 @@ public class AppDAO {
 
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 
-		// LinkedHashMap<Integer, ArrayList<Object>> map = new
-		// LinkedHashMap<Integer, ArrayList<Object>>();
 		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>(
 				4000);
 		try {
