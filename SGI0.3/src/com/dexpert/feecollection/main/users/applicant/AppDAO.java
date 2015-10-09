@@ -2,7 +2,6 @@ package com.dexpert.feecollection.main.users.applicant;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -19,6 +18,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -27,7 +28,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellRange;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -39,11 +39,8 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-
-import COM.rsa.jsafe.v;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -60,7 +57,6 @@ import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 public class AppDAO {
 
@@ -197,7 +193,8 @@ public class AppDAO {
 			getDuesDetail(appBean);
 
 		} finally {
-
+			session.flush();
+			session.clear();
 			session.close();
 		}
 		return appBean;
@@ -252,9 +249,12 @@ public class AppDAO {
 			duesBean.setPayments_to_date(0.0);
 			duesBean.setTotal_fee_amount(fcBean.getAmount());
 			session.save(duesBean);
+
 			tx.commit();
 
 		} finally {
+			session.flush();
+			session.clear();
 			session.close();
 
 		}
@@ -386,14 +386,19 @@ public class AppDAO {
 		Session session = factory.openSession();
 		FvBean bean = new FvBean();
 		List<FvBean> list = new ArrayList<FvBean>();
+
+		element = element.replaceAll("\\u00A0", "");
+		// element = element.replaceAll("(^\\h*)|(\\h*$)", "");
+		element = element.trim();
 		try {
-			log.info("cell Value ::" + element + " " + lookupId);
+			 
 			Criteria criteria = session.createCriteria(FvBean.class);
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
 
 			if (list.size() > 0) {
+				log.info("cell Value ::" + element + "-" + lookupId);
 				LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
 				Iterator<FvBean> iterator = list.iterator();
@@ -433,7 +438,8 @@ public class AppDAO {
 
 		// LinkedHashMap<Integer, ArrayList<Object>> map = new
 		// LinkedHashMap<Integer, ArrayList<Object>>();
-		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>(3000);
+		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>(
+				4000);
 		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
@@ -442,7 +448,7 @@ public class AppDAO {
 			String stringVal;
 			String blankVal;
 
-			long numVal;
+			Long numVal;
 			XSSFCell cell;
 
 			while (rows.hasNext()) {
@@ -469,48 +475,57 @@ public class AppDAO {
 
 					case XSSFCell.CELL_TYPE_STRING:
 						stringVal = cell.getStringCellValue();
-						System.out.println("String :: " + stringVal);
-						tempArrayList.add(stringVal);
+						// System.out.println("String :: " + stringVal);
+						tempArrayList.add(stringVal.trim());
 						break;
 
 					case XSSFCell.CELL_TYPE_NUMERIC:
 						numVal = (long) cell.getNumericCellValue();
-						tempArrayList.add(numVal);
-						System.out.println("NUmber ::" + numVal);
+						tempArrayList.add(numVal.toString().trim());
+
+						// System.out.println("NUmber ::" + numVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_BLANK:
 						blankVal = cell.getStringCellValue();
-						tempArrayList.add(blankVal);
-						System.out.println("Blank ::" + blankVal);
+						tempArrayList.add(blankVal.trim());
+						// System.out.println("Blank ::" + blankVal);
 						break;
 
 					}
 					i++;
 
 					Iterator<Integer> paramIterator = paramList.iterator();
+					// log.info("Look Parameter size is ::" + paramList.size());
 					while (paramIterator.hasNext()) {
 						FvBean bean = new FvBean();
 						String tempString = "";
 
 						Integer lookupId = (Integer) paramIterator.next();
 
+						// log.info("Look Up Id is ::" + lookupId);
+
 						switch (cell.getCellType()) {
 
 						case XSSFCell.CELL_TYPE_STRING:
 
 							tempString = row.getCell(i - 1).toString();
-							log.info(" >>" + tempString);
+							// log.info(" >>" + tempString);
 							break;
 
 						case XSSFCell.CELL_TYPE_NUMERIC:
-							tempString = row.getCell(i - 1).toString();
-							log.info(" >>>>" + tempString);
+							tempString = row.getCell(i - 1).toString().trim();
+							// log.info(" >>>>" + tempString);
+							break;
+
+						case XSSFCell.CELL_TYPE_BLANK:
+							tempString = row.getCell(i - 1).toString().trim();
+							// log.info(" >>>>" + tempString);
 							break;
 
 						}
 
-						log.info("temp String is ::" + tempString);
+						// log.info("temp String is ::" + tempString);
 						String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf("."))
 								: tempString;
 
@@ -535,7 +550,7 @@ public class AppDAO {
 			}
 			log.info("AppBEan Map size ::" + appBeanMap.size());
 			ArrayList<Integer> arrayList = new ArrayList<Integer>(appBeanMap.keySet());
-			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>(3000);
+			ArrayList<AppBean> appBeansList = new ArrayList<AppBean>(4000);
 			Iterator<Integer> iterator = arrayList.iterator();
 			log.info("AppBean Array list  ::" + arrayList.size());
 
@@ -568,14 +583,13 @@ public class AppDAO {
 				appBeansList.add(appBean);
 
 			}
-
+			log.info("appBean LIst Size c:: " + appBeansList.size());
 			Iterator<AppBean> iterator2 = appBeansList.iterator();
+
 			// log.info("appBean List Size " + appBeansList.size());
+
 			while (iterator2.hasNext()) {
 				AppBean appBean = (AppBean) iterator2.next();
-
-				// System.out.println(appBean.getGrNumber() +
-				// appBean.getAplMobilePri());
 
 				addBulkData(appBean);
 
@@ -588,6 +602,7 @@ public class AppDAO {
 		return null;
 
 	}
+
 	public ArrayList<AppBean> importExcelFileToTempDataBase(String fileUploadFileName, File fileUpload, String path)
 			throws Exception {
 		HttpServletRequest request = ServletActionContext.getRequest();
@@ -609,7 +624,9 @@ public class AppDAO {
 
 		// LinkedHashMap<Integer, ArrayList<Object>> map = new
 		// LinkedHashMap<Integer, ArrayList<Object>>();
-		//LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>();
+		// LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>
+		// appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>,
+		// List<FvBean>>>();
 		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
@@ -630,10 +647,12 @@ public class AppDAO {
 				Iterator<Cell> cells = row.cellIterator();
 				ArrayList<Object> tempArrayList = new ArrayList<Object>();
 
-				/*List<FvBean> fvBeansList = new ArrayList<FvBean>();
-
-				LinkedHashMap<ArrayList<Object>, List<FvBean>> rowMap = new LinkedHashMap<ArrayList<Object>, List<FvBean>>();
-*/
+				/*
+				 * List<FvBean> fvBeansList = new ArrayList<FvBean>();
+				 * 
+				 * LinkedHashMap<ArrayList<Object>, List<FvBean>> rowMap = new
+				 * LinkedHashMap<ArrayList<Object>, List<FvBean>>();
+				 */
 				// System.out.print(">>" + j + " ");
 
 				int i = 0;
@@ -664,18 +683,11 @@ public class AppDAO {
 					}
 					i++;
 
-				
-					
 				}
-				
-				
 
 				j++;
 
 			}
-			
-			
-			
 
 		} catch (Exception e) {
 
@@ -925,7 +937,7 @@ public class AppDAO {
 
 			}
 			session.flush();
-	        session.clear();
+			session.clear();
 			session.close();
 
 		}

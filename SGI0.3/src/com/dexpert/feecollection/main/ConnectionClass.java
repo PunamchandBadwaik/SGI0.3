@@ -8,16 +8,23 @@ public class ConnectionClass {
 	public static SessionFactory sessionFactoryfactory = buildSessionFactory();
 
 	public static SessionFactory buildSessionFactory() {
-		Configuration configuration = new Configuration().configure();
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration
-				.getProperties());
-		SessionFactory factory = configuration.buildSessionFactory(builder.build());
-		return factory;
+
+		if (sessionFactoryfactory == null) {
+			Configuration configuration = new Configuration().configure();
+
+			StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration
+					.getProperties());
+			SessionFactory factory = configuration.buildSessionFactory(builder.build());
+			return factory;
+
+		} else {
+			return sessionFactoryfactory;
+		}
 
 	}
 
 	public static SessionFactory getFactory() {
-		
+
 		return sessionFactoryfactory;
 	}
 
