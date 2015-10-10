@@ -208,7 +208,7 @@ try{
 							<%
 								if (profile.contentEquals("SU")){
 							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 									
 									<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>

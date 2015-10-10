@@ -211,7 +211,7 @@
 							%>
 							
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							
 							<%
 								}
