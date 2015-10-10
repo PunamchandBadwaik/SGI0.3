@@ -9,6 +9,8 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +45,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.internal.SessionImpl;
 
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -59,6 +64,9 @@ import com.dexpert.feecollection.main.users.LoginBean;
 import com.dexpert.feecollection.main.users.PasswordEncryption;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.ResultSetMetaData;
+import com.mysql.jdbc.Statement;
 
 public class AppDAO {
 
@@ -69,6 +77,10 @@ public class AppDAO {
 	AffDAO affDAO = new AffDAO();
 	FcDAO fcDAO = new FcDAO();
 	FvDAO fvDAO = new FvDAO();
+	HttpServletRequest request = ServletActionContext.getRequest();
+	HttpSession httpSession = request.getSession();
+	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+	Integer instId = lgBean.getAffBean().getInstId();
 
 	// End of Global Variables
 
@@ -382,7 +394,6 @@ public class AppDAO {
 
 	}
 
-	@SuppressWarnings("finally")
 	public FvBean checkFeeValue(Integer lookupId, String element) {
 
 		Session session = factory.openSession();
@@ -393,14 +404,14 @@ public class AppDAO {
 		// element = element.replaceAll("(^\\h*)|(\\h*$)", "");
 		element = element.trim();
 		try {
-
+			log.info("cell Value ::" + element + "-" + lookupId);
 			Criteria criteria = session.createCriteria(FvBean.class);
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
 
 			if (list.size() > 0) {
-				log.info("cell Value ::" + element + "-" + lookupId);
+
 				LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
 				Iterator<FvBean> iterator = list.iterator();
@@ -447,6 +458,9 @@ public class AppDAO {
 				}
 
 			}
+
+			List<String> useList = new ArrayList<String>();
+
 			columnList.add("IsProcessed");
 			columnList.add("Status");
 			String dynSQL = new String();
@@ -462,12 +476,19 @@ public class AppDAO {
 
 			}
 
+			String[] splitsqlString = dynSQL.split(",");
+			for (int i = 0; i < splitsqlString.length; i++) {
+				String string2 = splitsqlString[i];
+				useList.add(string2);
+
+			}
+
 			dynSQL = dynSQL.substring(1, dynSQL.length());
 			session.createSQLQuery(
 					"CREATE TABLE temp_imported_data (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL + " )")
 					.executeUpdate();
 
-			importExcelFileToDatabase2(fileUploadFileName, fileUpload, string);
+			importExcelFileToDatabase2(fileUploadFileName, fileUpload, string, useList);
 
 		} catch (Exception e) {
 
@@ -476,33 +497,17 @@ public class AppDAO {
 
 	}
 
-	public ArrayList<AppBean> importExcelFileToDatabase2(String fileUploadFileName, File fileUpload, String path)
-			throws Exception {
+	public ArrayList<AppBean> importExcelFileToDatabase2(String fileUploadFileName, File fileUpload, String path,
+			List<String> colList) throws Exception {
 		Session session = factory.openSession();
-		HttpServletRequest request = ServletActionContext.getRequest();
-		HttpSession httpSession = request.getSession();
-		List<Integer> valueList = new ArrayList<Integer>();
-		List<Integer> paramList = new ArrayList<Integer>();
-		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-
-		List<Integer> str_ids = affDAO.getStrutureId(lgBean.getAffBean().getInstId(), null);
-		valueList = fcDAO.getLookupValue(str_ids);
-
-		paramList = fvDAO.getListOfValueBeans(valueList);
 
 		FileInputStream fileInputStream = new FileInputStream(fileUpload);
-
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
-
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 
-		LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>> appBeanMap = new LinkedHashMap<Integer, Map<ArrayList<Object>, List<FvBean>>>(
-				4000);
 		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
-
-			int j = 0;
 			String stringVal;
 			String blankVal;
 
@@ -517,14 +522,6 @@ public class AppDAO {
 				}
 				Iterator<Cell> cells = row.cellIterator();
 				ArrayList<Object> tempArrayList = new ArrayList<Object>();
-
-				List<FvBean> fvBeansList = new ArrayList<FvBean>();
-
-				LinkedHashMap<ArrayList<Object>, List<FvBean>> rowMap = new LinkedHashMap<ArrayList<Object>, List<FvBean>>();
-
-				// System.out.print(">>" + j + " ");
-
-				int i = 0;
 				while (cells.hasNext()) {
 
 					cell = (XSSFCell) cells.next();
@@ -533,9 +530,8 @@ public class AppDAO {
 
 					case XSSFCell.CELL_TYPE_STRING:
 						stringVal = cell.getStringCellValue();
-						// System.out.println("String :: " + stringVal);
+
 						stringVal = stringVal.replaceAll("\\u00A0", "");
-						// element = element.replaceAll("(^\\h*)|(\\h*$)", "");
 
 						tempArrayList.add(stringVal.trim());
 						break;
@@ -545,19 +541,15 @@ public class AppDAO {
 						String tempSt = numVal.toString().replaceAll("\\u00A0", "");
 
 						tempArrayList.add(tempSt.trim());
-
-						// System.out.println("NUmber ::" + numVal);
 						break;
 
 					case XSSFCell.CELL_TYPE_BLANK:
 						blankVal = cell.getStringCellValue();
 						blankVal.toString().replaceAll("\\u00A0", "");
 						tempArrayList.add(blankVal.trim());
-						// System.out.println("Blank ::" + blankVal);
 						break;
 
 					}
-					i++;
 
 				}
 				String insertParam = new String();
@@ -567,10 +559,7 @@ public class AppDAO {
 				while (iterator.hasNext()) {
 					String ss = (String) iterator.next();
 
-					// ss = ss.replaceAll("\\s", "_");
-
 					insertParam = insertParam + "," + "'" + ss + "'";
-
 				}
 				Transaction tx = session.beginTransaction();
 				insertParam = insertParam.substring(1, insertParam.length());
@@ -582,9 +571,157 @@ public class AppDAO {
 				// log.info("insert string ::" + insertParam);
 
 			}
+			Statement stmt = null;
+			ResultSet rs = null;
+			Connection conn;
+			// SessionImpl sessionImpl = (SessionImpl) session;
+
+			Class.forName("com.mysql.jdbc.Driver");
+			// String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+			String DB_URL = "jdbc:mysql://localhost/sgi";
+
+			// Database credentials
+			String USER = "dexpertuser";
+			String PASS = "Dspl_2014";
+			conn = (Connection) DriverManager.getConnection(DB_URL, USER, PASS);
+			log.info("1");
+			boolean areMoreRecords = true;
+			int g = 0;
+
+			do {
+
+				try {
+
+					stmt = (Statement) conn.createStatement();
+
+					String mysql1 = "SELECT * FROM temp_imported_data where IsProcessed = 'N' Limit 1";
+
+					rs = stmt.executeQuery(mysql1);
+					List<ArrayList<String>> Largelist = new ArrayList<ArrayList<String>>();
+
+					if (rs.next()) {
+						log.info("got another row with id equal to.." + rs.getInt("id"));
+						g = rs.getInt("id");
+
+						// rs.first();
+						// while (rs.next()) {
+						log.info("reading row");
+						int x = colList.size();
+						ArrayList<String> dbParameterList = new ArrayList<String>();
+						for (int i = 0; i < x - 2; i++) {
+
+							String object = rs.getString(i + 1);
+							log.info(">>>>" + object);
+
+							dbParameterList.add(object);
+
+						}
+						log.info("excecuting method validateLookupValues");
+						validateLookupValues(dbParameterList);
+						// }
+
+						// Iterator<ArrayList<String>> iterator =
+						// Largelist.iterator();
+						// while (iterator.hasNext()) {
+						// ArrayList<java.lang.String> arrayList =
+						// (ArrayList<java.lang.String>) iterator.next();
+
+						// }
+
+						stmt.close();
+						rs.close();
+						log.info("current id of the record being processed is.." + g);
+						Statement stmt1 = (Statement) conn.createStatement();
+
+						String mysql2 = "UPDATE temp_imported_data set  IsProcessed = 'Y', status='PROCESSED' where id="
+								+ g + "";
+						int rs1 = 0;
+						rs1 = stmt1.executeUpdate(mysql2);
+
+					}
+
+					else {
+						log.info("exhausted, exiting...");
+						areMoreRecords = false;
+					}
+
+				} catch (Exception e) {
+
+					e.printStackTrace();
+				}
+			} while (areMoreRecords);
 
 		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 
+		}
+
+		return null;
+
+	}
+
+	public ArrayList<AppBean> validateLookupValues(List<String> studentAllParamList) throws Exception {
+
+		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
+
+		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
+		List<Integer> valueList = fcDAO.getLookupValue(str_ids);
+		List<Integer> paramList = fvDAO.getListOfValueBeans(valueList);
+		try {
+
+			List<FvBean> fvBeansList = new ArrayList<FvBean>();
+
+			log.info("Look up Dynamic Parameter size is ::" + paramList.size());
+			log.info("Student parameter  size is ::" + studentAllParamList.size());
+
+			Iterator<String> studentIterator = studentAllParamList.iterator();
+			log.info(studentAllParamList);
+			log.info(paramList);
+			AppBean appBean = new AppBean();
+			while (studentIterator.hasNext()) {
+				String object = studentIterator.next();
+
+				appBean.setGrNumber(studentAllParamList.get(1));
+				appBean.setAplFirstName(studentAllParamList.get(2));
+				appBean.setAplLstName(studentAllParamList.get(3));
+				appBean.setGender(studentAllParamList.get(4));
+				appBean.setAplAddress(studentAllParamList.get(5));
+				appBean.setAplMobilePri(studentAllParamList.get(6));
+				appBean.setAplMobileSec(studentAllParamList.get(7));
+				appBean.setAplEmail(studentAllParamList.get(8));
+				appBean.setStartYear(studentAllParamList.get(9));
+
+				Iterator<Integer> paramIterator = paramList.iterator();
+
+				while (paramIterator.hasNext()) {
+
+					FvBean bean = new FvBean();
+					String tempString = object.toString().trim();
+					object = object.toString().replaceAll("\\u00A0", "").trim().replaceAll("\\s", "");
+
+					Integer lookupId = (Integer) paramIterator.next();
+
+					String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf(".")) : tempString; //
+					log.info("look up id is  :: " + lookupId + " <<>> " + object);
+					bean = checkFeeValue(lookupId, x);
+
+					if (bean != null) {
+						fvBeansList.add(bean);
+
+					}
+
+				}
+
+			}
+			log.info("*****************  adding to bulk data ***************");
+
+			Set<FvBean> paramSet = new HashSet<FvBean>(fvBeansList);
+			appBean.setApplicantParamValues(paramSet);
+			addBulkData(appBean);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return null;
@@ -768,7 +905,7 @@ public class AppDAO {
 			}
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 
 		return null;
@@ -1026,93 +1163,92 @@ public class AppDAO {
 	public ArrayList<AppBean> addBulkData(AppBean appBean) throws InvalidKeyException, NoSuchAlgorithmException,
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
-
-		HttpServletRequest request = ServletActionContext.getRequest();
+		log.info("add bulk Method");
 
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 		String EnrollNo = en.generateEnrollmentNum(appBean);
 		appBean.setEnrollmentNumber(EnrollNo);
-
-		HttpSession httpSession = request.getSession();
-		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-
+		log.info("add bulk Method>>>>>>>>>>>111");
 		List<AppBean> studentFromDBList = getStudentDetailByEnrollMentNumber(appBean.getEnrollmentNumber());
+		log.info("add bulk Method >>>>222");
+		// if (studentFromDBList.isEmpty()) {
+		log.info("add bulk Method >>>>333");
+		Session session = factory.openSession();
+		log.info("44");
+		AffBean affBean = new AffBean();
+		AffBean clgBean = new AffBean();
+		if (lgBean.getProfile().contentEquals("CollegeOperator")) {
+			log.info("5");
+			clgBean = aff.viewInstDetail(instId);
 
-		if (studentFromDBList.isEmpty()) {
-			Session session = factory.openSession();
+		} else if (lgBean.getProfile().contentEquals("Institute")) {
+			log.info("66");
+			clgBean = aff.viewInstDetail(instId);
+		}
 
-			AffBean affBean = new AffBean();
-			AffBean clgBean = new AffBean();
-			if (lgBean.getProfile().contentEquals("CollegeOperator")) {
+		// to get college record based on id to create relationship
+		affBean = aff.viewInstDetail(clgBean.getInstId());
 
-				clgBean = aff.viewInstDetail(lgBean.getOperatorBean().getAffBean().getInstId());
+		LoginBean loginBean = new LoginBean();
+		loginBean.setUserName(appBean.getEnrollmentNumber());
+		log.info("77");
+		// to Encrypt Password
+		PasswordEncryption.encrypt(String.valueOf(appBean.getStartYear().substring(0, 4)));
+		String encryptedPwd = PasswordEncryption.encStr;
+		log.info("888");
+		loginBean.setPassword(encryptedPwd);
+		loginBean.setProfile("Student");
+		appBean.setLoginBean(loginBean);
+		loginBean.setAppBean(appBean);
+		log.info("99");
+		affBean.setAppBean(appBean);
+		appBean.setAffBeanStu(affBean);
 
-			} else if (lgBean.getProfile().contentEquals("Institute")) {
-				clgBean = aff.viewInstDetail(lgBean.getAffBean().getInstId());
-			}
+		// one to many Relationship
+		affBean.getAplBeanSet().add(appBean);
+		Transaction tx = session.beginTransaction();
+		session.save(appBean);
+		tx.commit();
+		getDuesDetail(appBean);
+		try {
 
-			// to get college record based on id to create relationship
-			affBean = aff.viewInstDetail(clgBean.getInstId());
+			if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
+					|| appBean.getAplMobilePri().equals(null)) {
 
-			LoginBean loginBean = new LoginBean();
-			loginBean.setUserName(appBean.getEnrollmentNumber());
-
-			// to Encrypt Password
-			PasswordEncryption.encrypt(String.valueOf(appBean.getStartYear().substring(0, 4)));
-			String encryptedPwd = PasswordEncryption.encStr;
-
-			loginBean.setPassword(encryptedPwd);
-			loginBean.setProfile("Student");
-			appBean.setLoginBean(loginBean);
-			loginBean.setAppBean(appBean);
-
-			affBean.setAppBean(appBean);
-			appBean.setAffBeanStu(affBean);
-
-			// one to many Relationship
-			affBean.getAplBeanSet().add(appBean);
-			Transaction tx = session.beginTransaction();
-			session.save(appBean);
-			tx.commit();
-			getDuesDetail(appBean);
-			try {
-
-				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
-						|| appBean.getAplMobilePri().equals(null)) {
-
-				} else {
-					String user = appBean.getEnrollmentNumber();
-					String pass = appBean.getStartYear().substring(0, 4);
-					String msg = "UserId :" + user + "" + " Passsword : " + pass;
-					SendSMS sms = new SendSMS();
-					sms.sendSMS(appBean.getAplMobilePri(), msg);
-
-				}
-			} catch (java.lang.NullPointerException e) {
-
-			}
-
-			try {
-
-				if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
-						|| appBean.getAplEmail().equals(null)) {
-
-				} else {
-					EmailSessionBean email = new EmailSessionBean();
-					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
-							appBean.getStartYear().substring(0, 4),
-							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
-
-				}
-			} catch (java.lang.NullPointerException e) {
+			} else {
+				String user = appBean.getEnrollmentNumber();
+				String pass = appBean.getStartYear().substring(0, 4);
+				String msg = "UserId :" + user + "" + " Passsword : " + pass;
+				SendSMS sms = new SendSMS();
+				sms.sendSMS(appBean.getAplMobilePri(), msg);
 
 			}
-			session.flush();
-			session.clear();
-			session.close();
+		} catch (java.lang.NullPointerException e) {
+			e.printStackTrace();
 
 		}
+
+		try {
+
+			if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
+					|| appBean.getAplEmail().equals(null)) {
+
+			} else {
+				EmailSessionBean email = new EmailSessionBean();
+				email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(), appBean
+						.getStartYear().substring(0, 4),
+						appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+
+			}
+		} catch (java.lang.NullPointerException e) {
+			e.printStackTrace();
+		}
+		session.flush();
+		session.clear();
+		session.close();
+
+		// }
 
 		return null;
 	}

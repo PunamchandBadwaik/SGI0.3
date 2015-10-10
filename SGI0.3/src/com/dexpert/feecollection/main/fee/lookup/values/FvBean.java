@@ -33,10 +33,10 @@ public class FvBean implements Serializable {
 	private Integer feeValueId;
 	private String value;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "applicantParamValues")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "applicantParamValues")
 	Set<AppBean> appBeanParamSet;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "parentFeeValueSet")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "parentFeeValueSet")
 	Set<ParBean> parentParam;
 
 	// one to one unidirectional mapping with Fee Config
@@ -45,10 +45,10 @@ public class FvBean implements Serializable {
 	@JoinColumn(name = "fee_config_fk")
 	private FcBean fcBean;
 
-	@ManyToOne(targetEntity=LookupBean.class)
+	@ManyToOne(targetEntity = LookupBean.class)
 	@JoinColumn(name = "FeeLookupId_Fk", referencedColumnName = "lookupId")
 	private LookupBean lookupname;
-	
+
 	public FcBean getFcBean() {
 		return fcBean;
 	}

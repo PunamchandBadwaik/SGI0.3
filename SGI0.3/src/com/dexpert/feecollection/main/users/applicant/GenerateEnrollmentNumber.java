@@ -86,10 +86,12 @@ public class GenerateEnrollmentNumber {
 		String enrollmentNumber = "";
 		Session session = factory.openSession();
 		// feeValueId=:feeId and
-		String query = "select enrollmentNumber from fee_values_master inner join applicant_values on  fee_values_master.feeValueId=applicant_values.value_id  where enrollmentNumber like:enrollmentNumber ";
+		//String query = "select enrollmentNumber from fee_values_master inner join applicant_values on  fee_values_master.feeValueId=applicant_values.value_id  where enrollmentNumber like:enrollmentNumber ";
+		String query = "select enrollmentNumber from applicant_details where college_id_fk="+ preEnrollmentNumber.substring(2,4) + "";
+		log.info("hjj");
 		SQLQuery sqlQuery = session.createSQLQuery(query);
 		//sqlQuery.setParameter("feeId", feeValueId);
-		sqlQuery.setParameter("enrollmentNumber", preEnrollmentNumber + "%");
+		//sqlQuery.setParameter("enrollmentNumber", preEnrollmentNumber + "%");
 		sqlQuery.setCacheable(false);
 		List<String> enrollmentNumberList = sqlQuery.list();
 		session.close();
@@ -138,6 +140,7 @@ public class GenerateEnrollmentNumber {
 
 	public String generateEnrollmentNum(AppBean appBean) {
 		String startYear = appBean.getStartYear();
+		log.info("start yar is:"+startYear);
 		String course = appBean.getCourse();
 
 		Set<FvBean> paramSet = appBean.getApplicantParamValues();
