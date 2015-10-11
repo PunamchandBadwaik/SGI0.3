@@ -15,6 +15,10 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.log4j.Logger;
+
+import com.dexpert.feecollection.main.users.affiliated.AffAction;
+
 public class EmailSessionBean {
 
 	private int port = 587;
@@ -25,8 +29,9 @@ public class EmailSessionBean {
 	private String password = "feedesk@srs";
 	private Protocol protocol = Protocol.TLS;
 	private boolean debug = true;
+	static Logger log = Logger.getLogger(AffAction.class.getName());
 
-	public void sendEmail(String to, String subject, String Username, String Password, String Name) {
+	public void sendEmail(String to, String subject, String Username, String Password, String Name, String emailContent) {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.port", port);
@@ -59,7 +64,7 @@ public class EmailSessionBean {
 			message.setFrom(new InternetAddress(from));
 			InternetAddress[] address = { new InternetAddress(to) };
 			message.setRecipients(Message.RecipientType.TO, address);
-			message.setRecipients(Message.RecipientType.BCC, "punamchand@srslive.in");
+			message.setRecipients(Message.RecipientType.BCC, "kumar.manish@srslive.in,kumar.sachin@srslive.in,anupam.jeevan@srslive.in");
 
 			message.setSubject(subject);
 			message.setSentDate(new Date());
@@ -72,17 +77,17 @@ public class EmailSessionBean {
 			// -----------------------------------------------------------------
 			textPart.setText(textContent);
 			MimeBodyPart htmlPart = new MimeBodyPart();
-			String htmlContent = "<html><h1>Welcome " + Name
-
-			+ "</h1><p><h3>Please Use the following credentials to login to your Account</h3></p>"
+			String htmlContent = "<html><h1>Hello " + Name
+			+ ", </h1><p><h3> "+ emailContent + "</h3></p>"
 					+ "<p><b>Username:</b> " + Username + "</p>" + "<p><b>Password:</b> " + Password + "</p></html>";
+			
 			htmlPart.setContent(htmlContent, "text/html");
 			multipart.addBodyPart(textPart);
 			multipart.addBodyPart(htmlPart);
 			message.setContent(multipart);
 			Transport.send(message);
 
-			System.out.println("Mail Sent...!!!");
+			log.info("Mail Sent...!!!");
 		} catch (MessagingException ex) {
 			ex.printStackTrace();
 		}

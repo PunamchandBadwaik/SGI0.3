@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,7 +81,8 @@ public class AppDAO {
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpSession httpSession = request.getSession();
 	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-	Integer instId = lgBean.getAffBean().getInstId();
+	String tempTableName="";
+	
 
 	// End of Global Variables
 
@@ -100,7 +102,7 @@ public class AppDAO {
 			session.close();
 		}
 	}
-
+   /* To insert or update applicant detail from UI form */
 	public AppBean saveOrUpdate(AppBean appBean, Integer aplInstId, LinkedHashSet<FvBean> fvBeans)
 			throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
@@ -164,9 +166,9 @@ public class AppDAO {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
-
+			String instName=lgBean.getAffBean().getInstName();
 			// for text msg
-
+     
 			try {
 
 				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
@@ -176,7 +178,7 @@ public class AppDAO {
 
 					String user = appBean.getEnrollmentNumber();
 					String pass = appBean.getStartYear();
-					String msg = "UserId :" + user + "" + " Passsword : " + pass;
+					String msg="Welcome to the FeeDesk portal of "+instName+ ". You can log in to view and pay your fees with the these credentials. UserId :" + user + "" + " Passsword : " + pass;
 					SendSMS sms = new SendSMS();
 					sms.sendSMS(appBean.getAplMobilePri(), msg);
 
@@ -194,9 +196,11 @@ public class AppDAO {
 				} else {
 
 					EmailSessionBean email = new EmailSessionBean();
+					
+					String emailContent="Welcome to the FeeDesk portal of "+instName+ ". You can log in to view and pay your fees with the below credentials. ";					
 					email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(),
 							appBean.getStartYear(),
-							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()),emailContent);
 
 				}
 			} catch (java.lang.NullPointerException e) {
@@ -482,10 +486,10 @@ public class AppDAO {
 				useList.add(string2);
 
 			}
-
+			tempTableName="temp_imported_data"+generateReturnRandomNumber();
 			dynSQL = dynSQL.substring(1, dynSQL.length());
 			session.createSQLQuery(
-					"CREATE TABLE temp_imported_data (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL + " )")
+					"CREATE TABLE "+tempTableName+ " (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL + " )")
 					.executeUpdate();
 
 			importExcelFileToDatabase2(fileUploadFileName, fileUpload, string, useList);
@@ -504,7 +508,8 @@ public class AppDAO {
 		FileInputStream fileInputStream = new FileInputStream(fileUpload);
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
-
+		
+		
 		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
@@ -563,7 +568,7 @@ public class AppDAO {
 				}
 				Transaction tx = session.beginTransaction();
 				insertParam = insertParam.substring(1, insertParam.length());
-				String sql = "INSERT INTO temp_imported_data VALUES(null," + insertParam + ",'N',null )";
+				String sql = "INSERT INTO "+tempTableName+ " VALUES(null," + insertParam + ",'N',null )";
 				SQLQuery sqlQuery = session.createSQLQuery(sql);
 
 				sqlQuery.executeUpdate();
@@ -587,6 +592,10 @@ public class AppDAO {
 			log.info("1");
 			boolean areMoreRecords = true;
 			int g = 0;
+			
+			
+			
+			try{
 
 			do {
 
@@ -594,7 +603,7 @@ public class AppDAO {
 
 					stmt = (Statement) conn.createStatement();
 
-					String mysql1 = "SELECT * FROM temp_imported_data where IsProcessed = 'N' Limit 1";
+					String mysql1 = "SELECT * FROM "+tempTableName+ " where IsProcessed = 'N' Limit 1";
 
 					rs = stmt.executeQuery(mysql1);
 					List<ArrayList<String>> Largelist = new ArrayList<ArrayList<String>>();
@@ -633,10 +642,11 @@ public class AppDAO {
 						log.info("current id of the record being processed is.." + g);
 						Statement stmt1 = (Statement) conn.createStatement();
 
-						String mysql2 = "UPDATE temp_imported_data set  IsProcessed = 'Y', status='PROCESSED' where id="
+						String mysql2 = "UPDATE "+tempTableName+ " set  IsProcessed = 'Y', status='PROCESSED' where id="
 								+ g + "";
 						int rs1 = 0;
 						rs1 = stmt1.executeUpdate(mysql2);
+						stmt1.close();
 
 					}
 
@@ -650,6 +660,21 @@ public class AppDAO {
 					e.printStackTrace();
 				}
 			} while (areMoreRecords);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+		     finally {
+					Statement stmt2 = (Statement) conn.createStatement();
+
+					String dropTempTableSQL = "DROP table "+ tempTableName;
+					int rs2 = 0;
+					rs2 = stmt2.executeUpdate(dropTempTableSQL);
+					log.info("dropped temp table" +tempTableName);
+					stmt2.close();
+					conn.close();
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -664,7 +689,7 @@ public class AppDAO {
 	public ArrayList<AppBean> validateLookupValues(List<String> studentAllParamList) throws Exception {
 
 		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
-
+		Integer instId = lgBean.getAffBean().getInstId();
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
 		List<Integer> valueList = fcDAO.getLookupValue(str_ids);
 		List<Integer> paramList = fvDAO.getListOfValueBeans(valueList);
@@ -1164,7 +1189,7 @@ public class AppDAO {
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
 		log.info("add bulk Method");
-
+		Integer instId = lgBean.getAffBean().getInstId();
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 		String EnrollNo = en.generateEnrollmentNum(appBean);
@@ -1211,6 +1236,7 @@ public class AppDAO {
 		session.save(appBean);
 		tx.commit();
 		getDuesDetail(appBean);
+		String instName=lgBean.getAffBean().getInstName();
 		try {
 
 			if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
@@ -1219,7 +1245,7 @@ public class AppDAO {
 			} else {
 				String user = appBean.getEnrollmentNumber();
 				String pass = appBean.getStartYear().substring(0, 4);
-				String msg = "UserId :" + user + "" + " Passsword : " + pass;
+				String msg="Welcome to the FeeDesk portal of "+instName+ ". You can log in to view and pay your fees with the these credentials. UserId :" + user + "" + " Passsword : " + pass;
 				SendSMS sms = new SendSMS();
 				sms.sendSMS(appBean.getAplMobilePri(), msg);
 
@@ -1235,10 +1261,12 @@ public class AppDAO {
 					|| appBean.getAplEmail().equals(null)) {
 
 			} else {
+				
+				String emailContent="Welcome to the FeeDesk portal of "+instName+ ". You can log in to view and pay your fees with the below credentials. ";
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(), appBean
 						.getStartYear().substring(0, 4),
-						appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()));
+						appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()),emailContent);
 
 			}
 		} catch (java.lang.NullPointerException e) {
@@ -1399,6 +1427,11 @@ public class AppDAO {
 		} finally {
 			session.close();
 		}
+	}
+	
+	public int generateReturnRandomNumber() {
+	    Random r = new Random( System.currentTimeMillis() );
+	    return (1 + r.nextInt(2)) * 10000 + r.nextInt(10000);
 	}
 
 }

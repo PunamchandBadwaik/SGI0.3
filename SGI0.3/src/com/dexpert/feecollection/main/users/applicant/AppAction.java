@@ -412,6 +412,7 @@ public class AppAction extends ActionSupport {
 	}
 
 	public void getDuesOfStudent() {
+		log.info("inside getDuesOfStudent");
 		app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
 		Set<PaymentDuesBean> paymentDues=app1.getPaymentDues();
 		paymentDues=addSeqOfFees(paymentDues,app1.getAffBeanStu().getInstId());
