@@ -606,14 +606,12 @@ public class AppDAO {
 					String mysql1 = "SELECT * FROM "+tempTableName+ " where IsProcessed = 'N' Limit 1";
 
 					rs = stmt.executeQuery(mysql1);
-					List<ArrayList<String>> Largelist = new ArrayList<ArrayList<String>>();
-
+					 
 					if (rs.next()) {
 						log.info("got another row with id equal to.." + rs.getInt("id"));
 						g = rs.getInt("id");
 
-						// rs.first();
-						// while (rs.next()) {
+						
 						log.info("reading row");
 						int x = colList.size();
 						ArrayList<String> dbParameterList = new ArrayList<String>();
@@ -627,15 +625,7 @@ public class AppDAO {
 						}
 						log.info("excecuting method validateLookupValues");
 						validateLookupValues(dbParameterList);
-						// }
-
-						// Iterator<ArrayList<String>> iterator =
-						// Largelist.iterator();
-						// while (iterator.hasNext()) {
-						// ArrayList<java.lang.String> arrayList =
-						// (ArrayList<java.lang.String>) iterator.next();
-
-						// }
+						
 
 						stmt.close();
 						rs.close();

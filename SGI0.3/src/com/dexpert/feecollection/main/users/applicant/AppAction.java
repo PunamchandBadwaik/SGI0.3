@@ -236,25 +236,31 @@ public class AppAction extends ActionSupport {
 
 	// add Bulk Students
 	public String addBulkStudents() throws Exception {
-
+       
 		if (fileUploadFileName.endsWith(".xlsx")) {
-
-			String path = request.getServletContext().getRealPath("/");
-			path = path + File.separator;
-			File f = new File(path + "/SGI/");
-			f.mkdir();
-
-			log.info("File Name is ::" + fileUploadFileName);
-
-			// appBeansList =
-			// aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload,
-			// f + File.separator);
-		//	appBeansList = aplDAO.importExcelFileToDatabase1(fileUploadFileName, fileUpload, f + File.separator);
-			appBeansList = aplDAO.generateTempTable(fileUploadFileName, fileUpload, f + File.separator);
-
-			request.setAttribute("msg", "Student Record Uploaded Successfully");
-
-			return SUCCESS;
+           try{
+				String path = request.getServletContext().getRealPath("/");
+				path = path + File.separator;
+				File f = new File(path + "/SGI/");
+				f.mkdir();
+	
+				log.info("File Name is ::" + fileUploadFileName);
+	
+				// appBeansList =
+				// aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload,
+				// f + File.separator);
+			//	appBeansList = aplDAO.importExcelFileToDatabase1(fileUploadFileName, fileUpload, f + File.separator);
+				appBeansList = aplDAO.generateTempTable(fileUploadFileName, fileUpload, f + File.separator);
+	
+				request.setAttribute("msg", "Student Record Uploaded Successfully");
+				return SUCCESS;
+           }
+           catch(Exception e){
+        	   e.printStackTrace();
+        	   request.setAttribute("msg", "Error in file uploading, please try again.");
+        	   return SUCCESS;
+           }
+			
 
 		}
 
