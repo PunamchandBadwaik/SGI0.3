@@ -215,7 +215,7 @@
 							%>
 							
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> College Operator</span></a></li>
+									class="fa fa-building"></i><span> Institute Operator</span></a></li>
 							
 							<%
 								}
@@ -303,7 +303,10 @@
 												<i class="fa fa-plus"></i> Add Bulk Student
 											</button>  
 										</div>
+										
 									</div>
+									
+									
 									<!---Content-->
 									<table
 										class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">

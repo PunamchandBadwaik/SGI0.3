@@ -89,7 +89,7 @@
 ValueStack vs =TagUtils.getStack(pageContext);
 AppBean appBean =(AppBean)vs.findValue("app1");
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
-
+	Integer cId= appBean.getAffBeanStu().getInstId();
 
 %>
 
@@ -267,7 +267,9 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 										<tr>
 
 											<td>Student UIN</td>
-											<td><s:property value="app1.enrollmentNumber" /></td>
+											<td><s:property value="app1.enrollmentNumber" />
+											
+											<input type="hidden" id="collegeId" name="collegeId" value="<%=cId%>"></td>
 										</tr>
 										<tr>
 
@@ -325,20 +327,28 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<% if(netDue==0&&totalDue>0){%>
 											<td><span style="color: green; font-weight: bold;">Fees
 													Completed</span></td>
-											<%}%><%-- <%else{%> --%>
+													<%-- <td><%=netDue %>
+											
+											</td> --%>
+											<%}else {%><%-- <%else{%> --%>
 											<td><%=netDue %>
 											
 											</td>
-											<%-- <%} %> --%>
-											 <input type="hidden" value='<%=netDue %>'
+											<input type="hidden" value='<%=netDue %>'
 													id="payableamount[<%=i%>]"/>
-											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
+											<%} %>
+											<%-- <%} %> --%>
+											<%--  <input type="hidden" value='<%=netDue %>'
+													id="payableamount[<%=i%>]"/>
+											 --%><td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
 											<td><div class="checkbox">
+											<% if(netDue!=0&&totalDue>0){%>
 													<label> <input type="checkbox"
 														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
 														class="btn btn-check">Check to Add to Payment
 													</label>
 												</div></td>
+												
 											<td><input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
 												onchange="callFun(this.value)"> <script
@@ -429,7 +439,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 
 
-
+<%} %>
 
 										<%-- <s:iterator value="app1.paymentDues">
 
@@ -577,12 +587,16 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 												<script type="text/javascript">
 														
-												       function validateFees() {
+												       function validateFees() { 
 															 
 															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
-														
-															 var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
+															 var collegeId=document.getElementById("collegeId").value;
+															 alert("college Id is "+collegeId);
+															 
+														if(collegeId==3){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
+														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?0000:29000;}
+															 
 															
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);
