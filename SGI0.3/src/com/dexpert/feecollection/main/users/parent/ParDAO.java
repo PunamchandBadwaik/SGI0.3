@@ -186,9 +186,10 @@ public class ParDAO {
 				// session.close();
 
 				// -----Code for sending email//--------------------
-				EmailSessionBean email = new EmailSessionBean();
+				String emailContent="Welcome to the FeeDesk portal of "+bean.getParInstName()+ ". You can log in with the below credentials. ";
+                EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getParInstEmail(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
-						.getUserName(), password, bean.getParInstName());
+						.getUserName(), password, bean.getParInstName(),emailContent);
 
 				log.info("password :" + password);
 

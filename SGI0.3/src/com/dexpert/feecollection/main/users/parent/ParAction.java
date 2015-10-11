@@ -113,9 +113,10 @@ public class ParAction extends ActionSupport {
 				sms.sendSMS(parBean.getParInstContact(), msg);
 		
 		// -----Code for sending email//--------------------
+	String emailContent="Welcome to the FeeDesk portal of "+parBean.getParInstName()+ ". You can log in with the below credentials. ";
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(parBean.getParInstEmail(), "Welcome To FeeDesk!", username, password,
-				parBean.getParInstName());
+				parBean.getParInstName(),emailContent);
 		request.setAttribute("msg", "University Added Successfully");
 		return SUCCESS;
 

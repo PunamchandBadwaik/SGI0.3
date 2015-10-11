@@ -514,10 +514,10 @@ public class AffDAO {
 
 			parDAO.saveOrUpdate(parBean1, null);
 			// ----------------------------
-
+			String emailContent="Welcome to the FeeDesk portal of "+affBean.getInstName()+ ". You can log in with the below credentials. ";
 			EmailSessionBean email = new EmailSessionBean();
 			email.sendEmail(affBean.getEmail(), "Welcome To Fee Collection Portal!", username, password,
-					affBean.getInstName());
+					affBean.getInstName(),emailContent);
 			Session session = factory.openSession();
 			Transaction tx = session.beginTransaction();
 			session.save(affBean);
@@ -568,9 +568,10 @@ public class AffDAO {
 				// session.close();
 
 				// -----Code for sending email//--------------------
+				String emailContent="Welcome to the FeeDesk portal of "+bean.getInstName()+ ". You can log in with the below credentials. ";
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getEmail(), "Welcome To Fee Collection Portal!",
-						bean.getLoginBean().getUserName(), password, bean.getInstName());
+						bean.getLoginBean().getUserName(), password, bean.getInstName(),emailContent);
 
 				log.info("password :" + password);
 

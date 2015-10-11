@@ -90,9 +90,10 @@ public class SaAction extends ActionSupport {
 		sms.sendSMS(superAdmin.getMobileNum(), msg);
 		
 		// -----Code for sending email//--------------------
+		String emailContent="Welcome to the FeeDesk portal of "+superAdmin.getFirstName()+ ". You can log in with the below credentials. ";
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(superAdmin.getEmailId(), "Welcome To FeeDesk!", username, password,
-				superAdmin.getFirstName());
+				superAdmin.getFirstName(),emailContent);
 		request.setAttribute("redirectLink", "SuperAdminForm.jsp");
 		return SUCCESS;
 

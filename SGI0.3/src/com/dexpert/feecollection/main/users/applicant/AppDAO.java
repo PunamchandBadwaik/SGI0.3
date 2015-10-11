@@ -1245,7 +1245,7 @@ public class AppDAO {
 			} else {
 				String user = appBean.getEnrollmentNumber();
 				String pass = appBean.getStartYear().substring(0, 4);
-				String msg="Welcome to the FeeDesk portal of "+instName+ ". You can log in to view and pay your fees with the these credentials. UserId :" + user + "" + " Passsword : " + pass;
+				String msg="Hello "+ appBean.getAplFirstName() +"Welcome to the FeeDesk portal of "+instName+ ". You can log in to view and pay your fees with the these credentials. UserId :" + user + "" + " Passsword : " + pass;
 				SendSMS sms = new SendSMS();
 				sms.sendSMS(appBean.getAplMobilePri(), msg);
 

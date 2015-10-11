@@ -18,8 +18,8 @@ public class SendSMS {
 		String password = "research1";
 		String senderId = "EventD";
 		String msg = "Welcome To FeeDesk ";
-		String detail = msg + message;
-
+		//String detail = msg + message;
+		String detail = message;
 		log.info("Recepient is ::"+recepient);
 		log.info("Message is ::"+detail);
 		

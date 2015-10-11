@@ -124,9 +124,11 @@ public class OperatorDao {
 				// session.close();
 
 				// -----Code for sending email//--------------------
+				String emailContent="Welcome to the FeeDesk portal of "+bean.getOperatorName()+ ". You can log in with the below credentials. ";
+
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getOperatorEmail(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
-						.getUserName(), password, bean.getOperatorName());
+						.getUserName(), password, bean.getOperatorName(),emailContent);
 
 				log.info("password :" + password);
 

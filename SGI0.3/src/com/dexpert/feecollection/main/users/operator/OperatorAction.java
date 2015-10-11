@@ -117,9 +117,10 @@ public class OperatorAction extends ActionSupport {
 		sms.sendSMS(operatorBean.getOperatorContact(), msg);
 
 		// -----Code for sending email//--------------------
+		String emailContent="Welcome to the FeeDesk portal of "+operatorBean.getOperatorName()+ ". You can log in with the below credentials. ";
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(operatorBean.getOperatorEmail(), "Welcome To FeeDesk!", username, password,
-				operatorBean.getOperatorName());
+				operatorBean.getOperatorName(),emailContent);
 
 		request.setAttribute("msg", "Operator Added Successfully");
 		request.setAttribute("redirectLink", "Success.jsp");

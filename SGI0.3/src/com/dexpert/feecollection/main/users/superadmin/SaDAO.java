@@ -128,9 +128,10 @@ public class SaDAO {
 				sms.sendSMS(loginDetailsOfSuAdmin.getSaBean().getMobileNum(), msg);
 
 				// -----Code for sending email//--------------------
-				EmailSessionBean email = new EmailSessionBean();
+				String emailContent="Welcome to the FeeDesk portal of "+bean.getFirstName()+ ". You can log in with the below credentials. ";
+                EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getEmailId(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
-						.getUserName(), password, bean.getFirstName());
+						.getUserName(), password, bean.getFirstName(),emailContent);
 
 				log.info("password :" + password);
 

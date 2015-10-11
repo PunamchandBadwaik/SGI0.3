@@ -203,9 +203,10 @@ public class AffAction extends ActionSupport {
 				
 				
 				// -----Code for sending email//--------------------
+				String emailContent="Welcome to the FeeDesk portal of "+affInstBean.getInstName()+ ". You can log in with the below credentials. ";
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(affInstBean.getEmail(), "Welcome To FeeDesk!", username, password,
-						affInstBean.getInstName());
+						affInstBean.getInstName(),emailContent);
 
 				request.setAttribute("msg", "Institute Added Successfully");
 				request.setAttribute("redirectLink", "Success.jsp");
