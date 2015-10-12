@@ -623,7 +623,7 @@ public class AppDAO {
 							dbParameterList.add(object);
 
 						}
-						log.info("excecuting method validateLookupValues");
+					 	log.info("excecuting method validateLookupValues");
 						validateLookupValues(dbParameterList);
 						
 
