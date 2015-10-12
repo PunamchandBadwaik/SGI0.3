@@ -107,11 +107,11 @@ public class AffBean implements Serializable {
 	@JoinTable(name = "affiliated_values", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> collegeParamvalues;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@Fetch(FetchMode.JOIN)
 	private Set<AffFeePropBean> feeProps;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> dueFeesSet;
 

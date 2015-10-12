@@ -76,16 +76,16 @@ public class AppBean implements Serializable {
 	LoginBean loginBean;
 
 	// one to many relationship of applicant with Payment
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = PayBean.class)
+	@OneToMany(cascade = CascadeType.ALL,  targetEntity = PayBean.class)
 	@JoinColumn(name = "aplicantId_Fk", referencedColumnName = "enrollmentNumber")
 	@Fetch(FetchMode.JOIN)
 	private Set<PayBean> payBeansSet;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "applicant_values", joinColumns = @JoinColumn(name = "enrollmentNumber"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> applicantParamValues;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appBean")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
 	@OrderBy(value = "dueId DESC")
 	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> paymentDues;
