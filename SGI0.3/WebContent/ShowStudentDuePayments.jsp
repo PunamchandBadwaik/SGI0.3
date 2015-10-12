@@ -89,8 +89,9 @@
 ValueStack vs =TagUtils.getStack(pageContext);
 AppBean appBean =(AppBean)vs.findValue("app1");
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
-	Integer cId= appBean.getAffBeanStu().getInstId();
-
+Integer cId= appBean.getAffBeanStu().getInstId();
+Double amountAfterDiscount=(Double)vs.findValue("amountAfterDiscount");
+double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 %>
 
 
@@ -318,11 +319,6 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 											<td><%=paymentDue.getTotal_fee_amount()%></td>
-											<%-- <%double totalDue=paymentDue.getTotal_fee_amount() ;%> --%>
-											<%-- <%if(totalDue==0) {%>
-											<td><td><span style="color: green; font-weight: bold;">Fees
-													NOT Applicable</span></td> </td>
-											<%}%> --%>
 											<%double netDue=paymentDue.getNetDue(); %>
 											<% if(netDue==0&&totalDue>0){%>
 											<td><span style="color: green; font-weight: bold;">Fees
@@ -337,6 +333,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<input type="hidden" value='<%=netDue %>'
 													id="payableamount[<%=i%>]"/>
 											<%} %>
+											
 											<%-- <%} %> --%>
 											<%--  <input type="hidden" value='<%=netDue %>'
 													id="payableamount[<%=i%>]"/>
@@ -376,6 +373,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															}
 															document.getElementById("totalPaidAmount").value=parseFloat(h)+parseFloat(feeTxtId.value);
 															feeTxtId.style.display = myCheckId.checked ? "block" : "none";
+													
 														}
 														else{
 															
@@ -391,7 +389,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															else{
 																h=document.getElementById("totalPaidAmount").value;
 																//document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(feeTxtId.value);
-																														document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(d);
+																document.getElementById("totalPaidAmount").value=parseFloat(h)-parseFloat(d);
 																feeTxtId.value=0;
 															}
 															
@@ -556,6 +554,17 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 										</s:iterator> --%>
 										
 										<%}%>
+										<%if(amountAfterDiscount>0) {%>
+										<tr>
+										<td>***</td>
+										<td>Discount</td>
+										<td>-<s:property value="discountedAmount" /></td>
+										<td>-<s:property value="discountedAmount" /></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									    </tr>
+										<%}%> 
 										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
@@ -593,8 +602,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 															 var collegeId=document.getElementById("collegeId").value;
 															 alert("college Id is "+collegeId);
-															 
-														if(collegeId==3){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
+															
+															 if(collegeId==3){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
 														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?0000:29000;}
 															 
 															
@@ -611,6 +620,12 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																return false;																
 																
 															}
+													var amountAfterDiscount=<%=amountAfterDiscount%>;
+													if(amountAfterDiscount>0){
+													totalBeingPaid><%=finalAmountToBePaid%>
+													alert("please Pay Only"+<%=finalAmountToBePaid%>);
+													return false;
+													}		
 															
 															/* if(totalBeingPaid<29000){
 																alert("Please select a higher Fee and amount to pay");

@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +64,7 @@ public class AppAction extends ActionSupport {
 	List<FeeDetailsBean> feeDetailsBeanList = new ArrayList<FeeDetailsBean>();
 	FcDAO fcDAO = new FcDAO();
 	private AppBean app1;
-	private Double totalDueOFStudent, totalNetFees, paymentDone;
+	private Double totalDueOFStudent, totalNetFees, paymentDone,discountedAmount=0.0,amountAfterDiscount=0.0,finalAmountToBePaid=0.0;
 	private List<FeeDetailsBean> feeList;
 	private List<TransactionBean> transactionDetailsForReport;
 	private OperatorBean operatorBean;
@@ -413,13 +412,27 @@ public class AppAction extends ActionSupport {
 	public void getDuesOfStudent() {
 		log.info("inside getDuesOfStudent");
 		app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
-		Set<PaymentDuesBean> paymentDues = app1.getPaymentDues();
-		paymentDues = addSeqOfFees(paymentDues, app1.getAffBeanStu().getInstId());
-		app1.setPaymentDues(paymentDues);
 		feeList = aplDAO.getAllFeeDeatils();
 		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
 		totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
 		paymentDone = aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
+		String discountType=app1.getDiscountType()==null?"":app1.getDiscountType();
+		Double discountValue=app1.getDiscountValue()==null?0.0:app1.getDiscountValue();
+		if (discountValue > 0) {
+			if (discountType.contentEquals("Per")) {
+				discountedAmount = totalDueOFStudent * discountValue / 100;
+				amountAfterDiscount = totalDueOFStudent - discountedAmount;
+				finalAmountToBePaid = amountAfterDiscount - paymentDone;
+				totalDueOFStudent = totalDueOFStudent - discountedAmount;
+				
+				totalNetFees = totalNetFees - discountedAmount;
+			} else if (discountType.contentEquals("Fix")) {
+				amountAfterDiscount = totalDueOFStudent - discountValue;
+				finalAmountToBePaid = amountAfterDiscount - paymentDone;
+				totalDueOFStudent = totalDueOFStudent - discountValue;
+				totalNetFees = totalNetFees - discountValue;
+			}
+		}
 	}
 
 	public String getTransactionDetailsOfStudent() {
@@ -685,5 +698,31 @@ public class AppAction extends ActionSupport {
 	public void setLookupBeanList(List<LookupBean> lookupBeanList) {
 		this.lookupBeanList = lookupBeanList;
 	}
+
+	public Double getDiscountedAmount() {
+		return discountedAmount;
+	}
+
+	public void setDiscountedAmount(Double discountedAmount) {
+		this.discountedAmount = discountedAmount;
+	}
+
+	public Double getAmountAfterDiscount() {
+		return amountAfterDiscount;
+	}
+
+	public void setAmountAfterDiscount(Double amountAfterDiscount) {
+		this.amountAfterDiscount = amountAfterDiscount;
+	}
+
+	public Double getFinalAmountToBePaid() {
+		return finalAmountToBePaid;
+	}
+
+	public void setFinalAmountToBePaid(Double finalAmountToBePaid) {
+		this.finalAmountToBePaid = finalAmountToBePaid;
+	}
+	
+	
 
 }

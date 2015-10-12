@@ -20,6 +20,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
@@ -73,11 +75,13 @@ public class AffBean implements Serializable {
 
 	// one to many relationship with Applicants (Students)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "affBeanStu")
+	@Fetch(FetchMode.JOIN)
 	@OrderBy(value = "enrollmentNumber")
 	Set<AppBean> aplBeanSet;
 
 	// one to many relationship with College Operator (operator)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "affBean")
+	@Fetch(FetchMode.JOIN)
 	Set<OperatorBean> OptrBeanSet;
 
 	// many to many relationship with FeeDetails)
@@ -104,12 +108,15 @@ public class AffBean implements Serializable {
 	Set<FvBean> collegeParamvalues;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	private Set<AffFeePropBean> feeProps;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> dueFeesSet;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
+	@Fetch(FetchMode.JOIN)
 	private Set<CollegeCourses> collegeCourses;
 
 	public Set<CollegeCourses> getCollegeCourses() {

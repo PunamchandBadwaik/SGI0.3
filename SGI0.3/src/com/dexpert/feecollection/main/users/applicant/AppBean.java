@@ -16,6 +16,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.payment.transaction.PayBean;
@@ -29,7 +32,24 @@ public class AppBean implements Serializable {
 	@Id
 	private String enrollmentNumber;
 	private String aplFirstName, aplLstName, aplEmail, aplAddress, aplMobilePri, aplMobileSec, gender, category,
-			course, year, yearCode, grNumber, isHosteler, startYear;
+			course, year, yearCode, grNumber, isHosteler, startYear,discountType;
+	private Double discountValue;
+
+	public String getDiscountType() {
+		return discountType;
+	}
+
+	public void setDiscountType(String discountType) {
+		this.discountType = discountType;
+	}
+
+	public Double getDiscountValue() {
+		return discountValue;
+	}
+
+	public void setDiscountValue(Double discountValue) {
+		this.discountValue = discountValue;
+	}
 
 	public String getCategory() {
 		return category;
@@ -58,6 +78,7 @@ public class AppBean implements Serializable {
 	// one to many relationship of applicant with Payment
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = PayBean.class)
 	@JoinColumn(name = "aplicantId_Fk", referencedColumnName = "enrollmentNumber")
+	@Fetch(FetchMode.JOIN)
 	private Set<PayBean> payBeansSet;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -66,6 +87,7 @@ public class AppBean implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appBean")
 	@OrderBy(value = "dueId DESC")
+	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> paymentDues;
 
 	public Set<PaymentDuesBean> getPaymentDues() {
