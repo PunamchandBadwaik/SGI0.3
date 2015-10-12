@@ -35,7 +35,6 @@
 		<mapping
 			class="com.dexpert.feecollection.main.users.affiliated.AffFeePropBean" />
 		<mapping class="com.dexpert.feecollection.main.users.applicant.AppBean" />
-		<mapping class="com.dexpert.feecollection.main.users.applicant.ApplicableFeesBean" />
 		<mapping class="com.dexpert.feecollection.main.payment.transaction.PayBean" />
 		<mapping class="com.dexpert.feecollection.main.users.parent.ParBean" />
 		<mapping class="com.dexpert.feecollection.main.fee.lookup.LookupBean" />

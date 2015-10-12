@@ -8,7 +8,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -174,13 +173,13 @@ public class AppAction extends ActionSupport {
 			log.info("4");
 			request.setAttribute("msg", "Enrollment Number Already Registered");
 			affInstList = affDAO.getCollegesList(null);
-			List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(),null);
+			List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(), null);
 			log.info("Struture id" + structureIdes);
 			List<Integer> valueIdes = fcDAO.getLookupValue(structureIdes);
 			log.info("value ides got from fee config table::::::" + valueIdes);
 			List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 			log.info("look up param list::::::" + lookUpParamList);
-			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant",lookUpParamList,valueIdes);
+			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
 			affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
 			return "failure";
 		}
@@ -198,6 +197,7 @@ public class AppAction extends ActionSupport {
 
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
+			
 			return ERROR;
 		}
 
@@ -210,7 +210,7 @@ public class AppAction extends ActionSupport {
 
 		String apId = request.getParameter("applicantId");
 		appBean1 = aplDAO.viewApplicantDetail(apId);
-		
+
 		return SUCCESS;
 	}
 
@@ -236,31 +236,25 @@ public class AppAction extends ActionSupport {
 
 	// add Bulk Students
 	public String addBulkStudents() throws Exception {
-       
+
 		if (fileUploadFileName.endsWith(".xlsx")) {
-           try{
+			try {
 				String path = request.getServletContext().getRealPath("/");
 				path = path + File.separator;
 				File f = new File(path + "/SGI/");
 				f.mkdir();
-	
+
 				log.info("File Name is ::" + fileUploadFileName);
-	
-				// appBeansList =
-				// aplDAO.importExcelFileToDatabase(fileUploadFileName, fileUpload,
-				// f + File.separator);
-			//	appBeansList = aplDAO.importExcelFileToDatabase1(fileUploadFileName, fileUpload, f + File.separator);
-				appBeansList = aplDAO.generateTempTable(fileUploadFileName, fileUpload, f + File.separator);
-	
+
+				appBeansList = aplDAO.generateTempTable(fileUpload);
+
 				request.setAttribute("msg", "Student Record Uploaded Successfully");
 				return SUCCESS;
-           }
-           catch(Exception e){
-        	   e.printStackTrace();
-        	   request.setAttribute("msg", "Error in file uploading, please try again.");
-        	   return SUCCESS;
-           }
-			
+			} catch (Exception e) {
+				e.printStackTrace();
+				request.setAttribute("msg", "Error in file uploading, please try again.");
+				return SUCCESS;
+			}
 
 		}
 
@@ -274,8 +268,8 @@ public class AppAction extends ActionSupport {
 
 	}
 
-	public void updateStudentDue() {
-        
+/*	public void updateStudentDue() {
+
 		List<Integer> feeIdes = new ArrayList<Integer>();
 		String applicableFeeString = aplDAO.getApplicableFeesString(appBean1.getCourse());
 		log.info("Applicable fee string" + applicableFeeString);
@@ -293,7 +287,7 @@ public class AppAction extends ActionSupport {
 			updateDueAmountOfStudent(feeId, fee, feeName);
 		}
 
-	}
+	}*/
 
 	public void updateDueAmountOfStudent(Integer feeId, Double feeAmount, String feeName) {
 
@@ -320,42 +314,41 @@ public class AppAction extends ActionSupport {
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
+			e.printStackTrace();
 			return ERROR;
 		}
 
 	}
 
-	
-/*	College Operator getting the Student dues Detail*/
-	
-	public String  operatorGettingTheStudentDuesDetail() {
+	/* College Operator getting the Student dues Detail */
+
+	public String operatorGettingTheStudentDuesDetail() {
 
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean)
-		httpSession.getAttribute("loginUserBean");
+		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		String enroll = new String();
 		try {
-		enroll = appBean1.getEnrollmentNumber();
+			enroll = appBean1.getEnrollmentNumber();
 
-		httpSession.setAttribute("enroll", enroll);
-		appBean1 = aplDAO.getUserDetail(enroll);
+			httpSession.setAttribute("enroll", enroll);
+			appBean1 = aplDAO.getUserDetail(enroll);
 
-		/*httpSession.setAttribute("sesProfile", "Student");
-		httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
-
-		httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
-*/
-		getDuesOfStudent();
-		return SUCCESS;
-	} catch (Exception e) {
-	 request.setAttribute("msg", "Please Enter Valid UIN");
-	 return "failure";
+			/*
+			 * httpSession.setAttribute("sesProfile", "Student");
+			 * httpSession.setAttribute("dashLink",
+			 * "getTheStudentFeeDetailsFromLoginPage");
+			 * 
+			 * httpSession.setAttribute("loginUserBean",
+			 * appBean1.getLoginBean());
+			 */
+			getDuesOfStudent();
+			return SUCCESS;
+		} catch (Exception e) {
+			request.setAttribute("msg", "Please Enter Valid UIN");
+			return "failure";
+		}
 	}
-	}
 
-
-	
-	
 	public String StudentDuesDetail() {
 
 		HttpSession httpSession = request.getSession();
@@ -363,22 +356,22 @@ public class AppAction extends ActionSupport {
 		// httpSession.getAttribute("loginUserBean");
 		String enroll = new String();
 		try {
-		enroll = appBean1.getEnrollmentNumber();
+			enroll = appBean1.getEnrollmentNumber();
 
-		httpSession.setAttribute("enroll", enroll);
-		appBean1 = aplDAO.getUserDetail(enroll);
+			httpSession.setAttribute("enroll", enroll);
+			appBean1 = aplDAO.getUserDetail(enroll);
 
-		httpSession.setAttribute("sesProfile", "Student");
-		httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
+			httpSession.setAttribute("sesProfile", "Student");
+			httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
 
-		httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
+			httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
 
-		getDuesOfStudent();
-		return SUCCESS;
-	} catch (Exception e) {
-	 request.setAttribute("msg", "Please Enter Valid UIN");
-	 return "failure";
-	}
+			getDuesOfStudent();
+			return SUCCESS;
+		} catch (Exception e) {
+			request.setAttribute("msg", "Please Enter Valid UIN");
+			return "failure";
+		}
 
 		/*
 		 * } catch (java.lang.NullPointerException e) {
@@ -404,24 +397,24 @@ public class AppAction extends ActionSupport {
 		 * // return SUCCESS;
 		 */
 	}
-	public Set<PaymentDuesBean> addSeqOfFees(Set<PaymentDuesBean> paymentDues,Integer instId)
-	{
-	Set<PaymentDuesBean> payDueSetWithSeqId=new HashSet<PaymentDuesBean>() ;
-	Iterator<PaymentDuesBean> itr=paymentDues.iterator();
-	while(itr.hasNext()){
-	PaymentDuesBean payDues=itr.next();
-	Integer sequenceId=fcDAO.getSequenceOfFee(instId,payDues.getFeeId());
-	payDues.setSequenceId(sequenceId);
-	payDueSetWithSeqId.add(payDues);
-	}
-	return payDueSetWithSeqId;	
+
+	public Set<PaymentDuesBean> addSeqOfFees(Set<PaymentDuesBean> paymentDues, Integer instId) {
+		Set<PaymentDuesBean> payDueSetWithSeqId = new HashSet<PaymentDuesBean>();
+		Iterator<PaymentDuesBean> itr = paymentDues.iterator();
+		while (itr.hasNext()) {
+			PaymentDuesBean payDues = itr.next();
+			Integer sequenceId = fcDAO.getSequenceOfFee(instId, payDues.getFeeId());
+			payDues.setSequenceId(sequenceId);
+			payDueSetWithSeqId.add(payDues);
+		}
+		return payDueSetWithSeqId;
 	}
 
 	public void getDuesOfStudent() {
 		log.info("inside getDuesOfStudent");
 		app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
-		Set<PaymentDuesBean> paymentDues=app1.getPaymentDues();
-		paymentDues=addSeqOfFees(paymentDues,app1.getAffBeanStu().getInstId());
+		Set<PaymentDuesBean> paymentDues = app1.getPaymentDues();
+		paymentDues = addSeqOfFees(paymentDues, app1.getAffBeanStu().getInstId());
 		app1.setPaymentDues(paymentDues);
 		feeList = aplDAO.getAllFeeDeatils();
 		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());

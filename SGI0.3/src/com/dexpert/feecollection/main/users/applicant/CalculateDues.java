@@ -72,7 +72,7 @@ public class CalculateDues {
 			
 			if (values.containsAll(list)) {
 
-				System.out.println("Amount is ::" + searchList.get(0).getAmount());
+				//System.out.println("Amount is ::" + searchList.get(0).getAmount());
 				return searchList.get(0).getAmount();
 			} else {
 

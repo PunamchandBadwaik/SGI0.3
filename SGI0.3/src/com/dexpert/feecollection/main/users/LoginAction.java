@@ -152,20 +152,20 @@ public class LoginAction extends ActionSupport {
 
 		Iterator<LoginBean> loginIterator = loginUserList.iterator();
 		while (loginIterator.hasNext()) {
-			log.info("1");
+			//log.info("1");
 			lgbean = (LoginBean) loginIterator.next();
 
 			encryptedPwd = lgbean.getPassword();
-			log.info("2");
+			//log.info("2");
 			PasswordEncryption.decrypt(encryptedPwd);
 			decrypedText = PasswordEncryption.plainStr;
-			log.info("3");
+			//log.info("3");
 			log.info("password frm Database is ::" + decrypedText);
-			log.info("4");
+			//log.info("4");
 		}
 		try {
 			if (loginBean.getUserName().equals(loginBean.getUserName()) && loginBean.getPassword().equals(decrypedText)) {
-				log.info("valid User name and Password");
+				//log.info("valid User name and Password");
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
 				usercookie.setMaxAge(60 * 60);
 				response.addCookie(usercookie);
