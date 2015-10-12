@@ -26,11 +26,10 @@ import com.dexpert.feecollection.main.users.affiliated.AffBean;
 @Table(name = "applicant_details")
 public class AppBean implements Serializable {
 
-
 	@Id
 	private String enrollmentNumber;
 	private String aplFirstName, aplLstName, aplEmail, aplAddress, aplMobilePri, aplMobileSec, gender, category,
-			course, year, yearCode, grNumber,isHosteler,startYear;
+			course, year, yearCode, grNumber, isHosteler, startYear;
 
 	public String getCategory() {
 		return category;
@@ -57,15 +56,15 @@ public class AppBean implements Serializable {
 	LoginBean loginBean;
 
 	// one to many relationship of applicant with Payment
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = PayBean.class)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = PayBean.class)
 	@JoinColumn(name = "aplicantId_Fk", referencedColumnName = "enrollmentNumber")
 	private Set<PayBean> payBeansSet;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "applicant_values", joinColumns = @JoinColumn(name = "enrollmentNumber"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> applicantParamValues;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appBean")
 	@OrderBy(value = "dueId DESC")
 	private Set<PaymentDuesBean> paymentDues;
 
@@ -212,7 +211,5 @@ public class AppBean implements Serializable {
 	public void setStartYear(String startYear) {
 		this.startYear = startYear;
 	}
-
-	
 
 }

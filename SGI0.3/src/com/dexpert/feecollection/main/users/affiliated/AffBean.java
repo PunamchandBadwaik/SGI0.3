@@ -42,8 +42,6 @@ public class AffBean implements Serializable {
 	@Id
 	@GeneratedValue(generator = "g1")
 	private Integer instId;
-	
-	
 
 	@Column(unique = true)
 	private String instName;
@@ -72,36 +70,37 @@ public class AffBean implements Serializable {
 	@ManyToOne(targetEntity = ParBean.class)
 	@JoinColumn(name = "University_Id_Fk", referencedColumnName = "parInstId")
 	ParBean parBeanAff;
-	
+
 	// one to many relationship with Applicants (Students)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
-	@OrderBy(value="enrollmentNumber")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "affBeanStu")
+	@OrderBy(value = "enrollmentNumber")
 	Set<AppBean> aplBeanSet;
 
 	// one to many relationship with College Operator (operator)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "affBean")
 	Set<OperatorBean> OptrBeanSet;
 
 	// many to many relationship with FeeDetails)
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "affiliatedinstitute_feedetails", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "feeId"))
-	@Column(name="sequenceId")
+	@Column(name = "sequenceId")
 	@OrderBy(value = "feeId")
 	Set<FeeDetailsBean> feeSet;
 
-	/*// many to many relationship with FeeConfigs)
-		@OneToMany(cascade = CascadeType.ALL, mappedBy="structure_id")
-		Set<FcBean> configSet;*/
-	
+	/*
+	 * // many to many relationship with FeeConfigs)
+	 * 
+	 * @OneToMany(cascade = CascadeType.ALL, mappedBy="structure_id")
+	 * Set<FcBean> configSet;
+	 */
+
 	// one to one bidirectional relationship with student and college
 	// child
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
-	
 	private AppBean appBean;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "affiliated_values", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "value_id"))
-	
 	Set<FvBean> collegeParamvalues;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -109,8 +108,8 @@ public class AffBean implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<PaymentDuesBean> dueFeesSet;
-	
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="affBean")
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
 	private Set<CollegeCourses> collegeCourses;
 
 	public Set<CollegeCourses> getCollegeCourses() {
@@ -299,9 +298,5 @@ public class AffBean implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	
-	
-	
 
 }
