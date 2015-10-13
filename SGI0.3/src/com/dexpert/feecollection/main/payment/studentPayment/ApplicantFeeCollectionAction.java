@@ -324,7 +324,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			clientName="LPS";	
 			}
 
-			String url = SabPaisaURL + "Name=" + name + "&amt=" + feeTot + "&txnId=" + txnId + "&RollNo="
+			String url = SabPaisaURL + "?Name=" + name + "&amt=" + feeTot + "&txnId=" + txnId + "&RollNo="
 					+ "Bulk Payment" + "&client=" +clientName +"&ru=" + returnUrl + "&Contact=" + oprBean.getOperatorContact()
 					+ "&failureURL=" + clientFailureUrl + "&Email=" + oprBean.getOperatorEmail() + "&Add="
 					+ oprBean.getOperatorAddress();
