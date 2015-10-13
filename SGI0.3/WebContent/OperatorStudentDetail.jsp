@@ -642,8 +642,8 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 															var collegeId=document.getElementById("collegeId").value;
 															
 															 
-															if(collegeId==3){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
-															}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?0000:29000;}
+															if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
+															}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
 															
 																 
 															/*  var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000; */
