@@ -253,9 +253,9 @@
 
 								<div class="col-md-12">
 								
-								 <span style="font-size: large;font-weight: bold;margin-left:10px;" >Institute Name :<%=loginUser.getOperatorBean().getAffBean().getInstName()%>
+								 <%-- <span style="font-size: large;font-weight: bold;margin-left:10px;" >Institute Name :<%=loginUser.getOperatorBean().getAffBean().getInstName()%>
 								</span>
-								
+								 --%>
 									<button class="btn btn-sm btn-info"
 										style="float: right; margin-right: 10px;"
 										onclick='window.open("AddStudentColleges", "Studetn Form", "width=500,height=600")'>
