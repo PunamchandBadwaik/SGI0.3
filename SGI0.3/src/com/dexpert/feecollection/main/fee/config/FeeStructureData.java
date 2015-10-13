@@ -1,15 +1,18 @@
 package com.dexpert.feecollection.main.fee.config;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
 @Table(name = "affiliated_institute_structure_mapping")
-public class FeeStructureData {
+public class FeeStructureData implements Serializable {
 
 	
 	@GenericGenerator(name = "g1", strategy = "increment")

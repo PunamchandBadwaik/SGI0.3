@@ -1,5 +1,6 @@
 package com.dexpert.feecollection.main.communication.email;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Properties;
 
@@ -19,7 +20,7 @@ import org.apache.log4j.Logger;
 
 import com.dexpert.feecollection.main.users.affiliated.AffAction;
 
-public class EmailSessionBean {
+public class EmailSessionBean implements Serializable {
 
 	private int port = 587;
 	private String host = "smtp.gmail.com";

@@ -29,7 +29,7 @@ public class GenerateEnrollmentNumber {
 
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpSession httpSession = request.getSession();
-	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+
 	/*
 	 * public static void main(String[] args) { // GenerateEnrollmentNumber gn =
 	 * new GenerateEnrollmentNumber(); // Integer feeValueID =
@@ -137,13 +137,15 @@ public class GenerateEnrollmentNumber {
 	}
 
 	public String generateEnrollmentNum(AppBean appBean) {
-		String startYear = appBean.getStartYear();
-		AffBean affBean = lgBean.getAffBean();
-		String collegeId = affBean.getInstId().toString().length() == 1 ? "0" + affBean.getInstId().toString()
-				: affBean.getInstId().toString();
 
-		String universityId = affBean.getParBeanAff().getParInstId().toString().length() == 1 ? "0"
-				+ affBean.getParBeanAff().getParInstId().toString() : affBean.getParBeanAff().getParInstId().toString();
+		Integer instId = (Integer) httpSession.getAttribute("instId");
+		Integer parInstId = (Integer) httpSession.getAttribute("parInstId");
+
+		String startYear = appBean.getStartYear();
+		// AffBean affBean = lgBean.getAffBean();
+		String collegeId = instId.toString().length() == 1 ? "0" + instId.toString() : instId.toString();
+
+		String universityId = parInstId.toString().length() == 1 ? "0" + parInstId.toString() : parInstId.toString();
 
 		// Integer feevalueId = fvDAO.getCourseId(course);
 

@@ -12,6 +12,7 @@ import javax.crypto.IllegalBlockSizeException;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -40,10 +41,16 @@ public class LoginDAO {
 		Session session = factory.openSession();
 		try {
 
-			Criteria criteria = session.createCriteria(LoginBean.class);
-			criteria.add(Restrictions.eq("userName", loginBean.getUserName()));
+			String sql = "select * from sgi.login_master where userName=:user";
+			SQLQuery sqlQuery = session.createSQLQuery(sql);
+			sqlQuery.setParameter("user", loginBean.getUserName());
+			sqlQuery.addEntity(LoginBean.class);
 
-			List<LoginBean> bean = criteria.list();
+			// Criteria criteria = session.createCriteria(LoginBean.class);
+			// criteria.add(Restrictions.eq("userName",
+			// loginBean.getUserName()));
+
+			List<LoginBean> bean = sqlQuery.list();
 
 			return bean;
 		} finally {
@@ -128,31 +135,28 @@ public class LoginDAO {
 		}
 	}
 
-	public static void updateChangePwdDetails(LoginBean creds, String newPwd) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
-		
-		
+	public static void updateChangePwdDetails(LoginBean creds, String newPwd) throws InvalidKeyException,
+			NoSuchAlgorithmException, InvalidKeySpecException, InvalidAlgorithmParameterException,
+			UnsupportedEncodingException, IllegalBlockSizeException, BadPaddingException {
+
 		Session session = factory.openSession();
-		
-		String password =newPwd;
+
+		String password = newPwd;
 		log.info("Password  is changed:" + password);
 
 		PasswordEncryption.encrypt(password);
 
 		String userEncryptedPwd = PasswordEncryption.encStr;
 
-		
-		
-		LoginBean bean=(LoginBean)session.get(LoginBean.class, creds.getLoginId());
-		
-		bean.setPassword(userEncryptedPwd);		
-		
-	
-		Transaction tx=session.beginTransaction();
+		LoginBean bean = (LoginBean) session.get(LoginBean.class, creds.getLoginId());
+
+		bean.setPassword(userEncryptedPwd);
+
+		Transaction tx = session.beginTransaction();
 		session.merge(bean);
 		tx.commit();
 		session.close();
-		
-	}
 
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.dexpert.feecollection.challan;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -13,8 +14,12 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "challan_detail")
-public class ChallanBean {
+public class ChallanBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	private String challanNumber;
 	String rollNo, name, branch, semester, phone, txnId;

@@ -1,5 +1,6 @@
 package com.dexpert.feecollection.main.users.affiliated;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 
 @Entity
 @Table(name = "institute_fee_properties")
-public class AffFeePropBean {
+public class AffFeePropBean implements Serializable {
 
 	@GenericGenerator(name = "g1", strategy = "increment")
 	@Id

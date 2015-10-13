@@ -73,7 +73,7 @@ public class AppDAO {
 	FvDAO fvDAO = new FvDAO();
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpSession httpSession = request.getSession();
-
+	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 	// String instName = lgBean.getAffBean().getInstName();
 	// Integer instId = lgBean.getAffBean().getInstId();
 
@@ -87,15 +87,15 @@ public class AppDAO {
 
 	public FvBean getfeeValue(Integer feeValueId) {
 		Session session = factory.openSession();
-		//try {
+		try {
 
 			FvBean bean = (FvBean) session.get(FvBean.class, feeValueId);
-			session.close();
-			return bean;
-		//} finally {
 
-			//session.close();
-		//}
+			return bean;
+		} finally {
+
+			session.close();
+		}
 	}
 
 	/* To insert or update applicant detail from UI form */
@@ -155,17 +155,18 @@ public class AppDAO {
 
 		affBean.setAppBean(appBean);
 		appBean.setAffBeanStu(affBean);
-		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		// LoginBean lgBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
 		// one to many Relationship
 		affBean.getAplBeanSet().add(appBean);
-		///try {
+		try {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
 			String instName = lgBean.getAffBean().getInstName();
 			// for text msg
 
-			//try {
+			try {
 
 				if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
 						|| appBean.getAplMobilePri().equals(null)) {
@@ -181,12 +182,12 @@ public class AppDAO {
 					sms.sendSMS(appBean.getAplMobilePri(), msg);
 
 				}
-		//	} catch (java.lang.NullPointerException e) {
+			} catch (java.lang.NullPointerException e) {
 
-			//}
+			}
 
 			// for email
-			//try {
+			try {
 
 				if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
 						|| appBean.getAplEmail().equals(null)) {
@@ -202,18 +203,18 @@ public class AppDAO {
 							appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()), emailContent);
 
 				}
-			//} catch (java.lang.NullPointerException e) {
-				// e.printStackTrace();
-			//}
+			} catch (java.lang.NullPointerException e) {
+				e.printStackTrace();
+			}
 
 			// to get detail about Dues
 			getDuesDetail(appBean);
 
-		//} finally {
+		} finally {
 			session.flush();
 			session.clear();
 			session.close();
-		//}
+		}
 		return appBean;
 
 	}
@@ -252,7 +253,7 @@ public class AppDAO {
 
 	public void addToDuesTable(AppBean appBean, FcBean fcBean, FeeDetailsBean detailsBean) {
 		Session session = factory.openSession();
-		//try {
+		try {
 			Date dd = new Date();
 
 			PaymentDuesBean duesBean = new PaymentDuesBean();
@@ -269,120 +270,121 @@ public class AppDAO {
 
 			tx.commit();
 
-		//} finally {
+		} finally {
 			session.flush();
 			session.clear();
 			session.close();
-
-		//}
+		}
 
 	}
 
 	public List<AppBean> getAllStudentList() {
 		Session session = factory.openSession();
-		//try {
+		try {
 			Criteria criteria = session.createCriteria(AppBean.class);
 			List<AppBean> list = criteria.list();
-			
-		//} finally {
-			session.close();
-		//}
 			return list;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public AppBean viewApplicantDetail(String appId) {
 		Session session = factory.openSession();
-	//	try {
+		try {
 
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("enrollmentNumber", appId));
 			AppBean appBean = (AppBean) criteria.list().iterator().next();
-			
-
-		//} finally {
+			return appBean;
+		} finally {
 			session.close();
 			// TODO: handle exception
-		//}
-			return appBean;
+		}
+
 	}
 
 	public AffBean getStudentDetail(LoginBean bean) {
 		Session session = factory.openSession();
-		//try {
-
+		try {
 			Integer id = bean.getAffBean().getInstId();
-			Criteria criteria = session.createCriteria(AffBean.class);
 
-			criteria.add(Restrictions.eq("instId", id));
+			String sql = "select * from sgi.affiliated_institute_details where instId=:instId";
 
-			AffBean affBean = (AffBean) criteria.list().iterator().next();
+			SQLQuery sqlQuery = session.createSQLQuery(sql);
 
-		
+			sqlQuery.setParameter("instId", id);
+			sqlQuery.addEntity(AffBean.class);
+			AffBean affBean = (AffBean) sqlQuery.list().iterator().next();
 
-		//} finally {
+			// Criteria criteria = session.createCriteria(AffBean.class);
+
+			// criteria.add(Restrictions.eq("instId", id));
+
+			return affBean;
+		} finally {
 			session.close();
 			// TODO: handle exception
-		//}
-			return affBean;
+		}
+
 	}
 
 	public List<String> existingEnrollNum(AppBean appBean) {
 		Session session = factory.openSession();
-		//try {
+		try {
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.setProjection(Projections.property("enrollmentNumber"));
 			criteria.add(Restrictions.eq("enrollmentNumber", appBean.getEnrollmentNumber()));
 			List<String> list = criteria.list();
-			
-
-		//} finally {
+			return list;
+		} finally {
 			session.close();
 			// TODO: handle exception
-		//}
-			return list;
+		}
+
 	}
 
 	public List<AppBean> getStudentDetailByEnrollMentNumber(String enrollmentNumber) {
 		Session session = factory.openSession();
 
-		//try {
+		try {
 
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("enrollmentNumber", enrollmentNumber));
 
 			List<AppBean> appBeanList = criteria.list();
-			
-
-		//} finally {
+			return appBeanList;
+		} finally {
 			session.close();
 			// TODO: handle exception
-		//}
-			return appBeanList;
+		}
+
 	}
 
 	public AppBean getUserDetail(String EnrId) {
 
 		log.info("Student Enrollment Number ::" + EnrId);
 		Session session = factory.openSession();
-
-	//	try {
+		AppBean appBean = new AppBean();
+		try {
 
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("enrollmentNumber", EnrId));
 
-			AppBean appBean = new AppBean();
-			//try {
+			try {
 				appBean = (AppBean) criteria.list().iterator().next();
-			//} catch (java.util.NoSuchElementException e) {
-//
-			//}
-			
 
-		//} finally {
+			} catch (java.util.NoSuchElementException e) {
+
+			}
+
+		} finally {
 			session.close();
 			// TODO: handle exception
-		//}
-			return appBean;
+		}
+		return appBean;
+
 	}
 
 	public AppBean AddListRecordToAppBean(ArrayList<String> list) {
@@ -408,8 +410,7 @@ public class AppDAO {
 		element = element.replaceAll("\\u00A0", "");
 		// element = element.replaceAll("(^\\h*)|(\\h*$)", "");
 		element = element.trim();
-		//try {
-			log.info("cell Value ::" + element + "-" + lookupId);
+		try {
 			Criteria criteria = session.createCriteria(FvBean.class);
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
@@ -428,14 +429,14 @@ public class AppDAO {
 
 				return bean;
 			}
-		//} finally {
+		} finally {
 			session.close();
-		//}
+		}
 		return null;
 
 	}
 
-	public List<AppBean> generateTempTable(File fileUpload) throws Exception {
+	public void generateTempTable(File fileUpload) throws Exception {
 
 		File excelFile = fileUpload;
 
@@ -446,7 +447,7 @@ public class AppDAO {
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 		Session session = factory.openSession();
 
-		//try {
+		try {
 			Iterator<Row> rows = hssfSheet.rowIterator();
 			XSSFCell cell;
 			ArrayList<String> columnList = new ArrayList<String>();
@@ -501,11 +502,10 @@ public class AppDAO {
 
 			importExcelFileToDatabase2(excelFile, useList);
 
-		//} catch (Exception e) {
-			//e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 
-	//	}
-		return null;
+		}
 
 	}
 
@@ -516,7 +516,7 @@ public class AppDAO {
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(fileInputStream);
 		XSSFSheet hssfSheet = xssfWorkbook.getSheetAt(0);
 
-		//try {
+		try {
 
 			Iterator<Row> rows = hssfSheet.rowIterator();
 			String stringVal;
@@ -599,11 +599,11 @@ public class AppDAO {
 			boolean areMoreRecords = true;
 			int g = 0;
 
-			//try {
+			try {
 
 				do {
 
-				//	try {
+					try {
 
 						stmt = (Statement) conn.createStatement();
 
@@ -649,16 +649,16 @@ public class AppDAO {
 							areMoreRecords = false;
 						}
 
-					//} catch (Exception e) {
+					} catch (Exception e) {
 
-						//e.printStackTrace();
-					//}
+						e.printStackTrace();
+					}
 				} while (areMoreRecords);
-			//} catch (Exception e) {
-				//e.printStackTrace();
-			//}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-			//finally {
+			finally {
 				Statement stmt2 = (Statement) conn.createStatement();
 
 				String dropTempTableSQL = "DROP table " + tempTableName;
@@ -667,13 +667,13 @@ public class AppDAO {
 				// log.info("dropped temp table" + tempTableName);
 				stmt2.close();
 				conn.close();
-			//}
+			}
 
-		//} catch (Exception e) {
-		//	e.printStackTrace();
-		//} finally {
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 
-		//}
+		}
 
 		return null;
 
@@ -686,7 +686,7 @@ public class AppDAO {
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
 		List<Integer> valueList = fcDAO.getLookupValue(str_ids);
 		List<Integer> paramList = fvDAO.getListOfValueBeans(valueList);
-		//try {
+		try {
 
 			List<FvBean> fvBeansList = new ArrayList<FvBean>();
 
@@ -741,9 +741,9 @@ public class AppDAO {
 			appBean.setApplicantParamValues(paramSet);
 			addBulkData(appBean);
 
-		//} catch (Exception e) {
-		//	e.printStackTrace();
-		//}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -753,7 +753,7 @@ public class AppDAO {
 	public void addBulkData(AppBean appBean) throws InvalidKeyException, NoSuchAlgorithmException,
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
-		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+
 		Integer instId = lgBean.getAffBean().getInstId();
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
@@ -804,7 +804,7 @@ public class AppDAO {
 		// to get Dues of Applicant
 		getDuesDetail(appBean);
 
-		//try {
+		try {
 
 			if (appBean.getAplMobilePri().equals("") || appBean.getAplMobilePri().equals("null")
 					|| appBean.getAplMobilePri().equals(null)) {
@@ -820,12 +820,12 @@ public class AppDAO {
 				sms.sendSMS(appBean.getAplMobilePri(), msg);
 
 			}
-		//} catch (java.lang.NullPointerException e) {
-			//e.printStackTrace();
+		} catch (java.lang.NullPointerException e) {
+			e.printStackTrace();
 
-		//}
+		}
 
-		//try {
+		try {
 
 			if (appBean.getAplEmail().equals("") || appBean.getAplEmail().equals("null")
 					|| appBean.getAplEmail().equals(null)) {
@@ -840,9 +840,9 @@ public class AppDAO {
 						appBean.getAplFirstName().concat(" ").concat(appBean.getAplLstName()), emailContent);
 
 			}
-		//} catch (java.lang.NullPointerException e) {
-			//e.printStackTrace();
-		//}
+		} catch (java.lang.NullPointerException e) {
+			e.printStackTrace();
+		}
 		session.flush();
 		session.clear();
 		session.close();

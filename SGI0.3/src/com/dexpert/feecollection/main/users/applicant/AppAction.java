@@ -64,7 +64,8 @@ public class AppAction extends ActionSupport {
 	List<FeeDetailsBean> feeDetailsBeanList = new ArrayList<FeeDetailsBean>();
 	FcDAO fcDAO = new FcDAO();
 	private AppBean app1;
-	private Double totalDueOFStudent, totalNetFees, paymentDone,discountedAmount=0.0,amountAfterDiscount=0.0,finalAmountToBePaid=0.0;
+	private Double totalDueOFStudent, totalNetFees, paymentDone, discountedAmount = 0.0, amountAfterDiscount = 0.0,
+			finalAmountToBePaid = 0.0;
 	private List<FeeDetailsBean> feeList;
 	private List<TransactionBean> transactionDetailsForReport;
 	private OperatorBean operatorBean;
@@ -196,7 +197,7 @@ public class AppAction extends ActionSupport {
 
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
-			
+
 			return ERROR;
 		}
 
@@ -245,7 +246,7 @@ public class AppAction extends ActionSupport {
 
 				log.info("File Name is ::" + fileUploadFileName);
 
-				appBeansList = aplDAO.generateTempTable(fileUpload);
+				aplDAO.generateTempTable(fileUpload);
 
 				request.setAttribute("msg", "Student Record Uploaded Successfully");
 				return SUCCESS;
@@ -267,26 +268,24 @@ public class AppAction extends ActionSupport {
 
 	}
 
-/*	public void updateStudentDue() {
-
-		List<Integer> feeIdes = new ArrayList<Integer>();
-		String applicableFeeString = aplDAO.getApplicableFeesString(appBean1.getCourse());
-		log.info("Applicable fee string" + applicableFeeString);
-		String applicableFeeIdArray[] = applicableFeeString.split("~");
-		for (String string : applicableFeeIdArray) {
-			feeIdes.add(Integer.parseInt(string));
-		}
-		Iterator<Integer> itr = feeIdes.iterator();
-		while (itr.hasNext()) {
-			Integer feeId = itr.next();
-			String feeName = fcDAO.getFeeName(feeId);
-			Integer categoryId = fvDAO.findFeeValueId(appBean1.getCategory(), feeId);
-			Integer courseId = fvDAO.findFeeValueId(appBean1.getCourse(), feeId);
-			Double fee = fcDAO.calculateFeeStudent(categoryId, courseId, null, feeId);
-			updateDueAmountOfStudent(feeId, fee, feeName);
-		}
-
-	}*/
+	/*
+	 * public void updateStudentDue() {
+	 * 
+	 * List<Integer> feeIdes = new ArrayList<Integer>(); String
+	 * applicableFeeString =
+	 * aplDAO.getApplicableFeesString(appBean1.getCourse());
+	 * log.info("Applicable fee string" + applicableFeeString); String
+	 * applicableFeeIdArray[] = applicableFeeString.split("~"); for (String
+	 * string : applicableFeeIdArray) { feeIdes.add(Integer.parseInt(string)); }
+	 * Iterator<Integer> itr = feeIdes.iterator(); while (itr.hasNext()) {
+	 * Integer feeId = itr.next(); String feeName = fcDAO.getFeeName(feeId);
+	 * Integer categoryId = fvDAO.findFeeValueId(appBean1.getCategory(), feeId);
+	 * Integer courseId = fvDAO.findFeeValueId(appBean1.getCourse(), feeId);
+	 * Double fee = fcDAO.calculateFeeStudent(categoryId, courseId, null,
+	 * feeId); updateDueAmountOfStudent(feeId, fee, feeName); }
+	 * 
+	 * }
+	 */
 
 	public void updateDueAmountOfStudent(Integer feeId, Double feeAmount, String feeName) {
 
@@ -416,15 +415,15 @@ public class AppAction extends ActionSupport {
 		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
 		totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
 		paymentDone = aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
-		String discountType=app1.getDiscountType()==null?"":app1.getDiscountType();
-		Double discountValue=app1.getDiscountValue()==null?0.0:app1.getDiscountValue();
+		String discountType = app1.getDiscountType() == null ? "" : app1.getDiscountType();
+		Double discountValue = app1.getDiscountValue() == null ? 0.0 : app1.getDiscountValue();
 		if (discountValue > 0) {
 			if (discountType.contentEquals("Per")) {
 				discountedAmount = totalDueOFStudent * discountValue / 100;
 				amountAfterDiscount = totalDueOFStudent - discountedAmount;
 				finalAmountToBePaid = amountAfterDiscount - paymentDone;
 				totalDueOFStudent = totalDueOFStudent - discountedAmount;
-				
+
 				totalNetFees = totalNetFees - discountedAmount;
 			} else if (discountType.contentEquals("Fix")) {
 				amountAfterDiscount = totalDueOFStudent - discountValue;
@@ -722,7 +721,5 @@ public class AppAction extends ActionSupport {
 	public void setFinalAmountToBePaid(Double finalAmountToBePaid) {
 		this.finalAmountToBePaid = finalAmountToBePaid;
 	}
-	
-	
 
 }

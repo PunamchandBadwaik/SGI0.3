@@ -1,6 +1,8 @@
 package com.dexpert.feecollection.main.fee;
 
-public class CartDataBean {
+import java.io.Serializable;
+
+public class CartDataBean implements Serializable {
 
 	private Integer id;
 	private String name;
