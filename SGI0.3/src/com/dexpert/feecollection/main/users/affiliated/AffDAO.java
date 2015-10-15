@@ -76,8 +76,6 @@ public class AffDAO {
 
 	// DAO Methods Here
 
-
-
 	// saveOrUpdate()
 	@SuppressWarnings("resource")
 	public AffBean saveOrUpdate(AffBean affInstBean, String path) throws InvalidKeyException, NoSuchAlgorithmException,
@@ -119,7 +117,7 @@ public class AffDAO {
 
 			}
 			session.beginTransaction();
-			
+
 			session.saveOrUpdate(affInstBean);
 
 			session.getTransaction().commit();
@@ -197,18 +195,32 @@ public class AffDAO {
 	}
 
 	// get direct child i.e. college list
-	public List<AffBean> getCollegesList(Integer parentInsId) {
-
+	public List<AffBean> getCollegesList() {
+		log.info("1");
 		Session session = factory.openSession();
+		List<AffBean> affBeansList = new ArrayList<AffBean>();
 
+		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		Criteria criteria = session.createCriteria(AffBean.class);
-		if (parentInsId != null) {
-			criteria.add(Restrictions.eq("parBeanAff.parInstId", parentInsId));
-		}
-		criteria.addOrder(Order.asc("instName"));
+		criteria.add(Restrictions.eq("parBeanAff.parInstId", loginBean.getParBean().getParInstId()));
+
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		List<AffBean> affBeansList = criteria.list();
-		session.close();
+
+		affBeansList = criteria.list();
+
+		/*
+		 * HttpSession httpSession = request.getSession(); String profile =
+		 * (String) httpSession.getAttribute("sesProfile"); Criteria criteria =
+		 * session.createCriteria(AffBean.class); Integer parInstId = null;
+		 * List<AffBean> affBeansList=new ArrayList<AffBean>(); log.info("2");
+		 * if (profile.equals("Parent")) { log.info("3");
+		 * criteria.add(Restrictions.eq("parBeanAff.parInstId", parInstId)); }
+		 * log.info("4"); //criteria.addOrder(Order.asc("instName"));
+		 * log.info("5");
+		 * criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		 * log.info("6"); affBeansList = criteria.list(); log.info("7");
+		 * session.close();
+		 */
 		return affBeansList;
 	}
 
@@ -514,10 +526,11 @@ public class AffDAO {
 
 			parDAO.saveOrUpdate(parBean1, null);
 			// ----------------------------
-			String emailContent="Welcome to the FeeDesk portal of "+affBean.getInstName()+ ". You can log in with the below credentials. ";
+			String emailContent = "Welcome to the FeeDesk portal of " + affBean.getInstName()
+					+ ". You can log in with the below credentials. ";
 			EmailSessionBean email = new EmailSessionBean();
 			email.sendEmail(affBean.getEmail(), "Welcome To Fee Collection Portal!", username, password,
-					affBean.getInstName(),emailContent);
+					affBean.getInstName(), emailContent);
 			Session session = factory.openSession();
 			Transaction tx = session.beginTransaction();
 			session.save(affBean);
@@ -568,10 +581,11 @@ public class AffDAO {
 				// session.close();
 
 				// -----Code for sending email//--------------------
-				String emailContent="Welcome to the FeeDesk portal of "+bean.getInstName()+ ". You can log in with the below credentials. ";
+				String emailContent = "Welcome to the FeeDesk portal of " + bean.getInstName()
+						+ ". You can log in with the below credentials. ";
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getEmail(), "Welcome To Fee Collection Portal!",
-						bean.getLoginBean().getUserName(), password, bean.getInstName(),emailContent);
+						bean.getLoginBean().getUserName(), password, bean.getInstName(), emailContent);
 
 				log.info("password :" + password);
 
@@ -710,7 +724,8 @@ public class AffDAO {
 		return affBeans;
 
 	}
-    // lagacy method 
+
+	// lagacy method
 	public List<String> getListOfCourses(Integer collegeId, List<Integer> listOfCollegeId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AppBean.class);
@@ -724,20 +739,20 @@ public class AffDAO {
 		session.clear();
 		return ListOfCourse;
 	}
-	//new method for getting cources of the 
-	public List<String> getCoursesOFCollege(Integer instId,List<Integer> instIdes)
-	{
-	Session session=factory.openSession();	
-	Criteria criteria=session.createCriteria(CollegeCourses.class);
-	if(instId!=null){
-	criteria.add(Restrictions.eq("affBean.instId",instId));
-	}else if(instIdes!=null&&instIdes.size()>0) {
-	criteria.add(Restrictions.in("affBean.instId",instIdes));	
-	}
-	criteria.setProjection(Projections.property("courseName"));
-	List<String> listOfCourses=criteria.list();
-	session.close();
-	return listOfCourses;
+
+	// new method for getting cources of the
+	public List<String> getCoursesOFCollege(Integer instId, List<Integer> instIdes) {
+		Session session = factory.openSession();
+		Criteria criteria = session.createCriteria(CollegeCourses.class);
+		if (instId != null) {
+			criteria.add(Restrictions.eq("affBean.instId", instId));
+		} else if (instIdes != null && instIdes.size() > 0) {
+			criteria.add(Restrictions.in("affBean.instId", instIdes));
+		}
+		criteria.setProjection(Projections.property("courseName"));
+		List<String> listOfCourses = criteria.list();
+		session.close();
+		return listOfCourses;
 	}
 
 	public List<Object[]> findDueOfFees(String feeName, List<String> enrollmentNumber) {
@@ -894,8 +909,7 @@ public class AffDAO {
 		log.info("Total amount is" + duesArray.iterator().next()[1]);
 		return duesArray;
 	}
-	
-	
+
 	public void saveCollegeCourses(CollegeCourses courses, Integer instId) {
 		AffBean affBean = new AffBean();
 		affBean.setInstId(instId);
@@ -911,21 +925,22 @@ public class AffDAO {
 		boolean courseNameAlreadySaved = false;
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(CollegeCourses.class);
-		criteria.add(Restrictions.eq("courseName",courseName)).add(Restrictions.eq("affBean.instId", instId));
+		criteria.add(Restrictions.eq("courseName", courseName)).add(Restrictions.eq("affBean.instId", instId));
 		List<CollegeCourses> collegeCourses = criteria.list();
 		session.close();
 		courseNameAlreadySaved = collegeCourses.size() > 0 ? true : courseNameAlreadySaved;
 		return courseNameAlreadySaved;
 	}
-	public List<CollegeCourses> getAllCourseOfInst (Integer instId) throws NullPointerException {
+
+	public List<CollegeCourses> getAllCourseOfInst(Integer instId) throws NullPointerException {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(CollegeCourses.class);
 		criteria.add(Restrictions.eq("affBean.instId", instId)).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<CollegeCourses> collegeCourses = criteria.list();
-		if(collegeCourses.size()<1) throw new NullPointerException();
+		if (collegeCourses.size() < 1)
+			throw new NullPointerException();
 		session.close();
 		return collegeCourses;
 	}
-	
 
 }

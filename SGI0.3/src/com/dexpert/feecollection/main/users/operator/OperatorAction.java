@@ -134,7 +134,7 @@ public class OperatorAction extends ActionSupport {
 	public String getListOfCollegeOperators() {
 		HttpSession httpSession = request.getSession();
 		loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		listAffBean = affDAO.getCollegesList(null);
+		listAffBean = affDAO.getCollegesList();
 		try {
 			Integer instId = loginBean.getAffBean().getInstId();
 			listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator(instId);

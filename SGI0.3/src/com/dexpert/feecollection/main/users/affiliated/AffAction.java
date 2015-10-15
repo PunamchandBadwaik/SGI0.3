@@ -255,11 +255,11 @@ public class AffAction extends ActionSupport {
 	public String getAllClgList() {
 		HttpSession httpSession = request.getSession();
 		
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		Integer parentId=loginBean.getProfile().contentEquals("Parent")?loginBean.getParBean().getParInstId():null;
+	//	LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+	//	Integer parentId=loginBean.getProfile().contentEquals("Parent")?loginBean.getParBean().getParInstId():null;
 		
 		
-		affInstList = affDao.getCollegesList(parentId);
+		affInstList = affDao.getCollegesList();
 		return SUCCESS;
 	}
 
