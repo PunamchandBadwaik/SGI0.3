@@ -30,13 +30,14 @@ public class RetrieveUserSessionAction extends ActionSupport {
 		try {
 			HttpSession httpSession = (HttpSession) request.getServletContext().getAttribute(txnId);
 			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-			
+
 			String dueStr = (String) httpSession.getAttribute("dueStr");
 			HashMap hm = (HashMap) httpSession.getAttribute("hmap");
 			String studentEnrollmentNo = (String) hm.get("enrollId");
+			log.info("Enrollment Number  ::" + studentEnrollmentNo);
 			String sgiTxnId = hm.get("txnID").toString();
 
-			if (RPS.equals("Ok")||RPS.equals("0"))
+			if (RPS.equals("Ok") || RPS.equals("0"))
 
 			{
 
@@ -44,12 +45,10 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 					dao.updateTransactionStatus(sgiTxnId, "Pending", payMode);
 
+				} else {
+					log.info("else Loop for  payment other than cash and cheque");
+					dao.updateTransTable(sgiTxnId, RPS, dueStr, studentEnrollmentNo, payMode);
 				}
-
-				// dao.updateTransTable(sgiTxnId, RPS, dueStr,
-				// studentEnrollmentNo,
-				// payMode);
-
 				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
 
 					return "opHome";
@@ -58,6 +57,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 				}
 			}
 
+			// else for cancel
 			else {
 
 				// dao.updateTransTable(sgiTxnId, RPS, "", studentEnrollmentNo,

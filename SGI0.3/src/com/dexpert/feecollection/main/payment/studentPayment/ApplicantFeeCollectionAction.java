@@ -29,16 +29,17 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	 * 
 	 */
 
-	 //public String SabPaisaURL = "https://payonline.sabpaisa.in";
-	
-	/*public String SabPaisaURL = "http://localhost:2015/SabPaisa/"; 
-	 public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp"; 
-	  String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
-*/	
-	public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/";
-	public String returnUrl = "http://49.50.72.228:8080/FD0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://49.50.72.228:8080/FD0.3/Login.jsp";
+	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
+	public String SabPaisaURL = "http://localhost:8080/SabPaisa/";
+	public String returnUrl = "http://192.168.1.228:8082/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://192.168.1.228:8082/SGI0.3/Login.jsp";
+
+	/*
+	 * public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; public
+	 * String returnUrl = "http://49.50.72.228:8080/FD0.3/ReturnPage.jsp";
+	 * String clientFailureUrl = "http://49.50.72.228:8080/FD0.3/Login.jsp";
+	 */
 	private static final long serialVersionUID = 1L;
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpServletResponse response = ServletActionContext.getResponse();
@@ -125,7 +126,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			/* String user = request.getParameter("feeName"); */
 			Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
 			String dueString = request.getParameter("dueString").trim();
-			String allowPayCode=request.getParameter("allowToPayFee").trim();
+			String allowPayCode = request.getParameter("allowToPayFee").trim();
 
 			// insert details into transaction bean
 			TransactionBean tran = new TransactionBean();
@@ -153,16 +154,16 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			httpSession.setAttribute("dueStr", dueString);
 			httpSession.setAttribute("hmap", hashMap);
 			httpSession.getServletContext().setAttribute(txnId, httpSession);
-			String clientName="";
-			int instId=studentDetails.getAffBeanStu().getInstId();
-			if(instId==1){
-			clientName="SGI";	
-			}else if(instId==2){
-			clientName="LPS";	
+			String clientName = "";
+			int instId = studentDetails.getAffBeanStu().getInstId();
+			if (instId == 1) {
+				clientName = "SGI";
+			} else if (instId == 2) {
+				clientName = "LPS";
 			}
 
 			String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo="
-					+ enrollmentNumber + "&client="+clientName+"&ru=" + returnUrl + "&Contact="
+					+ enrollmentNumber + "&client=" + clientName + "&ru=" + returnUrl + "&Contact="
 					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl + "&Email="
 					+ studentDetails.getAplEmail() + "&Add=" + studentDetails.getAplAddress();
 
@@ -174,7 +175,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		}
 
 	}
-	
+
 	public String quickPayStudentPayment() throws IOException {
 		HttpSession httpSession = request.getSession();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -189,7 +190,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			/* String user = request.getParameter("feeName"); */
 			Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
 			String dueString = request.getParameter("dueString").trim();
-			//String allowPayCode=request.getParameter("allowToPayFee").trim();
+			// String allowPayCode=request.getParameter("allowToPayFee").trim();
 
 			// insert details into transaction bean
 			TransactionBean tran = new TransactionBean();
@@ -205,7 +206,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			tran.setPayeeAmount(fee);
 			tran.setStatus("Pending");
 			tran.setBulkPay(0);
-			//tran.setAllowPayCode(allowPayCode);
+			// tran.setAllowPayCode(allowPayCode);
 			//
 			dao.insertPaymentDetails(tran);
 			String name = studentDetails.getAplFirstName() + " " + studentDetails.getAplLstName();
@@ -217,16 +218,16 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			httpSession.setAttribute("dueStr", dueString);
 			httpSession.setAttribute("hmap", hashMap);
 			httpSession.getServletContext().setAttribute(txnId, httpSession);
-			String clientName="";
-			int instId=studentDetails.getAffBeanStu().getInstId();
-			if(instId==1){
-			clientName="SGI";	
-			}else if(instId==2){
-			clientName="LPS";	
+			String clientName = "";
+			int instId = studentDetails.getAffBeanStu().getInstId();
+			if (instId == 1) {
+				clientName = "SGI";
+			} else if (instId == 2) {
+				clientName = "LPS";
 			}
 
 			String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo="
-					+ enrollmentNumber + "&client="+clientName+"&ru=" + returnUrl + "&Contact="
+					+ enrollmentNumber + "&client=" + clientName + "&ru=" + returnUrl + "&Contact="
 					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl + "&Email="
 					+ studentDetails.getAplEmail() + "&Add=" + studentDetails.getAplAddress();
 
@@ -238,14 +239,6 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		}
 
 	}
-
-
-	
-	
-	
-	
-	
-	
 
 	public String operatorStudentPaymentBulk() throws IOException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -316,18 +309,18 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			httpSession.setAttribute("dueStr", dueString);
 			httpSession.setAttribute("hmap", hashMap);
 			httpSession.getServletContext().setAttribute(txnId, httpSession);
-			String clientName="";
-			int instId=studentDetails.getAffBeanStu().getInstId();
-			if(instId==1){
-			clientName="SGI";	
-			}else if(instId==2){
-			clientName="LPS";	
+			String clientName = "";
+			int instId = studentDetails.getAffBeanStu().getInstId();
+			if (instId == 1) {
+				clientName = "SGI";
+			} else if (instId == 2) {
+				clientName = "LPS";
 			}
 
 			String url = SabPaisaURL + "?Name=" + name + "&amt=" + feeTot + "&txnId=" + txnId + "&RollNo="
-					+ "Bulk Payment" + "&client=" +clientName +"&ru=" + returnUrl + "&Contact=" + oprBean.getOperatorContact()
-					+ "&failureURL=" + clientFailureUrl + "&Email=" + oprBean.getOperatorEmail() + "&Add="
-					+ oprBean.getOperatorAddress();
+					+ "Bulk Payment" + "&client=" + clientName + "&ru=" + returnUrl + "&Contact="
+					+ oprBean.getOperatorContact() + "&failureURL=" + clientFailureUrl + "&Email="
+					+ oprBean.getOperatorEmail() + "&Add=" + oprBean.getOperatorAddress();
 
 			response.sendRedirect(url);
 			return SUCCESS;
@@ -339,7 +332,6 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	}
 
-	
 	// jumping to payment Gateway
 
 	/*
@@ -406,9 +398,12 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		tran.setTxnId(txnId);
 		tran.setPayeeAmount(fee);
 		tran.setStatus("Pending");
+
 		//
 		dao.insertPaymentDetails(tran);
+
 		String name = studentDetails.getAplFirstName().concat(" ").concat(studentDetails.getAplLstName());
+		name = name.trim();
 
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 
@@ -417,17 +412,17 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		httpSession.setAttribute("dueStr", dueString);
 		httpSession.setAttribute("hmap", hashMap);
 		httpSession.getServletContext().setAttribute(txnId, httpSession);
-		String clientName="";
-		int instId=studentDetails.getAffBeanStu().getInstId();
-		if(instId==1){
-		clientName="SGI";	
-		}else if(instId==2){
-		clientName="LPS";	
+		String clientName = "";
+		int instId = studentDetails.getAffBeanStu().getInstId();
+		if (instId == 1) {
+			clientName = "SGI";
+		} else if (instId == 2) {
+			clientName = "LPS";
 		}
 
 		String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo=" + enrollmentId
-				+ "&client="+ clientName+ "&ru=" + returnUrl + "&Contact=" + studentDetails.getAplMobilePri() + "&failureURL="
-				+ clientFailureUrl + "&Email=" + studentDetails.getAplEmail() + "&Add="
+				+ "&client=" + clientName + "&ru=" + returnUrl + "&Contact=" + studentDetails.getAplMobilePri()
+				+ "&failureURL=" + clientFailureUrl + "&Email=" + studentDetails.getAplEmail() + "&Add="
 				+ studentDetails.getAplAddress();
 
 		request.setAttribute("sabPaisaURL", url);
@@ -449,10 +444,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		String enrollmentId = request.getParameter("enrollId");
 		String mobile = request.getParameter("mob");
 		String txnId = Idgenerator.transxId();
-        String name = user.concat(" ").concat(lastname);
+		String name = user.concat(" ").concat(lastname);
 		Double studFee = Double.parseDouble(fee);
-        challanDAO.saveToTransaction(enrollmentId, mobile, txnId, studFee);
-        
+		challanDAO.saveToTransaction(enrollmentId, mobile, txnId, studFee);
 
 		String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&Contact=" + mobile + "&RollNo=" + enrollmentId
 				+ "&client=SGI" + "&ru=" + returnUrl + "&txnId=" + txnId;

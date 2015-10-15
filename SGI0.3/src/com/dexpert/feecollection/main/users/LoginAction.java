@@ -147,7 +147,7 @@ public class LoginAction extends ActionSupport {
 		log.info("Password is ::" + loginBean.getPassword());
 		String encryptedPwd, decrypedText = null;
 		LoginBean lgbean = new LoginBean();
-		log.info("");
+		
 
 		List<LoginBean> loginUserList = loginDAO.getLoginDetails(loginBean);
 

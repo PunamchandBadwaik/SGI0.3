@@ -415,7 +415,7 @@ public class AppDAO {
 			criteria.add(Restrictions.eq("value", element));
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
-
+			log.info("Cell Value is ::" + element + " <<>> " + lookupId);
 			if (list.size() > 0) {
 
 				LookupBean lookupBean = new LookupBean();

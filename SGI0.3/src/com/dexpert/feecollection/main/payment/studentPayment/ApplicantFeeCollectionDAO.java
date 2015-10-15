@@ -65,23 +65,23 @@ public class ApplicantFeeCollectionDAO {
 
 	}
 
-	public TransactionBean getTransaction(String txnId)
-	{
-		Session session=factory.openSession();
-		Criteria cr=session.createCriteria(TransactionBean.class);
+	public TransactionBean getTransaction(String txnId) {
+		Session session = factory.openSession();
+		Criteria cr = session.createCriteria(TransactionBean.class);
 		cr.add(Restrictions.eq("txnId", txnId));
-		TransactionBean res=(TransactionBean) cr.list().iterator().next();
+		TransactionBean res = (TransactionBean) cr.list().iterator().next();
 		return res;
 	}
-	public ArrayList<BulkPaymentBean>getBulkPayments(String txnId)
-	{
-		
-		Session session=factory.openSession();
-		Criteria cr=session.createCriteria(BulkPaymentBean.class);
+
+	public ArrayList<BulkPaymentBean> getBulkPayments(String txnId) {
+
+		Session session = factory.openSession();
+		Criteria cr = session.createCriteria(BulkPaymentBean.class);
 		cr.add(Restrictions.eq("txnId", txnId));
-		ArrayList<BulkPaymentBean>resList=new ArrayList<BulkPaymentBean>(cr.list());
+		ArrayList<BulkPaymentBean> resList = new ArrayList<BulkPaymentBean>(cr.list());
 		return resList;
 	}
+
 	public void updateTransTable(String txnId, String RspCode, String dueStr, String studentEnrollmentNo, String payMode) {
 		TransactionBean newBean = new TransactionBean();
 		newBean.setTxnId(txnId);
@@ -92,7 +92,7 @@ public class ApplicantFeeCollectionDAO {
 			// log.info("updateTransTable method :");
 			TransactionBean oldBean = (TransactionBean) session.get(TransactionBean.class, txnId);
 
-			if (RspCode.equals("0")) {
+			if (RspCode.equals("Ok") || RspCode.equals("0")) {
 				Transaction transaction = session.beginTransaction();
 
 				oldBean.setStatus("Paid");
@@ -240,5 +240,3 @@ public class ApplicantFeeCollectionDAO {
 		}
 	}
 }
-
-

@@ -13,7 +13,7 @@
 	<%
 		String payMode = request.getParameter("payMode");
 
-		String pgRespCode = request.getParameter("pgRespCode")==null?"DEF":request.getParameter("pgRespCode");
+		String pgRespCode = request.getParameter("pgRespCode") == null ? "DEF" : request.getParameter("pgRespCode");
 		String atomTxnId = request.getParameter("atomTxnNo");
 		String sabPaisaTxnId = request.getParameter("SabPaisaTxId");
 
@@ -25,14 +25,11 @@
 		String lstName = request.getParameter("lastName");
 		String mobile = request.getParameter("mobileNo");
 		String email = request.getParameter("email");
-		String pgName = request.getParameter("pg")==null?"":request.getParameter("pg");
+		//String pgName = request.getParameter("pg") == null ? "" : request.getParameter("pg");
 	%>
 
-
 	<%
-		if (pgName.equals("ATOM")) {
-
-			if (pgRespCode.equals("Ok")) {
+		if (pgRespCode.equals("Ok")) {
 	%>
 
 
@@ -52,49 +49,6 @@
 
 
 
-	<div align="center">Sorry, your transaction has been declined due
-		to some reason, will automatically redirected your home page...</div>
-
-	<%
-		}
-		else if (pgRespCode.equals("Ok")) {
-	%>
-
-
-	<div align="center">Congratulations, your payment has been
-		successful, will automatically redirected your home page...</div>
-	<%
-		}
-
-		else {
-	%>
-	<div align="center">Sorry, your transaction has been declined due
-		to some reason, will automatically redirected your home page...</div>
-
-	<%
-		}
-		
-	%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	<br>
 	<br>
@@ -109,7 +63,7 @@
 				
 				 window.setTimeout(function(){
 						window.location = "RetrieveUserSession?RPS=<%=pgRespCode%>&txnID=<%=clientTxnId%>&payMode=<%=payMode%>";
-							},05);
+							}, 01);
 		}
 	</script>
 </body>
