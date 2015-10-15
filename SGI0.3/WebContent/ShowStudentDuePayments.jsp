@@ -90,8 +90,7 @@ ValueStack vs =TagUtils.getStack(pageContext);
 AppBean appBean =(AppBean)vs.findValue("app1");
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 Integer cId= appBean.getAffBeanStu().getInstId();
-Double amountAfterDiscount=(Double)vs.findValue("amountAfterDiscount");
-double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
+
 %>
 
 
@@ -268,9 +267,9 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 										<tr>
 
 											<td>Student UIN</td>
-											<td><s:property value="app1.enrollmentNumber" />
-											
-											<input type="hidden" id="collegeId" name="collegeId" value="<%=cId%>"></td>
+											<td><s:property value="app1.enrollmentNumber" /> <input
+												type="hidden" id="collegeId" name="collegeId"
+												value="<%=cId%>"></td>
 										</tr>
 										<tr>
 
@@ -301,21 +300,21 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
                                            while(itr.hasNext()){
                                        PaymentDuesBean paymentDue=itr.next();
                                     	  %>
-                                    	  
-                                    	  <%double totalDue=paymentDue.getTotal_fee_amount() ;%>
+
+										<%double totalDue=paymentDue.getTotal_fee_amount() ;%>
 										<%if(totalDue!=0) {%>
-											<%-- <td><td><span style="color: green; font-weight: bold;">Fees
+										<%-- <td><td><span style="color: green; font-weight: bold;">Fees
 													NOT Applicable</span></td> </td> --%>
-											
+
 										<tr>
 
 											<td><%=i%></td>
 											<td style="display: none"><%=paymentDue.getFeeId() %><input
 												type="hidden" value='<%=paymentDue.getFeeId() %>'
 												id="feeId[<%=i%>]"></td>
-												<% hm.put(i,paymentDue.getSequenceId()); %>
+											<% hm.put(i,paymentDue.getSequenceId()); %>
 											<td><%=paymentDue.getFeeName() %></td>
-			                                    <%-- <td><s:property value="payee" /></td>
+											<%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 											<td><%=paymentDue.getTotal_fee_amount()%></td>
@@ -323,32 +322,46 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 											<% if(netDue==0&&totalDue>0){%>
 											<td><span style="color: green; font-weight: bold;">Fees
 													Completed</span></td>
-													<%-- <td><%=netDue %>
+											<%-- <td><%=netDue %>
 											
 											</td> --%>
 											<%}else {%><%-- <%else{%> --%>
-											<td><%=netDue %>
-											
-											</td>
+											<td><%=netDue %></td>
 											<input type="hidden" value='<%=netDue %>'
-													id="payableamount[<%=i%>]"/>
+												id="payableamount[<%=i%>]" />
 											<%} %>
-											
+
 											<%-- <%} %> --%>
 											<%--  <input type="hidden" value='<%=netDue %>'
 													id="payableamount[<%=i%>]"/>
-											 --%><td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
+											 --%>
+											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
 											<td><div class="checkbox">
-											<% if(netDue!=0&&totalDue>0){%>
+													<% if(netDue!=0&&totalDue>0){%>
 													<label> <input type="checkbox"
 														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
 														class="btn btn-check">Check to Add to Payment
 													</label>
 												</div></td>
+
+											<td>
+												<%-- <% if(cId==2){ %>
+											<input type="text" 
+												name="FeePaid" id="FeePaid[<%=i%>]" style="display: none;" readonly="readonly" 
+												onchange="callFun(this.value)"> 
 												
-											<td><input type="text" style="display: none;"
+												<input type="hidden" id="lmtFeesForLPS" value='<s:property value="totalDueOFStudent" />'>
+												<%}else { %> --%> <input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
-												onchange="callFun(this.value)"> <script
+												onchange="callFun(this.value)"> <input type="hidden"
+												id="lmtFeesForLPS"
+												value='<s:property value="totalDueOFStudent" />'> <%-- <%} %> --%>
+
+
+
+												<%-- <input type="text" style="display: none;"
+												name="FeePaid" id="FeePaid[<%=i%>]"
+												onchange="callFun(this.value)"> --%> <script
 													type="text/javascript">
 													
 													function showTextBox(k) {
@@ -426,7 +439,8 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 															
 														}
 													</script> <input type="hidden" name="paymentDueStr"
-												id="paymentDueStr" value="" /></td>
+												id="paymentDueStr" value="" />
+											</td>
 											<%
 													i++;
 														k = i;
@@ -437,7 +451,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 
 
 
-<%} %>
+										<%} %>
 
 										<%-- <s:iterator value="app1.paymentDues">
 
@@ -552,9 +566,9 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 
 											</tr>
 										</s:iterator> --%>
-										
+
 										<%}%>
-										<%if(amountAfterDiscount>0) {%>
+										<%-- <%if(amountAfterDiscount>0) {%>
 										<tr>
 										<td>***</td>
 										<td>Discount</td>
@@ -564,7 +578,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 										<td></td>
 										<td></td>
 									    </tr>
-										<%}%> 
+										<%}%>  --%>
 										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
@@ -600,11 +614,15 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 															 
 															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
+															 var lmtFee=document.getElementById("lmtFeesForLPS").value;
 															 var collegeId=document.getElementById("collegeId").value;
-															 alert("college Id is "+collegeId);
 															
-															 if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
-														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
+															
+															 if(collegeId==1){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
+														         }
+															 else{
+															var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
+															}
 															 
 															
 															//alert("tuitionFeePending is"+tuitionFeePending);
@@ -620,12 +638,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 																return false;																
 																
 															}
-													var amountAfterDiscount=<%=amountAfterDiscount%>;
-													if(amountAfterDiscount>0){
-													totalBeingPaid><%=finalAmountToBePaid%>
-													alert("please Pay Only"+<%=finalAmountToBePaid%>);
-													return false;
-													}		
+												
 															
 															/* if(totalBeingPaid<29000){
 																alert("Please select a higher Fee and amount to pay");
@@ -651,10 +664,18 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 																}
 															}
 															*/
-															if(totalBeingPaid<minimumAmountMustPaid){
-															alert("Please pay at least "+minimumAmountMustPaid);
-															return false;
-															}
+															if(collegeId==2){
+																var minimumAmountMustPaid='<s:property value="totalNetFees" />';
+																if(totalBeingPaid<minimumAmountMustPaid){
+																alert("Please pay the Total Fees : "+minimumAmountMustPaid);
+																return false;
+																}
+															}else{if(totalBeingPaid<minimumAmountMustPaid){
+																	alert("Please pay at least :"+minimumAmountMustPaid);
+																	return false;
+																	}}
+															
+															
 															var j=0;
 															var t=0;
 															for(j=1;j<<%=i%>;j++){

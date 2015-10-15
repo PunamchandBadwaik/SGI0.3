@@ -788,7 +788,7 @@
 										+ "&courseName=" + courseName
 										+ "&feeName=" + feeName;
 						<%}
-						else if(profile.contentEquals("Parent")){%>
+						else if(profile.contentEquals("Parent")) {%>
 							courseName = document
 										.getElementById("courseId").value == null ? ""
 										: document.getElementById("courseId").value;
