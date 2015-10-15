@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="java.math.BigDecimal"%>
+<%@page import="java.math.BigInteger"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <html lang="en">
 <head>
@@ -297,7 +299,9 @@
  	                  Object [] dueArray = ( Object []) session.getAttribute("duesArray");
                                         %>
 							<div>Total Dues Remaining</div>
-							<div> <%=dueArray[3]==null?0.0:dueArray[3]%> </div> <!-- <span class="notification">1</span> -->
+							<%Object netDueObj=dueArray[3]==null?0.0:dueArray[3];%> 
+							  
+							<div><%=BigDecimal.valueOf(Double.valueOf(netDueObj.toString())).toPlainString()%> </div> <!-- <span class="notification">1</span> -->
 						</a>
 					</div>
 
