@@ -102,9 +102,9 @@ public class AffAction extends ActionSupport {
 	AffBean affBean = new AffBean();
 	FvDAO fvDAO = new FvDAO();
 	List<FvBean> lookUpvalueList;
-    String courses;
-    List<CollegeCourses> allCourseOfInst;
-    
+	String courses;
+	List<CollegeCourses> allCourseOfInst;
+
 	// End of Global Variables
 
 	// ---------------------------------------------------
@@ -117,14 +117,14 @@ public class AffAction extends ActionSupport {
 		// log.info("paramset is "+affInstBean.getParamvalues().toString());
 		List<String> instNameList = affDao.getCollegeNameList(affInstBean.getInstName());
 		/* log.info("List Size is ::" + instNameList.size()); */
-		
+
 		ParDAO parDao = new ParDAO();
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		if (instNameList.isEmpty()) {
-		
+
 			if (parInstId == null) {
-				
+
 				parBeansList = parDao.getUniversityList();
 				request.setAttribute("msg", "Please Select University");
 				return "failure";
@@ -193,20 +193,19 @@ public class AffAction extends ActionSupport {
 
 				affInstBean = affDao.saveOrUpdate(affInstBean, f + File.separator);
 
-				
-				//code to send msg
+				// code to send msg
 				String user = username;
 				String pass = password;
 				String msg = "UserId :" + user + "" + " Passsword : " + pass;
 				SendSMS sms = new SendSMS();
 				sms.sendSMS(affInstBean.getMobileNum(), msg);
-				
-				
+
 				// -----Code for sending email//--------------------
-				String emailContent="Welcome to the FeeDesk portal of "+affInstBean.getInstName()+ ". You can log in with the below credentials. ";
+				String emailContent = "Welcome to the FeeDesk portal of " + affInstBean.getInstName()
+						+ ". You can log in with the below credentials. ";
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(affInstBean.getEmail(), "Welcome To FeeDesk!", username, password,
-						affInstBean.getInstName(),emailContent);
+						affInstBean.getInstName(), emailContent);
 
 				request.setAttribute("msg", "Institute Added Successfully");
 				request.setAttribute("redirectLink", "Success.jsp");
@@ -218,7 +217,7 @@ public class AffAction extends ActionSupport {
 		// else forward error message on input page
 
 		else {
-			log.info("courses"+courses);
+			log.info("courses" + courses);
 			log.info("College NAME ALREADY AVAILABLE");
 			parBeansList = parDao.getUniversityList();
 			request.setAttribute("msg", "Institute Name is Already Registered");
@@ -254,47 +253,40 @@ public class AffAction extends ActionSupport {
 
 	public String getAllClgList() {
 		HttpSession httpSession = request.getSession();
-		
-	//	LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-	//	Integer parentId=loginBean.getProfile().contentEquals("Parent")?loginBean.getParBean().getParInstId():null;
-		
-		
+
+		// LoginBean loginBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
+		// Integer
+		// parentId=loginBean.getProfile().contentEquals("Parent")?loginBean.getParBean().getParInstId():null;
+
 		affInstList = affDao.getCollegesList();
 		return SUCCESS;
 	}
 
-	
-	
-	
-	
-	
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(), null);
 		log.info("Struture id" + structureIdes);
-		try{
-		List<Integer> valueIdes = feeDAO.getLookupValue(structureIdes);
-		log.info("value ides got from fee config table::::::" + valueIdes);
-		List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
-		log.info("look up param list::::::" + lookUpParamList);
-		lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
-		log.info("look up List Size is ::" + lookupBeanList.size());
-        allCourseOfInst=affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
-        return SUCCESS;
-		}
-		catch(NullPointerException npe){
-			String message="Please Add the Courses Before Adding the Student ";
-			request.setAttribute("addCourse","true");
+		try {
+			List<Integer> valueIdes = feeDAO.getLookupValue(structureIdes);
+			log.info("value ides got from fee config table::::::" + valueIdes);
+			List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
+			log.info("look up param list::::::" + lookUpParamList);
+			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
+			log.info("look up List Size is ::" + lookupBeanList.size());
+			allCourseOfInst = affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
+			return SUCCESS;
+		} catch (NullPointerException npe) {
+			String message = "Please Add the Courses Before Adding the Student ";
+			request.setAttribute("addCourse", "true");
 			request.setAttribute("msg", message);
-			return ERROR;		
-		}
-		catch(Exception ex)
-		{
-		ex.printStackTrace();	
-		String message="Please configure the Fee Before Adding the Student";
-		request.setAttribute("msg", message);
-		return ERROR;	
+			return ERROR;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			String message = "Please configure the Fee Before Adding the Student";
+			request.setAttribute("msg", message);
+			return ERROR;
 		}
 	}
 
@@ -703,8 +695,8 @@ public class AffAction extends ActionSupport {
 		// collegeDueReport = (ArrayList<PaymentDuesBean>)
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
-         popUp=request.getParameter("popUp")==null?false:true;
-        
+		popUp = request.getParameter("popUp") == null ? false : true;
+
 		if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
 			collegeId = (Integer) ses.getAttribute("sesId");
 			String courseName = request.getParameter("courseName");
@@ -712,7 +704,7 @@ public class AffAction extends ActionSupport {
 			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
 			if (enrollmentNumber.size() < 1) {
 				totalDuesOfStudent = new ArrayList<Object[]>();
-				String result=popUp==true?"popUp":"success";
+				String result = popUp == true ? "popUp" : "success";
 				return result;
 			}
 			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
@@ -730,8 +722,8 @@ public class AffAction extends ActionSupport {
 				log.info("total original due " + totalOriginalDues);
 				log.info("total paid " + totalPaymentToDate);
 			}
-			
-			String result=popUp==true?"popUp":"success";
+
+			String result = popUp == true ? "popUp" : "success";
 			return result;
 
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")
@@ -1147,8 +1139,21 @@ public class AffAction extends ActionSupport {
 			if ((feeName != null && !feeName.isEmpty()) && (courseName != null && !courseName.isEmpty())) {
 				collegeId = (Integer) ses.getAttribute("sesId");
 				List<String> enrollmentNumberList = null;
-				enrollmentNumberList = courseName.contentEquals("All") ? affDao.findAllStudentOfInstituteByCourse(
-						collegeId, null) : affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+				/*
+				 * enrollmentNumberList = courseName.contentEquals("All") ?
+				 * affDao.findAllStudentOfInstituteByCourse( collegeId, null) :
+				 * affDao.findAllStudentOfInstituteByCourse(collegeId,
+				 * courseName);
+				 */if (courseName.contentEquals("All")) {
+					enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+				} else {
+					// user selected only one course find enrollment number of
+					// student belongs to that course
+					// find structure ids of college
+					List<Integer> structureIdes=affDao.getStrutureId(collegeId, null);
+
+				}
+
 				log.info("Number of Student" + enrollmentNumberList);
 				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 				log.info("Due list size is" + totalDuesOFCollege.size());
@@ -1269,8 +1274,8 @@ public class AffAction extends ActionSupport {
 			if (collegeName != null && !collegeName.isEmpty()) {
 
 				if (collegeName.contentEquals("All")) {
-                    listOfCourse = affDao.getCoursesOFCollege(null, parDAO.getIdesOfAllCollege(universityId));
-					feeNameList=feeDAO.getFeeNames(affDao.getFeeIdesOfInst(null));
+					listOfCourse = affDao.getCoursesOFCollege(null, parDAO.getIdesOfAllCollege(universityId));
+					feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(null));
 					log.info("list of course" + listOfCourse.size());
 					return "listOfCourse";
 				}
@@ -1279,7 +1284,7 @@ public class AffAction extends ActionSupport {
 				ses.setAttribute("collegeIdFRep", id);
 				log.info("id of the college is" + id);
 				listOfCourse = affDao.getCoursesOFCollege(id, null);
-				feeNameList=feeDAO.getFeeNames(affDao.getFeeIdesOfInst(id));
+				feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(id));
 				return "listOfCourse";
 			}
 			if (courseName != null && !courseName.isEmpty()) {
@@ -1311,7 +1316,7 @@ public class AffAction extends ActionSupport {
 			Integer id = (Integer) ses.getAttribute("sesId") == null ? affDao.getCollegeId(collegeName) : (Integer) ses
 					.getAttribute("sesId");
 			listOfCourse = affDao.getCoursesOFCollege(id, null);
-			feeNameList=feeDAO.getFeeNames(affDao.getFeeIdesOfInst(id));
+			feeNameList = feeDAO.getFeeNames(affDao.getFeeIdesOfInst(id));
 			log.info("list of course" + listOfCourse.size());
 			return SUCCESS;
 
@@ -1380,35 +1385,36 @@ public class AffAction extends ActionSupport {
 
 		return SUCCESS;
 	}
-	public void getTotalDuesOfStudents()
-	{
-	//read the college id from session
-	Integer instId=(Integer)ses.getAttribute("sesId");
-	affDao.getTotalDueOfStudents(instId);	
-		
+
+	public void getTotalDuesOfStudents() {
+		// read the college id from session
+		Integer instId = (Integer) ses.getAttribute("sesId");
+		affDao.getTotalDueOfStudents(instId);
+
 	}
-     public String saveCourses()
-     {
-     String courses=request.getParameter("values");
-     String [] courseArray=courses.split(",");
-     Integer instId=(Integer)ses.getAttribute("sesId");
-     ArrayList<String> courseArrayList=new ArrayList<String>(Arrays.asList(courseArray));
-     Iterator<String> itr=courseArrayList.iterator();
-     while (itr.hasNext()) {
-		String courseName =itr.next();
-		CollegeCourses collCourse=new CollegeCourses();
-		collCourse.setCourseName(courseName);
-		//validate course name
-		boolean isCourseNameAlreadySaved=affDao.courseNameAlreadySaved(courseName, instId);
-	    log.info("couses already saved"+isCourseNameAlreadySaved);
-		if(isCourseNameAlreadySaved==false){
-		affDao.saveCollegeCourses(collCourse, instId);
-	    }
-     }
-     String message="Courses Saved SuccessFully";
-     request.setAttribute("msg",message);
-     return SUCCESS;	 
-     }
+
+	public String saveCourses() {
+		String courses = request.getParameter("values");
+		String[] courseArray = courses.split(",");
+		Integer instId = (Integer) ses.getAttribute("sesId");
+		ArrayList<String> courseArrayList = new ArrayList<String>(Arrays.asList(courseArray));
+		Iterator<String> itr = courseArrayList.iterator();
+		while (itr.hasNext()) {
+			String courseName = itr.next();
+			CollegeCourses collCourse = new CollegeCourses();
+			collCourse.setCourseName(courseName);
+			// validate course name
+			boolean isCourseNameAlreadySaved = affDao.courseNameAlreadySaved(courseName, instId);
+			log.info("couses already saved" + isCourseNameAlreadySaved);
+			if (isCourseNameAlreadySaved == false) {
+				affDao.saveCollegeCourses(collCourse, instId);
+			}
+		}
+		String message = "Courses Saved SuccessFully";
+		request.setAttribute("msg", message);
+		return SUCCESS;
+	}
+
 	// End of Action Methods
 	// ---------------------------------------------------
 
@@ -1709,8 +1715,5 @@ public class AffAction extends ActionSupport {
 		this.allCourseOfInst = allCourseOfInst;
 	}
 
-	
-	
-	
 	// End of Getter Setter Methods
 }
