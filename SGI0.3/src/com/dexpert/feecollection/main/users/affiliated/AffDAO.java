@@ -671,12 +671,15 @@ public class AffDAO {
 
 	}
 
-	public List<String> findAllStudentOfInstituteByCourse(Integer collegeId, String courseName) {
+	public List<String> findAllStudentOfInstituteByCourse(Integer collegeId,String courseName,Integer courseId) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(AppBean.class);
 		criteria.add(Restrictions.eq("affBeanStu.instId", collegeId));
 		if (courseName != null && !courseName.isEmpty()) {
 			criteria.add(Restrictions.eq("course", courseName));
+		}else if(courseId!=null){
+		    criteria.createAlias("applicantParamValues","av" );
+			criteria.add(Restrictions.eq("av.feeValueId",courseId));	
 		}
 		criteria.setProjection(Projections.property("enrollmentNumber"));
 		List<String> appBeans = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();

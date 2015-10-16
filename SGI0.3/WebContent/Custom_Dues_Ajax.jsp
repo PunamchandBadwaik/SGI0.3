@@ -1,3 +1,4 @@
+<%@page import="com.opensymphony.xwork2.ActionContext"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -8,13 +9,29 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<%
+		String errMessage = (String) request.getAttribute("msg");
+		ActionContext.getContext().put("errMessage", errMessage);
+	%>
 	<div>
+
+
+
 		<s:if
 			test='%{totalDuesOFCollege.isEmpty()|| totalDuesOFCollege.size()<1}'>
-			<div
-				style="color: red; text-align: center; font-weight: bold; font-size: medium;">
-				No Due Available </div>
+
+
+			<s:if test="#request.errMessage!=null">
+				<div
+					style="color: red; text-align: center; font-weight: bold; font-size: medium;">Not
+					Available For Super Admin Please Check Other Reports</div>
+			</s:if>
+
+			<s:else>
+				<div
+					style="color: red; text-align: center; font-weight: bold; font-size: medium;">
+					No Due Available</div>
+			</s:else>
 		</s:if>
 		<s:else>
 			<table

@@ -112,6 +112,15 @@ public class FvDAO {
 	session.close();
 	return lookUpparamId;	
 	}
+	public List<Integer> valueIdOfCourse(List<Integer> valueIdes,String courseName){
+	Session session=factory.openSession();	
+	Criteria criteria=session.createCriteria(FvBean.class);	
+	criteria.add(Restrictions.eq("value",courseName)).add(Restrictions.in("feeValueId", valueIdes));	
+	criteria.setProjection(Projections.property("feeValueId"));
+	List<Integer> courseId=criteria.list();
+	session.close();
+	return courseId;
+	}
 	// DAO Methods End
 
 }

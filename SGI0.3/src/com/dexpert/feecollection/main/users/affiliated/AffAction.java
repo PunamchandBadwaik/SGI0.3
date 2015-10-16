@@ -701,7 +701,7 @@ public class AffAction extends ActionSupport {
 			collegeId = (Integer) ses.getAttribute("sesId");
 			String courseName = request.getParameter("courseName");
 			// String feeName=request.getParameter("feeName");
-			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName,null);
 			if (enrollmentNumber.size() < 1) {
 				totalDuesOfStudent = new ArrayList<Object[]>();
 				String result = popUp == true ? "popUp" : "success";
@@ -731,7 +731,7 @@ public class AffAction extends ActionSupport {
 			collegeId = Integer.parseInt(request.getParameter("instId"));
 			String courseName = request.getParameter("courseName");
 			popUp = true;
-			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+			List<String> enrollmentNumber = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName,null);
 			if (enrollmentNumber.size() < 1) {
 				totalDuesOfStudent = new ArrayList<Object[]>();
 				return "popUp";
@@ -864,7 +864,7 @@ public class AffAction extends ActionSupport {
 		// start of su admin custom due report
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 
-			// //user selected 4 value
+/*			// //user selected 4 value
 			if ((universityName != null && !universityName.isEmpty())
 					&& (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
 					&& (feeName != null && !feeName.isEmpty())) {
@@ -894,14 +894,14 @@ public class AffAction extends ActionSupport {
 				// user select specific college and all course and feeName
 				else if (courseName.contentEquals("All")) {
 					Integer collegeId = affDao.getCollegeId(collegeName);
-					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
 					log.info("Number of student" + enrollmentNumberList);
 					totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 					return SUCCESS;
 
 				}
 				Integer collegeId = affDao.getCollegeId(collegeName);
-				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName,null);
 				log.info("Number of student" + enrollmentNumberList);
 				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 				return SUCCESS;
@@ -919,6 +919,8 @@ public class AffAction extends ActionSupport {
 					&& (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())
 					|| (collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
 					&& (feeName != null && !feeName.isEmpty())) {
+				
+				
 				if (collegeName.contentEquals("All") && courseName.contentEquals("All")) {
 					Integer universityId = parDAO.getUniversityId(universityName);
 					List<Integer> collegeIdes = parDAO.getIdesOfAllCollege(universityId);
@@ -926,7 +928,7 @@ public class AffAction extends ActionSupport {
 					List<String> enrollmentNumberList = affDao.findEnrollmentNumberOfMoreTheOneCollege(collegeIdes,
 							null);
 					log.info("enrollment Numbers of the student" + enrollmentNumberList);
-					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
+					totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 					return SUCCESS;
 
 				}
@@ -934,7 +936,7 @@ public class AffAction extends ActionSupport {
 				// user select specific college and all course and feeName
 				else if (courseName.contentEquals("All")) {
 					Integer collegeId = affDao.getCollegeId(collegeName);
-					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
 					log.info("Number of student" + enrollmentNumberList);
 					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
 					return SUCCESS;
@@ -949,6 +951,7 @@ public class AffAction extends ActionSupport {
 					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
 					return SUCCESS;
 				}
+				//user selected specific college ,course,
 				Integer collegeId = affDao.getCollegeId(collegeName);
 				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
 				log.info("Number of Student" + enrollmentNumberList);
@@ -999,7 +1002,9 @@ public class AffAction extends ActionSupport {
 				return SUCCESS;
 
 			}
-
+*/              
+			request.setAttribute("msg","Not Available for Super Admin Please Check Other Reports");
+			return SUCCESS;
 			// end of user selected 1 value
 		}// end of super admin report
 			// /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1025,13 +1030,14 @@ public class AffAction extends ActionSupport {
 				// user select specific college and all course and feeName
 				else if (courseName.contentEquals("All")) {
 					Integer collegeId = affDao.getCollegeId(collegeName);
-					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
 					log.info("Number of student" + enrollmentNumberList);
 					totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 					return SUCCESS;
 
 				}
 				// user select all college with specific course and specific fee
+				//Problem have to find out the solution
 				else if (collegeName.contentEquals("All")) {
 					Integer universityId = (Integer) ses.getAttribute("sesId");
 					List<Integer> collegeIdes = parDAO.getIdesOfAllCollege(universityId);
@@ -1042,7 +1048,10 @@ public class AffAction extends ActionSupport {
 				}
 				// user select specific college ,specific course and feeName
 				Integer collegeId = affDao.getCollegeId(collegeName);
-				List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+				List<Integer> structureIdes=affDao.getStrutureId(collegeId, null);
+                List<Integer> valuesId=feeDAO.getValueIdByStructureIdes(structureIdes);
+                Integer idOfCourse=fvDAO.valueIdOfCourse(valuesId, courseName).get(0);
+                List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId,null,idOfCourse);
 				log.info("Number of student" + enrollmentNumberList);
 				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 				return SUCCESS;
@@ -1050,7 +1059,7 @@ public class AffAction extends ActionSupport {
 			}
 			// end of 3 value entered
 			// for 2 value
-			// user selected only two value
+			// user selected only two value (parentlogin)
 			else if ((collegeName != null && !collegeName.isEmpty()) && (courseName != null && !courseName.isEmpty())
 					|| (collegeName != null && !collegeName.isEmpty()) && (feeName != null && !feeName.isEmpty())
 					|| (courseName != null && !courseName.isEmpty()) && (feeName != null && !feeName.isEmpty())) {
@@ -1070,12 +1079,12 @@ public class AffAction extends ActionSupport {
 
 					} else if (courseName.contentEquals("All")) {
 						Integer collegeId = affDao.getCollegeId(collegeName);
-						List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+						List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
 						log.info("Number of student" + enrollmentNumberList);
 						totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
 						return SUCCESS;
 					}
-
+                    //Problem have to address (Parent login)
 					else if (collegeName.contentEquals("All")) {
 						Integer universityId = (Integer) ses.getAttribute("sesId");
 						List<Integer> collegeIdes = parDAO.getIdesOfAllCollege(universityId);
@@ -1085,9 +1094,12 @@ public class AffAction extends ActionSupport {
 						return SUCCESS;
 
 					}
-
+                    //user selected only specific college and specific course like(college Name="LPS" and Course=x) (Parent Login)
 					Integer collegeId = affDao.getCollegeId(collegeName);
-					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+					List<Integer> structureIdes=affDao.getStrutureId(collegeId, null);
+	                List<Integer> valuesId=feeDAO.getValueIdByStructureIdes(structureIdes);
+	                Integer idOfCourse=fvDAO.valueIdOfCourse(valuesId, courseName).get(0);
+					List<String> enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, courseName,idOfCourse);
 					log.info("Number of Student" + enrollmentNumberList);
 					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
 					return SUCCESS;
@@ -1118,7 +1130,7 @@ public class AffAction extends ActionSupport {
 					// user selected specific college
 					Integer collegeId = affDao.getCollegeId(collegeName);
 					log.info("college Id is" + collegeId);
-					List<String> enrollmentList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					List<String> enrollmentList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
 					log.info("list of student" + enrollmentList);
 					totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentList);
 					return SUCCESS;
@@ -1145,13 +1157,15 @@ public class AffAction extends ActionSupport {
 				 * affDao.findAllStudentOfInstituteByCourse(collegeId,
 				 * courseName);
 				 */if (courseName.contentEquals("All")) {
-					enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null);
+					enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
 				} else {
 					// user selected only one course find enrollment number of
 					// student belongs to that course
 					// find structure ids of college
 					List<Integer> structureIdes=affDao.getStrutureId(collegeId, null);
-
+                    List<Integer> valuesId=feeDAO.getValueIdByStructureIdes(structureIdes);
+                    Integer idOfCourse=fvDAO.valueIdOfCourse(valuesId, courseName).get(0);
+                    enrollmentNumberList=affDao.findAllStudentOfInstituteByCourse(collegeId,null,idOfCourse);
 				}
 
 				log.info("Number of Student" + enrollmentNumberList);
@@ -1165,10 +1179,19 @@ public class AffAction extends ActionSupport {
 			else if ((feeName != null && !feeName.isEmpty()) || (courseName != null && !courseName.isEmpty())) {
 				collegeId = (Integer) ses.getAttribute("sesId");
 				List<String> enrollmentNumberList = null;
-				enrollmentNumberList = courseName.contentEquals("All") ? affDao.findAllStudentOfInstituteByCourse(
-						collegeId, null) : affDao.findAllStudentOfInstituteByCourse(collegeId, courseName);
+				if (courseName.contentEquals("All")) {
+					enrollmentNumberList = affDao.findAllStudentOfInstituteByCourse(collegeId, null,null);
+				} else {
+					// user selected only one course find enrollment number of
+					// student belongs to that course
+					// find structure ids of college
+					List<Integer> structureIdes=affDao.getStrutureId(collegeId, null);
+                    List<Integer> valuesId=feeDAO.getValueIdByStructureIdes(structureIdes);
+                    Integer idOfCourse=fvDAO.valueIdOfCourse(valuesId, courseName).get(0);
+                    enrollmentNumberList=affDao.findAllStudentOfInstituteByCourse(collegeId,null,idOfCourse);
+				}
 				log.info("Number of Student" + enrollmentNumberList);
-				totalDuesOFCollege = affDao.findDueOfFees(feeName, enrollmentNumberList);
+				totalDuesOFCollege = affDao.findDueOfFees(null, enrollmentNumberList);
 				log.info("Due list size is" + totalDuesOFCollege.size());
 				return SUCCESS;
 
