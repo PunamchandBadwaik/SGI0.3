@@ -11,7 +11,7 @@
 <body onload="waitSubmit()">
 	<h2></h2>
 	<%
-		String payMode = request.getParameter("payMode");
+		String paymentMode = request.getParameter("payMode");
 
 		String pgRespCode = request.getParameter("pgRespCode") == null ? "DEF" : request.getParameter("pgRespCode");
 		String atomTxnId = request.getParameter("atomTxnNo");
@@ -62,7 +62,7 @@
 				
 				
 				 window.setTimeout(function(){
-						window.location = "RetrieveUserSession?RPS=<%=pgRespCode%>&txnID=<%=clientTxnId%>&payMode=<%=payMode%>";
+						window.location = "RetrieveUserSession?RPS=<%=pgRespCode%>&payMode=<%=paymentMode%>&txnID=<%=clientTxnId%>";
 							}, 01);
 		}
 	</script>

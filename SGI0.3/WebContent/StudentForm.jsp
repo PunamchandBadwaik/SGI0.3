@@ -77,7 +77,7 @@
 
 </head>
 
-<body onload="getCollegeList()">
+<body>
 	<!-- topbar starts -->
 
 	<!-- topbar ends -->

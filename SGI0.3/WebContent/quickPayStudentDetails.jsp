@@ -303,7 +303,10 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 												</div></td>
 											<td><input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
-												onchange="callFun(this.value)"> <script
+												onchange="callFun(this.value)"> 
+												
+												<input type="hidden" id="lmtFeesForLPS" value='<s:property value="totalDueOFStudent" />'>
+												<script
 													type="text/javascript">
 													
 													function showTextBox(k) {
@@ -537,11 +540,11 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 															 
 															 
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
-														
+															 var lmtFee=document.getElementById("lmtFeesForLPS").value;
 															 var collegeId=document.getElementById("collegeId").value;
 															
 															 
-														if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
+														if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
 														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
 														
 															 
@@ -569,11 +572,23 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 																
 															} */															
 															
-															if(totalBeingPaid==0){
+															/* if(totalBeingPaid==0){
 																alert("Please select a Fee and amount to pay");
 																return false;																
 																
-															}
+															} */
+															
+															if(collegeId==2){if(totalBeingPaid<minimumAmountMustPaid){
+																alert("Please pay the Total Fees : "+minimumAmountMustPaid);
+																return false;
+																}
+															}else{if(totalBeingPaid<minimumAmountMustPaid){
+																	alert("Please pay at least :"+minimumAmountMustPaid);
+																	return false;
+																	}}
+															
+															
+															
 															
 															if(isNaN(tuitionFeeBeingPaid)){
 																

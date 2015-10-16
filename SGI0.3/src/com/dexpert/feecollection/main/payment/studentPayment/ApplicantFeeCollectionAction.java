@@ -31,9 +31,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
-	public String SabPaisaURL = "http://192.168.1.228:8080/SabPaisa/";
-	public String returnUrl = "http://192.168.1.228:8082/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://192.168.1.228:8082/SGI0.3/Login.jsp";
+	public String SabPaisaURL = "http://localhost:8080/SabPaisa/";
+	public String returnUrl = "http://localhost:8082/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8082/SGI0.3/Login.jsp";
 
 	/*
 	 * public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; public
@@ -156,10 +156,22 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			httpSession.getServletContext().setAttribute(txnId, httpSession);
 			String clientName = "";
 			int instId = studentDetails.getAffBeanStu().getInstId();
+			// Temp Code 
 			if (instId == 1) {
-				clientName = "SGI";
+				clientName = "SGI_JUNIOR";
 			} else if (instId == 2) {
 				clientName = "LPS";
+			} else if (instId == 5) {
+				clientName = "SGI_PhR";
+			} else if (instId == 6) {
+				clientName = "SGI_ACS";
+			} else if (instId == 7) {
+				clientName = "SGI_DIE";
+			} else if (instId == 8) {
+				clientName = "SGI_RES";
+			} else if (instId == 9) {
+				clientName = "SGI_COE";
+
 			}
 
 			String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo="
@@ -322,10 +334,22 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			httpSession.getServletContext().setAttribute(txnId, httpSession);
 			String clientName = "";
 			int instId = studentDetails.getAffBeanStu().getInstId();
+			// Temp Code 
 			if (instId == 1) {
-				clientName = "SGI";
+				clientName = "SGI_JUNIOR";
 			} else if (instId == 2) {
 				clientName = "LPS";
+			} else if (instId == 5) {
+				clientName = "SGI_PhR";
+			} else if (instId == 6) {
+				clientName = "SGI_ACS";
+			} else if (instId == 7) {
+				clientName = "SGI_DIE";
+			} else if (instId == 8) {
+				clientName = "SGI_RES";
+			} else if (instId == 9) {
+				clientName = "SGI_COE";
+
 			}
 
 			String url = SabPaisaURL + "?Name=" + name + "&amt=" + feeTot + "&txnId=" + txnId + "&RollNo="
@@ -425,10 +449,22 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		httpSession.getServletContext().setAttribute(txnId, httpSession);
 		String clientName = "";
 		int instId = studentDetails.getAffBeanStu().getInstId();
+		// Temp Code 
 		if (instId == 1) {
-			clientName = "SGI";
+			clientName = "SGI_JUNIOR";
 		} else if (instId == 2) {
 			clientName = "LPS";
+		} else if (instId == 5) {
+			clientName = "SGI_PhR";
+		} else if (instId == 6) {
+			clientName = "SGI_ACS";
+		} else if (instId == 7) {
+			clientName = "SGI_DIE";
+		} else if (instId == 8) {
+			clientName = "SGI_RES";
+		} else if (instId == 9) {
+			clientName = "SGI_COE";
+
 		}
 
 		String url = SabPaisaURL + "?Name=" + name + "&amt=" + fee + "&txnId=" + txnId + "&RollNo=" + enrollmentId

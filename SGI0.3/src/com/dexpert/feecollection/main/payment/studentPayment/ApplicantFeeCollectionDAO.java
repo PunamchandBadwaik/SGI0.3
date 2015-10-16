@@ -94,7 +94,8 @@ public class ApplicantFeeCollectionDAO {
 
 			if (RspCode.equals("Ok") || RspCode.equals("0")) {
 				Transaction transaction = session.beginTransaction();
-
+				oldBean.setPaymentMode(payMode);
+		
 				oldBean.setStatus("Paid");
 
 				session.merge(oldBean);

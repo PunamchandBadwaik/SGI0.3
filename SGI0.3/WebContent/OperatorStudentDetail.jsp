@@ -380,7 +380,9 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 												</div></td>
 											<td><input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
-												onchange="callFun(this.value)"> <script
+												onchange="callFun(this.value)">
+												<input type="hidden" id="lmtFeesForLPS" value='<s:property value="totalDueOFStudent" />'>
+												 <script
 													type="text/javascript">
 													
 													function showTextBox(k) {
@@ -638,11 +640,12 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 															if(allowPayFee!=""&& allowPayFee!=null){}
 															 */
 															var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
-														
+															
+															 var lmtFee=document.getElementById("lmtFeesForLPS").value;
 															var collegeId=document.getElementById("collegeId").value;
 															
 															 
-															if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100;
+															if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
 															}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
 															
 																 
@@ -795,8 +798,20 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 
 																	
 																}else{ 
-																	alert("Please pay at least "+minimumAmountMustPaid);
-																	return false;
+																	/* alert("Please pay at least "+minimumAmountMustPaid);
+																	return false; */
+																	
+																	
+																	if(collegeId==2){
+																		alert("Please pay the Total Fees : "+minimumAmountMustPaid);
+																		return false;
+																		
+																	}else{
+																			alert("Please pay at least :"+minimumAmountMustPaid);
+																			return false;
+																			}
+																	
+																	
 																}
 																
 															

@@ -325,7 +325,7 @@
 												<th>Transaction ID</th>
 												<th>Mode Of Tranaction</th>
 												<th>Payee Name</th>
-												<th>Payee Mobile</th>
+												<!-- <th>Payee Mobile</th> -->
 												<!-- <th>Payee Email</th> -->
 												<!-- <th>Payee Address</th> -->
 												<th>Amount</th>
@@ -367,13 +367,13 @@
 																value="paymentMode" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property
 																value="payeeName" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
-																value="payeeMob" /></span></td>
+													<%-- <td><span style="margin-left: 10px;"><s:property
+																value="payeeMob" /></span></td> --%>
 													<%-- <td><span style="margin-left: 10px;"><s:property
 																value="payeeEmail" /></span></td> --%>
 													<%-- <td><span style="margin-left: 10px;"><s:property
 																value="payeeAdd" /></span></td> --%>
-													<td><span style="margin-left: 10px;"><s:property
+													<td>Rs. <span style="margin-left: 10px;"><s:property
 																value="payeeAmount" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property
 																value="status" /></span></td>

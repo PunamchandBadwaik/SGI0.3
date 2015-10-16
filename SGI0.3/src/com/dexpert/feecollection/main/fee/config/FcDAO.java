@@ -323,7 +323,10 @@ public class FcDAO {
 		Criteria criteria = session.createCriteria(FcBean.class);
 		criteria.add(Restrictions.in("structure_id", structureIdes));
 		criteria.setProjection(Projections.distinct(Projections.property("valueId")));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Integer> lookupValuesId = criteria.list();
+		
+		
 		session.close();
 		return lookupValuesId;
 	}

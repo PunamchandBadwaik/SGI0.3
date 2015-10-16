@@ -93,6 +93,7 @@ public class GenerateEnrollmentNumber {
 		// sqlQuery.setParameter("enrollmentNumber", preEnrollmentNumber + "%");
 		sqlQuery.setCacheable(false);
 		List<String> enrollmentNumberList = sqlQuery.list();
+		log.info(">>>>>>>>" + enrollmentNumberList);
 		session.close();
 
 		if (enrollmentNumberList.size() < 1) {
@@ -142,7 +143,7 @@ public class GenerateEnrollmentNumber {
 		Integer parInstId = (Integer) httpSession.getAttribute("parInstId");
 
 		String startYear = appBean.getStartYear();
-		log.info("start year of applicate"+startYear);
+		log.info("start year of applicate" + startYear);
 		// AffBean affBean = lgBean.getAffBean();
 		String collegeId = instId.toString().length() == 1 ? "0" + instId.toString() : instId.toString();
 

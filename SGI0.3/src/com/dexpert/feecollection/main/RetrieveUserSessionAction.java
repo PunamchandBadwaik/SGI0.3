@@ -1,15 +1,11 @@
 package com.dexpert.feecollection.main;
 
 import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
-
-import com.dexpert.feecollection.challan.ChallanAction;
 import com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
 import com.opensymphony.xwork2.ActionSupport;
@@ -25,8 +21,12 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 		String RPS = request.getParameter("RPS");
 		String txnId = request.getParameter("txnID");
-		String payMode = request.getParameter("payMode");
-
+		String paymentMode = request.getParameter("payMode");
+		log.info("PayMode is ::" + paymentMode);
+		log.info("TXN ID is ::" + txnId);
+		log.info("Response COde is ::" + RPS);
+		
+		
 		try {
 			HttpSession httpSession = (HttpSession) request.getServletContext().getAttribute(txnId);
 			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
@@ -34,21 +34,25 @@ public class RetrieveUserSessionAction extends ActionSupport {
 			String dueStr = (String) httpSession.getAttribute("dueStr");
 			HashMap hm = (HashMap) httpSession.getAttribute("hmap");
 			String studentEnrollmentNo = (String) hm.get("enrollId");
-			log.info("Enrollment Number  ::" + studentEnrollmentNo);
 			String sgiTxnId = hm.get("txnID").toString();
 
 			if (RPS.equals("Ok") || RPS.equals("0"))
 
 			{
+				log.info("PayMode is ::" + paymentMode);
+				if (!paymentMode.equals("null") || !paymentMode.equals("") || paymentMode != null) {
+					log.info("paymentMode is ::" + paymentMode);
+					if (paymentMode.equals("Cash") || paymentMode.equals("Cheque")) {
 
-				if (payMode.equals("Cash") || payMode.equals("Cheque")) {
+						dao.updateTransactionStatus(sgiTxnId, "Pending", paymentMode);
 
-					dao.updateTransactionStatus(sgiTxnId, "Pending", payMode);
+					} else {
+						log.info("paymentMode isd ::" + paymentMode);
+						dao.updateTransTable(sgiTxnId, RPS, dueStr, studentEnrollmentNo, paymentMode);
+					}
 
-				} else {
-					log.info("else Loop for  payment other than cash and cheque");
-					dao.updateTransTable(sgiTxnId, RPS, dueStr, studentEnrollmentNo, payMode);
 				}
+				/**/
 				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
 
 					return "opHome";
@@ -57,17 +61,16 @@ public class RetrieveUserSessionAction extends ActionSupport {
 				}
 			}
 
-			// else for cancel
 			else {
 
 				// dao.updateTransTable(sgiTxnId, RPS, "", studentEnrollmentNo,
-				// payMode);
+				// paymentMode);
 
-				if (payMode.equals("null") || payMode.equals("") || payMode.equals(null)) {
+				if (paymentMode.equals("null") || paymentMode.equals("") || paymentMode.equals(null)) {
 
 					dao.updateTransactionStatus(sgiTxnId, "Cancelled", "");
 				} else {
-					dao.updateTransactionStatus(sgiTxnId, "Cancelled", payMode);
+					dao.updateTransactionStatus(sgiTxnId, "Cancelled", paymentMode);
 				}
 
 				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
