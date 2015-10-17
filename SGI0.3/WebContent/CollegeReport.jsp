@@ -182,9 +182,9 @@
 								}
 							%>
 							<%
-								if (!profile.contentEquals("Affiliated")) {
+								if (profile.contentEquals("Parent")) {
 							%>
-							<li><a class="ajax-link" href="getCollegeList"><i
+							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
 									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
 							<%
 								}
@@ -286,14 +286,14 @@
 							</div>
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
-									<div class="row">
+									<!-- <div class="row">
 										<div class="col-md-12">
 											<button class="btn btn-sm btn-info pull-right"
 												onclick='window.open("GenerateCollegeReport", "CollegeForm", "width=1500,height=1080")'>
 												<i class="fa fa-plus"></i> Print Report
 											</button>
 										</div>
-									</div>
+									</div> -->
 
 									<!---Content-->
 									<table
@@ -305,7 +305,7 @@
 												<th>Institute Name</th>
 												<th>Contact No.</th>
 												<th>Email</th>
-												<th>University Name</th>
+											<!-- 	<th>University Name</th> -->
 												<th>Address</th>
 												<th>Action</th>
 
@@ -327,12 +327,9 @@
 																value="${aff.email}" /> <%-- <s:property
 																value="email" /> --%></span></td>
 
-													<td><span style="margin-left: 10px;"> <c:out
-																value="${aff.parBeanAff.parInstName}" /> <%-- 
-													
-													<s:property
-																value="affInstList.parBeanAff.parInstName" /> --%></span></td>
-													<td><span style="margin-left: 10px;"> <c:out
+											<%-- 		<td><span style="margin-left: 10px;"> <c:out
+																value="${aff.parBeanAff.parInstName}" /> </span></td>
+											 --%>		<td><span style="margin-left: 10px;"> <c:out
 																value="${aff.instAddress}" /> <%-- <s:property
 																value="instAddress" /> --%></span></td>
 													<td><input type="button" class="btn btn-success"

@@ -11,7 +11,7 @@ public class Idgenerator {
 		Integer second = calendar.get(Calendar.SECOND);
 		UUID uid = UUID.randomUUID();
 		String value = String.valueOf(uid.getMostSignificantBits());
-		String tranxId = "SGI".concat(value.substring(4, value.length()).concat(min.toString())
+		String tranxId = "FD".concat(value.substring(4, value.length()).concat(min.toString())
 				.concat(second.toString()));
 
 		return tranxId;
