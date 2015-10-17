@@ -41,6 +41,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -927,6 +928,8 @@ public class AppDAO {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(TransactionBean.class);
 		criteria.add(Restrictions.eq("studentEnrollmentNumber", enrollmentNumber));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		criteria.addOrder(Order.desc("transDate"));
 		List<TransactionBean> tranDetOfStu = criteria.list();
 		session.close();
 		return tranDetOfStu;
