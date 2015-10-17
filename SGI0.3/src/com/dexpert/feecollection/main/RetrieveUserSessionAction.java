@@ -25,6 +25,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 		log.info("PayMode is ::" + paymentMode);
 		log.info("TXN ID is ::" + txnId);
 		log.info("Response COde is ::" + RPS);
+		//return null;
 		
 		
 		try {
@@ -52,7 +53,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 					}
 
 				}
-				/**/
+				
 				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
 
 					return "opHome";

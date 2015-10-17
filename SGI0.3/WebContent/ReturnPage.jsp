@@ -52,9 +52,11 @@
 
 	<br>
 	<br>
-	<div style="text-align: center;">
-		<img src="img/loading.gif" title="img/loading.gif" height="300px"
-			width="400px">
+		<div style="text-align: center;">
+<br>
+		<span style="color: red; font-weight: bold;">Please, don't
+			close or refresh page</span> <br> <br><img src="img/loader.gif"
+			title="img/loader.gif" height="100px" width="150px">
 	</div>
 
 	<script type="text/javascript">

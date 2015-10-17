@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
+
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-	loginUser = (LoginBean) session.getAttribute("loginUserBean");
-	String profile = (String) session.getAttribute("sesProfile");
+
+	loginUser = (LoginBean) session.getAttribute("loginUserBean"); 
+	String profile=(String)session.getAttribute("sesProfile");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -22,10 +25,10 @@
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-			if (cookie.getName().equals("user"))
-				usercookie = cookie.getValue();
-			if (cookie.getName().equals("JSESSIONID"))
-				sessionID = cookie.getValue();
+	if (cookie.getName().equals("user"))
+		usercookie = cookie.getValue();
+	if (cookie.getName().equals("JSESSIONID"))
+		sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
@@ -139,7 +142,21 @@
 			</div>
 			<!-- theme selector ends -->
 			<!-- cart button starts -->
-
+			<%-- <div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="College-Payment-Summary.html">Proceed To
+							Checkout</a></li>
+					<li class="divider"></li>
+					<li><a href="#"
+						onclick='window.open("Cart.html", "MyCart", "width=500,height=900")'>View
+							Cart</a></li>
+				</ul>
+			</div> --%>
 			<!-- cart button ends -->
 		</div>
 	</div>
@@ -189,7 +206,7 @@
 							<%
 								}
 							%>
-							
+
 
 
 							<%
@@ -223,20 +240,20 @@
 							%>
 							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
 									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							
+
 							<%-- <li><a class="ajax-link" href="UniversityDetailRecord"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
  --%>
-                             <li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
+							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
 									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-                             
+
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-							
-							
-							
-							
-							
+
+
+
+
+
 							<%
 								}
 							%>
@@ -245,7 +262,7 @@
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%>
-							
+
 							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
 									class="fa fa-building"></i><span> College Operator</span></a></li>
 							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
@@ -295,7 +312,6 @@
 							<div class="box-header well">
 								<h2>
 									<i class="glyphicon glyphicon-list-alt"></i> Transaction Report
-									Detail
 								</h2>
 
 								<div class="box-icon">
@@ -307,15 +323,10 @@
 							</div>
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
-									<div class="row">
-										<div class="col-md-12">
-											<button class="btn btn-sm btn-info pull-right"
-												onclick='window.open("LockFeature.jsp", "CollegeForm", "width=500,height=700")'>
-												<i class="fa fa-plus"></i> Print Report
-											</button>
-										</div>
-									</div>
+									<div class="row"></div>
 									<!---Content-->
+
+
 									<table
 										class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
 										<thead>
@@ -334,6 +345,7 @@
 												<th>Transaction Date</th>
 
 
+
 											</tr>
 										</thead>
 										<tbody>
@@ -342,8 +354,9 @@
 											%>
 											<s:iterator value="transactionDetailsForReport">
 												<tr>
-													<td><span style="margin-left: 10px;"><%=i%></span></td>
-													<td><s:set var="val">
+													<td><%=i%></td>
+
+													<td class="center"><s:set var="val">
 															<s:property value="studentEnrollmentNumber" />
 														</s:set> <s:if test='%{#val=="NA"}'>
 
@@ -361,10 +374,11 @@
 																	value="studentEnrollmentNumber" /></span>
 
 														</s:else></td>
-													<td><span style="margin-left: 10px;"><s:property
+													<td class="center"><span style="margin-left: 10px;"><s:property
 																value="txnId" /></span></td>
-													<td><span style="margin-left: 10px;"><s:property
+													<td class="center"><span style="margin-left: 10px;"><s:property
 																value="paymentMode" /></span></td>
+
 													<td><span style="margin-left: 10px;"><s:property
 																value="payeeName" /></span></td>
 													<%-- <td><span style="margin-left: 10px;"><s:property
@@ -379,9 +393,6 @@
 																value="status" /></span></td>
 													<td><span style="margin-left: 10px;"><s:property
 																value="transDate" /></span></td>
-
-
-
 												</tr>
 
 												<%
@@ -392,6 +403,8 @@
 
 										</tbody>
 									</table>
+
+
 
 								</div>
 
@@ -484,8 +497,60 @@
 	<script src="js/charisma.js"></script>
 	<!-- TypeAhead Script -->
 	<script src="js/typeahead.bundle.js"></script>
+	<script>
+		function showSearchResults() {
+			document.getElementById("SearchResultBox").style.display = "block";
+			document.getElementById("CollegeDetailBox").style.display = "none";
+		}
+		function showDetails(id) {
 
+			//var id=document.getElementById("instId").value;
 
+			window.open("ViewCollegeDetails?instId=" + id, "CollegeDetails",
+					"width=700,height=900");
+		}
+	</script>
+
+	<script>
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches, substrRegex;
+
+				// an array that will be populated with substring matches
+				matches = [];
+
+				// regex used to determine if a string contains the substring `q`
+				substrRegex = new RegExp(q, 'i');
+
+				// iterate through the pool of strings and for any string that
+				// contains the substring `q`, add it to the `matches` array
+				$.each(strs, function(i, str) {
+					if (substrRegex.test(str)) {
+						// the typeahead jQuery plugin expects suggestions to a
+						// JavaScript object, refer to typeahead docs for more info
+						matches.push({
+							value : str
+						});
+					}
+				});
+
+				cb(matches);
+			};
+		};
+
+		var states = [ 'Bangalore', 'Mysore', 'Tumkur', 'Belgaum', 'BG Nagar',
+				'Hubli', 'Bijapur', 'Gulbarga', 'Bellary', 'Kolar' ];
+
+		$('#the-basics .typeahead').typeahead({
+			hint : true,
+			highlight : true,
+			minLength : 1
+		}, {
+			name : 'states',
+			displayKey : 'value',
+			source : substringMatcher(states)
+		});
+	</script>
 
 </body>
 </html>

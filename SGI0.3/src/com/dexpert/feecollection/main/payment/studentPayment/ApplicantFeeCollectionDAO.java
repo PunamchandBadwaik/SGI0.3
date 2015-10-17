@@ -41,14 +41,18 @@ public class ApplicantFeeCollectionDAO {
 	public void updateTransactionStatus(String transId, String transStatus, String paymentMode) {
 		Session session = factory.openSession();
 		Criteria criteria = session.createCriteria(TransactionBean.class);
-		TransactionBean transactionBean = (TransactionBean) criteria.add(Restrictions.eq("txnId", transId)).list()
-				.iterator().next();
-		if (transStatus != null) {
-			transactionBean.setStatus(transStatus);
-		}
-		transactionBean.setPaymentMode(paymentMode);
+		// TransactionBean transactionBean = (TransactionBean)
+		// criteria.add(Restrictions.eq("txnId", transId)).list()
+		// .iterator().next();
+		log.info("PayMode is 111::" + paymentMode);
+		TransactionBean oldTransBean = (TransactionBean) session.get(TransactionBean.class, transId);
+		// if (transStatus != null) {
+		oldTransBean.setStatus(transStatus);
+		// }
+		oldTransBean.setPaymentMode(paymentMode);
+
 		Transaction tran = session.beginTransaction();
-		session.merge(transactionBean);
+		session.merge(oldTransBean);
 		tran.commit();
 		session.close();
 
@@ -95,7 +99,7 @@ public class ApplicantFeeCollectionDAO {
 			if (RspCode.equals("Ok") || RspCode.equals("0")) {
 				Transaction transaction = session.beginTransaction();
 				oldBean.setPaymentMode(payMode);
-		
+
 				oldBean.setStatus("Paid");
 
 				session.merge(oldBean);

@@ -175,7 +175,7 @@
 													</tr>
 													<%
 														i++;
-																																																																																																																	  j++;
+																																																																																																																												  j++;
 													%>
 												</s:iterator>
 											</tbody>
@@ -188,13 +188,15 @@
 										
 										var c=confirm("You want to delete this Combination");
 										
-										if(c=true)
+										if(c==true)
 											{
+											
 											document.getElementById(id).remove();
-											return false
+											return false;
 											}
 										else
 											{
+											
 											return false;
 											
 											}
