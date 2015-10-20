@@ -41,13 +41,13 @@ public class LoginBean implements Serializable {
 
 	// one to one bidirectional relationship with super admin
 	// child
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = OperatorBean.class,fetch=FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, targetEntity = OperatorBean.class)
 	@JoinColumn(name = "operatorId_Id_Fk", referencedColumnName = "operatorId")
 	private OperatorBean operatorBean;
 
 	// one to one bidirectional relationship with super admin
 	// child
-	@OneToOne(cascade = CascadeType.ALL, targetEntity = SaBean.class,fetch=FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, targetEntity = SaBean.class)
 	@JoinColumn(name = "super_Admin_Id_Fk", referencedColumnName = "saId")
 	private SaBean saBean;
 

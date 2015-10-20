@@ -194,9 +194,22 @@ public class AffDAO {
 
 	}
 
+	public List<AffBean> getAllCollegeList() {
+
+		Session session = factory.openSession();
+		List<AffBean> affBeansList = new ArrayList<AffBean>();
+		Criteria criteria = session.createCriteria(AffBean.class);
+
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		affBeansList = criteria.list();
+
+		return affBeansList;
+	}
+
 	// get direct child i.e. college list
 	public List<AffBean> getCollegesList() {
-		log.info("1");
+
 		Session session = factory.openSession();
 		List<AffBean> affBeansList = new ArrayList<AffBean>();
 
