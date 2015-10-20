@@ -41,7 +41,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 			{
 				log.info("PayMode is ::" + paymentMode);
-				if (!paymentMode.equals("null") || !paymentMode.equals("") || paymentMode != null) {
+				if ( paymentMode != null&&!paymentMode.equals("null") && !paymentMode.equals("") ) {
 					log.info("paymentMode is ::" + paymentMode);
 					if (paymentMode.equals("Cash") || paymentMode.equals("Cheque")) {
 

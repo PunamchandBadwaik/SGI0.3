@@ -62,7 +62,8 @@ public class ChallanDAO {
 
 			transactionBean.setTransDate(challanBean.getDate());
 			transactionBean.setPayeeMob(challanBean.getPhone());
-			transactionBean.setPayeeName(challanBean.getName());
+			transactionBean.setPayeeFirstName(challanBean.getFirstName());
+			transactionBean.setPayeeLstName(challanBean.getLstName());
 			transactionBean.setPayeeAmount(challanBean.getAmount());
 			transactionBean.setTxnId(challanBean.getTxnId());
 			transDate = sdf.parse(sdf.format(transDate));

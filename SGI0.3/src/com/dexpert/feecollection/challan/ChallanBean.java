@@ -22,7 +22,7 @@ public class ChallanBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	private String challanNumber;
-	String rollNo, name, branch, semester, phone, txnId;
+	String rollNo, firstName, lstName, branch, semester, phone, txnId;
 	private Double amount;
 	@Temporal(TemporalType.DATE)
 	private Date date;
@@ -43,12 +43,20 @@ public class ChallanBean implements Serializable {
 		this.date = date;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLstName() {
+		return lstName;
+	}
+
+	public void setLstName(String lstName) {
+		this.lstName = lstName;
 	}
 
 	public String getBranch() {

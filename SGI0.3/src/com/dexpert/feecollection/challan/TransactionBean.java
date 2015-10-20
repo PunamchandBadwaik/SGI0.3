@@ -1,12 +1,11 @@
 package com.dexpert.feecollection.challan;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-
 
 @Entity
 @Table(name = "transaction_detail")
@@ -20,7 +19,7 @@ public class TransactionBean implements Serializable {
 	@Id
 	private String txnId;
 
-	String paymentMode, payeeName, payeeMob, payeeEmail, payeeAdd;
+	String paymentMode, payeeFirstName, payeeLstName, payeeMob, payeeEmail, payeeAdd;
 	private Double payeeAmount;
 	private Date transDate;
 	private String studentEnrollmentNumber;
@@ -94,12 +93,20 @@ public class TransactionBean implements Serializable {
 		this.payeeAmount = payeeAmount;
 	}
 
-	public String getPayeeName() {
-		return payeeName;
+	public String getPayeeFirstName() {
+		return payeeFirstName;
 	}
 
-	public void setPayeeName(String payeeName) {
-		this.payeeName = payeeName;
+	public void setPayeeFirstName(String payeeFirstName) {
+		this.payeeFirstName = payeeFirstName;
+	}
+
+	public String getPayeeLstName() {
+		return payeeLstName;
+	}
+
+	public void setPayeeLstName(String payeeLstName) {
+		this.payeeLstName = payeeLstName;
 	}
 
 	public String getPayeeMob() {
