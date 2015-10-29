@@ -33,7 +33,7 @@ public class FvBean implements Serializable {
 	private Integer feeValueId;
 	private String value;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "applicantParamValues")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "applicantParamValues")
 	Set<AppBean> appBeanParamSet;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "parentFeeValueSet")

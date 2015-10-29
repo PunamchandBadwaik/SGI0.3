@@ -67,13 +67,16 @@ public class GenerateEnrollmentNumber {
 	}
 
 	public Long sortSetOfEnrollmentNumberAndReturnMax(List<String> enrollMentNumber) {
+		log.info("Inside the sortSetOfEnrollmentNumberAndReturnMax()");
 		ArrayList<Long> tempArray = new ArrayList<Long>();
 		Iterator<String> itr = enrollMentNumber.iterator();
 		while (itr.hasNext()) {
 			Long intEnrollmentNumber = Long.parseLong(itr.next());
+			log.info("EnrollMent Number"+intEnrollmentNumber);
 			tempArray.add(intEnrollmentNumber);
 		}
 		Long maxEnrollmentNumber = Collections.max(tempArray);
+		log.info("MAX Enrollment Number is::::::::::"+maxEnrollmentNumber);
 		return maxEnrollmentNumber;
 
 	}
@@ -130,6 +133,7 @@ public class GenerateEnrollmentNumber {
 						: newValue;
 				return increment;
 			} catch (java.lang.NullPointerException e) {
+				e.printStackTrace();
 				String newValue = "00001";
 				return newValue;
 			}

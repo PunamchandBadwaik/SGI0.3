@@ -153,13 +153,11 @@ public class AppDAO {
 		loginBean.setProfile("Student");
 		appBean.setLoginBean(loginBean);
 		loginBean.setAppBean(appBean);
-
-		affBean.setAppBean(appBean);
-		appBean.setAffBeanStu(affBean);
+ 		appBean.setAffBeanStu(affBean);
 		// LoginBean lgBean = (LoginBean)
 		// httpSession.getAttribute("loginUserBean");
 		// one to many Relationship
-		affBean.getAplBeanSet().add(appBean);
+		//affBean.getAplBeanSet().add(appBean);
 		try {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
@@ -184,7 +182,7 @@ public class AppDAO {
 
 				}
 			} catch (java.lang.NullPointerException e) {
-
+               e.printStackTrace();
 			}
 
 			// for email
@@ -212,8 +210,7 @@ public class AppDAO {
 			getDuesDetail(appBean);
 
 		} finally {
-			session.flush();
-			session.clear();
+		
 			session.close();
 		}
 		return appBean;
@@ -405,7 +402,7 @@ public class AppDAO {
 	public FvBean checkFeeValue(Integer lookupId, String element) {
 
 		Session session = factory.openSession();
-		FvBean bean = new FvBean();
+		//FvBean bean = new FvBean();
 		List<FvBean> list = new ArrayList<FvBean>();
 
 		element = element.replaceAll("\\u00A0", "");
@@ -418,17 +415,15 @@ public class AppDAO {
 			list = criteria.list();
 			log.info("Cell Value is ::" + element + " <<>> " + lookupId);
 			if (list.size() > 0) {
-
-				LookupBean lookupBean = new LookupBean();
+				//LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
 				Iterator<FvBean> iterator = list.iterator();
 				FvBean fvBean = iterator.next();
-				bean.setFeeValueId(fvBean.getFeeValueId());
+				/*bean.setFeeValueId(fvBean.getFeeValueId());
 				bean.setValue(fvBean.getValue());
 				lookupBean.setLookupId(lookupId);
-				bean.setLookupname(lookupBean);
-
-				return bean;
+				bean.setLookupname(lookupBean);*/
+                return fvBean;
 			}
 		} finally {
 			session.close();
@@ -593,8 +588,8 @@ public class AppDAO {
 			String DB_URL = "jdbc:mysql://localhost/sgi";
 
 			// Database credentials
-			String USER = "dexpertuser";
-			String PASS = "Dspl_2014";
+			String USER = "root";
+			String PASS = "root";
 			conn = (Connection) DriverManager.getConnection(DB_URL, USER, PASS);
 
 			boolean areMoreRecords = true;
@@ -792,16 +787,18 @@ public class AppDAO {
 		loginBean.setProfile("Student");
 		appBean.setLoginBean(loginBean);
 		loginBean.setAppBean(appBean);
-
-		affBean.setAppBean(appBean);
-		appBean.setAffBeanStu(affBean);
+        AffBean affBean2=new AffBean();
+        affBean2.setInstId(affBean.getInstId());
+		//affBean.setAppBean(appBean);
+		appBean.setAffBeanStu(affBean2);
 
 		// one to many Relationship
-		affBean.getAplBeanSet().add(appBean);
+		//affBean.getAplBeanSet().add(appBean);
+		
 		Transaction tx = session.beginTransaction();
-		session.save(appBean);
+		session.merge(appBean);
 		tx.commit();
-
+       
 		// to get Dues of Applicant
 		getDuesDetail(appBean);
 
@@ -844,8 +841,7 @@ public class AppDAO {
 		} catch (java.lang.NullPointerException e) {
 			e.printStackTrace();
 		}
-		session.flush();
-		session.clear();
+		
 		session.close();
 
 		// }

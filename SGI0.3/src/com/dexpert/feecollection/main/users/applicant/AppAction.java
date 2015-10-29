@@ -117,7 +117,6 @@ public class AppAction extends ActionSupport {
 		for (int i = 0; i < x.length; i++) {
 			FvBean bean = new FvBean();
 			bean.setFeeValueId(Integer.parseInt(x[i]));
-
 			fvBeansSet.add(bean);
 		}
 

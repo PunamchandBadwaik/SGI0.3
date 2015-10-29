@@ -703,7 +703,8 @@ public class AffDAO {
 
 	public List<Object[]> findTotalDuesOFFee(String feeName, List<String> enrollmentNumber) {
 		Session session = factory.openSession();
-		String query = "SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
+		//String query = "SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
+		String query="SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date),ad.grNumber FROM sgi.fee_dues_master fdm left join sgi.applicant_details ad on fdm.enrollmentNumber_Fk=ad.enrollmentNumber where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
 		SQLQuery sqlQuery = session.createSQLQuery(query);
 		sqlQuery.setParameterList("enrollmentNumber", enrollmentNumber);
 		List<Object[]> totalDueOfStudent = sqlQuery.list();

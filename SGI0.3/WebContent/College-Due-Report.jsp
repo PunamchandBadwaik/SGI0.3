@@ -304,7 +304,7 @@
 													<tr>
 														<th>Sr. No.</th>
 														<th>UIN </th>
-														<th></th>
+														<th>GR Number</th>
 														<th>Original Dues</th>
 														<th></th>
 														<th>Payment To Date</th>
@@ -327,7 +327,8 @@
 																type="hidden" id="feeName"
 																value='<s:property value="#duesArray[0]" />'></td>
 
-															<td></td>
+															<td class="center"><s:property
+																	value="#duesArray[4]"/></td>
 															<td class="center">Rs. <s:property
 																	value="#duesArray[2]" default="0" /></td>
 															<td></td>

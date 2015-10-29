@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -92,9 +93,10 @@ public class AffAction extends ActionSupport {
 	private String contentType;
 	private List<TransactionBean> transactionDetailsForReport;
 	private List<Object[]> totalDuesOfStudent;
-	Double totalNetDuesOFCollegeStudent = 0.0;
-	Double totalPaymentToDate = 0.0;
-	Double totalOriginalDues = 0.0;
+	private String totalNetDuesOFCollegeStudent = "";
+	private String totalPaymentToDate = "";
+	private String totalOriginalDues = "";
+
 	List<String> listOfCourse;
 	List<String> feeNameList;
 	AppDAO appDAO = new AppDAO();
@@ -687,6 +689,12 @@ public class AffAction extends ActionSupport {
 		return SUCCESS;
 	}
 
+	// this method is for converting large amount into original
+	public String convertIntoOriginalAmount(Double amount) {
+		String originalAmount = BigDecimal.valueOf(Double.valueOf(amount.toString())).toPlainString();
+		return originalAmount;
+	}
+
 	// to get College Due Report
 
 	public String collegeDueReport() {
@@ -696,7 +704,9 @@ public class AffAction extends ActionSupport {
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
 		popUp = request.getParameter("popUp") == null ? false : true;
-
+		Double totalNetDuesOFCollegeStudent = 0.0;
+		Double totalOriginalDues = 0.0;
+		Double totalPaymentToDate = 0.0;
 		if (ses.getAttribute("sesProfile").toString().contentEquals("Affiliated")) {
 			collegeId = (Integer) ses.getAttribute("sesId");
 			String courseName = request.getParameter("courseName");
@@ -710,6 +720,7 @@ public class AffAction extends ActionSupport {
 			totalDuesOfStudent = affDao.findTotalDuesOFFee(null, enrollmentNumber);
 			log.info("List size is");
 			Iterator<Object[]> itr = totalDuesOfStudent.iterator();
+
 			while (itr.hasNext()) {
 				Object[] dues = itr.next();
 				Double netDue = dues[1] == null ? 0.0 : (Double) dues[1];
@@ -722,7 +733,9 @@ public class AffAction extends ActionSupport {
 				log.info("total original due " + totalOriginalDues);
 				log.info("total paid " + totalPaymentToDate);
 			}
-
+			this.totalNetDuesOFCollegeStudent = convertIntoOriginalAmount(totalNetDuesOFCollegeStudent);
+			this.totalOriginalDues = convertIntoOriginalAmount(totalOriginalDues);
+			this.totalPaymentToDate = convertIntoOriginalAmount(totalPaymentToDate);
 			String result = popUp == true ? "popUp" : "success";
 			return result;
 
@@ -751,6 +764,10 @@ public class AffAction extends ActionSupport {
 				log.info("total original due " + totalOriginalDues);
 				log.info("total paid " + totalPaymentToDate);
 			}
+			this.totalNetDuesOFCollegeStudent = convertIntoOriginalAmount(totalNetDuesOFCollegeStudent);
+			this.totalOriginalDues = convertIntoOriginalAmount(totalOriginalDues);
+			this.totalPaymentToDate = convertIntoOriginalAmount(totalPaymentToDate);
+
 			log.info("ppppppppppppppppppppppppppppppp");
 			return "popUp";
 
@@ -1178,7 +1195,7 @@ public class AffAction extends ActionSupport {
 				} else {
 					// user selected only one course find enrollment number of
 					// student belongs to that course
-					// find structure ids of college
+					// find structure ides of college
 					List<Integer> structureIdes = affDao.getStrutureId(collegeId, null);
 					List<Integer> valuesId = feeDAO.getValueIdByStructureIdes(structureIdes);
 					Integer idOfCourse = fvDAO.valueIdOfCourse(valuesId, courseName).get(0);
@@ -1659,30 +1676,6 @@ public class AffAction extends ActionSupport {
 		this.totalDuesOfStudent = totalDuesOfStudent;
 	}
 
-	public Double getTotalNetDuesOFCollegeStudent() {
-		return totalNetDuesOFCollegeStudent;
-	}
-
-	public void setTotalNetDuesOFCollegeStudent(Double totalNetDuesOFCollegeStudent) {
-		this.totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent;
-	}
-
-	public Double getTotalPaymentToDate() {
-		return totalPaymentToDate;
-	}
-
-	public void setTotalPaymentToDate(Double totalPaymentToDate) {
-		this.totalPaymentToDate = totalPaymentToDate;
-	}
-
-	public Double getTotalOriginalDues() {
-		return totalOriginalDues;
-	}
-
-	public void setTotalOriginalDues(Double totalOriginalDues) {
-		this.totalOriginalDues = totalOriginalDues;
-	}
-
 	public List<ParBean> getParBeans() {
 		return parBeans;
 	}
@@ -1753,6 +1746,30 @@ public class AffAction extends ActionSupport {
 
 	public void setAllCourseOfInst(List<CollegeCourses> allCourseOfInst) {
 		this.allCourseOfInst = allCourseOfInst;
+	}
+
+	public String getTotalNetDuesOFCollegeStudent() {
+		return totalNetDuesOFCollegeStudent;
+	}
+
+	public void setTotalNetDuesOFCollegeStudent(String totalNetDuesOFCollegeStudent) {
+		this.totalNetDuesOFCollegeStudent = totalNetDuesOFCollegeStudent;
+	}
+
+	public String getTotalPaymentToDate() {
+		return totalPaymentToDate;
+	}
+
+	public void setTotalPaymentToDate(String totalPaymentToDate) {
+		this.totalPaymentToDate = totalPaymentToDate;
+	}
+
+	public String getTotalOriginalDues() {
+		return totalOriginalDues;
+	}
+
+	public void setTotalOriginalDues(String totalOriginalDues) {
+		this.totalOriginalDues = totalOriginalDues;
 	}
 
 	// End of Getter Setter Methods
