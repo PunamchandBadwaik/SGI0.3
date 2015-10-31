@@ -1,4 +1,9 @@
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
+<%@page import="com.opensymphony.xwork2.util.ValueStack"%>
+<%@page import="org.apache.struts2.views.jsp.TagUtils"%>
 <%@page import="com.opensymphony.xwork2.ActionContext"%>
+<%@page import="com.opensymphony.xwork2.ognl.OgnlValueStack"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -12,6 +17,7 @@
 	<%
 		String errMessage = (String) request.getAttribute("msg");
 		ActionContext.getContext().put("errMessage", errMessage);
+		
 	%>
 	<div>
 
@@ -79,6 +85,9 @@
 							i++;
 						%>
 					</s:iterator>
+					
+					
+					
 					<%-- <tr>
 						<td></td>
 						<td></td>

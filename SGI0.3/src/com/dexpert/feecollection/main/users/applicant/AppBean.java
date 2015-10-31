@@ -86,7 +86,7 @@ public class AppBean implements Serializable {
 	Set<FvBean> applicantParamValues;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
-	@OrderBy(value = "dueId DESC")
+	//@OrderBy(value = "dueId DESC")
 	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> paymentDues;
 
