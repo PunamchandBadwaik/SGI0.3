@@ -74,13 +74,13 @@ public class AffBean implements Serializable {
 	ParBean parBeanAff;
 
 	// one to many relationship with Applicants (Students)
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "affBeanStu")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
 	@Fetch(FetchMode.JOIN)
 	@OrderBy(value = "enrollmentNumber")
 	Set<AppBean> aplBeanSet;
 
 	// one to many relationship with College Operator (operator)
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "affBean")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
 	@Fetch(FetchMode.JOIN)
 	Set<OperatorBean> OptrBeanSet;
 
