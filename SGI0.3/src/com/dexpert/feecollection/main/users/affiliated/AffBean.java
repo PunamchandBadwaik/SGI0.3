@@ -74,18 +74,18 @@ public class AffBean implements Serializable {
 	ParBean parBeanAff;
 
 	// one to many relationship with Applicants (Students)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu",fetch=FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@OrderBy(value = "enrollmentNumber")
 	Set<AppBean> aplBeanSet;
 
 	// one to many relationship with College Operator (operator)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean",fetch=FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	Set<OperatorBean> OptrBeanSet;
 
 	// many to many relationship with FeeDetails)
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinTable(name = "affiliatedinstitute_feedetails", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "feeId"))
 	@Column(name = "sequenceId")
 	@OrderBy(value = "feeId")
@@ -103,19 +103,19 @@ public class AffBean implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "affBeanStu")
 	private AppBean appBean;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinTable(name = "affiliated_values", joinColumns = @JoinColumn(name = "inst_id"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> collegeParamvalues;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	private Set<AffFeePropBean> feeProps;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> dueFeesSet;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean",fetch=FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	private Set<CollegeCourses> collegeCourses;
 

@@ -31,15 +31,15 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
-	public String SabPaisaURL = "http://localhost:8080/SabPaisa/";
+	/*public String SabPaisaURL = "http://localhost:8080/SabPaisa/";
 	public String returnUrl = "http://localhost:8082/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://localhost:8082/SGI0.3/Login.jsp";
+	String clientFailureUrl = "http://localhost:8082/SGI0.3/Login.jsp";*/
 
-	/*
-	 * public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; public
-	 * String returnUrl = "http://49.50.72.228:8080/FD0.3/ReturnPage.jsp";
-	 * String clientFailureUrl = "http://49.50.72.228:8080/FD0.3/Login.jsp";
-	 */
+	
+	  public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; 
+	  public  String returnUrl = "http://49.50.72.228:8080/FD0.3/ReturnPage.jsp";
+	  String clientFailureUrl = "http://49.50.72.228:8080/FD0.3/Login.jsp";
+	
 	private static final long serialVersionUID = 1L;
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpServletResponse response = ServletActionContext.getResponse();
