@@ -41,18 +41,19 @@ public class LoginDAO {
 		Session session = factory.openSession();
 		try {
 
-			String sql = "select * from sgi.login_master where userName=:user";
-			SQLQuery sqlQuery = session.createSQLQuery(sql);
-			sqlQuery.setParameter("user", loginBean.getUserName());
-			sqlQuery.addEntity(LoginBean.class);
-			List<LoginBean> bean= sqlQuery.list();
 			/*
-			 * Criteria criteria = session.createCriteria(LoginBean.class);
-			 * criteria.add(Restrictions.eq("userName",
-			 * loginBean.getUserName()));
-			 * criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			 * List<LoginBean> bean = criteria.list();
+			 * String sql =
+			 * "select * from sgi.login_master where userName=:user"; SQLQuery
+			 * sqlQuery = session.createSQLQuery(sql);
+			 * sqlQuery.setParameter("user", loginBean.getUserName());
+			 * sqlQuery.addEntity(LoginBean.class); List<LoginBean> bean=
+			 * sqlQuery.list();
 			 */
+
+			Criteria criteria = session.createCriteria(LoginBean.class);
+			criteria.add(Restrictions.eq("userName", loginBean.getUserName()));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			List<LoginBean> bean = criteria.list();
 
 			return bean;
 		} finally {
