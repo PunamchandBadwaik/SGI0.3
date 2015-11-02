@@ -96,7 +96,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 	
 %>
-	
+
 
 	<%
 		int i = 1;
@@ -122,8 +122,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 				<button class="btn btn-default dropdown-toggle"
 					data-toggle="dropdown">
 					<i class="glyphicon glyphicon-user"></i><span
-						class="hidden-sm hidden-xs"> <%-- <%=loginUser.getUserName()%> --%></span> <span
-						class="caret"></span>
+						class="hidden-sm hidden-xs"> <%-- <%=loginUser.getUserName()%> --%></span>
+					<span class="caret"></span>
 				</button>
 				<!-- <ul class="dropdown-menu">
 					<li><a id="saveProfileTagId" onclick=""
@@ -199,7 +199,7 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 			</noscript>
 
 			<div id="content" class="col-lg-10 col-sm-10">
-				
+
 
 
 				<div class="row">
@@ -223,13 +223,23 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 									<table class="table table-condensed"
 										style="font-weight: bold; font-size: large;">
+
+										<tr>
+
+											<td>School Name</td>
+											<td><s:property value="app1.affBeanStu.instName" /> <input
+												type="hidden" id="collegeId" name="collegeId"
+												value="<%=cId%>"></td>
+										</tr>
 										<tr>
 
 											<td>Student UIN Number</td>
-											<td><s:property value="app1.enrollmentNumber" />
-											
-											<input type="hidden" id="collegeId" name="collegeId" value="<%=cId%>"></td>
-											<input type="hidden" id="uin" value='<s:property value="app1.enrollmentNumber" />' /></td>
+											<td><s:property value="app1.enrollmentNumber" /> <input
+												type="hidden" id="collegeId" name="collegeId"
+												value="<%=cId%>"></td>
+											<input type="hidden" id="uin"
+												value='<s:property value="app1.enrollmentNumber" />' />
+											</td>
 										</tr>
 										<tr>
 
@@ -237,8 +247,23 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
 													value="app1.aplLstName" /></td>
 											<td><input type="hidden"
-												value='<s:property value="app1.isHostler" />' id="isHosteler" /></td>
+												value='<s:property value="app1.isHostler" />'
+												id="isHosteler" /></td>
 										</tr>
+										<s:iterator value="app1.applicantParamValues" var="x">
+											<tr>
+												<td><strong><s:property
+															value="#x.lookupname.lookupName" /></strong></td>
+												<td><s:property value="value" /></td>
+
+											</tr>
+
+
+
+
+										</s:iterator>
+
+
 
 									</table>
 									<table class="table table-condensed">
@@ -259,21 +284,21 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
                                            while(itr.hasNext()){
                                        PaymentDuesBean paymentDue=itr.next();
                                     	  %>
-                                    	  
-                                    	  <%double totalDue=paymentDue.getTotal_fee_amount() ;%>
+
+										<%double totalDue=paymentDue.getTotal_fee_amount() ;%>
 										<%if(totalDue!=0) {%>
-											<%-- <td><td><span style="color: green; font-weight: bold;">Fees
+										<%-- <td><td><span style="color: green; font-weight: bold;">Fees
 													NOT Applicable</span></td> </td> --%>
-											
+
 										<tr>
 
 											<td><%=i%></td>
 											<td style="display: none"><%=paymentDue.getFeeId() %><input
 												type="hidden" value='<%=paymentDue.getFeeId() %>'
 												id="feeId[<%=i%>]"></td>
-												<% hm.put(i,paymentDue.getSequenceId()); %>
+											<% hm.put(i,paymentDue.getSequenceId()); %>
 											<td><%=paymentDue.getFeeName() %></td>
-			                                    <%-- <td><s:property value="payee" /></td>
+											<%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 											<td><%=paymentDue.getTotal_fee_amount()%></td>
@@ -287,15 +312,13 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 											<td><span style="color: green; font-weight: bold;">Fees
 													Completed</span></td>
 											<%}else {%><%-- <%else{%> --%>
-											<td><%=netDue %>
-											
-											</td>
+											<td><%=netDue %></td>
 											<input type="hidden" value='<%=netDue %>'
-													id="payableamount[<%=i%>]"/>
+												id="payableamount[<%=i%>]" />
 											<%} %>
 											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
 											<td><div class="checkbox">
-											<% if(netDue!=0&&totalDue>0){%>
+													<% if(netDue!=0&&totalDue>0){%>
 													<label> <input type="checkbox"
 														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
 														class="btn btn-check">Check to Add to Payment
@@ -303,10 +326,9 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 												</div></td>
 											<td><input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
-												onchange="callFun(this.value)"> 
-												
-												<input type="hidden" id="lmtFeesForLPS" value='<s:property value="totalDueOFStudent" />'>
-												<script
+												onchange="callFun(this.value)"> <input type="hidden"
+												id="lmtFeesForLPS"
+												value='<s:property value="totalDueOFStudent" />'> <script
 													type="text/javascript">
 													
 													function showTextBox(k) {
@@ -391,9 +413,9 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 										</tr>
 										<%} %>
-										
+
 										<%} %>
-							<%} %>
+										<%} %>
 										<%-- <s:iterator value="app1.paymentDues">
 
 											
@@ -505,7 +527,8 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 
 											</tr>
 										</s:iterator>
- --%>										<tr>
+ --%>
+										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
 													Fees Amount</span></td>
@@ -688,10 +711,11 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 														}
 														
 													</script></td>
-													<td>
-												
+											<td>
+
 												<button type="button" class="btn btn-default"
-											onclick="gotoLogin()">Back</button> </td>
+													onclick="gotoLogin()">Back</button>
+											</td>
 										</tr>
 									</table>
 
@@ -788,14 +812,14 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 	<script src="js/jquery.history.js"></script>
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
-	 <script type="text/javascript">
+	<script type="text/javascript">
 												function gotoLogin() {
 
 													window.location = "quickPayStudentEnrollNumberSearch.jsp";
 
 												}
 											</script>
-							
+
 
 </body>
 </html>

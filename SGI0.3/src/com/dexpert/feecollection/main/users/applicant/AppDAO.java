@@ -589,7 +589,7 @@ public class AppDAO {
 
 			// Database credentials
 			String USER = "root";
-			String PASS = "Dspl_2014";
+			String PASS = "root";
 			conn = (Connection) DriverManager.getConnection(DB_URL, USER, PASS);
 
 			boolean areMoreRecords = true;

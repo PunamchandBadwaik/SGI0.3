@@ -267,10 +267,17 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
+											<td>School Name</td>
+											<td><s:property value="app1.affBeanStu.instName" /> <input
+												type="hidden" id="collegeId" name="collegeId"
+												value="<%=cId%>"></td>
+										</tr>
+										<tr>
+
 											<td>Student UIN</td>
-											<td><s:property value="app1.enrollmentNumber" />
-											
-											<input type="hidden" id="collegeId" name="collegeId" value="<%=cId%>"></td>
+											<td><s:property value="app1.enrollmentNumber" /> <input
+												type="hidden" id="collegeId" name="collegeId"
+												value="<%=cId%>"></td>
 										</tr>
 										<tr>
 
@@ -281,6 +288,22 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 												value='<s:property value="app1.isHosteler" />'
 												id="isHosteler" /></td>
 										</tr>
+
+										<s:iterator value="app1.applicantParamValues" var="x">
+											<tr>
+												<td><strong><s:property
+															value="#x.lookupname.lookupName" /></strong></td>
+												<td><s:property value="value" /></td>
+
+											</tr>
+
+
+
+
+										</s:iterator>
+
+
+
 
 									</table>
 									<table class="table table-condensed">
@@ -301,21 +324,21 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
                                            while(itr.hasNext()){
                                        PaymentDuesBean paymentDue=itr.next();
                                     	  %>
-                                    	  
-                                    	  <%double totalDue=paymentDue.getTotal_fee_amount() ;%>
+
+										<%double totalDue=paymentDue.getTotal_fee_amount() ;%>
 										<%if(totalDue!=0) {%>
-											<%-- <td><td><span style="color: green; font-weight: bold;">Fees
+										<%-- <td><td><span style="color: green; font-weight: bold;">Fees
 													NOT Applicable</span></td> </td> --%>
-											
+
 										<tr>
 
 											<td><%=i%></td>
 											<td style="display: none"><%=paymentDue.getFeeId() %><input
 												type="hidden" value='<%=paymentDue.getFeeId() %>'
 												id="feeId[<%=i%>]"></td>
-												<% hm.put(i,paymentDue.getSequenceId()); %>
+											<% hm.put(i,paymentDue.getSequenceId()); %>
 											<td><%=paymentDue.getFeeName() %></td>
-			                                    <%-- <td><s:property value="payee" /></td>
+											<%-- <td><s:property value="payee" /></td>
 												<td><s:property value="dueDate" /></td>
 												<td><s:property value="dateCalculated" /></td> --%>
 											<td><%=paymentDue.getTotal_fee_amount()%></td>
@@ -323,49 +346,44 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 											<% if(netDue==0&&totalDue>0){%>
 											<td><span style="color: green; font-weight: bold;">Fees
 													Completed</span></td>
-													<%-- <td><%=netDue %>
+											<%-- <td><%=netDue %>
 											
 											</td> --%>
 											<%}else {%><%-- <%else{%> --%>
-											<td><%=netDue %>
-											
-											</td>
+											<td><%=netDue %></td>
 											<input type="hidden" value='<%=netDue %>'
-													id="payableamount[<%=i%>]"/>
+												id="payableamount[<%=i%>]" />
 											<%} %>
-											
+
 											<%-- <%} %> --%>
 											<%--  <input type="hidden" value='<%=netDue %>'
 													id="payableamount[<%=i%>]"/>
-											 --%><td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
+											 --%>
+											<td><%=paymentDue.getPayments_to_date()==null?0:paymentDue.getPayments_to_date() %></td>
 											<td><div class="checkbox">
-											<% if(netDue!=0&&totalDue>0){%>
+													<% if(netDue!=0&&totalDue>0){%>
 													<label> <input type="checkbox"
 														id="checkId[<%=i %>]" onclick="showTextBox(<%=i%>)"
 														class="btn btn-check">Check to Add to Payment
 													</label>
 												</div></td>
-												
+
 											<td>
-											<%-- <% if(cId==2){ %>
+												<%-- <% if(cId==2){ %>
 											<input type="text" 
 												name="FeePaid" id="FeePaid[<%=i%>]" style="display: none;" readonly="readonly" 
 												onchange="callFun(this.value)"> 
 												
 												<input type="hidden" id="lmtFeesForLPS" value='<s:property value="totalDueOFStudent" />'>
-												<%}else { %> --%>
-												
-												<input type="text" style="display: none;"
+												<%}else { %> --%> <input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
-												onchange="callFun(this.value)"> 
-												<input type="hidden" id="lmtFeesForLPS" value='<s:property value="totalDueOFStudent" />'>
-												
-												
-												<%-- <%} %> --%>
-											
-											
-											
-											<%-- <input type="text" style="display: none;"
+												onchange="callFun(this.value)"> <input type="hidden"
+												id="lmtFeesForLPS"
+												value='<s:property value="totalDueOFStudent" />'> <%-- <%} %> --%>
+
+
+
+												<%-- <input type="text" style="display: none;"
 												name="FeePaid" id="FeePaid[<%=i%>]"
 												onchange="callFun(this.value)"> --%> <script
 													type="text/javascript">
@@ -445,7 +463,8 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 															
 														}
 													</script> <input type="hidden" name="paymentDueStr"
-												id="paymentDueStr" value="" /></td>
+												id="paymentDueStr" value="" />
+											</td>
 											<%
 													i++;
 														k = i;
@@ -456,7 +475,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 
 
 
-<%} %>
+										<%} %>
 
 										<%-- <s:iterator value="app1.paymentDues">
 
@@ -571,19 +590,19 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 
 											</tr>
 										</s:iterator> --%>
-										
+
 										<%}%>
 										<%if(amountAfterDiscount>0) {%>
 										<tr>
-										<td>***</td>
-										<td>Discount</td>
-										<td>-<s:property value="discountedAmount" /></td>
-										<td>-<s:property value="discountedAmount" /></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									    </tr>
-										<%}%> 
+											<td>***</td>
+											<td>Discount</td>
+											<td>-<s:property value="discountedAmount" /></td>
+											<td>-<s:property value="discountedAmount" /></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<%}%>
 										<tr>
 											<td></td>
 											<td><span style="font-size: 20px; font-weight: bold;">Total
@@ -622,10 +641,10 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 															 var lmtFee=document.getElementById("lmtFeesForLPS").value;
 															 var collegeId=document.getElementById("collegeId").value;
 															
-															
+													
 															 if(collegeId==7){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
-														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
-															 
+														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:100;}
+														  
 															
 															//alert("tuitionFeePending is"+tuitionFeePending);
 															var tuitionFeeBeingPaid = parseFloat(document.getElementById("FeePaid[1]").value);

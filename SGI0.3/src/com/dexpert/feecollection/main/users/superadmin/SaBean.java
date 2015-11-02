@@ -17,6 +17,10 @@ import com.dexpert.feecollection.main.users.LoginBean;
 @Table(name = "super_admin_master")
 public class SaBean implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@GenericGenerator(name = "g2", strategy = "increment")
 	@Id
 	@GeneratedValue(generator = "g2")

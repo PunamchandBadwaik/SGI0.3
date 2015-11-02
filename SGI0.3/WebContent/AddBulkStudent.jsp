@@ -159,8 +159,13 @@
 												<tr>
 
 													<td style="font-weight: bold;">Upload Excel File</td>
-													<td><input type="file" name="fileUpload" size="40"
-														class="form-control" required="required"></td>
+													<td>
+													<input type="file" name="fileUpload" size="40"
+														class="form-control" required="required">
+														
+														
+														
+														</td>
 
 												</tr>
 

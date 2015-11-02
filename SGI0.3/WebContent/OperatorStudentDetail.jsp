@@ -290,6 +290,13 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 										style="font-weight: bold; font-size: large;">
 										<tr>
 
+											<td>School Name</td>
+											<td><s:property value="app1.affBeanStu.instName" /> <input
+												type="hidden" id="collegeId" name="collegeId"
+												value="<%=cId%>"></td>
+										</tr>
+										<tr>
+
 											<td>Student UIN Number</td>
 											<td>
 											<input type="hidden" id="collegeId" name="collegeId" value="<%=cId%>">
@@ -308,6 +315,18 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 												value='<s:property value="app1.isHosteler" />' id="isHosteler" /></td>
 													
 										</tr>
+										<s:iterator value="app1.applicantParamValues" var="x">
+											<tr>
+												<td><strong><s:property
+															value="#x.lookupname.lookupName" /></strong></td>
+												<td><s:property value="value" /></td>
+
+											</tr>
+
+
+
+
+										</s:iterator>
 
 									</table>
 									<table class="table table-condensed">

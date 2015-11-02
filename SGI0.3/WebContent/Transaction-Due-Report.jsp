@@ -380,7 +380,8 @@
 																value="paymentMode" /></span></td>
 
 													<td><span style="margin-left: 10px;"><s:property
-																value="payeeName" /></span></td>
+																value="payeeFirstName" />&nbsp;&nbsp;<s:property
+																value="payeeLstName" /></span></td>
 													<%-- <td><span style="margin-left: 10px;"><s:property
 																value="payeeMob" /></span></td> --%>
 													<%-- <td><span style="margin-left: 10px;"><s:property
