@@ -18,8 +18,7 @@ public class TransactionBean implements Serializable {
 
 	@Id
 	private String txnId;
-
-	String paymentMode, payeeFirstName, payeeLstName, payeeMob, payeeEmail, payeeAdd;
+ 	String paymentMode, payeeFirstName, payeeLstName, payeeMob, payeeEmail, payeeAdd;
 	private Double payeeAmount;
 	private Date transDate;
 	private String studentEnrollmentNumber;

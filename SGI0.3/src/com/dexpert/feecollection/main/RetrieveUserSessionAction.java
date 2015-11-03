@@ -48,7 +48,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 						dao.updateTransactionStatus(sgiTxnId, "Pending", paymentMode);
 
 					} else {
-						log.info("paymentMode isd ::" + paymentMode);
+						log.info("paymentMode is d ::" + paymentMode);
 						dao.updateTransTable(sgiTxnId, RPS, dueStr, studentEnrollmentNo, paymentMode);
 					}
 
@@ -64,8 +64,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 			else {
 
-				// dao.updateTransTable(sgiTxnId, RPS, "", studentEnrollmentNo,
-				// paymentMode);
+				
 
 				if (paymentMode.equals("null") || paymentMode.equals("") || paymentMode.equals(null)) {
 

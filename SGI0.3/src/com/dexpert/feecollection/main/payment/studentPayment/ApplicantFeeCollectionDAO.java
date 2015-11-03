@@ -40,11 +40,6 @@ public class ApplicantFeeCollectionDAO {
 
 	public void updateTransactionStatus(String transId, String transStatus, String paymentMode) {
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(TransactionBean.class);
-		// TransactionBean transactionBean = (TransactionBean)
-		// criteria.add(Restrictions.eq("txnId", transId)).list()
-		// .iterator().next();
-		log.info("PayMode is 111::" + paymentMode);
 		TransactionBean oldTransBean = (TransactionBean) session.get(TransactionBean.class, transId);
 		// if (transStatus != null) {
 		oldTransBean.setStatus(transStatus);
@@ -87,8 +82,7 @@ public class ApplicantFeeCollectionDAO {
 	}
 
 	public void updateTransTable(String txnId, String RspCode, String dueStr, String studentEnrollmentNo, String payMode) {
-		TransactionBean newBean = new TransactionBean();
-		newBean.setTxnId(txnId);
+		
 		Session session = factory.openSession();
 
 		// log.info("DUe String is ::" + dueStr);
