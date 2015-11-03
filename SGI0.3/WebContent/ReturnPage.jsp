@@ -13,7 +13,7 @@
 	<%
 		String paymentMode = request.getParameter("payMode");
 
-		String pgRespCode = request.getParameter("pgRespCode") == null ? "DEF" : request.getParameter("pgRespCode");
+		String pgRespCode = request.getParameter("pgRespCode") == null ? "-99" : request.getParameter("pgRespCode");
 		String atomTxnId = request.getParameter("atomTxnNo");
 		String sabPaisaTxnId = request.getParameter("SabPaisaTxId");
 

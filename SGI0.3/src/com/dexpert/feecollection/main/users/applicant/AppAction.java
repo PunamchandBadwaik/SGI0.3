@@ -307,6 +307,7 @@ public class AppAction extends ActionSupport {
 
 		try {
 			appBean1 = aplDAO.getUserDetail(loginBean.getAppBean().getEnrollmentNumber());
+			
 			getDuesOfStudent();
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {

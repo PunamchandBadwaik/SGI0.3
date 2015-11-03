@@ -15,6 +15,7 @@ import com.dexpert.feecollection.main.users.affiliated.AffAction;
 public class ExcelTemplateDAO {
 	static Logger log = Logger.getLogger(AffAction.class.getName());
 
+	@SuppressWarnings("static-access")
 	public static void generateTemplate(XSSFSheet xssfSheet) {
 
 		LookupDAO lpdao = new LookupDAO();
@@ -29,7 +30,7 @@ public class ExcelTemplateDAO {
 		paramStr.add("Secondary Mobile");
 		paramStr.add("Email Id");
 		paramStr.add("Start Year");
-	
+
 		try {
 
 			Row header = xssfSheet.createRow(0);
@@ -44,6 +45,7 @@ public class ExcelTemplateDAO {
 				Cell paramCell = header.createCell(i);
 				paramCell.setCellValue(paramStr.get(i));
 				xssfSheet.setColumnWidth(i, 6500);
+				paramCell.setCellType(paramCell.CELL_TYPE_STRING);
 
 			}
 

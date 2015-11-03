@@ -25,9 +25,8 @@ public class RetrieveUserSessionAction extends ActionSupport {
 		log.info("PayMode is ::" + paymentMode);
 		log.info("TXN ID is ::" + txnId);
 		log.info("Response COde is ::" + RPS);
-		//return null;
-		
-		
+		// return null;
+
 		try {
 			HttpSession httpSession = (HttpSession) request.getServletContext().getAttribute(txnId);
 			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
@@ -41,11 +40,11 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 			{
 				log.info("PayMode is ::" + paymentMode);
-				if ( paymentMode != null&&!paymentMode.equals("null") && !paymentMode.equals("") ) {
+				if (paymentMode != null && !paymentMode.equals("null") && !paymentMode.equals("")) {
 					log.info("paymentMode is ::" + paymentMode);
 					if (paymentMode.equals("Cash") || paymentMode.equals("Cheque")) {
 
-						dao.updateTransactionStatus(sgiTxnId, "Pending", paymentMode);
+						dao.updateTransactionStatus(sgiTxnId, "Pending", paymentMode, RPS);
 
 					} else {
 						log.info("paymentMode is d ::" + paymentMode);
@@ -53,7 +52,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 					}
 
 				}
-				
+
 				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
 
 					return "opHome";
@@ -64,13 +63,11 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 			else {
 
-				
-
 				if (paymentMode.equals("null") || paymentMode.equals("") || paymentMode.equals(null)) {
 
-					dao.updateTransactionStatus(sgiTxnId, "Cancelled", "");
+					dao.updateTransactionStatus(sgiTxnId, "Cancelled", "", RPS);
 				} else {
-					dao.updateTransactionStatus(sgiTxnId, "Cancelled", paymentMode);
+					dao.updateTransactionStatus(sgiTxnId, "Cancelled", paymentMode, RPS);
 				}
 
 				if (loginBean.getProfile().contentEquals("CollegeOperator")) {

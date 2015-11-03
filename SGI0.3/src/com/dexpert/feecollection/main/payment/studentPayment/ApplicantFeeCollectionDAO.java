@@ -38,14 +38,14 @@ public class ApplicantFeeCollectionDAO {
 
 	}
 
-	public void updateTransactionStatus(String transId, String transStatus, String paymentMode) {
+	public void updateTransactionStatus(String transId, String transStatus, String paymentMode, String RPS) {
 		Session session = factory.openSession();
 		TransactionBean oldTransBean = (TransactionBean) session.get(TransactionBean.class, transId);
 		// if (transStatus != null) {
 		oldTransBean.setStatus(transStatus);
 		// }
 		oldTransBean.setPaymentMode(paymentMode);
-
+		oldTransBean.setAllowPayCode(RPS);
 		Transaction tran = session.beginTransaction();
 		session.merge(oldTransBean);
 		tran.commit();
@@ -82,7 +82,7 @@ public class ApplicantFeeCollectionDAO {
 	}
 
 	public void updateTransTable(String txnId, String RspCode, String dueStr, String studentEnrollmentNo, String payMode) {
-		
+
 		Session session = factory.openSession();
 
 		// log.info("DUe String is ::" + dueStr);
@@ -95,7 +95,7 @@ public class ApplicantFeeCollectionDAO {
 				oldBean.setPaymentMode(payMode);
 
 				oldBean.setStatus("Paid");
-
+				oldBean.setAllowPayCode(RspCode);
 				session.merge(oldBean);
 				transaction.commit();
 
