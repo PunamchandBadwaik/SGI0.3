@@ -85,23 +85,7 @@ public class AppAction extends ActionSupport {
 		this.operatorBean = operatorBean;
 	}
 
-	public String getDueFees() {
-
-		String enrollmentId = request.getParameter("EnrollmentId");
-		enrollmentId = "1234";
-
-		appBean1 = aplDAO.getUserDetail(enrollmentId);
-
-		feeDetailsBeanList = fcDAO.getAllFeeDetail();
-
-		Iterator<FeeDetailsBean> itr = feeDetailsBeanList.iterator();
-		while (itr.hasNext()) {
-
-			Integer feeId = itr.next().getFeeId();
-			fcDAO.calculateFeeStudent(1, 2, 3, feeId);
-		}
-		return SUCCESS;
-	}
+	
 
 	public String registerStudent() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
@@ -312,7 +296,7 @@ public class AppAction extends ActionSupport {
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
-			e.printStackTrace();
+			//e.printStackTrace();
 			return ERROR;
 		}
 

@@ -26,7 +26,8 @@ public class FcDAO {
 	// Global Declarations
 	public static SessionFactory factory = ConnectionClass.getFactory();
 	static Logger log = Logger.getLogger(FcDAO.class.getName());
-    AffDAO affDAO=new AffDAO();
+	AffDAO affDAO = new AffDAO();
+
 	// Global Declarations End
 	// DAO Methods
 	public void insertFeeBulk(ArrayList<FcBean> savelist) {
@@ -120,6 +121,7 @@ public class FcDAO {
 			session.close();
 		}
 	}
+
 	public void insertFeeStructureBulk(ArrayList<FeeStructureData> savelist) {
 		// Declarations
 
@@ -148,7 +150,8 @@ public class FcDAO {
 	}
 
 	@SuppressWarnings("deprecation")
-	public ArrayList<FeeDetailsBean> GetFees(String filterKey, String filterValue, Integer id, ArrayList<Integer> ids,Integer structureId) {
+	public ArrayList<FeeDetailsBean> GetFees(String filterKey, String filterValue, Integer id, ArrayList<Integer> ids,
+			Integer structureId) {
 		// Declarations
 		ArrayList<FeeDetailsBean> ResultList = new ArrayList<FeeDetailsBean>();
 		// Open session from session factory
@@ -172,11 +175,11 @@ public class FcDAO {
 			} else if (filterKey.contentEquals("ids")) {
 				feeCr.add(Restrictions.in("feeId", ids));
 			}
-			
-			if(structureId!=null){
-			feeCr.createAlias("configs","conf",CriteriaSpecification.LEFT_JOIN);
-			feeCr.add(Restrictions.eq("conf.structure_id",structureId ));
-			
+
+			if (structureId != null) {
+				feeCr.createAlias("configs", "conf", CriteriaSpecification.LEFT_JOIN);
+				feeCr.add(Restrictions.eq("conf.structure_id", structureId));
+
 			}
 			feeCr.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			Iterator<FeeDetailsBean> feeIt = feeCr.list().iterator();
@@ -195,105 +198,73 @@ public class FcDAO {
 		}
 	}
 
-	public Double calculateFeeStudent(Integer valueId1, Integer valueId2, Integer valueId3, Integer feeId) {
-		FeeDetailsBean feeDetail = new FeeDetailsBean();
-		List<FcBean> combinations = new ArrayList<FcBean>();
-		List<FcBean> searchList = new ArrayList<FcBean>();
-		
-	
-		
-		// Get Fee From fee_details table
-		try {
-			feeDetail = GetFees("id", null, feeId, null,null).get(0);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			log.info("Incorrect Fee ID");
-			e.printStackTrace();
-		}
-		// Get all the possible combinations of the retrieved fee
-
-		combinations = feeDetail.getConfigs();
-		// Create a multimap with the combo ID as the key and the bean as the
-		// value
-		com.google.common.collect.ListMultimap<Integer, FcBean> comboMap = ArrayListMultimap.create();
-		Iterator<FcBean> comboIt = combinations.iterator();
-		while (comboIt.hasNext()) {
-			FcBean tempbean = comboIt.next();
-			comboMap.put(tempbean.getComboId(), tempbean);
-		}
-		// Get KeySet
-		ArrayList<Integer> cKeySet = new ArrayList<Integer>(comboMap.keySet());
-		// Search for the unique combo which satisfies all the three valueIds
-		Iterator<Integer> keyIt = cKeySet.iterator();
-		while (keyIt.hasNext()) {
-			ArrayList<Integer> values = new ArrayList<Integer>();
-			searchList.addAll(comboMap.get(keyIt.next()));
-			for (int i = 0; i < searchList.size(); i++) {
-				values.add(searchList.get(i).getValueId());
-			}
-			/*
-			 * if ((values.get(0) == valueId1 || values.get(0) == valueId2 ||
-			 * values.get(0) == valueId3) && (values.get(1) == valueId1 ||
-			 * values.get(1) == valueId2 || values.get(1) == valueId3) &&
-			 * (values.get(2) == valueId1 || values.get(2) == valueId2 ||
-			 * values.get(2) == valueId3)) { return
-			 * searchList.get(0).getAmount();
-			 */
-			if ((values.get(0) == valueId1 || values.get(0) == valueId2 || values.get(0) == valueId3)
-					&& (values.get(1) == valueId1 || values.get(1) == valueId2 || values.get(1) == valueId3)) {
-				return searchList.get(0).getAmount();
-			} else {
-				searchList.clear();
-			}
-		}
-		// If no Combination found return zero
-		log.info("no Unique combination found");
-		return (double) 0;
-
-	}
-
 	public List<FeeDetailsBean> getAllFeeDetail() {
 		// TODO Auto-generated method stub
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(FeeDetailsBean.class);
-		List<FeeDetailsBean> feesDetails = criteria.list();
-		return feesDetails;
+		try {
+			Criteria criteria = session.createCriteria(FeeDetailsBean.class);
+			List<FeeDetailsBean> feesDetails = criteria.list();
+			return feesDetails;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public List<Integer> getAllFeeId() {
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(FeeDetailsBean.class);
-		criteria.setProjection(Projections.id()).addOrder(Order.asc("feeId"));
-		List<Integer> feeIdes = criteria.list();
-		return feeIdes;
+
+		try {
+			Criteria criteria = session.createCriteria(FeeDetailsBean.class);
+			criteria.setProjection(Projections.id()).addOrder(Order.asc("feeId"));
+			List<Integer> feeIdes = criteria.list();
+
+			return feeIdes;
+
+		} finally {
+			session.close();
+		}
 	}
 
 	public String getFeeName(Integer feeId) {
 		Session session = factory.openSession();
-		String feeName = (String) session.createCriteria(FeeDetailsBean.class).add(Restrictions.eq("feeId", feeId))
-				.setProjection(Projections.property("feeName")).list().iterator().next();
-		session.close();
-		return feeName;
+
+		try {
+			String feeName = (String) session.createCriteria(FeeDetailsBean.class).add(Restrictions.eq("feeId", feeId))
+					.setProjection(Projections.property("feeName")).list().iterator().next();
+			return feeName;
+		} finally {
+			session.close();
+		}
 
 	}
 
 	public List<String> getFeeNames(List<Integer> feeIdes) {
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(FeeDetailsBean.class);
-		if (feeIdes != null && feeIdes.size() > 0 && (!feeIdes.isEmpty())) {
-			criteria.add(Restrictions.in("feeId", feeIdes)).setProjection(Projections.property("feeName"))
-					.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		}else if(feeIdes.size()<1){
-		List<String> feeName=new ArrayList<String>();	
-		return feeName;
-		} 
-		
-		else {
-			criteria.setProjection(Projections.property("feeName")).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		try
+
+		{
+			Criteria criteria = session.createCriteria(FeeDetailsBean.class);
+			if (feeIdes != null && feeIdes.size() > 0 && (!feeIdes.isEmpty())) {
+				criteria.add(Restrictions.in("feeId", feeIdes)).setProjection(Projections.property("feeName"))
+						.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			} else if (feeIdes.size() < 1) {
+				List<String> feeName = new ArrayList<String>();
+				return feeName;
+			}
+
+			else {
+				criteria.setProjection(Projections.property("feeName")).setResultTransformer(
+						Criteria.DISTINCT_ROOT_ENTITY);
+			}
+			List<String> feeName = criteria.list();
+			return feeName;
+		} finally {
+			session.close();
+
 		}
-		List<String> feeName = criteria.list();
-		session.close();
-		return feeName;
+
 	}
 
 	public Integer getMaxStructure() {// Declarations
@@ -325,60 +296,65 @@ public class FcDAO {
 		criteria.setProjection(Projections.distinct(Projections.property("valueId")));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Integer> lookupValuesId = criteria.list();
-		
-		
+
 		session.close();
 		return lookupValuesId;
 	}
-	public Integer getSequenceOfFee(Integer instId,Integer feeId)
-	{
-	Integer sequenceId=null;
-	Session session=factory.openSession();
-	try{
-	String query="SELECT sequenceId FROM sgi.affiliatedinstitute_feedetails where feeId=:feeId and inst_id=:insId";
-	SQLQuery sqlQuery=session.createSQLQuery(query);	
-	sqlQuery.setParameter("feeId",feeId);
-	sqlQuery.setParameter("insId",instId);
-	sequenceId=(Integer)sqlQuery.list().iterator().next();
-	return sequenceId;
-	}catch(Exception ex){
-	return sequenceId;	
+
+	public Integer getSequenceOfFee(Integer instId, Integer feeId) {
+		Integer sequenceId = null;
+		Session session = factory.openSession();
+		try {
+			String query = "SELECT sequenceId FROM sgi.affiliatedinstitute_feedetails where feeId=:feeId and inst_id=:insId";
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			sqlQuery.setParameter("feeId", feeId);
+			sqlQuery.setParameter("insId", instId);
+			sequenceId = (Integer) sqlQuery.list().iterator().next();
+			return sequenceId;
+		} catch (Exception ex) {
+			return sequenceId;
+		} finally {
+			session.close();
+		}
 	}
-	}
-	
-	public Integer getFeeStructure(Integer instId,Integer feeId)
-	{
+
+	public Integer getFeeStructure(Integer instId, Integer feeId) {
 		// Declarations
-		Integer structureId=null;
+		Integer structureId = null;
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
-			Criteria cr=session.createCriteria(FeeStructureData.class);
+			Criteria cr = session.createCriteria(FeeStructureData.class);
 			cr.add(Restrictions.eq("inst_id", instId));
 			cr.add(Restrictions.eq("fee_id", feeId));
-			FeeStructureData temp=(FeeStructureData) cr.list().get(0);
-			structureId=temp.getStructure_id();
+			FeeStructureData temp = (FeeStructureData) cr.list().get(0);
+			structureId = temp.getStructure_id();
 			return structureId;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return structureId;
 		} finally {
-			
+
 			// close session
 			session.close();
-			
+
 		}
 	}
-      public List<Integer> getValueIdByStructureIdes(List<Integer> structureIdes){
-                Session session=factory.openSession();	  
-    	         Criteria criteria=session.createCriteria(FcBean.class);
-    	         criteria.add(Restrictions.in("structure_id",structureIdes));
-    	         criteria.setProjection(Projections.distinct(Projections.property("valueId")));
-    	         List<Integer> valuesIdes=criteria.list();
-    	         session.close();
-    	         return valuesIdes;
-    	  
-      }
+
+	public List<Integer> getValueIdByStructureIdes(List<Integer> structureIdes) {
+		Session session = factory.openSession();
+
+		try {
+			Criteria criteria = session.createCriteria(FcBean.class);
+			criteria.add(Restrictions.in("structure_id", structureIdes));
+			criteria.setProjection(Projections.distinct(Projections.property("valueId")));
+			List<Integer> valuesIdes = criteria.list();
+			return valuesIdes;
+		} finally {
+			session.close();
+		}
+
+	}
 	// DAO Methods End
 }

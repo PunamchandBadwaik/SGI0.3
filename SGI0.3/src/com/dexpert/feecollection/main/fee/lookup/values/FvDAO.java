@@ -64,62 +64,91 @@ public class FvDAO {
 	}
 
 	public Integer findFeeValueId(String value, Integer feeId) {
-		log.info(" value is ::" + value);
-		log.info(" Fee id is ::" + feeId);
-
-		String query = "SELECT feeValueId from sgi.fee_values_master where value=:category";// and FeeLookupId_Fk=:feeId";
+		// log.info(" value is ::" + value);
+		// log.info(" Fee id is ::" + feeId);
 		Session session = factory.openSession();
-		SQLQuery sqlQuery = session.createSQLQuery(query);
-		sqlQuery.setParameter("category", value);
-	//	sqlQuery.setParameter("feeId", feeId);
-		Integer id = (Integer) sqlQuery.list().iterator().next();
-		session.close();
-		return id;
+		try {
+			String query = "SELECT feeValueId from sgi.fee_values_master where value=:category";// and
+																								// FeeLookupId_Fk=:feeId";
+
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			sqlQuery.setParameter("category", value);
+			// sqlQuery.setParameter("feeId", feeId);
+			Integer id = (Integer) sqlQuery.list().iterator().next();
+			return id;
+		} finally {
+			session.close();
+
+		}
+
 	}
 
 	public Integer findFeeValueId(Long value, Integer feeId) {
-		log.info(" value is111 ::" + value);
-		log.info(" Fee id is111 ::" + feeId);
-		String query = "SELECT feeValueId from sgi.fee_values_master where value=:category" ;//and FeeLookupId_Fk=:feeId";
+		// log.info(" value is111 ::" + value);
+		// log.info(" Fee id is111 ::" + feeId);
 		Session session = factory.openSession();
-		SQLQuery sqlQuery = session.createSQLQuery(query);
-		sqlQuery.setParameter("category", value);
-	//	sqlQuery.setParameter("feeId", feeId);
-		Integer id = (Integer) sqlQuery.list().iterator().next();
-		session.close();
-		return id;
+		try {
+			String query = "SELECT feeValueId from sgi.fee_values_master where value=:category";// and
+																								// FeeLookupId_Fk=:feeId";
+
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			sqlQuery.setParameter("category", value);
+			// sqlQuery.setParameter("feeId", feeId);
+			Integer id = (Integer) sqlQuery.list().iterator().next();
+			return id;
+		} finally {
+			session.close();
+
+		}
+
 	}
-	
+
 	public Integer getCourseId(String courseName) {
-		log.info("course name is :: "+courseName);
+		// log.info("course name is :: " + courseName);
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(FvBean.class);
-		criteria.add(Restrictions.eq("value", courseName)).setProjection(Projections.id());
-		Integer courseId = (Integer) criteria.list().iterator().next();
-		session.close();
-		return courseId;
+
+		try {
+			Criteria criteria = session.createCriteria(FvBean.class);
+			criteria.add(Restrictions.eq("value", courseName)).setProjection(Projections.id());
+			Integer courseId = (Integer) criteria.list().iterator().next();
+			return courseId;
+		} finally {
+			session.close();
+		}
+
 	}
-	public List<Integer> getListOfValueBeans(List<Integer> listOfValue)
-	{
-	Session session=factory.openSession();	
-	Criteria criteria=session.createCriteria(FvBean.class);
-	criteria.add(Restrictions.in("feeValueId", listOfValue));
-	criteria.setProjection(Projections.groupProperty("lookupname.lookupId"));
-	criteria.setProjection(Projections.property("lookupname.lookupId"));
-	criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-	List<Integer> lookUpparamId=criteria.list();
-	log.info("look up param list"+lookUpparamId);
-	session.close();
-	return lookUpparamId;	
+
+	public List<Integer> getListOfValueBeans(List<Integer> listOfValue) {
+		Session session = factory.openSession();
+
+		// log.info("look up param list" + lookUpparamId);
+		try {
+			Criteria criteria = session.createCriteria(FvBean.class);
+			criteria.add(Restrictions.in("feeValueId", listOfValue));
+			criteria.setProjection(Projections.groupProperty("lookupname.lookupId"));
+			criteria.setProjection(Projections.property("lookupname.lookupId"));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			List<Integer> lookUpparamId = criteria.list();
+			return lookUpparamId;
+		} finally {
+			session.close();
+		}
+
 	}
-	public List<Integer> valueIdOfCourse(List<Integer> valueIdes,String courseName){
-	Session session=factory.openSession();	
-	Criteria criteria=session.createCriteria(FvBean.class);	
-	criteria.add(Restrictions.eq("value",courseName)).add(Restrictions.in("feeValueId", valueIdes));	
-	criteria.setProjection(Projections.property("feeValueId"));
-	List<Integer> courseId=criteria.list();
-	session.close();
-	return courseId;
+
+	public List<Integer> valueIdOfCourse(List<Integer> valueIdes, String courseName) {
+		Session session = factory.openSession();
+
+		try {
+			Criteria criteria = session.createCriteria(FvBean.class);
+			criteria.add(Restrictions.eq("value", courseName)).add(Restrictions.in("feeValueId", valueIdes));
+			criteria.setProjection(Projections.property("feeValueId"));
+			List<Integer> courseId = criteria.list();
+			return courseId;
+		} finally {
+			session.close();
+		}
+
 	}
 	// DAO Methods End
 

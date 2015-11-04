@@ -30,23 +30,36 @@ public class ChallanDAO {
 	public ChallanBean serachByChallanNumber(String challanId) {
 		ChallanBean challanBean = null;
 		Session session = factorySb.openSession();
-		Criteria criteria = session.createCriteria(ChallanBean.class);
-		criteria.add(Restrictions.eq("challanNumber", challanId));
-		List<ChallanBean> challanList = criteria.list();
-		log.info("Challan List is ::" + challanList.size());
-		if (challanList.size() > 0) {
-			challanBean = challanList.iterator().next();
+
+		try {
+			Criteria criteria = session.createCriteria(ChallanBean.class);
+			criteria.add(Restrictions.eq("challanNumber", challanId));
+			List<ChallanBean> challanList = criteria.list();
+			log.info("Challan List is ::" + challanList.size());
+			if (challanList.size() > 0) {
+				challanBean = challanList.iterator().next();
+			}
+
+		} finally {
+			session.close();
 		}
-		session.close();
+
 		return challanBean;
 	}
 
 	public List<ChallanBean> allChallanInfo() {
 		Session session = factorySb.openSession();
-		Criteria criteria = session.createCriteria(ChallanBean.class);
-		List<ChallanBean> allChallanList = criteria.list();
-		session.close();
-		return allChallanList;
+
+		try {
+			Criteria criteria = session.createCriteria(ChallanBean.class);
+			List<ChallanBean> allChallanList = criteria.list();
+
+			return allChallanList;
+
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public void saveToTransaction(ChallanBean challanBean) throws ParseException {

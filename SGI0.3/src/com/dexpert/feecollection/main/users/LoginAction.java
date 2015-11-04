@@ -139,33 +139,33 @@ public class LoginAction extends ActionSupport {
 	}
 
 	public String userLogin() throws InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException,
-			IllegalBlockSizeException, BadPaddingException, IOException
+			IllegalBlockSizeException, BadPaddingException, IOException, NoSuchAlgorithmException,
+			InvalidKeySpecException
 
 	{
-
+		LoginBean loginClone = new LoginBean();
 		log.info("user Name is ::" + loginBean.getUserName());
 		log.info("Password is ::" + loginBean.getPassword());
-		String encryptedPwd, decrypedText = null;
+		String encryptedPwd = null;
 		LoginBean lgbean = new LoginBean();
-		
+		synchronized (this) {
+			// to Encrypt Password
+			PasswordEncryption.encrypt(String.valueOf(loginBean.getPassword()));
+			encryptedPwd = PasswordEncryption.encStr;
+			loginBean.setPassword(encryptedPwd);
 
-		List<LoginBean> loginUserList = loginDAO.getLoginDetails(loginBean);
-
-		Iterator<LoginBean> loginIterator = loginUserList.iterator();
-		while (loginIterator.hasNext()) {
-			// log.info("1");
-			lgbean = (LoginBean) loginIterator.next();
-
-			encryptedPwd = lgbean.getPassword();
-			// log.info("2");
-			PasswordEncryption.decrypt(encryptedPwd);
-			decrypedText = PasswordEncryption.plainStr;
-			// log.info("3");
-			log.info("password frm Database is ::" + decrypedText);
-			// log.info("4");
 		}
+		loginClone.setUserName(loginBean.getUserName());
+		loginClone.setPassword(loginBean.getPassword());
+		log.info("After Encryption ::" + loginClone.getPassword());
+
+		LoginBean loginUser = loginDAO.getLoginDetails(loginClone);
+		// log.info("List Size ::" + loginUserList.size());
+		// log.info("List  ::" + loginUserList);
+
 		try {
-			if (loginBean.getUserName().equals(loginBean.getUserName()) && loginBean.getPassword().equals(decrypedText)) {
+			if ((loginUser.getUserName().equals(loginClone.getUserName()) && loginUser.getPassword().equals(
+					loginClone.getPassword()))) {
 				// log.info("valid User name and Password");
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
 				usercookie.setMaxAge(60 * 60);
@@ -178,22 +178,29 @@ public class LoginAction extends ActionSupport {
 					httpSession.setAttribute("sesProfile", "Affiliated");
 					httpSession.setAttribute("dashLink", "index-College.jsp");
 					httpSession.setAttribute("sesId", lgbean.getAffBean().getInstId());
-					
+
 					httpSession.setAttribute("instId", lgbean.getAffBean().getInstId());
 					httpSession.setAttribute("parInstId", lgbean.getAffBean().getParBeanAff().getParInstId());
-					
-				/*	List<Object[]> studentsDues = affDAO.getTotalDueOfStudents(lgbean.getAffBean().getInstId());
-					httpSession.setAttribute("duesArray", (Object[]) studentsDues.iterator().next());
-				*/	return "college";
+
+					/*
+					 * List<Object[]> studentsDues =
+					 * affDAO.getTotalDueOfStudents
+					 * (lgbean.getAffBean().getInstId());
+					 * httpSession.setAttribute("duesArray", (Object[])
+					 * studentsDues.iterator().next());
+					 */return "college";
 				} else if (lgbean.getParBean() != null) {
 					log.info("Valid University");
 					httpSession.setAttribute("sesId", lgbean.getParBean().getParInstId());
 					httpSession.setAttribute("sesProfile", "Parent");
 					httpSession.setAttribute("dashLink", "index-University.jsp");
-					/*List<Object[]> viewstudentDuesForPar = parDAO.getTotDuesOFStudOFAllColl(lgbean.getParBean()
-							.getParInstId());
-					httpSession.setAttribute("duesArrayForParent", (Object[]) viewstudentDuesForPar.iterator().next());
-				*/	return "university";
+					/*
+					 * List<Object[]> viewstudentDuesForPar =
+					 * parDAO.getTotDuesOFStudOFAllColl(lgbean.getParBean()
+					 * .getParInstId());
+					 * httpSession.setAttribute("duesArrayForParent", (Object[])
+					 * viewstudentDuesForPar.iterator().next());
+					 */return "university";
 				} else if (lgbean.getSaBean() != null) {
 					log.info("Valid Super Admin");
 					httpSession.setAttribute("sesProfile", "SU");
@@ -333,69 +340,62 @@ public class LoginAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public String validateChangePwdDetails() throws InvalidKeyException, NoSuchPaddingException,
-			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException,
-			NoSuchAlgorithmException, InvalidKeySpecException {
-
-		log.info("login details:" + loginBean.getUserName() + " " + loginBean.getPassword() + " " + newPwd);
-		log.info("user Name is ::" + loginBean.getUserName());
-		log.info("Password is ::" + loginBean.getPassword());
-		String encryptedPwd, decrypedText = null;
-		String userProfile = "";
-		LoginBean lgbean = new LoginBean();
-		log.info("");
-
-		List<LoginBean> loginUserList = loginDAO.getLoginDetails(loginBean);
-
-		Iterator<LoginBean> loginIterator = loginUserList.iterator();
-		while (loginIterator.hasNext()) {
-			log.info("1");
-			lgbean = (LoginBean) loginIterator.next();
-			userProfile = lgbean.getProfile();
-			setUserId(lgbean.getLoginId());
-			encryptedPwd = lgbean.getPassword();
-			log.info("2");
-			PasswordEncryption.decrypt(encryptedPwd);
-			decrypedText = PasswordEncryption.plainStr;
-			log.info("3");
-			log.info("password frm Database is ::" + decrypedText);
-			log.info("4");
-		}
-
-		if (loginBean.getPassword().equals(decrypedText)) {
-
-			log.info("Password is matching:" + loginBean.getPassword());
-
-			if (userProfile.contentEquals("Institute")) {
-
-				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
-				request.setAttribute("msg", "Your Password is Successfully changed..");
-				return SUCCESS;
-
-			} else if (userProfile.contentEquals("Admin")) {
-
-				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
-				request.setAttribute("msg", "Your Password is Successfully changed..");
-				return SUCCESS;
-
-			} else if (userProfile.contentEquals("Super Admin")) {
-
-				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
-				request.setAttribute("msg", "Your Password is Successfully changed..");
-				return SUCCESS;
-
-			} else if (userProfile.contentEquals("CollegeOperator")) {
-
-				LoginDAO.updateChangePwdDetails(lgbean, newPwd);
-				request.setAttribute("msg", "Your Password is Successfully changed..");
-				return SUCCESS;
-
-			}
-		}
-		request.setAttribute("msg", "Please Enter The Valid Password");
-		return "failure";
-
-	}
+	/*
+	 * public String validateChangePwdDetails() throws InvalidKeyException,
+	 * NoSuchPaddingException, InvalidAlgorithmParameterException,
+	 * IllegalBlockSizeException, BadPaddingException, IOException,
+	 * NoSuchAlgorithmException, InvalidKeySpecException {
+	 * 
+	 * log.info("login details:" + loginBean.getUserName() + " " +
+	 * loginBean.getPassword() + " " + newPwd); log.info("user Name is ::" +
+	 * loginBean.getUserName()); log.info("Password is ::" +
+	 * loginBean.getPassword()); String encryptedPwd, decrypedText = null;
+	 * String userProfile = ""; LoginBean lgbean = new LoginBean();
+	 * log.info("");
+	 * 
+	 * List<LoginBean> loginUserList = loginDAO.getLoginDetails(loginBean);
+	 * 
+	 * Iterator<LoginBean> loginIterator = loginUserList.iterator(); while
+	 * (loginIterator.hasNext()) { log.info("1"); lgbean = (LoginBean)
+	 * loginIterator.next(); userProfile = lgbean.getProfile();
+	 * setUserId(lgbean.getLoginId()); encryptedPwd = lgbean.getPassword();
+	 * log.info("2"); PasswordEncryption.decrypt(encryptedPwd); decrypedText =
+	 * PasswordEncryption.plainStr; log.info("3");
+	 * log.info("password frm Database is ::" + decrypedText); log.info("4"); }
+	 * 
+	 * if (loginBean.getPassword().equals(decrypedText)) {
+	 * 
+	 * log.info("Password is matching:" + loginBean.getPassword());
+	 * 
+	 * if (userProfile.contentEquals("Institute")) {
+	 * 
+	 * LoginDAO.updateChangePwdDetails(lgbean, newPwd);
+	 * request.setAttribute("msg", "Your Password is Successfully changed..");
+	 * return SUCCESS;
+	 * 
+	 * } else if (userProfile.contentEquals("Admin")) {
+	 * 
+	 * LoginDAO.updateChangePwdDetails(lgbean, newPwd);
+	 * request.setAttribute("msg", "Your Password is Successfully changed..");
+	 * return SUCCESS;
+	 * 
+	 * } else if (userProfile.contentEquals("Super Admin")) {
+	 * 
+	 * LoginDAO.updateChangePwdDetails(lgbean, newPwd);
+	 * request.setAttribute("msg", "Your Password is Successfully changed..");
+	 * return SUCCESS;
+	 * 
+	 * } else if (userProfile.contentEquals("CollegeOperator")) {
+	 * 
+	 * LoginDAO.updateChangePwdDetails(lgbean, newPwd);
+	 * request.setAttribute("msg", "Your Password is Successfully changed..");
+	 * return SUCCESS;
+	 * 
+	 * } } request.setAttribute("msg", "Please Enter The Valid Password");
+	 * return "failure";
+	 * 
+	 * }
+	 */
 
 	// updatePersonalInfoDetail for Super Admin
 

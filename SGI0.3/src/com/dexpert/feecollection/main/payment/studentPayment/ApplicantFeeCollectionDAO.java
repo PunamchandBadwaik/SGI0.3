@@ -29,56 +29,79 @@ public class ApplicantFeeCollectionDAO {
 
 	public String getDueString(String tranId) {
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(TransactionBean.class);
-		criteria.add(Restrictions.eq("txnId", tranId));
-		TransactionBean tran = (TransactionBean) criteria.list().iterator().next();
-		String DueString = tran.getDueString();
-		session.close();
-		return DueString;
+
+		try {
+			Criteria criteria = session.createCriteria(TransactionBean.class);
+			criteria.add(Restrictions.eq("txnId", tranId));
+			TransactionBean tran = (TransactionBean) criteria.list().iterator().next();
+			String DueString = tran.getDueString();
+			return DueString;
+		} finally {
+			session.close();
+
+		}
 
 	}
 
 	public void updateTransactionStatus(String transId, String transStatus, String paymentMode, String RPS) {
 		Session session = factory.openSession();
-		TransactionBean oldTransBean = (TransactionBean) session.get(TransactionBean.class, transId);
-		// if (transStatus != null) {
-		oldTransBean.setStatus(transStatus);
-		// }
-		oldTransBean.setPaymentMode(paymentMode);
-		oldTransBean.setAllowPayCode(RPS);
-		Transaction tran = session.beginTransaction();
-		session.merge(oldTransBean);
-		tran.commit();
-		session.close();
+
+		try {
+			TransactionBean oldTransBean = (TransactionBean) session.get(TransactionBean.class, transId);
+			// if (transStatus != null) {
+			oldTransBean.setStatus(transStatus);
+			// }
+			oldTransBean.setPaymentMode(paymentMode);
+			oldTransBean.setAllowPayCode(RPS);
+			Transaction tran = session.beginTransaction();
+			session.merge(oldTransBean);
+			tran.commit();
+		} finally {
+			session.close();
+		}
 
 	}
 
 	public Integer getTransId(String txnId) {
 
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(TransactionBean.class);
-		criteria.add(Restrictions.eq("txnId", txnId));
-		Integer id = (Integer) criteria.list().iterator().next();
-		session.close();
-		return id;
+
+		try {
+			Criteria criteria = session.createCriteria(TransactionBean.class);
+			criteria.add(Restrictions.eq("txnId", txnId));
+			Integer id = (Integer) criteria.list().iterator().next();
+			return id;
+		} finally {
+			session.close();
+		}
 
 	}
 
 	public TransactionBean getTransaction(String txnId) {
 		Session session = factory.openSession();
-		Criteria cr = session.createCriteria(TransactionBean.class);
-		cr.add(Restrictions.eq("txnId", txnId));
-		TransactionBean res = (TransactionBean) cr.list().iterator().next();
-		return res;
+		try {
+			Criteria cr = session.createCriteria(TransactionBean.class);
+			cr.add(Restrictions.eq("txnId", txnId));
+			TransactionBean res = (TransactionBean) cr.list().iterator().next();
+			return res;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public ArrayList<BulkPaymentBean> getBulkPayments(String txnId) {
 
 		Session session = factory.openSession();
-		Criteria cr = session.createCriteria(BulkPaymentBean.class);
-		cr.add(Restrictions.eq("txnId", txnId));
-		ArrayList<BulkPaymentBean> resList = new ArrayList<BulkPaymentBean>(cr.list());
-		return resList;
+
+		try {
+			Criteria cr = session.createCriteria(BulkPaymentBean.class);
+			cr.add(Restrictions.eq("txnId", txnId));
+			ArrayList<BulkPaymentBean> resList = new ArrayList<BulkPaymentBean>(cr.list());
+			return resList;
+		} finally {
+			session.close();
+		}
 	}
 
 	public void updateTransTable(String txnId, String RspCode, String dueStr, String studentEnrollmentNo, String payMode) {
@@ -206,10 +229,15 @@ public class ApplicantFeeCollectionDAO {
 
 	public void insertPaymentDetails(TransactionBean transaction) {
 		Session session = factory.openSession();
-		Transaction hibernateTran = session.beginTransaction();
-		session.save(transaction);
-		hibernateTran.commit();
-		session.close();
+
+		try {
+			Transaction hibernateTran = session.beginTransaction();
+			session.save(transaction);
+			hibernateTran.commit();
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public void insertBulkPayDetails(ArrayList<BulkPaymentBean> savelist) {

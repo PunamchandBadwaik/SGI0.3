@@ -37,26 +37,19 @@ public class LoginDAO {
 
 	// DAO Methods Here
 	// method to getDetails About user
-	public List<LoginBean> getLoginDetails(LoginBean loginBean) {
+	public LoginBean getLoginDetails(LoginBean loginBean) {
 		Session session = factory.openSession();
 		try {
-
-			/*
-			 * String sql =
-			 * "select * from sgi.login_master where userName=:user"; SQLQuery
-			 * sqlQuery = session.createSQLQuery(sql);
-			 * sqlQuery.setParameter("user", loginBean.getUserName());
-			 * sqlQuery.addEntity(LoginBean.class); List<LoginBean> bean=
-			 * sqlQuery.list();
-			 */
-
+			log.info("Get Login Details ");
 			Criteria criteria = session.createCriteria(LoginBean.class);
 			criteria.add(Restrictions.eq("userName", loginBean.getUserName()));
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			List<LoginBean> bean = criteria.list();
-
+			criteria.add(Restrictions.eq("password", loginBean.getPassword()));
+			// criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			LoginBean bean = (LoginBean) criteria.list().iterator().next();
+			log.info(" after Get Login Details ");
 			return bean;
 		} finally {
+			log.info("finally Block");
 			session.close();
 		}
 	}

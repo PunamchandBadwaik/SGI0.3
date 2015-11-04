@@ -1,4 +1,5 @@
 package com.dexpert.feecollection.main.users;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -13,7 +14,6 @@ import java.security.spec.KeySpec;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -22,10 +22,18 @@ import javax.crypto.spec.PBEParameterSpec;
 
 public class PasswordEncryption {
 
+	/*public static void main(String[] args) throws InvalidKeyException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException {
+		String pwd = "BsGiHbHZqChZWH7hrWGy9A==";
+		plainStr = PasswordEncryption.decrypt(pwd);
+
+		System.out.println(plainStr);
+	}
+*/
 	// for password encryption and decryption
 	static Cipher ecipher;
 	static Cipher dcipher;
-	
+
 	// 8-byte Salt
 	static byte[] salt = { (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32, (byte) 0x56, (byte) 0x35, (byte) 0xE3,
 			(byte) 0x03 };
@@ -38,19 +46,19 @@ public class PasswordEncryption {
 	static public void encrypt(String pwd) throws NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidKeyException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
-		/*Logger logger = Logger.getLogger("MyClass");*/
+		/* Logger logger = Logger.getLogger("MyClass"); */
 
 		KeySpec keySpec = new PBEKeySpec(key.toCharArray(), salt, iterationCount);
 
-		/*logger.info("encryption message 1 KeySpec :::" + keySpec);*/
+		/* logger.info("encryption message 1 KeySpec :::" + keySpec); */
 
 		SecretKey secretKey = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);
-		/*logger.info("encryption message 2 secrete key:" + secretKey);*/
+		/* logger.info("encryption message 2 secrete key:" + secretKey); */
 		AlgorithmParameterSpec spec = new PBEParameterSpec(salt, iterationCount);
-		/*logger.info("encryption message 3 AlgorithmParameterSpec :" + spec);*/
+		/* logger.info("encryption message 3 AlgorithmParameterSpec :" + spec); */
 		try {
 			ecipher = Cipher.getInstance(secretKey.getAlgorithm());
-			
+
 			ecipher.init(Cipher.ENCRYPT_MODE, secretKey, spec);
 			String charSet = "UTF-8";
 			byte[] in = null;
@@ -58,7 +66,7 @@ public class PasswordEncryption {
 			byte[] out = null;
 			out = ecipher.doFinal(in);
 			encStr = new sun.misc.BASE64Encoder().encode(out);
-			/*logger.info("encryption message 4 encStr :" + encStr);*/
+			/* logger.info("encryption message 4 encStr :" + encStr); */
 		} catch (NoSuchPaddingException e) {
 
 			e.printStackTrace();
@@ -66,10 +74,10 @@ public class PasswordEncryption {
 
 	}
 
-	static public void decrypt(String pass) throws NoSuchPaddingException, InvalidKeyException,
+	static public String decrypt(String pass) throws NoSuchPaddingException, InvalidKeyException,
 			InvalidAlgorithmParameterException, IOException, IllegalBlockSizeException, BadPaddingException {
 		String pwd = pass;
-		/*Logger logger = Logger.getLogger("MyClass");*/
+		/* Logger logger = Logger.getLogger("MyClass"); */
 		KeySpec keySpec = new PBEKeySpec(key.toCharArray(), salt, iterationCount);
 		SecretKey secretKey = null;
 		try {
@@ -83,8 +91,8 @@ public class PasswordEncryption {
 			utf8 = dcipher.doFinal(enc);
 			String charSet = "UTF-8";
 			plainStr = new String(utf8, charSet);
-			
-			/*logger.info("Decryption message plain Text :" + plainStr);*/
+
+			/* logger.info("Decryption message plain Text :" + plainStr); */
 		} catch (InvalidKeySpecException e) {
 
 			e.printStackTrace();
@@ -92,6 +100,7 @@ public class PasswordEncryption {
 
 			e.printStackTrace();
 		}
+		return plainStr;
 
 	}
 
