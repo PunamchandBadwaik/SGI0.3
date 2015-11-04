@@ -128,10 +128,11 @@ public class SaDAO {
 				sms.sendSMS(loginDetailsOfSuAdmin.getSaBean().getMobileNum(), msg);
 
 				// -----Code for sending email//--------------------
-				String emailContent="Welcome to the FeeDesk portal of "+bean.getFirstName()+ ". You can log in with the below credentials. ";
-                EmailSessionBean email = new EmailSessionBean();
+				String emailContent = "Welcome to the FeeDesk portal of " + bean.getFirstName()
+						+ ". You can log in with the below credentials. ";
+				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getEmailId(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
-						.getUserName(), password, bean.getFirstName(),emailContent);
+						.getUserName(), password, bean.getFirstName(), emailContent);
 
 				log.info("password :" + password);
 
@@ -153,18 +154,19 @@ public class SaDAO {
 	public static void updatePersonalRecordOfSuperAdmin(SaBean saBean) {
 
 		Session session = factory.openSession();
-		SaBean bean = (SaBean) session.get(SaBean.class, saBean.getSaId());
-
-		bean.setFirstName(saBean.getFirstName());
-		bean.setMidName(saBean.getMidName());
-		bean.setLstName(saBean.getLstName());
-		bean.setAddress(saBean.getAddress());
-		bean.setMobileNum(saBean.getMobileNum());
-		Transaction transaction = session.beginTransaction();
-		session.merge(bean);
-		transaction.commit();
-		session.close();
-
+		try {
+			SaBean bean = (SaBean) session.get(SaBean.class, saBean.getSaId());
+			bean.setFirstName(saBean.getFirstName());
+			bean.setMidName(saBean.getMidName());
+			bean.setLstName(saBean.getLstName());
+			bean.setAddress(saBean.getAddress());
+			bean.setMobileNum(saBean.getMobileNum());
+			Transaction transaction = session.beginTransaction();
+			session.merge(bean);
+			transaction.commit();
+		} finally {
+			session.close();
+		}
 	}
 
 }

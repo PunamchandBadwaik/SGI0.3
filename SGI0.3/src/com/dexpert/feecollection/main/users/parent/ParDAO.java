@@ -186,10 +186,11 @@ public class ParDAO {
 				// session.close();
 
 				// -----Code for sending email//--------------------
-				String emailContent="Welcome to the FeeDesk portal of "+bean.getParInstName()+ ". You can log in with the below credentials. ";
-                EmailSessionBean email = new EmailSessionBean();
+				String emailContent = "Welcome to the FeeDesk portal of " + bean.getParInstName()
+						+ ". You can log in with the below credentials. ";
+				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(bean.getParInstEmail(), "Welcome To Fee Collection Portal!", bean.getLoginBean()
-						.getUserName(), password, bean.getParInstName(),emailContent);
+						.getUserName(), password, bean.getParInstName(), emailContent);
 
 				log.info("password :" + password);
 
@@ -210,71 +211,76 @@ public class ParDAO {
 	public List<Integer> getIdesOfAllCollege(Integer id) {
 		List<Integer> listOfIdes = new ArrayList<Integer>();
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(ParBean.class);
-		ParBean parBean = (ParBean) criteria.add(Restrictions.eq("parInstId", id)).list().iterator().next();
-		Set<AffBean> affBean = parBean.getAffBeanOneToManySet();
-		Iterator<AffBean> itr = affBean.iterator();
-		while (itr.hasNext()) {
-			listOfIdes.add(itr.next().getInstId());
+		try {
+			Criteria criteria = session.createCriteria(ParBean.class);
+			ParBean parBean = (ParBean) criteria.add(Restrictions.eq("parInstId", id)).list().iterator().next();
+			Set<AffBean> affBean = parBean.getAffBeanOneToManySet();
+			Iterator<AffBean> itr = affBean.iterator();
+			while (itr.hasNext()) {
+				listOfIdes.add(itr.next().getInstId());
+			}
+			log.info("list size is" + listOfIdes.size());
+			return listOfIdes;
+		} finally {
+			session.close();
 		}
-		log.info("list size is" + listOfIdes.size());
-		return listOfIdes;
-
 	}
 
 	public Integer getUniversityId(String universityName) {
 		Integer universityId = null;
-		if (universityName != null && !universityName.isEmpty() && !universityName.contentEquals("")) {
-			Session session = factory.openSession();
-			universityId = (Integer) session.createCriteria(ParBean.class)
-					.add(Restrictions.eq("parInstName", universityName)).setProjection(Projections.id()).list()
-					.iterator().next();
+		Session session = factory.openSession();
+		try {
+			if (universityName != null && !universityName.isEmpty() && !universityName.contentEquals("")) {
+
+				universityId = (Integer) session.createCriteria(ParBean.class)
+						.add(Restrictions.eq("parInstName", universityName)).setProjection(Projections.id()).list()
+						.iterator().next();
+			}
+			return universityId;
+		} finally {
+			session.close();
 		}
-		return universityId;
 
 	}
 
 	public List<Object[]> getTotDuesOFStudOFAllColl(Integer parentInstId) {
-		List<Object[]> duesArray =null;
+		List<Object[]> duesArray = null;
 		DetachedCriteria dc = DetachedCriteria.forClass(AffBean.class);
 		dc.add(Restrictions.eq("parBeanAff.parInstId", parentInstId));
 		dc.setProjection(Projections.id());
 		DetachedCriteria dc2 = DetachedCriteria.forClass(AppBean.class);
-		dc2.add(Subqueries.propertyIn("affBeanStu.instId", dc)).
-		setProjection(Projections.property("enrollmentNumber"));
+		dc2.add(Subqueries.propertyIn("affBeanStu.instId", dc)).setProjection(Projections.property("enrollmentNumber"));
 		Session session = factory.openSession();
-		Criteria criteria=session.createCriteria(ParBean.class,"parent");
-		try{
-		criteria.createAlias("parent.affBeanOneToManySet", "inst");
-        criteria.createAlias("inst.aplBeanSet", "student");
-        criteria.createAlias("student.paymentDues", "payDueBean");
-        criteria.add(Subqueries.propertyIn("student.enrollmentNumber", dc2));
-		criteria.add(Subqueries.propertyIn("payDueBean.appBean.enrollmentNumber", dc2));
-		criteria.add(Restrictions.eq("parInstId",parentInstId));
-	    criteria.setProjection(Projections.projectionList().add(Projections.property("parent.parInstName"))
-				.add(Projections.sum("payDueBean.total_fee_amount"))
-				.add(Projections.sum("payDueBean.payments_to_date")).add(Projections.sum("payDueBean.netDue")));
-		duesArray = criteria.list();
-		return duesArray;
-		}catch(Exception ex){
+		Criteria criteria = session.createCriteria(ParBean.class, "parent");
+		try {
+			criteria.createAlias("parent.affBeanOneToManySet", "inst");
+			criteria.createAlias("inst.aplBeanSet", "student");
+			criteria.createAlias("student.paymentDues", "payDueBean");
+			criteria.add(Subqueries.propertyIn("student.enrollmentNumber", dc2));
+			criteria.add(Subqueries.propertyIn("payDueBean.appBean.enrollmentNumber", dc2));
+			criteria.add(Restrictions.eq("parInstId", parentInstId));
+			criteria.setProjection(Projections.projectionList().add(Projections.property("parent.parInstName"))
+					.add(Projections.sum("payDueBean.total_fee_amount"))
+					.add(Projections.sum("payDueBean.payments_to_date")).add(Projections.sum("payDueBean.netDue")));
+			duesArray = criteria.list();
+			return duesArray;
+		} catch (Exception ex) {
 			criteria.add(Restrictions.eq("parInstId", parentInstId));
 			criteria.setProjection(Projections.property("parent.parInstName"));
-			String parentInstName =(String) criteria.list().iterator().next();
+			String parentInstName = (String) criteria.list().iterator().next();
 			Object obj[] = new Object[4];
-			obj[0]=parentInstName;
+			obj[0] = parentInstName;
 			obj[1] = 0;
 			obj[2] = 0;
 			obj[3] = 0;
-			duesArray= new ArrayList<Object[]>();duesArray.add(obj);
-			return duesArray;	
-			
+			duesArray = new ArrayList<Object[]>();
+			duesArray.add(obj);
+			return duesArray;
+
+		} finally {
+
+			session.close();
 		}
-	finally{
-		
-		session.close();
+
 	}
-    
-
-
-}
 }
