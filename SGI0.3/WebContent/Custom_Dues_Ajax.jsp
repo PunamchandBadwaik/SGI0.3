@@ -1,3 +1,4 @@
+<%@page import="java.math.BigDecimal"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="com.opensymphony.xwork2.util.ValueStack"%>
@@ -17,7 +18,8 @@
 	<%
 		String errMessage = (String) request.getAttribute("msg");
 		ActionContext.getContext().put("errMessage", errMessage);
-		
+		ValueStack vs = TagUtils.getStack(pageContext);
+		List<Object[]> studentDues = (List<Object[]>) vs.findValue("totalDuesOFCollege");
 	%>
 	<div>
 
@@ -61,7 +63,7 @@
 					<%
 						int i = 1;
 					%>
-					<s:iterator value="totalDuesOFCollege" var="duesArray">
+					<%-- <s:iterator value="totalDuesOFCollege" var="duesArray">
 						<tr>
 							<td><%=i%></td>
 
@@ -70,14 +72,14 @@
 								value='<s:property value="#duesArray[0]" />'></td>
 
 							<td></td>
-							<td class="center">Rs. <s:property value="#duesArray[1]"
-									default="0" /></td>
+							<td class="center">Rs.<s:property value="#duesArray[1]" />	</td>
 							<td></td>
-							<td class="center">Rs. <s:property value="#duesArray[2]"
-									default="0" /></td>
+							<td class="center">Rs.<s:property value="#duesArray[2]" />
+							</td>
 							<td></td>
-							<td colspan="2" class="center">Rs. <s:property
-									value="#duesArray[3]" default="0" /></td>
+							<td colspan="2" class="center">Rs.<s:property
+									value="#duesArray[3]" />
+							</td>
 
 						</tr>
 
@@ -85,9 +87,46 @@
 							i++;
 						%>
 					</s:iterator>
-					
-					
-					
+ --%>
+					<%
+						Iterator<Object[]> iterator = studentDues.iterator();
+
+							while (iterator.hasNext()) {
+								Object[] studentDue = iterator.next();
+					%>
+					<tr>
+						<td><%=i%></td>
+
+						<td class="center"><%=studentDue[0]%><input
+							type="hidden" id="feeName"
+							value='<s:property value="#duesArray[0]" />'></td>
+
+						<td></td>
+						<%
+							Object originalDue = studentDue[1] == null ? 0.0 : studentDue[1];
+						%>
+						<td class="center">Rs.<%=BigDecimal.valueOf(Double.valueOf(originalDue.toString())).toPlainString()%>
+						</td>
+						<td></td>
+						<%
+							Object paymentToDate = studentDue[2] == null ? 0.0 : studentDue[2];
+						%>
+						<td class="center">Rs.<%=BigDecimal.valueOf(Double.valueOf(paymentToDate.toString())).toPlainString()%>
+						</td>
+						<td></td>
+						<%
+							Object netDue = studentDue[3] == null ? 0.0 : studentDue[3];
+						%>
+						<td colspan="2" class="center">Rs.<%=BigDecimal.valueOf(Double.valueOf(netDue.toString())).toPlainString()%>
+						</td>
+
+					</tr>
+
+
+					<%
+						}
+					%>
+
 					<%-- <tr>
 						<td></td>
 						<td></td>
