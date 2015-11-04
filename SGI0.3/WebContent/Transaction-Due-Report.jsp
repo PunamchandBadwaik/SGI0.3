@@ -324,6 +324,17 @@
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 									<div class="row"></div>
+
+									<div class="row">
+										<div class="col-md-12">
+											<button class="btn btn-sm btn-info" style="float: right;"
+												onclick='window.location="TranactionReport?forDownload=true"'>
+												<i class="fa fa-plus"></i>DownLoad Report
+											</button>
+
+										</div>
+
+									</div>
 									<!---Content-->
 
 

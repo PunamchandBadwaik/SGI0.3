@@ -703,6 +703,8 @@ public class AffAction extends ActionSupport {
 		// collegeDueReport = (ArrayList<PaymentDuesBean>)
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
+		
+		String forDownload=	request.getParameter("forDownload");
 		popUp = request.getParameter("popUp") == null ? false : true;
 		Double totalNetDuesOFCollegeStudent = 0.0;
 		Double totalOriginalDues = 0.0;
@@ -737,6 +739,8 @@ public class AffAction extends ActionSupport {
 			this.totalOriginalDues = convertIntoOriginalAmount(totalOriginalDues);
 			this.totalPaymentToDate = convertIntoOriginalAmount(totalPaymentToDate);
 			String result = popUp == true ? "popUp" : "success";
+			result=forDownload!=null&&forDownload.contentEquals("true")?"forDownload":result;
+			
 			return result;
 
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")
@@ -1385,21 +1389,25 @@ public class AffAction extends ActionSupport {
 	}
 
 	public String getInsTransactionDetails() {
-
+		
+		String forDownload=request.getParameter("forDownload");
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			transactionDetailsForReport = affDao.getAllTransactionDetail();
-			return SUCCESS;
+			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			return result;
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
 			Integer operatorId = (Integer) ses.getAttribute("opratorId");
 			Integer instituteId = opratorDAO.getCollegeIdOfOperator(operatorId);
 			log.info("insitute id is" + instituteId);
 			transactionDetailsForReport = affDao.getAllTransactionDetail(instituteId);
-
-			return SUCCESS;
+			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			return result;
+			
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Student")) {
 			String enrollmentNumber = (String) ses.getAttribute("StudentEnrollId");
 			transactionDetailsForReport = affDao.getStudentTransactionDetails(enrollmentNumber);
-			return SUCCESS;
+			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			return result;
 		}
 
 		else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")) {
@@ -1409,14 +1417,16 @@ public class AffAction extends ActionSupport {
 			transactionDetailsForReport = affDao.getTransactionOfColleges(allCollegeId);
 			log.info("Number of Transaction Done by Colleges Belongs to That University"
 					+ transactionDetailsForReport.size());
-			return SUCCESS;
+			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			return result;
 		}
 
 		else {
 			Integer insId = (Integer) ses.getAttribute("sesId");
 			log.info("ins id is=" + insId);
 			transactionDetailsForReport = affDao.getAllTransactionDetail(insId);
-			return SUCCESS;
+			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			return result;
 		}
 	}
 

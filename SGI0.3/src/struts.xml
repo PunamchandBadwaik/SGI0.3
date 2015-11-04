@@ -33,8 +33,8 @@
 
 
 		<action name="getCollegeList"
-	class="com.dexpert.feecollection.main.users.affiliated.AffAction"
-	method="getClgListForSA">
+			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
+			method="getClgListForSA">
 
 			<result name="success">Admin-MyColleges.jsp</result>
 
@@ -351,7 +351,7 @@
 
 
 
-         <action name="saveCourses"
+		<action name="saveCourses"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="saveCourses">
 			<result name="success">CourseAddedSuccessFully.jsp</result>
@@ -480,6 +480,8 @@
 
 			<result name="success">College-Due-Report.jsp</result>
 			<result name="popUp">CollegeDues.jsp</result>
+			<result name="forDownload">College-Due-ReportExcelFormat.jsp</result>
+
 			<!-- <result name="nodues">CollegeDues.jsp</result> -->
 			<result name="error">Login.jsp</result>
 
@@ -490,7 +492,7 @@
 			method="CustomCollegeDueReport">
 			<result name="success">Custom_Dues_Ajax.jsp</result>
 		</action>
-		
+
 		<action name="getValForDropDown"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="getValForDropDown">
@@ -517,15 +519,9 @@
 		<action name="TranactionReport"
 			class="com.dexpert.feecollection.main.users.affiliated.AffAction"
 			method="getInsTransactionDetails">
-
 			<result name="success">/Transaction-Due-Report.jsp</result>
-
-
+			<result name="forDowload">/Transaction-Due-ReportExcelFormat.jsp</result>
 		</action>
-
-
-
-
 
 	</package>
 
@@ -665,13 +661,13 @@
 		<action name="ViewApplicantDue"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="viewStudentDues">
-	     <result name="success">StudentDueView_PopUp.jsp</result>
+			<result name="success">StudentDueView_PopUp.jsp</result>
 			<result name="error">Login.jsp</result>
 		</action>
-       <action name="ViewApplicantDetail"
+		<action name="ViewApplicantDetail"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="viewApplicant">
-       <result name="success">View-Applicant.jsp</result>
+			<result name="success">View-Applicant.jsp</result>
 		</action>
 
 		<!-- <action name="StudentQuickPay" class="com.dexpert.feecollection.main.users.applicant.AppAction" 
@@ -804,15 +800,15 @@
 			method="operatorStudentPayment">
 			<result name="success">WaitToLoad.jsp</result>
 			<result name="error">Login.jsp</result>
-			</action>
-			<!-- quickPayStudentPayment -->
-			
+		</action>
+		<!-- quickPayStudentPayment -->
+
 		<action name="quickPayStdPayment"
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionAction"
 			method="quickPayStudentPayment">
 			<result name="success">WaitToLoad.jsp</result>
-			<result name="error">Login.jsp</result>	
-			
+			<result name="error">Login.jsp</result>
+
 
 		</action>
 		<action name="PayBulk"
@@ -839,9 +835,9 @@
 			<result name="success">TransactionResponsePage.jsp</result>
 
 		</action>
-		
-		
-		
+
+
+
 
 		<action name="RetrieveUserSession"
 			class="com.dexpert.feecollection.main.RetrieveUserSessionAction"
@@ -871,7 +867,7 @@
 			<result name="success">feedeskReturnPage.jsp</result>
 
 		</action>
-		
+
 
 
 
@@ -883,7 +879,7 @@
 
 		<action name="getStudentRecordByOperator"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
-			method="operatorGettingTheStudentDuesDetail"> <!--  StudentDuesDetail -->
+			method="operatorGettingTheStudentDuesDetail"> <!-- StudentDuesDetail -->
 
 			<result name="success">OperatorStudentDetail.jsp</result>
 			<result name="failure">StudentEnrollmentNo.jsp</result>
@@ -891,12 +887,12 @@
 
 		</action>
 
-	
-		
- 		<!--getQuickPayStudentRecordByOperator -->
-					
-					
-			<action name="getQuickPayStudentRecordByOperator"
+
+
+		<!--getQuickPayStudentRecordByOperator -->
+
+
+		<action name="getQuickPayStudentRecordByOperator"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
 			method="StudentDuesDetail">
 
@@ -907,7 +903,7 @@
 		</action>
 
 
- 			
+
 
 		<action name="getTheStudentFeeDetailsFromLoginPage"
 			class="com.dexpert.feecollection.main.users.applicant.AppAction"
