@@ -173,10 +173,10 @@ public class AppAction extends ActionSupport {
 
 	public String getStudentList() {
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		Integer instId=(Integer)httpSession.getAttribute("sesId");
 
 		try {
-			affBean = aplDAO.getStudentDetail(loginBean);
+			appBeansList= aplDAO.getStudentDetail(instId);
 
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");

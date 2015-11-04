@@ -73,15 +73,15 @@ public class AffBean implements Serializable {
 	@JoinColumn(name = "University_Id_Fk", referencedColumnName = "parInstId")
 	ParBean parBeanAff;
 
-	// one to many relationship with Applicants (Students)
+	/*// one to many relationship with Applicants (Students)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBeanStu",fetch=FetchType.LAZY)
 	@Fetch(FetchMode.JOIN)
 	@OrderBy(value = "enrollmentNumber")
 	Set<AppBean> aplBeanSet;
-
+*/
 	// one to many relationship with College Operator (operator)
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean",fetch=FetchType.LAZY)
-	@Fetch(FetchMode.JOIN)
+	
 	Set<OperatorBean> OptrBeanSet;
 
 	// many to many relationship with FeeDetails)
@@ -127,14 +127,14 @@ public class AffBean implements Serializable {
 		this.collegeCourses = collegeCourses;
 	}
 
-	public Set<AppBean> getAplBeanSet() {
+	/*public Set<AppBean> getAplBeanSet() {
 		return aplBeanSet;
 	}
 
 	public void setAplBeanSet(Set<AppBean> aplBeanSet) {
 		this.aplBeanSet = aplBeanSet;
 	}
-
+*/
 	/*
 	 * public Set<LoginBean> getLoginBeanSet() { return loginBeanSet; }
 	 * 

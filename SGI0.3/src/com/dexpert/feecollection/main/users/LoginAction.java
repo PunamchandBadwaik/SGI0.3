@@ -143,7 +143,7 @@ public class LoginAction extends ActionSupport {
 			InvalidKeySpecException
 
 	{
-		LoginBean loginClone = new LoginBean();
+		//LoginBean loginClone = new LoginBean();
 		log.info("user Name is ::" + loginBean.getUserName());
 		log.info("Password is ::" + loginBean.getPassword());
 		String encryptedPwd = null;
@@ -155,32 +155,36 @@ public class LoginAction extends ActionSupport {
 			loginBean.setPassword(encryptedPwd);
 
 		}
-		loginClone.setUserName(loginBean.getUserName());
-		loginClone.setPassword(loginBean.getPassword());
-		log.info("After Encryption ::" + loginClone.getPassword());
+		lgbean.setUserName(loginBean.getUserName());
+		lgbean.setPassword(loginBean.getPassword());
+		log.info("After Encryption ::" + lgbean.getPassword());
 
-		LoginBean loginUser = loginDAO.getLoginDetails(loginClone);
+		LoginBean loginUser = loginDAO.getLoginDetails(lgbean);
 		// log.info("List Size ::" + loginUserList.size());
 		// log.info("List  ::" + loginUserList);
 
 		try {
-			if ((loginUser.getUserName().equals(loginClone.getUserName()) && loginUser.getPassword().equals(
-					loginClone.getPassword()))) {
-				// log.info("valid User name and Password");
+			if(loginUser.getUserName()==null){
+				request.setAttribute("msg", "Invalid Username or Password");
+				return INPUT;	
+			}
+			
+			if (null!=loginUser.getUserName()) {
+				 log.info("valid User name and Password");
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
 				usercookie.setMaxAge(60 * 60);
 				response.addCookie(usercookie);
 				httpSession.setAttribute("cart_init", 0);
-				httpSession.setAttribute("loginUserBean", lgbean);
+				httpSession.setAttribute("loginUserBean", loginUser);
 
-				if (lgbean.getAffBean() != null) {
+				if (loginUser.getAffBean() != null) {
 					log.info("Valid College");
 					httpSession.setAttribute("sesProfile", "Affiliated");
 					httpSession.setAttribute("dashLink", "index-College.jsp");
-					httpSession.setAttribute("sesId", lgbean.getAffBean().getInstId());
+					httpSession.setAttribute("sesId", loginUser.getAffBean().getInstId());
 
-					httpSession.setAttribute("instId", lgbean.getAffBean().getInstId());
-					httpSession.setAttribute("parInstId", lgbean.getAffBean().getParBeanAff().getParInstId());
+					httpSession.setAttribute("instId", loginUser.getAffBean().getInstId());
+					httpSession.setAttribute("parInstId", loginUser.getAffBean().getParBeanAff().getParInstId());
 
 					/*
 					 * List<Object[]> studentsDues =
@@ -189,9 +193,9 @@ public class LoginAction extends ActionSupport {
 					 * httpSession.setAttribute("duesArray", (Object[])
 					 * studentsDues.iterator().next());
 					 */return "college";
-				} else if (lgbean.getParBean() != null) {
+				} else if (loginUser.getParBean() != null) {
 					log.info("Valid University");
-					httpSession.setAttribute("sesId", lgbean.getParBean().getParInstId());
+					httpSession.setAttribute("sesId", loginUser.getParBean().getParInstId());
 					httpSession.setAttribute("sesProfile", "Parent");
 					httpSession.setAttribute("dashLink", "index-University.jsp");
 					/*
@@ -201,30 +205,30 @@ public class LoginAction extends ActionSupport {
 					 * httpSession.setAttribute("duesArrayForParent", (Object[])
 					 * viewstudentDuesForPar.iterator().next());
 					 */return "university";
-				} else if (lgbean.getSaBean() != null) {
+				} else if (loginUser.getSaBean() != null) {
 					log.info("Valid Super Admin");
 					httpSession.setAttribute("sesProfile", "SU");
 					httpSession.setAttribute("dashLink", "index-Admin.jsp");
 					return "superAdmin";
 				}
 
-				else if (lgbean.getOperatorBean() != null) {
+				else if (loginUser.getOperatorBean() != null) {
 					log.info("Valid College Operator");
 
 					httpSession.setAttribute("sesProfile", "CollegeOperator");
 					httpSession.setAttribute("dashLink", "index-College-Operator.jsp");
-					httpSession.setAttribute("oprBean", lgbean.getOperatorBean());
+					httpSession.setAttribute("oprBean", loginUser.getOperatorBean());
 					return "collegeOperator";
 				}
 
-				else if (lgbean.getAppBean() != null) {
+				else if (loginUser.getAppBean() != null) {
 
-					log.info("Enrollment Number is ::" + lgbean.getAppBean().getEnrollmentNumber());
+					log.info("Enrollment Number is ::" + loginUser.getAppBean().getEnrollmentNumber());
 
 					log.info("Valid Student EnrollmentNumber");
 
 					httpSession.setAttribute("sesProfile", "Student");
-					httpSession.setAttribute("StudentEnrollId", lgbean.getAppBean().getEnrollmentNumber());
+					httpSession.setAttribute("StudentEnrollId", loginUser.getAppBean().getEnrollmentNumber());
 					httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
 					return "student";
 				}

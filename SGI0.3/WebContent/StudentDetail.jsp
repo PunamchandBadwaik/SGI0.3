@@ -328,7 +328,7 @@
 											<%
 												int i = 1;
 											%>
-											 <s:iterator value="affBean.aplBeanSet"> 
+											 <s:iterator value="appBeansList"> 
 											<%-- <c:forEach items="${affBean.aplBeanSet}" var="optr"> --%>
 												<tr>
 													<td><%=i%></td>

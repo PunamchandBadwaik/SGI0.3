@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
@@ -60,7 +62,7 @@ public class ParBean implements Serializable {
 
 	
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinTable(name = "University_values", joinColumns = @JoinColumn(name = "parInstId"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> parentFeeValueSet;
 

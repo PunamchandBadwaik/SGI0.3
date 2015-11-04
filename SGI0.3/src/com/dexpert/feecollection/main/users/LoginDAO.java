@@ -42,12 +42,23 @@ public class LoginDAO {
 		try {
 			log.info("Get Login Details ");
 			Criteria criteria = session.createCriteria(LoginBean.class);
+			// criteria.add(Restrictions.eq("userName",
+			// loginBean.getUserName()));
+			// criteria.add(Restrictions.eq("password",
+			// loginBean.getPassword()));
 			criteria.add(Restrictions.eq("userName", loginBean.getUserName()));
 			criteria.add(Restrictions.eq("password", loginBean.getPassword()));
+			log.info(" after setting creds ");
 			// criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			LoginBean bean = (LoginBean) criteria.list().iterator().next();
+
+			// LoginBean bean = (LoginBean) criteria.list().iterator().next();
+			List<LoginBean> loginBean1 = criteria.list();
+			// session.evict(bean);
 			log.info(" after Get Login Details ");
-			return bean;
+			return loginBean1.get(0);
+		} catch (java.lang.IndexOutOfBoundsException aioub) {
+			LoginBean login = new LoginBean();
+			return login;
 		} finally {
 			log.info("finally Block");
 			session.close();

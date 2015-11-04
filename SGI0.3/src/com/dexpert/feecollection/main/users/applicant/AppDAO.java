@@ -153,11 +153,11 @@ public class AppDAO {
 		loginBean.setProfile("Student");
 		appBean.setLoginBean(loginBean);
 		loginBean.setAppBean(appBean);
- 		appBean.setAffBeanStu(affBean);
+		appBean.setAffBeanStu(affBean);
 		// LoginBean lgBean = (LoginBean)
 		// httpSession.getAttribute("loginUserBean");
 		// one to many Relationship
-		//affBean.getAplBeanSet().add(appBean);
+		// affBean.getAplBeanSet().add(appBean);
 		try {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
@@ -182,7 +182,7 @@ public class AppDAO {
 
 				}
 			} catch (java.lang.NullPointerException e) {
-               e.printStackTrace();
+				e.printStackTrace();
 			}
 
 			// for email
@@ -210,7 +210,7 @@ public class AppDAO {
 			getDuesDetail(appBean);
 
 		} finally {
-		
+
 			session.close();
 		}
 		return appBean;
@@ -303,24 +303,30 @@ public class AppDAO {
 
 	}
 
-	public AffBean getStudentDetail(LoginBean bean) {
+	public List<AppBean> getStudentDetail(Integer instId) {
 		Session session = factory.openSession();
 		try {
-			Integer id = bean.getAffBean().getInstId();
 
-			String sql = "select * from sgi.affiliated_institute_details where instId=:instId";
-
-			SQLQuery sqlQuery = session.createSQLQuery(sql);
-
-			sqlQuery.setParameter("instId", id);
-			sqlQuery.addEntity(AffBean.class);
-			AffBean affBean = (AffBean) sqlQuery.list().iterator().next();
-
+			/*
+			 * String sql =
+			 * "select * from sgi.affiliated_institute_details where instId=:instId"
+			 * ;
+			 * 
+			 * SQLQuery sqlQuery = session.createSQLQuery(sql);
+			 * 
+			 * sqlQuery.setParameter("instId", id);
+			 * sqlQuery.addEntity(AffBean.class); AffBean affBean = (AffBean)
+			 * sqlQuery.list().iterator().next();
+			 */
+			Criteria criteria = session.createCriteria(AppBean.class);
+			criteria.add(Restrictions.eq("affBeanStu.instId", instId));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+             List<AppBean> appList=criteria.list();
 			// Criteria criteria = session.createCriteria(AffBean.class);
 
 			// criteria.add(Restrictions.eq("instId", id));
 
-			return affBean;
+			return appList;
 		} finally {
 			session.close();
 			// TODO: handle exception
@@ -402,7 +408,7 @@ public class AppDAO {
 	public FvBean checkFeeValue(Integer lookupId, String element) {
 
 		Session session = factory.openSession();
-		//FvBean bean = new FvBean();
+		// FvBean bean = new FvBean();
 		List<FvBean> list = new ArrayList<FvBean>();
 
 		element = element.replaceAll("\\u00A0", "");
@@ -415,15 +421,17 @@ public class AppDAO {
 			list = criteria.list();
 			log.info("Cell Value is ::" + element + " <<>> " + lookupId);
 			if (list.size() > 0) {
-				//LookupBean lookupBean = new LookupBean();
+				// LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
 				Iterator<FvBean> iterator = list.iterator();
 				FvBean fvBean = iterator.next();
-				/*bean.setFeeValueId(fvBean.getFeeValueId());
-				bean.setValue(fvBean.getValue());
-				lookupBean.setLookupId(lookupId);
-				bean.setLookupname(lookupBean);*/
-                return fvBean;
+				/*
+				 * bean.setFeeValueId(fvBean.getFeeValueId());
+				 * bean.setValue(fvBean.getValue());
+				 * lookupBean.setLookupId(lookupId);
+				 * bean.setLookupname(lookupBean);
+				 */
+				return fvBean;
 			}
 		} finally {
 			session.close();
@@ -787,18 +795,18 @@ public class AppDAO {
 		loginBean.setProfile("Student");
 		appBean.setLoginBean(loginBean);
 		loginBean.setAppBean(appBean);
-        AffBean affBean2=new AffBean();
-        affBean2.setInstId(affBean.getInstId());
-		//affBean.setAppBean(appBean);
+		AffBean affBean2 = new AffBean();
+		affBean2.setInstId(affBean.getInstId());
+		// affBean.setAppBean(appBean);
 		appBean.setAffBeanStu(affBean2);
 
 		// one to many Relationship
-		//affBean.getAplBeanSet().add(appBean);
-		
+		// affBean.getAplBeanSet().add(appBean);
+
 		Transaction tx = session.beginTransaction();
 		session.merge(appBean);
 		tx.commit();
-       
+
 		// to get Dues of Applicant
 		getDuesDetail(appBean);
 
@@ -841,7 +849,7 @@ public class AppDAO {
 		} catch (java.lang.NullPointerException e) {
 			e.printStackTrace();
 		}
-		
+
 		session.close();
 
 		// }
