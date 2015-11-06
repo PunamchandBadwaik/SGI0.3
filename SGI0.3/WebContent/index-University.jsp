@@ -157,8 +157,9 @@
 							
 							<%
 								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
+							%>
+							<jsp:include page="menu_Institute.jsp"></jsp:include>
+							
 							<%
 								}
 							%>

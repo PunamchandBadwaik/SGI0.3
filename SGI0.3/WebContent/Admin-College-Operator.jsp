@@ -104,7 +104,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -167,24 +168,33 @@
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-						
+
 						<%
-								if (profile.contentEquals("SU")){
-							%>
-							<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
-							
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Parent")) {
-							%>
-							<jsp:include page="menu_Parent.jsp"></jsp:include>
-							<%
-								}
-							%>
-							
-						
+							if (profile.contentEquals("SU")){
+						%>
+						<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
+
+						<%
+							}
+						%>
+						<%
+							if (profile.contentEquals("Parent")) {
+						%>
+						<jsp:include page="menu_Parent.jsp"></jsp:include>
+						<%
+							}
+						%>
+
+						<%
+							if (profile.contentEquals("Affiliated")) {
+						%>
+						<jsp:include page="menu_Institute.jsp"></jsp:include>
+
+						<%
+							}
+						%>
+
+
 					</div>
 				</div>
 			</div>
@@ -235,21 +245,24 @@
 									<div class="row">
 										<div class="col-md-12">
 
-								<%
-															if (profile.contentEquals("Affiliated")) {
-
-																System.out.print("Profile is ::" + profile);
-														%> <%-- <input type="hidden" name="aplInstId"
+											<%
+												if (profile.contentEquals("Affiliated")) {
+																																											
+																													                                                 
+																																											System.out.print("Profile is ::" + profile);
+											%>
+											<%-- <input type="hidden" name="aplInstId"
 														value="<%=loginUser.getAffBean().getInstId()%>"> --%>
-														<button class="btn btn-sm btn-info pull-right"
+											<button class="btn btn-sm btn-info pull-right"
 												style="margin-right: 3%; float: right;"
 												onclick='window.open("CollegeOperatorForm.jsp", "CollegeForm", "width=500,height=700")'>
 												<i class="fa fa-plus"></i> Add Operator
-											</button> <%
- 	}
- %>
-								
-											
+											</button>
+											<%
+												}
+											%>
+
+
 										</div>
 									</div>
 
