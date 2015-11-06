@@ -4,7 +4,6 @@
 
 <hibernate-configuration>
 	<session-factory>
-
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sgi</property>
 		<property name="hibernate.connection.username">root</property>
@@ -24,7 +23,6 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.connection.release_mode">after_transaction</property>
 		<property name="hibernate.enable_lazy_load_no_trans">true</property>
-
 		<mapping
 			class="com.dexpert.feecollection.main.users.operator.OperatorBean" />
 		<mapping class="com.dexpert.feecollection.main.users.LoginBean" />
@@ -45,13 +43,9 @@
 		<mapping class="com.dexpert.feecollection.main.fee.config.FeeStructureData" />
 		<mapping
 			class="com.dexpert.feecollection.main.payment.studentPayment.ApplicantFeeCollectionBean" />
-		
 		<mapping class="com.dexpert.feecollection.challan.ChallanBean" />
-
 		<mapping class="com.dexpert.feecollection.challan.TransactionBean" />
 		<mapping class="com.dexpert.feecollection.main.payment.studentPayment.BulkPaymentBean" />
         <mapping class="com.dexpert.feecollection.main.users.affiliated.CollegeCourses" />
-
-
 	</session-factory>
 </hibernate-configuration>

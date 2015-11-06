@@ -7,7 +7,10 @@
 </head>
 
 <body>
-
+	<%
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		response.setHeader("Content-Disposition", "attachment; filename=" + "TransactionReport.xls");
+	%>
 
 
 	<table

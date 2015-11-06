@@ -306,26 +306,10 @@ public class AppDAO {
 	public List<AppBean> getStudentDetail(Integer instId) {
 		Session session = factory.openSession();
 		try {
-
-			/*
-			 * String sql =
-			 * "select * from sgi.affiliated_institute_details where instId=:instId"
-			 * ;
-			 * 
-			 * SQLQuery sqlQuery = session.createSQLQuery(sql);
-			 * 
-			 * sqlQuery.setParameter("instId", id);
-			 * sqlQuery.addEntity(AffBean.class); AffBean affBean = (AffBean)
-			 * sqlQuery.list().iterator().next();
-			 */
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("affBeanStu.instId", instId));
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-             List<AppBean> appList=criteria.list();
-			// Criteria criteria = session.createCriteria(AffBean.class);
-
-			// criteria.add(Restrictions.eq("instId", id));
-
+			List<AppBean> appList = criteria.list();
 			return appList;
 		} finally {
 			session.close();
@@ -508,7 +492,6 @@ public class AppDAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 
 	}
@@ -878,7 +861,7 @@ public class AppDAO {
 	 */
 
 	public void updateDueAmountOfStudent(AppBean appBean, Integer feeId, Double feeAmount, String feeName) {
-
+        
 		PaymentDuesBean paymentDue = new PaymentDuesBean();
 		paymentDue.setFeeName(feeName);
 		paymentDue.setFeeId(feeId);
@@ -894,49 +877,69 @@ public class AppDAO {
 
 		log.info("enrollment Id of student is=========" + enrollmentNumber);
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(AppBean.class);
-		criteria.add(Restrictions.eq("enrollmentNumber", enrollmentNumber));
-		AppBean applicantDetails = (AppBean) criteria.list().iterator().next();
-		applicantDetails.getPaymentDues().add(dueBean);
-		Transaction transaction = session.beginTransaction();
-		session.save(applicantDetails);
-		transaction.commit();
-		session.close();
+		try {
+			Criteria criteria = session.createCriteria(AppBean.class);
+			criteria.add(Restrictions.eq("enrollmentNumber", enrollmentNumber));
+			AppBean applicantDetails = (AppBean) criteria.list().iterator().next();
+			applicantDetails.getPaymentDues().add(dueBean);
+			Transaction transaction = session.beginTransaction();
+			session.save(applicantDetails);
+			transaction.commit();
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public AppBean getStudentDues(String enrollmentNumber) {
 		Session session = factory.openSession();
-		AppBean completeDeatilsOfStudent = (AppBean) session.get(AppBean.class, enrollmentNumber);
-		session.close();
-		return completeDeatilsOfStudent;
+		try {
+			AppBean completeDeatilsOfStudent = (AppBean) session.get(AppBean.class, enrollmentNumber);
+			return completeDeatilsOfStudent;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public Double totalDueFeeOfStudent(String enrollMentNumber) {
 		Session session = factory.openSession();
-		String query = "SELECT  Sum(netDue) FROM sgi.fee_dues_master where enrollmentNumber_Fk=:enrollmentNumber";
-		SQLQuery sqlQuery = session.createSQLQuery(query);
-		sqlQuery.setParameter("enrollmentNumber", enrollMentNumber);
-		Double totalAmount = (Double) sqlQuery.list().iterator().next();
-		log.info("Total fees ::" + totalAmount);
-		return totalAmount;
+		try {
+			String query = "SELECT  Sum(netDue) FROM sgi.fee_dues_master where enrollmentNumber_Fk=:enrollmentNumber";
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			sqlQuery.setParameter("enrollmentNumber", enrollMentNumber);
+			Double totalAmount = (Double) sqlQuery.list().iterator().next();
+			log.info("Total fees ::" + totalAmount);
+			return totalAmount;
+		} finally {
+			session.close();
+		}
 	}
 
 	public List<FeeDetailsBean> getAllFeeDeatils() {
 		Session session = factory.openSession();
-		List<FeeDetailsBean> feeList = session.createCriteria(FeeDetailsBean.class).list();
-		session.close();
-		return feeList;
+		try {
+			List<FeeDetailsBean> feeList = session.createCriteria(FeeDetailsBean.class).list();
+			return feeList;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public List<TransactionBean> getTransactionDetailsOfStudent(String enrollmentNumber) {
 		Session session = factory.openSession();
-		Criteria criteria = session.createCriteria(TransactionBean.class);
-		criteria.add(Restrictions.eq("studentEnrollmentNumber", enrollmentNumber));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.addOrder(Order.desc("transDate"));
-		List<TransactionBean> tranDetOfStu = criteria.list();
-		session.close();
-		return tranDetOfStu;
+		try {
+			Criteria criteria = session.createCriteria(TransactionBean.class);
+			criteria.add(Restrictions.eq("studentEnrollmentNumber", enrollmentNumber));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			criteria.addOrder(Order.desc("transDate"));
+			List<TransactionBean> tranDetOfStu = criteria.list();
+			return tranDetOfStu;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	/*

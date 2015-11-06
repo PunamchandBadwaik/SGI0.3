@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
-<%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
@@ -168,124 +168,29 @@
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-						<div class="nav-sm nav nav-stacked"></div>
-						<ul class="nav nav-pills nav-stacked main-menu">
-							<li class="nav-header">Main</li>
-							<li><a class="ajax-link"
-								href='<%=session.getAttribute("dashLink").toString()%>'><i
-									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-							<%
-								if (profile.contentEquals("SU")){
-							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
-									class="fa fa-building"></i><span> Parent Institute</span></a></li>
-							<%
-								}
-							%>
 
+						<%
+							if (profile.contentEquals("SU")) {
+						%>
+						<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
+						<%
+							}
+						%>
+						<%
+							if (profile.contentEquals("Parent")) {
+						%>
 
-
-							<%
-								if (profile.contentEquals("Parent")){
-							%>
-							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
-									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							<%
-								}
-							%>
-
-
-							<%
-								if (profile.contentEquals("SU")){
-							%>
-							<li><a class="ajax-link" href="getCollegeList"><i
-									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							<%
-								}
-							%>
-
-
-
-
-
-
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
-									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-							<%
-								}
-							%>
-							<%-- <%
-								if (!profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="getInstDues"><i
-									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
-							<%
-								}
-							%> --%>
-
-
-							<%-- 
-							<%
-								if (profile.contentEquals("Parent")){
-							%><li><a class="ajax-link" href="getInstDues"><i
-									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
-							<%
-								}
-							%>
- --%>
-
-							<%
-								if (profile.contentEquals("SU")){
-							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> Institute Operator</span></a></li>
-							<%
-								}
-							%>
-
-							
-							
-							<%
-								if (profile.contentEquals("SU")){
-							%>
-							
-							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-
-							<%
-								}
-							%>
-<%
-								if (profile.contentEquals("Parent")) {
-							%>
-							<%-- <li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> Institute Operator</span></a></li>
-							 --%><li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-							<%
-								}
-							%>
-
-
-
-
-
-
-
-
-
-
-							<%-- <li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-				 --%>
-						</ul>
+						<jsp:include page="menu_Parent.jsp"></jsp:include>
+						<%
+							}
+						%>
+						<%
+							if (profile.contentEquals("Affiliated")) {
+						%>
+						<jsp:include page="menu_Institute.jsp"></jsp:include>
+						<%
+							}
+						%>
 					</div>
 				</div>
 			</div>
@@ -351,7 +256,7 @@
 
 									<%
 										if (profile.contentEquals("Parent")){
-																																																																																																																																																																																			System.out.println("Parent Class Table");
+																																																																																																																																																																																																																						System.out.println("Parent Class Table");
 									%>
 									<table
 										class="table table-condensed table-striped table-bordered bootstrap-datatable datatable responsive">
@@ -383,12 +288,10 @@
 														title="Button To Display College Detail"
 														onclick="showDetails(<s:property value="instId"/>)"> <i
 															class="glyphicon glyphicon-zoom-in icon-white"></i> View
-													</a>
-													
-													<%-- <button class="btn btn-sm btn-warning"
+													</a> <%-- <button class="btn btn-sm btn-warning"
 															onclick='window.open("ViewCollegeFees?instId=<s:property value="instId"/>", "CollegeForm", "width=700,height=500")'>
 															Associated Fees</button> --%></td>
-													
+
 
 													<%-- <td class="center"><a class="btn btn-success btn-sm"
 														title="Button To Display College Detail"
@@ -400,7 +303,7 @@
 															<i class="glyphicon glyphicon-cog icon-white"></i>
 															Configure
 													</a> --%>
-														<%-- <button class="btn btn-sm btn-warning"
+													<%-- <button class="btn btn-sm btn-warning"
 															onclick='window.open("ViewCollegeFees?instId=<s:property value="instId"/>", "CollegeForm", "width=500,height=700")'>
 															Associated Fees</button></td> --%>
 												</tr>
@@ -416,9 +319,9 @@
 
 									<%
 										}
-																																																																																																																																																													else{
-																																																																																																																																																														
-																																																																																																																																																														System.out.println("child Class Table");
+																																																																																																																																																																																																else{
+																																																																																																																																																																																																	
+																																																																																																																																																																																																	System.out.println("child Class Table");
 									%>
 
 									<table
@@ -448,11 +351,11 @@
 
 													<td class="center"><c:out value="${aff.place}" /></td>
 													<td><a class="btn btn-success btn-sm"
-														title="Button To Display College Detail"							onclick="showDetails(<c:out value="${aff.instId}" />)">
+														title="Button To Display College Detail"
+														onclick="showDetails(<c:out value="${aff.instId}" />)">
 															<i class="glyphicon glyphicon-zoom-in icon-white"></i>
 															View
-													</a>
-													<%-- 	<td class="center"><a class="btn btn-success btn-sm"
+													</a> <%-- 	<td class="center"><a class="btn btn-success btn-sm"
 														title="Button To Display College Detail"
 														onclick="showDetails(<c:out value="${aff.instId}" />)">
 															<i class="glyphicon glyphicon-zoom-in icon-white"></i>
@@ -465,10 +368,9 @@
 													</a>--%>
 														<button class="btn btn-sm btn-warning"
 															onclick='window.open("CloneFeesValidate?instId=<c:out value="${aff.instId}" />", "CollegeForm", "width=500,height=700")'>
-															Clone Fees</button>
-															<%-- <button class="btn btn-sm btn-warning"
+															Clone Fees</button> <%-- <button class="btn btn-sm btn-warning"
 															onclick='window.open("ViewCollegeFees?instId=<c:out value="${aff.instId}" />", "CollegeForm", "width=500,height=700")'>
-															Associate Fees</button> --%></td> 
+															Associate Fees</button> --%></td>
 												</tr>
 
 												<%

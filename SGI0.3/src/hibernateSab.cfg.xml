@@ -24,8 +24,6 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.connection.release_mode">after_transaction</property>
 		<property name="hibernate.enable_lazy_load_no_trans">true</property>
-
-
 		<mapping class="com.dexpert.feecollection.challan.ChallanBean" />
 
 

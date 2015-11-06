@@ -23,11 +23,8 @@
 
 function CallFun()
 {
-	
 	setTimeout(function()
 			{
-			 
-			
  	window.location ="<%=url%>";
 			}, 05);
 

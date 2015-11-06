@@ -167,71 +167,29 @@
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-						<div class="nav-sm nav nav-stacked"></div>
-						<ul class="nav nav-pills nav-stacked main-menu">
-							<li class="nav-header">Main</li>
-							<li><a class="ajax-link"
-								href='<%=session.getAttribute("dashLink").toString()%>'><i
-									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-							<%
-								if (profile.contentEquals("SU")){
-							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
-									class="fa fa-building"></i><span> Parent Institute</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="getCollegeList"><i
-									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Student</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
-									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="getInstDues"><i
-									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
-							<%
-								}
-							%>
-							<%-- <li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
- --%>
-							<%
-								if (profile.contentEquals("SU")){
-							%><li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> Institute Operator</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("SU")){
-							%>
-							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
 
+						<%
+							if (profile.contentEquals("SU")) {
+						%>
+						<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
+						<%
+							}
+						%>
+						<%
+							if (profile.contentEquals("Parent")) {
+						%>
 
-
-							<%
-								}
-							%>
-						</ul>
+						<jsp:include page="menu_Parent.jsp"></jsp:include>
+						<%
+							}
+						%>
+						<%
+							if (profile.contentEquals("Affiliated")) {
+						%>
+						<jsp:include page="menu_Institute.jsp"></jsp:include>
+						<%
+							}
+						%>
 					</div>
 				</div>
 			</div>
@@ -266,8 +224,8 @@
 						<div class="box-inner">
 							<div class="box-header well">
 								<h2>
-									<i class="glyphicon glyphicon-list-alt"></i> &nbsp;Total
-									Parent Institutes
+									<i class="glyphicon glyphicon-list-alt"></i> &nbsp;Total Parent
+									Institutes
 								</h2>
 
 								<div class="box-icon">

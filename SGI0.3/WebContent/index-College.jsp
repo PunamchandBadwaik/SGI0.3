@@ -7,7 +7,8 @@
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-	loginUser = (LoginBean) session.getAttribute("loginUserBean"); String profile=(String)session.getAttribute("sesProfile");
+	loginUser = (LoginBean) session.getAttribute("loginUserBean");
+	String profile = (String) session.getAttribute("sesProfile");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -87,7 +88,8 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -100,7 +102,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -163,68 +166,7 @@
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-						<div class="nav-sm nav nav-stacked"></div>
-						<ul class="nav nav-pills nav-stacked main-menu">
-							<li class="nav-header">Main</li>
-							<li><a class="ajax-link"
-								href='<%=session.getAttribute("dashLink").toString()%>'><i
-									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-							<%
-								if (profile.contentEquals("SU")){
-							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
-									class="fa fa-building"></i><span> Parent Institute</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="getCollegeList"><i
-									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="StudentTotalRecord"><i
-									class="glyphicon glyphicon-home"></i><span> Students</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
-									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="getInstDues"><i
-									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
-							<%
-								}
-							%>
-							
-							
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%>
-							
-							<li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> Institute Operator</span></a></li>
-							
-							<%
-								}
-							%>
-							
-							
-							
-							
-							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-						</ul>
+						<jsp:include page="menu_Institute.jsp"></jsp:include>
 					</div>
 				</div>
 			</div>
@@ -244,7 +186,7 @@
 
 			<div id="content" class="col-lg-10 col-sm-10">
 				<!-- content starts -->
-				
+
 
 
 				<div class="row">
@@ -264,8 +206,10 @@
 							</div>
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
-								  <input type="button" class="btn btn-info" style="float: right;" value="Add Course" onclick="window.open('AddCourses.jsp','AddCourses',' width=600 height=400')">
-							
+									<input type="button" class="btn btn-info" style="float: right;"
+										value="Add Course"
+										onclick="window.open('AddCourses.jsp','AddCourses',' width=600 height=400')">
+
 									<h1>
 										Welcome
 										<%=loginUser.getAffBean().getInstName()%><br> <small>
@@ -276,10 +220,10 @@
 										payment methods such as Cash, Cheque, Online Banking,
 										Credit/Debit Card, NEFT & RTGS. Please use the menu list on
 										the left sidebar to use the features of the portal. You can
-										use the cart option in the top bar to view and edit your 
+										use the cart option in the top bar to view and edit your
 										current payable amount.</p>
 
-                          	</div>
+								</div>
 
 
 							</div>
@@ -288,7 +232,7 @@
 				</div>
 
 				<!--/row-->
-               <%--  <div class=" row">
+				<%--  <div class=" row">
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<a data-toggle="tooltip"
 							title="1 new student requests. Click here to view"

@@ -146,27 +146,15 @@
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-						<div class="nav-sm nav nav-stacked"></div>
-						<ul class="nav nav-pills nav-stacked main-menu">
-							<li class="nav-header">Main</li>
-							<li><a class="ajax-link"
-								href='<%=session.getAttribute("dashLink").toString()%>'><i
-									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
+						
 							<%
 								if (profile.contentEquals("SU")){
-							%><li><a class="ajax-link" href="UniversityDetailRecord"><i
-									class="fa fa-building"></i><span> Parent Institute</span></a></li>
+							%>
+							<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
 							<%
 								}
 							%>
-							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
-									class="fa fa-building"></i><span> Affiliated Institutes</span></a></li>
-							<%
-								}
-							%>
+							
 							<%
 								if (profile.contentEquals("Affiliated")){
 							%><li><a class="ajax-link" href="StudentTotalRecord"><i
@@ -175,33 +163,13 @@
 								}
 							%>
 							<%
-								if (!profile.contentEquals("Affiliated")){
-							%>
-							<li><a class="ajax-link" href="Admin-FeeConfig.jsp"><i
-									class="fa fa-building"></i><span> Fee Configuration</span></a></li>
-							<%
-								}
-							%>
-							<%
-								if (profile.contentEquals("Affiliated")){
-							%><li><a class="ajax-link" href="getInstDues"><i
-									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
-							<%
-								}
-							%>
-
-
-							<%
 								if (profile.contentEquals("Parent")) {
 							%>
-							<%-- <li><a class="ajax-link" href="CollegeOperatorDetail"><i
-									class="fa fa-building"></i><span> Institute Operator</span></a></li> --%>
-							<li><a class="ajax-link" href="Admin-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
+							<jsp:include page="menu_Parent.jsp"></jsp:include>
 							<%
 								}
 							%>
-						</ul>
+						
 					</div>
 				</div>
 			</div>
