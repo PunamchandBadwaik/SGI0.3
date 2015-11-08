@@ -32,8 +32,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
 	public String SabPaisaURL = "http://localhost:8085/SabPaisa/";
-	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
+	public String returnUrl = "http://localhost:8084/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8084/SGI0.3/Login.jsp";
 
 	
 	/*  public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; 
@@ -52,7 +52,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	List<ApplicantFeeCollectionBean> collectionBeanList = new ArrayList<ApplicantFeeCollectionBean>();
 	ApplicantFeeCollectionDAO afc = new ApplicantFeeCollectionDAO();
 	AppDAO appDAO = new AppDAO();
-	ChallanDAO challanDAO = new ChallanDAO();
+	
 
 	// //
 
@@ -504,7 +504,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		String txnId = Idgenerator.transxId();
 		String name = user.concat(" ").concat(lastname);
 		Double studFee = Double.parseDouble(fee);
-		challanDAO.saveToTransaction(enrollmentId, mobile, txnId, studFee);
+		//challanDAO.saveToTransaction(enrollmentId, mobile, txnId, studFee);
 
 		String url = SabPaisaURL + "?firstName=" + user + "&lstName=" + lastname + "&amt=" + fee + "&Contact=" + mobile
 				+ "&RollNo=" + enrollmentId + "&client=SGI" + "&ru=" + returnUrl + "&txnId=" + txnId;
