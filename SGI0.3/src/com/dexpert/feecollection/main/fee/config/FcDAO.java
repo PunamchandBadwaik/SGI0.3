@@ -296,7 +296,6 @@ public class FcDAO {
 		criteria.setProjection(Projections.distinct(Projections.property("valueId")));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Integer> lookupValuesId = criteria.list();
-
 		session.close();
 		return lookupValuesId;
 	}

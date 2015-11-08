@@ -31,9 +31,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
-	public String SabPaisaURL = "http://192.168.0.100:8085/SabPaisa/";
-	public String returnUrl = "http://192.168.0.100:8080/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://192.168.0.100:8080/SGI0.3/Login.jsp";
+	public String SabPaisaURL = "http://localhost:8085/SabPaisa/";
+	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
 
 	
 	/*  public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; 

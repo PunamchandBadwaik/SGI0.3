@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -404,6 +405,7 @@ public class AppDAO {
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
 			log.info("Cell Value is ::" + element + " <<>> " + lookupId);
+			log.info("found matches in the list..=" +list.size());
 			if (list.size() > 0) {
 				// LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
@@ -606,14 +608,18 @@ public class AppDAO {
 							// log.info("reading row");
 							int x = colList.size();
 							ArrayList<String> dbParameterList = new ArrayList<String>();
+							Map<String, String> metaDataAndDataMap = new LinkedHashMap<String, String>();
 							for (int i = 0; i < x - 2; i++) {
 
 								String object = rs.getString(i + 1);
 								// log.info(">>>>" + object);
-
+								ResultSetMetaData rsmd = rs.getMetaData();
+								String columnName = rsmd.getColumnName(i + 1);
+								metaDataAndDataMap.put(columnName, object);
 								dbParameterList.add(object);
 
 							}
+
 							// log.info("excecuting method validateLookupValues");
 							validateLookupValues(dbParameterList);
 
@@ -657,6 +663,7 @@ public class AppDAO {
 			}
 
 		} catch (Exception e) {
+
 			e.printStackTrace();
 		} finally {
 
@@ -666,13 +673,18 @@ public class AppDAO {
 
 	}
 
+	
 	public void validateLookupValues(List<String> studentAllParamList) throws Exception {
 		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
 		Integer instId = lgBean.getAffBean().getInstId();
+		log.info("INFO:inside the validateLookupValues method() ");
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
+		log.info("DATA::All Structure Ides Of Institute=" + str_ids);
 		List<Integer> valueList = fcDAO.getLookupValue(str_ids);
+		log.info("DATA::All Look Up Value Ides=" + valueList);
 		List<Integer> paramList = fvDAO.getListOfValueBeans(valueList);
+		log.info("DATA::All Look Up Ides=" + paramList);
 		try {
 
 			List<FvBean> fvBeansList = new ArrayList<FvBean>();
@@ -708,12 +720,15 @@ public class AppDAO {
 					object = object.toString().replaceAll("\\u00A0", "").trim().replaceAll("\\s", "");
 
 					Integer lookupId = (Integer) paramIterator.next();
+					log.info("DATA::Look Up Id Inside Iterator="+lookupId);
 
 					String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf(".")) : tempString; //
 					// log.info("look up id is  :: " + lookupId + " <<>> " +
 					// object);
+					log.info("lookup value id ="+lookupId);
+					log.info("DATA: x = "+x);
 					bean = checkFeeValue(lookupId, x);
-
+                    log.info("DATA::FvBean Object Return By checkFeeValue="+bean);
 					if (bean != null) {
 						fvBeansList.add(bean);
 
@@ -861,7 +876,7 @@ public class AppDAO {
 	 */
 
 	public void updateDueAmountOfStudent(AppBean appBean, Integer feeId, Double feeAmount, String feeName) {
-        
+
 		PaymentDuesBean paymentDue = new PaymentDuesBean();
 		paymentDue.setFeeName(feeName);
 		paymentDue.setFeeId(feeId);

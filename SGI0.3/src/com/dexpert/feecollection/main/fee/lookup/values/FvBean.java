@@ -96,5 +96,10 @@ public class FvBean implements Serializable {
 	public void setParentParam(Set<ParBean> parentParam) {
 		this.parentParam = parentParam;
 	}
+	@Override
+	public String toString(){
+	String value="Value Id="+feeValueId+"Value Name="+this.value;
+	return value;
+	}
 
 }
