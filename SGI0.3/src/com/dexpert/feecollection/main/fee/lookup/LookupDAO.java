@@ -75,17 +75,20 @@ public class LookupDAO {
 			if (filterKey.contentEquals("ALL")) {
 
 			}
-			if (filterKey.contentEquals("ID")) {
+			else if (filterKey.contentEquals("ID")) {
 				lookupCr.add(Restrictions.eq("lookupId", id));
 			}
-			if (filterKey.contentEquals("Scope")) {
+			else if (filterKey.contentEquals("Scope")) {
 				lookupCr.add(Restrictions.eq("lookupScope", filterValue));
 			}
-			if (filterKey.contentEquals("Type")) {
+			else if (filterKey.contentEquals("Type")) {
 				lookupCr.add(Restrictions.eq("lookupType", filterValue));
 			}
-			if (filterKey.contentEquals("Ids")) {
+			else if (filterKey.contentEquals("Ids")) {
 				lookupCr.add(Restrictions.in("lookupId", Ids));
+			}
+			else if (filterKey.contentEquals("Name")) {
+				lookupCr.add(Restrictions.eq("lookupName", filterValue));
 			}
 
 			ArrayList<LookupBean> resultList = new ArrayList<LookupBean>();

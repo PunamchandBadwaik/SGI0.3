@@ -10,7 +10,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -52,7 +51,8 @@ import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.config.FcBean;
 import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.config.FeeDetailsBean;
-
+import com.dexpert.feecollection.main.fee.lookup.LookupBean;
+import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
 import com.dexpert.feecollection.main.fee.lookup.values.FvBean;
 import com.dexpert.feecollection.main.fee.lookup.values.FvDAO;
 import com.dexpert.feecollection.main.users.LoginBean;
@@ -483,6 +483,7 @@ public class AppDAO {
 			}
 
 			tempTableName = "temp_imported_data" + generateReturnRandomNumber();
+			log.info("Temp Table Name is "+tempTableName);
 			dynSQL = dynSQL.substring(1, dynSQL.length());
 			session.createSQLQuery(
 					"CREATE TABLE " + tempTableName + " (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL
@@ -580,7 +581,7 @@ public class AppDAO {
 
 			// Database credentials
 			String USER = "root";
-			String PASS = "root";
+			String PASS = "Dspl_2014";
 			conn = (Connection) DriverManager.getConnection(DB_URL, USER, PASS);
 
 			boolean areMoreRecords = true;
@@ -614,12 +615,13 @@ public class AppDAO {
 								ResultSetMetaData rsmd = rs.getMetaData();
 								String columnName = rsmd.getColumnName(i + 1);
 								metaDataAndDataMap.put(columnName, object);
+								
 								dbParameterList.add(object);
 
 							}
 
 							// log.info("excecuting method validateLookupValues");
-							validateLookupValues(dbParameterList);
+							validateLookupValues(dbParameterList,metaDataAndDataMap);
 
 							stmt.close();
 							rs.close();
@@ -741,6 +743,132 @@ public class AppDAO {
 			appBean.setApplicantParamValues(paramSet);
 			addBulkData(appBean);
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	//--------VAlidate Values With Map-----------
+	public void validateLookupValues(List<String> studentAllParamList,Map<String, String> metaDataAndDataMap) throws Exception {
+		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
+		Integer instId = lgBean.getAffBean().getInstId();
+		log.info("INFO:inside the validateLookupValues method() ");
+		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
+		log.info("DATA::All Structure Ides Of Institute=" + str_ids);
+		List<Integer> valueList = fcDAO.getLookupValue(str_ids);
+		log.info("DATA::All Look Up Value Ides=" + valueList);
+		List<Integer> paramList = fvDAO.getListOfValueBeans(valueList);
+		log.info("DATA::All Look Up Ides=" + paramList);
+		try {
+			List<String>mapKeys=new ArrayList<String>(metaDataAndDataMap.keySet());
+			log.info("Keys of MEta Map Are "+mapKeys.toString());
+			List<FvBean> fvBeansList = new ArrayList<FvBean>();
+
+			// log.info("Look up Dynamic Parameter size is ::" +
+			// paramList.size());
+			// log.info("Student parameter  size is ::" +
+			// studentAllParamList.size());
+
+			Iterator<String> studentIterator = studentAllParamList.iterator();
+			// log.info(studentAllParamList);
+			// log.info(paramList);
+			AppBean appBean = new AppBean();
+			while (studentIterator.hasNext()) {
+				String object = studentIterator.next();
+
+				appBean.setGrNumber(metaDataAndDataMap.get("GR_Number"));
+				appBean.setAplFirstName(metaDataAndDataMap.get("First_Name"));
+				appBean.setAplLstName(metaDataAndDataMap.get("Last_Name"));
+				appBean.setGender(metaDataAndDataMap.get("Gender"));
+				appBean.setAplAddress(metaDataAndDataMap.get("Address"));
+				appBean.setAplMobilePri(metaDataAndDataMap.get("Primary_Mobile"));
+				appBean.setAplMobileSec(metaDataAndDataMap.get("Secondary_Mobile"));
+				appBean.setAplEmail(metaDataAndDataMap.get("Email_Id"));
+				appBean.setStartYear(metaDataAndDataMap.get("Start_Year"));
+				
+				for (int i = 10; i < mapKeys.size(); i++) {
+					String columnName=mapKeys.get(i);
+					
+					log.info("Got Column "+columnName);
+					
+					String columnValue=metaDataAndDataMap.get(columnName);
+					
+					log.info("Got Column Value "+columnValue);
+					LookupDAO lkDao=new LookupDAO();
+					columnName=columnName.replace("_", " ");
+					LookupBean parameterBean=lkDao.getLookupData("Name", columnName, null, null).get(0);
+					ArrayList<FvBean>paramValueList=new ArrayList<FvBean>(parameterBean.getFvBeansList());
+					Iterator<FvBean>fvIt=paramValueList.iterator();
+					while(fvIt.hasNext())
+					{
+						FvBean temp=fvIt.next();
+						if(parameterBean.getLookupType().contentEquals("Boolean"))
+						{
+							if(columnValue.equalsIgnoreCase("YES")||columnValue.equalsIgnoreCase("TRUE"))
+							{
+								columnValue="1";
+							}
+							else if(columnValue.equalsIgnoreCase("NO")||columnValue.equalsIgnoreCase("FALSE"))
+							{
+								columnValue="0";
+							}
+							
+						}
+						if(temp.getValue().contentEquals(columnValue))
+						{
+							log.info("Found Match!! Value "+columnValue+" belongs to "+columnName);
+							fvBeansList.add(temp);
+						}
+					}
+					
+				}
+				
+				
+				/*appBean.setGrNumber(studentAllParamList.get(1));
+				appBean.setAplFirstName(studentAllParamList.get(2));
+				appBean.setAplLstName(studentAllParamList.get(3));
+				appBean.setGender(studentAllParamList.get(4));
+				appBean.setAplAddress(studentAllParamList.get(5));
+				appBean.setAplMobilePri(studentAllParamList.get(6));
+				appBean.setAplMobileSec(studentAllParamList.get(7));
+				appBean.setAplEmail(studentAllParamList.get(8));
+				appBean.setStartYear(studentAllParamList.get(9));*/
+
+				//Iterator<Integer> paramIterator = paramList.iterator();
+
+				/*while (paramIterator.hasNext()) {
+
+					FvBean bean = new FvBean();
+					String tempString = object.toString().trim();
+					object = object.toString().replaceAll("\\u00A0", "").trim().replaceAll("\\s", "");
+
+					Integer lookupId = (Integer) paramIterator.next();
+					log.info("DATA::Look Up Id Inside Iterator="+lookupId);
+
+					String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf(".")) : tempString; //
+					// log.info("look up id is  :: " + lookupId + " <<>> " +
+					// object);
+					log.info("lookup value id ="+lookupId);
+					log.info("DATA: x = "+x);
+					bean = checkFeeValue(lookupId, x);
+                    log.info("DATA::FvBean Object Return By checkFeeValue="+bean);
+					if (bean != null) {
+						fvBeansList.add(bean);
+
+					}
+
+				}*/
+
+			}
+			log.info("*****************  adding to bulk data ***************");
+
+			Set<FvBean> paramSet = new HashSet<FvBean>(fvBeansList);
+			appBean.setApplicantParamValues(paramSet);
+			addBulkData(appBean);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
