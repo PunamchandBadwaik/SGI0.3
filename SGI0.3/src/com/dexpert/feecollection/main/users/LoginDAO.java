@@ -29,7 +29,7 @@ public class LoginDAO {
 
 	// Declare Global Variables Here
 	public static SessionFactory factory = ConnectionClass.getFactory();
-	static Logger log = Logger.getLogger(AffDAO.class.getName());
+	static Logger log = Logger.getLogger(LoginDAO.class.getName());
 
 	// End of Global Variables
 
@@ -37,11 +37,27 @@ public class LoginDAO {
 
 	// DAO Methods Here
 	// method to getDetails About user
+	
+	
+	
 	public LoginBean getLoginDetails(LoginBean loginBean) {
 		Session session = factory.openSession();
 		try {
 			log.info("Get Login Details ");
-			Criteria criteria = session.createCriteria(LoginBean.class);
+			
+			
+			String query="select * from sgi.login_master where userName=:userName and password=:pass";
+			SQLQuery sqlQuery=session.createSQLQuery(query);
+			sqlQuery.setParameter("userName", loginBean.getUserName());
+			sqlQuery.setParameter("pass", loginBean.getPassword());
+			sqlQuery.addEntity(LoginBean.class);
+			LoginBean bean =(LoginBean)sqlQuery.list().get(0);
+			return bean;
+			
+			
+			
+			
+		/*	Criteria criteria = session.createCriteria(LoginBean.class);
 			// criteria.add(Restrictions.eq("userName",
 			// loginBean.getUserName()));
 			// criteria.add(Restrictions.eq("password",
@@ -55,7 +71,7 @@ public class LoginDAO {
 			List<LoginBean> loginBean1 = criteria.list();
 			// session.evict(bean);
 			log.info(" after Get Login Details ");
-			return loginBean1.get(0);
+			return loginBean1.get(0);*/
 		} catch (java.lang.IndexOutOfBoundsException aioub) {
 			LoginBean login = new LoginBean();
 			return login;

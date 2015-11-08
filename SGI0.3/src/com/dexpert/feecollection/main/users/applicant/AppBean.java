@@ -81,16 +81,16 @@ public class AppBean implements Serializable {
 	@Fetch(FetchMode.JOIN)
 	private Set<PayBean> payBeansSet;
 
-	@ManyToMany(fetch=FetchType.LAZY)
+	@ManyToMany()
 	@JoinTable(name = "applicant_values", joinColumns = @JoinColumn(name = "enrollmentNumber"), inverseJoinColumns = @JoinColumn(name = "value_id"))
 	Set<FvBean> applicantParamValues;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean",fetch=FetchType.LAZY)
+@OneToMany(cascade = CascadeType.ALL, mappedBy = "appBean")
 	//@OrderBy(value = "dueId DESC")
 	@Fetch(FetchMode.JOIN)
 	private Set<PaymentDuesBean> paymentDues;
 
-	public Set<PaymentDuesBean> getPaymentDues() {
+public Set<PaymentDuesBean> getPaymentDues() {
 		return paymentDues;
 	}
 
