@@ -150,8 +150,7 @@
 			<result name="college">index-College.jsp</result>
 			<result name="superAdmin">index-Admin.jsp</result>
 			<result name="collegeOperator">index-College-Operator.jsp</result>
-			<result name="student" type="redirect">getTheStudentFeeDetailsFromLoginPage
-			</result>
+			<result name="student">index_Student.jsp</result>
 			<result name="input">Login.jsp</result>
 			<result name="failure">Login.jsp</result>
 			<result name="error">Login.jsp</result>

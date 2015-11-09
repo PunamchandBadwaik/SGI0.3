@@ -254,8 +254,8 @@ public class AffAction extends ActionSupport {
 	// get institute Details list
 
 	public String getAllClgList() {
-
-		affInstList = affDao.getCollegesList();
+		Integer parentInstId=(Integer)ses.getAttribute("parentInstId");
+		affInstList = affDao.getCollegesList(parentInstId);
 		return SUCCESS;
 	}
 
@@ -267,8 +267,9 @@ public class AffAction extends ActionSupport {
 
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(), null);
+		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		Integer instId=(Integer)httpSession.getAttribute("instId");
+		List<Integer> structureIdes = affDao.getStrutureId(instId, null);
 		log.info("Struture id" + structureIdes);
 		try {
 			List<Integer> valueIdes = feeDAO.getLookupValue(structureIdes);
@@ -277,7 +278,7 @@ public class AffAction extends ActionSupport {
 			log.info("look up param list::::::" + lookUpParamList);
 			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
 			log.info("look up List Size is ::" + lookupBeanList.size());
-			allCourseOfInst = affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
+			allCourseOfInst = affDao.getAllCourseOfInst(instId);
 			return SUCCESS;
 		} catch (NullPointerException npe) {
 			String message = "Please Add the Courses Before Adding the Student ";
@@ -296,8 +297,9 @@ public class AffAction extends ActionSupport {
 	public String getUniversityCollegeList() {
 		try {
 			HttpSession httpSession = request.getSession();
-			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-			parBean = affDao.getUniversityCollegeList(loginBean);
+			//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+			Integer parentInstId=(Integer)httpSession.getAttribute("parentInstId");
+			parBean = affDao.getUniversityCollegeList(parentInstId);
 			log.info("University Names ::" + parBean.getParInstName());
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {

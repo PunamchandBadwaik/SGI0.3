@@ -4,7 +4,7 @@
 <head>
 <%
 	//checking session
-	LoginBean loginUser = new LoginBean();
+     LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean"); String profile=(String)session.getAttribute("sesProfile");
 	boolean alertflag=false;
 	boolean alertflag2=false;
@@ -96,7 +96,7 @@
 	<!-- topbar starts -->
 	<%
 		Integer headCount = 4;
-		Integer colCount = 0;
+			Integer colCount = 0;
 	%>
 	<!-- topbar ends -->
 	<div class="ch-container">
@@ -184,7 +184,7 @@ Integer count=0;%>
 												</tr>
 
 												<tr>
-													
+
 													<td>Fee Payable By</td>
 													<td><div class="control-group" id="divFeePayeeSelect">
 
@@ -202,29 +202,30 @@ Integer count=0;%>
 												<tr>
 
 													<td>Fee Name</td>
-													<td>
-													<input hidden="hidden" id="inputFeeMode" name="feeAddMode" value="new">
-														<div style='display: none' class="control-group" id="divFeeSelect">
+													<td><input hidden="hidden" id="inputFeeMode"
+														name="feeAddMode" value="new">
+														<div style='display: none' class="control-group"
+															id="divFeeSelect">
 
 
-															<div class="controls" >
+															<div class="controls">
 																<s:select theme="simple" list="feeList"
 																	listValue="feeName" listKey="feeId"
 																	cssStyle="width:60%" requiredLabel="required"
 																	name="selectedFee"></s:select>
-																<button type="button" id="buttonNewFee" class="btn btn-info btn-sm"
-																	onclick="toggleFeeMode()">Add New Fee</button>
+																<button type="button" id="buttonNewFee"
+																	class="btn btn-info btn-sm" onclick="toggleFeeMode()">Add
+																	New Fee</button>
 
 															</div>
 														</div>
-														<div  id="divFeeInput">
-															<input id="inputFeeName"
-																placeholder="Give a Unique Name" type="text"
-																 name="feedetails.feeName">
-																 <button type="button" id="buttonNewFee" class="btn btn-info btn-sm"
-																	onclick="toggleFeeMode()">Select Predefined Fee</button>
-														</div>
-													</td>
+														<div id="divFeeInput">
+															<input id="inputFeeName" placeholder="Give a Unique Name"
+																type="text" name="feedetails.feeName">
+															<button type="button" id="buttonNewFee"
+																class="btn btn-info btn-sm" onclick="toggleFeeMode()">Select
+																Predefined Fee</button>
+														</div></td>
 
 												</tr>
 

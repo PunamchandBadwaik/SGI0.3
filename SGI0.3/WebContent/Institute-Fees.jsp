@@ -6,8 +6,8 @@
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-
-	loginUser = (LoginBean) session.getAttribute("loginUserBean"); String profile=(String)session.getAttribute("sesProfile");
+    loginUser = (LoginBean) session.getAttribute("loginUserBean"); 
+	String profile=(String)session.getAttribute("sesProfile");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -87,7 +87,8 @@
 					class="icon-bar"></span>
 			</button>
 
-			<a href="http://www.feedesk.in/" target="blank"> <img alt="FeeDesk Logo" src="img/feeDesk_logo.png"
+			<a href="http://www.feedesk.in/" target="blank"> <img
+				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
 
@@ -100,7 +101,8 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick="" href="EditUserDetail.jsp">Settings</a></li>
+					<li><a id="saveProfileTagId" onclick=""
+						href="EditUserDetail.jsp">Settings</a></li>
 					<li class="divider"></li>
 					<li><a href="logOutUser">Logout</a></li>
 				</ul>
@@ -163,7 +165,7 @@
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-								<%
+						<%
 							if (profile.contentEquals("SU")) {
 						%>
 						<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
@@ -185,7 +187,7 @@
 						<%
 							}
 						%>
-				</div>
+					</div>
 				</div>
 			</div>
 			<!--/span-->
@@ -273,7 +275,8 @@
 														</s:if>
 														<button
 															onclick='window.open("getFeeCalcDetails?instId=<%=session.getAttribute("sesId").toString()%>&reqFeeId=<s:property value='feeId'/>","CalcDetails","height=768,width=1024")'
-															class="btn btn-success btn-sm">Calculation Details</button></td>
+															class="btn btn-success btn-sm">Calculation
+															Details</button></td>
 												</tr>
 
 												<%

@@ -1,4 +1,5 @@
 package com.dexpert.feecollection.main.users.applicant;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
@@ -73,7 +74,7 @@ public class AppDAO {
 	FvDAO fvDAO = new FvDAO();
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpSession httpSession = request.getSession();
-	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+	// LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 	// String instName = lgBean.getAffBean().getInstName();
 	// Integer instId = lgBean.getAffBean().getInstId();
 
@@ -161,7 +162,7 @@ public class AppDAO {
 			Transaction tx = session.beginTransaction();
 			session.save(appBean);
 			tx.commit();
-			String instName = lgBean.getAffBean().getInstName();
+			String instName = affBean.getInstName();
 			// for text msg
 
 			try {
@@ -403,7 +404,7 @@ public class AppDAO {
 			criteria.add(Restrictions.eq("lookupname.lookupId", lookupId));
 			list = criteria.list();
 			log.info("Cell Value is ::" + element + " <<>> " + lookupId);
-			log.info("found matches in the list..=" +list.size());
+			log.info("found matches in the list..=" + list.size());
 			if (list.size() > 0) {
 				// LookupBean lookupBean = new LookupBean();
 				log.info("Matched");
@@ -483,7 +484,7 @@ public class AppDAO {
 			}
 
 			tempTableName = "temp_imported_data" + generateReturnRandomNumber();
-			log.info("Temp Table Name is "+tempTableName);
+			log.info("Temp Table Name is " + tempTableName);
 			dynSQL = dynSQL.substring(1, dynSQL.length());
 			session.createSQLQuery(
 					"CREATE TABLE " + tempTableName + " (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL
@@ -581,7 +582,7 @@ public class AppDAO {
 
 			// Database credentials
 			String USER = "root";
-			String PASS = "Dspl_2014";
+			String PASS = "root";
 			conn = (Connection) DriverManager.getConnection(DB_URL, USER, PASS);
 
 			boolean areMoreRecords = true;
@@ -615,13 +616,13 @@ public class AppDAO {
 								ResultSetMetaData rsmd = rs.getMetaData();
 								String columnName = rsmd.getColumnName(i + 1);
 								metaDataAndDataMap.put(columnName, object);
-								
+
 								dbParameterList.add(object);
 
 							}
 
 							// log.info("excecuting method validateLookupValues");
-							validateLookupValues(dbParameterList,metaDataAndDataMap);
+							validateLookupValues(dbParameterList, metaDataAndDataMap);
 
 							stmt.close();
 							rs.close();
@@ -673,11 +674,11 @@ public class AppDAO {
 
 	}
 
-	
 	public void validateLookupValues(List<String> studentAllParamList) throws Exception {
-		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		//LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
-		Integer instId = lgBean.getAffBean().getInstId();
+		Integer instId =(Integer)httpSession.getAttribute("instId");
+
 		log.info("INFO:inside the validateLookupValues method() ");
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
 		log.info("DATA::All Structure Ides Of Institute=" + str_ids);
@@ -720,15 +721,15 @@ public class AppDAO {
 					object = object.toString().replaceAll("\\u00A0", "").trim().replaceAll("\\s", "");
 
 					Integer lookupId = (Integer) paramIterator.next();
-					log.info("DATA::Look Up Id Inside Iterator="+lookupId);
+					log.info("DATA::Look Up Id Inside Iterator=" + lookupId);
 
 					String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf(".")) : tempString; //
 					// log.info("look up id is  :: " + lookupId + " <<>> " +
 					// object);
-					log.info("lookup value id ="+lookupId);
-					log.info("DATA: x = "+x);
+					log.info("lookup value id =" + lookupId);
+					log.info("DATA: x = " + x);
 					bean = checkFeeValue(lookupId, x);
-                    log.info("DATA::FvBean Object Return By checkFeeValue="+bean);
+					log.info("DATA::FvBean Object Return By checkFeeValue=" + bean);
 					if (bean != null) {
 						fvBeansList.add(bean);
 
@@ -748,13 +749,14 @@ public class AppDAO {
 		}
 
 	}
-	
-	
-	//--------VAlidate Values With Map-----------
-	public void validateLookupValues(List<String> studentAllParamList,Map<String, String> metaDataAndDataMap) throws Exception {
-		LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+
+	// --------VAlidate Values With Map-----------
+	public void validateLookupValues(List<String> studentAllParamList, Map<String, String> metaDataAndDataMap)
+			throws Exception {
+	//	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
-		Integer instId = lgBean.getAffBean().getInstId();
+	//	Integer instId = lgBean.getAffBean().getInstId();
+		Integer instId=(Integer)httpSession.getAttribute("instId");
 		log.info("INFO:inside the validateLookupValues method() ");
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
 		log.info("DATA::All Structure Ides Of Institute=" + str_ids);
@@ -763,8 +765,8 @@ public class AppDAO {
 		List<Integer> paramList = fvDAO.getListOfValueBeans(valueList);
 		log.info("DATA::All Look Up Ides=" + paramList);
 		try {
-			List<String>mapKeys=new ArrayList<String>(metaDataAndDataMap.keySet());
-			log.info("Keys of MEta Map Are "+mapKeys.toString());
+			List<String> mapKeys = new ArrayList<String>(metaDataAndDataMap.keySet());
+			log.info("Keys of MEta Map Are " + mapKeys.toString());
 			List<FvBean> fvBeansList = new ArrayList<FvBean>();
 
 			// log.info("Look up Dynamic Parameter size is ::" +
@@ -788,79 +790,37 @@ public class AppDAO {
 				appBean.setAplMobileSec(metaDataAndDataMap.get("Secondary_Mobile"));
 				appBean.setAplEmail(metaDataAndDataMap.get("Email_Id"));
 				appBean.setStartYear(metaDataAndDataMap.get("Start_Year"));
-				
+
 				for (int i = 10; i < mapKeys.size(); i++) {
-					String columnName=mapKeys.get(i);
-					
-					log.info("Got Column "+columnName);
-					
-					String columnValue=metaDataAndDataMap.get(columnName);
-					
-					log.info("Got Column Value "+columnValue);
-					LookupDAO lkDao=new LookupDAO();
-					columnName=columnName.replace("_", " ");
-					LookupBean parameterBean=lkDao.getLookupData("Name", columnName, null, null).get(0);
-					ArrayList<FvBean>paramValueList=new ArrayList<FvBean>(parameterBean.getFvBeansList());
-					Iterator<FvBean>fvIt=paramValueList.iterator();
-					while(fvIt.hasNext())
-					{
-						FvBean temp=fvIt.next();
-						if(parameterBean.getLookupType().contentEquals("Boolean"))
-						{
-							if(columnValue.equalsIgnoreCase("YES")||columnValue.equalsIgnoreCase("TRUE"))
-							{
-								columnValue="1";
+					String columnName = mapKeys.get(i);
+
+					log.info("Got Column " + columnName);
+
+					String columnValue = metaDataAndDataMap.get(columnName);
+
+					log.info("Got Column Value " + columnValue);
+					LookupDAO lkDao = new LookupDAO();
+					columnName = columnName.replace("_", " ");
+					LookupBean parameterBean = lkDao.getLookupData("Name", columnName, null, null).get(0);
+					ArrayList<FvBean> paramValueList = new ArrayList<FvBean>(parameterBean.getFvBeansList());
+					Iterator<FvBean> fvIt = paramValueList.iterator();
+					while (fvIt.hasNext()) {
+						FvBean temp = fvIt.next();
+						if (parameterBean.getLookupType().contentEquals("Boolean")) {
+							if (columnValue.equalsIgnoreCase("YES") || columnValue.equalsIgnoreCase("TRUE")) {
+								columnValue = "1";
+							} else if (columnValue.equalsIgnoreCase("NO") || columnValue.equalsIgnoreCase("FALSE")) {
+								columnValue = "0";
 							}
-							else if(columnValue.equalsIgnoreCase("NO")||columnValue.equalsIgnoreCase("FALSE"))
-							{
-								columnValue="0";
-							}
-							
+
 						}
-						if(temp.getValue().contentEquals(columnValue))
-						{
-							log.info("Found Match!! Value "+columnValue+" belongs to "+columnName);
+						if (temp.getValue().contentEquals(columnValue)) {
+							log.info("Found Match!! Value " + columnValue + " belongs to " + columnName);
 							fvBeansList.add(temp);
 						}
 					}
-					
+
 				}
-				
-				
-				/*appBean.setGrNumber(studentAllParamList.get(1));
-				appBean.setAplFirstName(studentAllParamList.get(2));
-				appBean.setAplLstName(studentAllParamList.get(3));
-				appBean.setGender(studentAllParamList.get(4));
-				appBean.setAplAddress(studentAllParamList.get(5));
-				appBean.setAplMobilePri(studentAllParamList.get(6));
-				appBean.setAplMobileSec(studentAllParamList.get(7));
-				appBean.setAplEmail(studentAllParamList.get(8));
-				appBean.setStartYear(studentAllParamList.get(9));*/
-
-				//Iterator<Integer> paramIterator = paramList.iterator();
-
-				/*while (paramIterator.hasNext()) {
-
-					FvBean bean = new FvBean();
-					String tempString = object.toString().trim();
-					object = object.toString().replaceAll("\\u00A0", "").trim().replaceAll("\\s", "");
-
-					Integer lookupId = (Integer) paramIterator.next();
-					log.info("DATA::Look Up Id Inside Iterator="+lookupId);
-
-					String x = tempString.contains(".") ? tempString.substring(0, tempString.indexOf(".")) : tempString; //
-					// log.info("look up id is  :: " + lookupId + " <<>> " +
-					// object);
-					log.info("lookup value id ="+lookupId);
-					log.info("DATA: x = "+x);
-					bean = checkFeeValue(lookupId, x);
-                    log.info("DATA::FvBean Object Return By checkFeeValue="+bean);
-					if (bean != null) {
-						fvBeansList.add(bean);
-
-					}
-
-				}*/
 
 			}
 			log.info("*****************  adding to bulk data ***************");
@@ -868,7 +828,7 @@ public class AppDAO {
 			Set<FvBean> paramSet = new HashSet<FvBean>(fvBeansList);
 			appBean.setApplicantParamValues(paramSet);
 			addBulkData(appBean);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -881,8 +841,9 @@ public class AppDAO {
 	public void addBulkData(AppBean appBean) throws InvalidKeyException, NoSuchAlgorithmException,
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
-
-		Integer instId = lgBean.getAffBean().getInstId();
+		String profile = (String) httpSession.getAttribute("profile");
+		AffBean affBeanSes = (AffBean) httpSession.getAttribute("instBean");
+		Integer instId = affBeanSes.getInstId();
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
 		String EnrollNo = en.generateEnrollmentNum(appBean);
@@ -896,11 +857,11 @@ public class AppDAO {
 		// log.info("44");
 		AffBean affBean = new AffBean();
 		AffBean clgBean = new AffBean();
-		if (lgBean.getProfile().contentEquals("CollegeOperator")) {
+		if (profile.contentEquals("CollegeOperator")) {
 			// log.info("5");
 			clgBean = aff.viewInstDetail(instId);
 
-		} else if (lgBean.getProfile().contentEquals("Institute")) {
+		} else if (profile.contentEquals("Institute")) {
 			// log.info("66");
 			clgBean = aff.viewInstDetail(instId);
 		}
@@ -943,7 +904,7 @@ public class AppDAO {
 				String user = appBean.getEnrollmentNumber();
 				String pass = appBean.getStartYear().substring(0, 4);
 				String msg = "Hello " + appBean.getAplFirstName() + "Welcome to the FeeDesk portal of "
-						+ lgBean.getAffBean().getInstName()
+						+ affBeanSes.getInstName()
 						+ ". You can log in to view and pay your fees with the these credentials. UserId :" + user + ""
 						+ " Passsword : " + pass;
 				SendSMS sms = new SendSMS();
@@ -962,7 +923,7 @@ public class AppDAO {
 
 			} else {
 
-				String emailContent = "Welcome to the FeeDesk portal of " + lgBean.getAffBean().getInstName()
+				String emailContent = "Welcome to the FeeDesk portal of " + affBeanSes.getInstName()
 						+ ". You can log in to view and pay your fees with the below credentials. ";
 				EmailSessionBean email = new EmailSessionBean();
 				email.sendEmail(appBean.getAplEmail(), "Welcome To FeeDesk!", appBean.getEnrollmentNumber(), appBean
@@ -1032,16 +993,14 @@ public class AppDAO {
 
 	}
 
-	public AppBean getStudentDues(String enrollmentNumber) {
-		Session session = factory.openSession();
-		try {
-			AppBean completeDeatilsOfStudent = (AppBean) session.get(AppBean.class, enrollmentNumber);
-			return completeDeatilsOfStudent;
-		} finally {
-			session.close();
-		}
-
-	}
+	/*
+	 * public AppBean getStudentDues(String enrollmentNumber) { Session session
+	 * = factory.openSession(); try { AppBean completeDeatilsOfStudent =
+	 * (AppBean) session.get(AppBean.class, enrollmentNumber); return
+	 * completeDeatilsOfStudent; } finally { session.close(); }
+	 * 
+	 * }
+	 */
 
 	public Double totalDueFeeOfStudent(String enrollMentNumber) {
 		Session session = factory.openSession();
@@ -1152,5 +1111,23 @@ public class AppDAO {
 		Random r = new Random(System.currentTimeMillis());
 		return (1 + r.nextInt(2)) * 10000 + r.nextInt(10000);
 	}
+
+	public List<PaymentDuesBean> getStudentDues(String enrollmentNumber) {
+		// sundays changes
+		Session session = factory.openSession();
+		try {
+
+			Criteria criteria = session.createCriteria(PaymentDuesBean.class);
+			criteria.add(Restrictions.eq("appBean.enrollmentNumber", enrollmentNumber));
+			//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			log.info("before fetching the list");
+			List<PaymentDuesBean> paymentDuesBean = criteria.list();
+			log.info("after fetching the list");
+			return paymentDuesBean;
+		} finally {
+			session.close();
+		}
+	}
+  
 
 }

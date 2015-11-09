@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.parent.ParBean"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html lang="en">
@@ -6,7 +7,9 @@
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-	loginUser = (LoginBean) session.getAttribute("loginUserBean"); String profile=(String)session.getAttribute("sesProfile");
+	loginUser = (LoginBean) session.getAttribute("loginUserBean"); 
+	String profile=(String)session.getAttribute("sesProfile");
+	ParBean parBean=(ParBean)session.getAttribute("ParInsBean");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -217,7 +220,7 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 									<h1>
 										Welcome
-										<%=loginUser.getParBean().getParInstName()%><br> <small>This
+										<%=parBean.getParInstName()%><br> <small>This
 											is the online fee payment portal</small>
 									</h1>
 									<p>You can use the portal to monitor and manage the fee

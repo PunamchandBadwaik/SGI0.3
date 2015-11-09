@@ -108,15 +108,15 @@ public class AffBean implements Serializable {
 	Set<FvBean> collegeParamvalues;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-	@Fetch(FetchMode.JOIN)
+	
 	private Set<AffFeePropBean> feeProps;
 
 	@OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
-	@Fetch(FetchMode.JOIN)
+	
 	private Set<PaymentDuesBean> dueFeesSet;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "affBean",fetch=FetchType.LAZY)
-	@Fetch(FetchMode.JOIN)
+
 	private Set<CollegeCourses> collegeCourses;
 
 	public Set<CollegeCourses> getCollegeCourses() {

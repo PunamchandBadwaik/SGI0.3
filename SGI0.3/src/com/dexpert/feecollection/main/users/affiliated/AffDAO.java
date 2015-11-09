@@ -208,14 +208,14 @@ public class AffDAO {
 	}
 
 	// get direct child i.e. college list
-	public List<AffBean> getCollegesList() {
+	public List<AffBean> getCollegesList(Integer parentInsId) {
 
 		Session session = factory.openSession();
 		List<AffBean> affBeansList = new ArrayList<AffBean>();
 
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		Criteria criteria = session.createCriteria(AffBean.class);
-		criteria.add(Restrictions.eq("parBeanAff.parInstId", loginBean.getParBean().getParInstId()));
+		criteria.add(Restrictions.eq("parBeanAff.parInstId",parentInsId));
 
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
@@ -238,12 +238,12 @@ public class AffDAO {
 	}
 
 	// to get child college list based on university
-	public ParBean getUniversityCollegeList(LoginBean loginBean) {
+	public ParBean getUniversityCollegeList(Integer parentInsId) {
 
 		Session session = factory.openSession();
 
 		Criteria criteria = session.createCriteria(ParBean.class);
-		criteria.add(Restrictions.eq("parInstId", loginBean.getParBean().getParInstId()));
+		criteria.add(Restrictions.eq("parInstId",parentInsId));
 
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		ParBean parBean = (ParBean) criteria.list().iterator().next();
@@ -266,12 +266,11 @@ public class AffDAO {
 	// End of DAO Methods
 
 	public AffBean viewInstDetail(Integer instId) {
+		log.info("before creating session");
 		Session session = factory.openSession();
-
-		Criteria criteria = session.createCriteria(AffBean.class);
-
-		criteria.add(Restrictions.eq("instId", instId));
-		AffBean affBean = (AffBean) criteria.list().iterator().next();
+		log.info("after creating session");
+		AffBean affBean  = (AffBean)session.get(AffBean.class,instId);
+	    log.info("after fetching bean");
 		session.close();
 		return affBean;
 	}
@@ -475,7 +474,9 @@ public class AffDAO {
 		ArrayList<AffBean> notAddedCollegeList = new ArrayList<AffBean>();
 		collegeListFromDB = getCollegesListByInstName(affBean);
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		Integer parentInsId=(Integer)httpSession.getAttribute("parentInstId");
+		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		
 		String userprofile = httpSession.getAttribute("sesProfile").toString();
 		log.info("CHild " + affBean.getInstName());
 		if (collegeListFromDB.isEmpty()) {
@@ -529,7 +530,7 @@ public class AffDAO {
 			// one to many Bidirectional relationship
 			Set<AffBean> affBeansSet = new HashSet<AffBean>();
 
-			parBean1 = parDAO.viewUniversity(loginBean.getParBean().getParInstId());
+			parBean1 = parDAO.viewUniversity(parentInsId);
 			log.info("Parent Login is :: " + parBean1.getParInstId() + " ::: " + parBean1.getParInstName());
 			affBeansSet = parBean1.getAffBeanOneToManySet();
 

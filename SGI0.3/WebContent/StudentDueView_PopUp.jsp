@@ -153,7 +153,7 @@
 
 
 
-										<s:iterator value="app1.paymentDues">
+										<s:iterator value="paymentDuesBeans">
 
 
 											<tr>

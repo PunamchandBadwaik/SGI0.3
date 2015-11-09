@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.affiliated.AffBean"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="java.math.BigInteger"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
@@ -9,6 +10,7 @@
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	String profile = (String) session.getAttribute("sesProfile");
+	AffBean affBean = (AffBean) session.getAttribute("instBean");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -212,8 +214,8 @@
 
 									<h1>
 										Welcome
-										<%=loginUser.getAffBean().getInstName()%><br> <small>
-											This is the online fee payment portal</small>
+										<%=affBean.getInstName()%><br> <small> This is
+											the online fee payment portal</small>
 									</h1>
 									<p>You can use the portal to pay various fees to the
 										governing university in a hasslefree manner. We accept various

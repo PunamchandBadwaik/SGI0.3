@@ -8,7 +8,6 @@
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-
 	loginUser = (LoginBean) session.getAttribute("loginUserBean"); 
 	String profile=(String)session.getAttribute("sesProfile");
 

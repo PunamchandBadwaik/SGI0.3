@@ -44,8 +44,9 @@ public class AppAction extends ActionSupport {
 	AppBean appBean1, appBean;
 	List<AppBean> appBeansList = new ArrayList<AppBean>();
 	HttpServletRequest request = ServletActionContext.getRequest();
+	HttpSession httpSession=request.getSession();
 	HttpServletResponse response = ServletActionContext.getResponse();
-	static Logger log = Logger.getLogger(AffAction.class.getName());
+	static Logger log = Logger.getLogger(AppAction.class.getName());
 	AffBean affBean = new AffBean();
 	List<LookupBean> lookupBeanList = new ArrayList<LookupBean>();
 	String collegeName, applicantParamValue;
@@ -63,13 +64,14 @@ public class AppAction extends ActionSupport {
 	public AppDAO aplDAO = new AppDAO();
 	List<FeeDetailsBean> feeDetailsBeanList = new ArrayList<FeeDetailsBean>();
 	FcDAO fcDAO = new FcDAO();
-	private AppBean app1;
+	private AppBean app1=new AppBean();
 	private Double totalDueOFStudent, totalNetFees, paymentDone, discountedAmount = 0.0, amountAfterDiscount = 0.0,
 			finalAmountToBePaid = 0.0;
 	private List<FeeDetailsBean> feeList;
 	private List<TransactionBean> transactionDetailsForReport;
 	private OperatorBean operatorBean;
 	private AffDAO affDao = new AffDAO();
+	private List<PaymentDuesBean> paymentDuesBeans;
 
 	// End of Global Variables
 
@@ -85,11 +87,12 @@ public class AppAction extends ActionSupport {
 		this.operatorBean = operatorBean;
 	}
 
-	
-
 	public String registerStudent() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException,
 			InvalidAlgorithmParameterException, UnsupportedEncodingException, IllegalBlockSizeException,
 			BadPaddingException {
+		Integer instId=(Integer)httpSession.getAttribute("instId");
+		AffBean affBean=(AffBean)httpSession.getAttribute("instBean");
+
 		LookupDAO lookupdao = new LookupDAO();
 		log.info("Course  ::" + applicantParamValue);
 
@@ -108,7 +111,7 @@ public class AppAction extends ActionSupport {
 		// appBean1.getApplicantParamValues();
 
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		log.info("Applicant Name  ::" + appBean1.getAplFirstName());
 
 		List<String> existEnrollmentList = aplDAO.existingEnrollNum(appBean1);
@@ -123,7 +126,7 @@ public class AppAction extends ActionSupport {
 			// try {
 			// log.info("Enrollment Number is" +
 			// appBean1.getEnrollmentNumber());
-			appBean1 = aplDAO.saveOrUpdate(appBean1, loginBean.getAffBean().getInstId(), fvBeansSet);
+			appBean1 = aplDAO.saveOrUpdate(appBean1,instId, fvBeansSet);
 
 			// } catch (java.lang.NullPointerException e) {
 			// request.setAttribute("msg", "Please Enter Enrollment Number");
@@ -144,7 +147,7 @@ public class AppAction extends ActionSupport {
 			} catch (java.util.NoSuchElementException e) {
 
 				request.setAttribute("msg", "Please Set Fees for Student");
-				affInstList = affDAO.getCollegesList();
+				affInstList = affDAO.getCollegesList(affBean.getParBeanAff().getParInstId());
 				return "feeNotSet";
 			}
 
@@ -155,15 +158,15 @@ public class AppAction extends ActionSupport {
 		} else {
 			log.info("4");
 			request.setAttribute("msg", "Enrollment Number Already Registered");
-			affInstList = affDAO.getCollegesList();
-			List<Integer> structureIdes = affDao.getStrutureId(loginBean.getAffBean().getInstId(), null);
+			affInstList = affDAO.getCollegesList(affBean.getParBeanAff().getParInstId());
+			List<Integer> structureIdes = affDao.getStrutureId(instId, null);
 			log.info("Struture id" + structureIdes);
 			List<Integer> valueIdes = fcDAO.getLookupValue(structureIdes);
 			log.info("value ides got from fee config table::::::" + valueIdes);
 			List<Integer> lookUpParamList = fvDAO.getListOfValueBeans(valueIdes);
 			log.info("look up param list::::::" + lookUpParamList);
 			lookupBeanList = lookupdao.getListOfLookUpValues("Applicant", lookUpParamList, valueIdes);
-			affDao.getAllCourseOfInst(loginBean.getAffBean().getInstId());
+			affDao.getAllCourseOfInst(instId);
 			return "failure";
 		}
 
@@ -173,10 +176,10 @@ public class AppAction extends ActionSupport {
 
 	public String getStudentList() {
 		HttpSession httpSession = request.getSession();
-		Integer instId=(Integer)httpSession.getAttribute("sesId");
+		Integer instId = (Integer) httpSession.getAttribute("sesId");
 
 		try {
-			appBeansList= aplDAO.getStudentDetail(instId);
+			appBeansList = aplDAO.getStudentDetail(instId);
 
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
@@ -287,16 +290,16 @@ public class AppAction extends ActionSupport {
 
 	public String getParticularFeeDetailsOfStudentFromloginPage() {
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-
+		// LoginBean loginBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
+		String stdEnrollNum = (String) httpSession.getAttribute("StudentEnrollId");
 		try {
-			appBean1 = aplDAO.getUserDetail(loginBean.getAppBean().getEnrollmentNumber());
-			
-			getDuesOfStudent();
+			app1 = aplDAO.getUserDetail(stdEnrollNum);
+			getDuesOfStudent(stdEnrollNum);
 			return SUCCESS;
 		} catch (java.lang.NullPointerException e) {
 			request.setAttribute("msg", "Session Time Out");
-			//e.printStackTrace();
+			// e.printStackTrace();
 			return ERROR;
 		}
 
@@ -307,7 +310,7 @@ public class AppAction extends ActionSupport {
 	public String operatorGettingTheStudentDuesDetail() {
 
 		HttpSession httpSession = request.getSession();
-		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		String enroll = new String();
 		try {
 			enroll = appBean1.getEnrollmentNumber();
@@ -323,7 +326,7 @@ public class AppAction extends ActionSupport {
 			 * httpSession.setAttribute("loginUserBean",
 			 * appBean1.getLoginBean());
 			 */
-			getDuesOfStudent();
+			getDuesOfStudent(enroll);
 			return SUCCESS;
 		} catch (Exception e) {
 			request.setAttribute("msg", "Please Enter Valid UIN");
@@ -346,38 +349,16 @@ public class AppAction extends ActionSupport {
 			httpSession.setAttribute("sesProfile", "Student");
 			httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
 
-			httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
+			//httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
 
-			getDuesOfStudent();
+			getDuesOfStudent(enroll);
 			return SUCCESS;
 		} catch (Exception e) {
 			request.setAttribute("msg", "Please Enter Valid UIN");
 			return "failure";
 		}
 
-		/*
-		 * } catch (java.lang.NullPointerException e) {
-		 * request.setAttribute("msg", "Enrollment is not exist"); return
-		 * "failure"; } try { appBean1 = aplDAO.getUserDetail(enroll); app1 =
-		 * aplDAO.getStudentOpDues(appBean1.getEnrollmentNumber(),
-		 * loginBean.getOperatorBean().getAffBean() .getInstId()); // app1 =
-		 * aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
-		 * totalDueOFStudent =
-		 * aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
-		 * totalNetFees =
-		 * aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
-		 * paymentDone =
-		 * aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
-		 * 
-		 * // log.info("total net dues is ::" + totalNetFees);
-		 * 
-		 * } catch (Exception e) { request.setAttribute("msg",
-		 * "Enrollment Number is Not Registered");
-		 * 
-		 * return "failure"; }
-		 * 
-		 * // return SUCCESS;
-		 */
+		
 	}
 
 	public Set<PaymentDuesBean> addSeqOfFees(Set<PaymentDuesBean> paymentDues, Integer instId) {
@@ -392,14 +373,15 @@ public class AppAction extends ActionSupport {
 		return payDueSetWithSeqId;
 	}
 
-	public void getDuesOfStudent() {
+	public void getDuesOfStudent(String enrollMentNumber) {
 		log.info("inside getDuesOfStudent");
-		app1 = aplDAO.getStudentDues(appBean1.getEnrollmentNumber());
-		feeList = aplDAO.getAllFeeDeatils();
-		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(appBean1.getEnrollmentNumber());
-		totalNetFees = aplDAO.totalfeesOfStudent(appBean1.getEnrollmentNumber());
-		paymentDone = aplDAO.totalPaymentDone(appBean1.getEnrollmentNumber());
-		String discountType = app1.getDiscountType() == null ? "" : app1.getDiscountType();
+		paymentDuesBeans = aplDAO.getStudentDues(enrollMentNumber);
+		log.info("LIst size is"+paymentDuesBeans.size());
+		//feeList = aplDAO.getAllFeeDeatils();
+		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(enrollMentNumber);
+		totalNetFees = aplDAO.totalfeesOfStudent(enrollMentNumber);
+		paymentDone = aplDAO.totalPaymentDone(enrollMentNumber);
+		/*String discountType = app1.getDiscountType() == null ? "" : app1.getDiscountType();
 		Double discountValue = app1.getDiscountValue() == null ? 0.0 : app1.getDiscountValue();
 		if (discountValue > 0) {
 			if (discountType.contentEquals("Per")) {
@@ -415,19 +397,20 @@ public class AppAction extends ActionSupport {
 				totalDueOFStudent = totalDueOFStudent - discountValue;
 				totalNetFees = totalNetFees - discountValue;
 			}
-		}
+		}*/
 	}
 
 	public String getTransactionDetailsOfStudent() {
 		try {
 			HttpSession session = request.getSession();
 
-			LoginBean bean = (LoginBean) session.getAttribute("loginUserBean");
+			//LoginBean bean = (LoginBean) session.getAttribute("loginUserBean");
+			 OperatorBean bean=(OperatorBean) httpSession.getAttribute("oprBean");
 
 			if (session.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
 				Integer operatorId = (Integer) session.getAttribute("opratorId");
 
-				Integer instituteId = opratorDAO.getCollegeIdOfOperator(bean.getOperatorBean().getOperatorId());
+				Integer instituteId = opratorDAO.getCollegeIdOfOperator(bean.getOperatorId());
 
 				transactionDetailsForReport = affDao.getAllTransactionDetail(instituteId);
 				return SUCCESS;
@@ -485,7 +468,8 @@ public class AppAction extends ActionSupport {
 	// student due view for college
 	public String viewStudentDues() {
 		String enrollmentNumber = request.getParameter("applicantId").trim();
-		app1 = aplDAO.getStudentDues(enrollmentNumber);
+		paymentDuesBeans = aplDAO.getStudentDues(enrollmentNumber);
+		app1=paymentDuesBeans.get(0).getAppBean();
 		feeList = aplDAO.getAllFeeDeatils();
 		totalDueOFStudent = aplDAO.totalDueFeeOfStudent(enrollmentNumber);
 		totalNetFees = aplDAO.totalfeesOfStudent(enrollmentNumber);
@@ -706,4 +690,15 @@ public class AppAction extends ActionSupport {
 		this.finalAmountToBePaid = finalAmountToBePaid;
 	}
 
+	public List<PaymentDuesBean> getPaymentDuesBeans() {
+		return paymentDuesBeans;
+	}
+
+	public void setPaymentDuesBeans(List<PaymentDuesBean> paymentDuesBeans) {
+		this.paymentDuesBeans = paymentDuesBeans;
+	}
+	
+	
+
+	
 }

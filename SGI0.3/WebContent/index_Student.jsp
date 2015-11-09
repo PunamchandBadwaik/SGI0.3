@@ -1,29 +1,21 @@
 <!DOCTYPE html>
+<%@page import="java.math.BigDecimal"%>
+<%@page import="java.math.BigInteger"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <html lang="en">
 <head>
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-     String profile=null;
-try{
-	profile=(String)session.getAttribute("sesProfile");
-	
-	loginUser = (LoginBean) session.getAttribute("loginUserBean");
-	
+    loginUser = (LoginBean) session.getAttribute("loginUserBean");
+	String profile = (String) session.getAttribute("sesProfile");
+
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
 
 		return;
 
 	}
-}catch(java.lang.NullPointerException e)
-{response.sendRedirect("Login.jsp");
-	return ;
-}
-
-	
 	String usercookie = null;
 	String sessionID = null;
 	String dispchar = "display:none";
@@ -31,10 +23,10 @@ try{
 	if (cookies != null) {
 		for (Cookie cookie : cookies) {
 
-	if (cookie.getName().equals("user"))
-		usercookie = cookie.getValue();
-	if (cookie.getName().equals("JSESSIONID"))
-		sessionID = cookie.getValue();
+			if (cookie.getName().equals("user"))
+				usercookie = cookie.getValue();
+			if (cookie.getName().equals("JSESSIONID"))
+				sessionID = cookie.getValue();
 		}
 	} else {
 		sessionID = session.getId();
@@ -100,12 +92,13 @@ try{
 				alt="FeeDesk Logo" src="img/feeDesk_logo.png"
 				style="width: 150px; height: 53px; margin-left: 20px;" />
 			</a>
+
 			<!-- user dropdown starts -->
 			<div class="btn-group pull-right">
 				<button class="btn btn-default dropdown-toggle"
 					data-toggle="dropdown">
 					<i class="glyphicon glyphicon-user"></i><span
-						class="hidden-sm hidden-xs"><%=loginUser.getUserName()%></span> <span
+						class="hidden-sm hidden-xs"> <%=loginUser.getUserName()%></span> <span
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
@@ -146,7 +139,23 @@ try{
 				</ul>
 			</div>
 			<!-- theme selector ends -->
-
+			<!-- cart button starts -->
+			<!-- <div class="btn-group pull-right">
+				<button class="btn btn-default dropdown-toggle"
+					data-toggle="dropdown">
+					<i class=" glyphicon glyphicon-shopping-cart"></i><span
+						class="hidden-sm hidden-xs"> Cart</span> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="College-Payment-Summary.html">Proceed To
+							Checkout</a></li>
+					<li class="divider"></li>
+					<li><a href="#"
+						onclick='window.open("Cart.html", "MyCart", "width=500,height=900")'>View
+							Cart</a></li>
+				</ul>
+			</div> -->
+			<!-- cart button ends -->
 		</div>
 	</div>
 	<!-- topbar ends -->
@@ -157,29 +166,7 @@ try{
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-
-						<%
-							if (profile.contentEquals("SU")) {
-						%>
-						<jsp:include page="menu_SuperAdmin.jsp"></jsp:include>
-						<%
-							}
-						%>
-						<%
-							if (profile.contentEquals("Parent")) {
-						%>
-
-						<jsp:include page="menu_Parent.jsp"></jsp:include>
-						<%
-							}
-						%>
-						<%
-							if (profile.contentEquals("Affiliated")) {
-						%>
-						<jsp:include page="menu_Institute.jsp"></jsp:include>
-						<%
-							}
-						%>
+						<jsp:include page="menu_Student.jsp"></jsp:include>
 					</div>
 				</div>
 			</div>
@@ -219,40 +206,46 @@ try{
 							</div>
 							<div class="box-content row">
 								<div class="col-lg-12 col-md-12 animated fadeIn">
+									<input type="button" class="btn btn-info" style="float: right;"
+										value="Add Course"
+										onclick="window.open('AddCourses.jsp','AddCourses',' width=600 height=400')">
+
 									<h1>
 										Welcome
-
-
-										<%=loginUser.getSaBean().getFirstName()%>
-										<%=loginUser.getSaBean().getMidName()%>
-										<%=loginUser.getSaBean().getLstName()%>
-										<br> <small>This is the online fee payment portal</small>
+										<%-- <%=loginUser.getAffBean().getInstName()%><br> <small> --%>
+											This is the online fee payment portal</small>
 									</h1>
-									<p>You can use the portal to monitor and manage the fee
-										payments done to you via colleges affiliated to you. We accept
-										various payment methods such as Cash, Cheque, Online Banking,
+									<p>You can use the portal to pay various fees to the
+										governing university in a hasslefree manner. We accept various
+										payment methods such as Cash, Cheque, Online Banking,
 										Credit/Debit Card, NEFT & RTGS. Please use the menu list on
-										the left sidebar to use the features of the portal.</p>
+										the left sidebar to use the features of the portal. You can
+										use the cart option in the top bar to view and edit your
+										current payable amount.</p>
+
 								</div>
+
+
 							</div>
 						</div>
 					</div>
-
-
 				</div>
 
-
 				<!--/row-->
-				<%-- <div class=" row">
+				<%--  <div class=" row">
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<a data-toggle="tooltip"
 							title="1 new student requests. Click here to view"
 							class="well top-block" href="#"
-							onclick='window.open("LockFeature.jsp", "Dail Report", "width=1920,height=1080");'>
-							<i class="glyphicon glyphicon-user blue"></i>
-
-							<div>Total Student Requests</div>
-							<div>1</div> <span class="notification">1</span>
+							onclick='window.open("CollegeDueReport?popUp=true", "Dail Report", "width=1100,height=500");'>
+							<!-- <i class="glyphicon glyphicon-user blue"></i> --> <i
+							class="fa fa-inr green"></i> <%
+ 	                  Object [] dueArray = ( Object []) session.getAttribute("duesArray");
+                                        %>
+							<div>Total Dues Remaining</div>
+							<%Object netDueObj=dueArray[3]==null?0.0:dueArray[3];%> 
+							  
+							<div><%=BigDecimal.valueOf(Double.valueOf(netDueObj.toString())).toPlainString()%> </div> <!-- <span class="notification">1</span> -->
 						</a>
 					</div>
 
@@ -260,11 +253,11 @@ try{
 						<a data-toggle="tooltip"
 							title="0 new payments by colleges. Click here to view"
 							class="well top-block" href="#"
-							onclick='window.open("LockFeature.jsp", "University Report", "height=1080,width=1920")'>
+							onclick='window.open("CollegeDueReport?popUp=true", "University Report", "height=500,width=1100")'>
 							<i class="fa fa-inr green"></i>
 
-							<div>Total Payments Made This Month</div>
-							<div>0</div> <span class="notification green">0</span>
+							<div>Total Payments Done</div>
+							<div> <%=dueArray[2]==null?0.0:dueArray[2]%> </div> <!--  <span class="notification green">0</span> -->
 						</a>
 					</div>
 
@@ -302,7 +295,7 @@ try{
 			</div>
 		</div>
 
-		<!--   <footer>
+		<!-- <footer>
 			<p class="col-md-9 col-sm-9 col-xs-12 copyright">
 				&copy; <a href="http://dexpertsystems.com" target="_blank">Dexpert
 					Systems Pvt. Ltd</a>
@@ -353,15 +346,6 @@ try{
 	<!-- application script for Charisma demo -->
 	<script src="js/charisma.js"></script>
 
-	<script type="text/javascript">
-		function viewProfile() {
-			var id =
-	<%=loginUser.getSaBean().getSaId()%>
-		var query = "?saId=" + id;
 
-			window.open("showSAdminProfile" + query);
-
-		}
-	</script>
 </body>
 </html>

@@ -185,5 +185,11 @@ public class OperatorDao {
 		
 		
 	}
+	public OperatorBean getOperatorBean(Integer operaId){
+	Session session=factory.openSession();	
+	OperatorBean operatorBean=(OperatorBean)session.get(OperatorBean.class,operaId);	
+	session.close();
+	return operatorBean;	
+	}
 	
 }

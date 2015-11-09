@@ -16,6 +16,8 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.dexpert.feecollection.main.ConnectionClass;
@@ -37,48 +39,77 @@ public class LoginDAO {
 
 	// DAO Methods Here
 	// method to getDetails About user
-	
-	
-	
-	public LoginBean getLoginDetails(LoginBean loginBean) {
+
+	public String getLoginDetails(LoginBean loginBean) {
 		Session session = factory.openSession();
+		String profile = null;
 		try {
 			log.info("Get Login Details ");
-			
-			
-			String query="select * from sgi.login_master where userName=:userName and password=:pass";
-			SQLQuery sqlQuery=session.createSQLQuery(query);
+
+			String query = "select profile from sgi.login_master where userName=:userName and password=:pass";
+			SQLQuery sqlQuery = session.createSQLQuery(query);
 			sqlQuery.setParameter("userName", loginBean.getUserName());
 			sqlQuery.setParameter("pass", loginBean.getPassword());
-			sqlQuery.addEntity(LoginBean.class);
-			LoginBean bean =(LoginBean)sqlQuery.list().get(0);
-			return bean;
-			
-			
-			
-			
-		/*	Criteria criteria = session.createCriteria(LoginBean.class);
-			// criteria.add(Restrictions.eq("userName",
-			// loginBean.getUserName()));
-			// criteria.add(Restrictions.eq("password",
-			// loginBean.getPassword()));
-			criteria.add(Restrictions.eq("userName", loginBean.getUserName()));
-			criteria.add(Restrictions.eq("password", loginBean.getPassword()));
-			log.info(" after setting creds ");
-			// criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			profile = (String) sqlQuery.list().get(0);
+			return profile;
 
-			// LoginBean bean = (LoginBean) criteria.list().iterator().next();
-			List<LoginBean> loginBean1 = criteria.list();
-			// session.evict(bean);
-			log.info(" after Get Login Details ");
-			return loginBean1.get(0);*/
+			/*
+			 * Criteria criteria = session.createCriteria(LoginBean.class); //
+			 * criteria.add(Restrictions.eq("userName", //
+			 * loginBean.getUserName())); //
+			 * criteria.add(Restrictions.eq("password", //
+			 * loginBean.getPassword()));
+			 * criteria.add(Restrictions.eq("userName",
+			 * loginBean.getUserName()));
+			 * criteria.add(Restrictions.eq("password",
+			 * loginBean.getPassword())); log.info(" after setting creds "); //
+			 * criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			 * 
+			 * // LoginBean bean = (LoginBean)
+			 * criteria.list().iterator().next(); List<LoginBean> loginBean1 =
+			 * criteria.list(); // session.evict(bean);
+			 * log.info(" after Get Login Details "); return loginBean1.get(0);
+			 */
 		} catch (java.lang.IndexOutOfBoundsException aioub) {
-			LoginBean login = new LoginBean();
-			return login;
+
+			return profile;
 		} finally {
 			log.info("finally Block");
 			session.close();
 		}
+	}
+
+	public Object getIdOFLoginUser(String profile,LoginBean bean) {
+		Object loginUserId = null;
+		
+		Session session = factory.openSession();
+		try {
+			Criteria criteria = session.createCriteria(LoginBean.class);
+			criteria.add(Restrictions.eq("password",bean.getPassword() ));
+			criteria.add(Restrictions.eq("userName",bean.getUserName() ));
+			if (profile.contentEquals("Institute")) {
+				criteria.setProjection(Projections.property("affBean.instId"));
+
+			} else if (profile.contentEquals("Admin")) {
+				criteria.setProjection(Projections.property("parBean.parInstId"));
+
+			} else if (profile.contentEquals("Super Admin")) {
+				criteria.setProjection(Projections.property("saBean.saId"));
+
+			} else if (profile.contentEquals("CollegeOperator")) {
+
+				criteria.setProjection(Projections.property("operatorBean.operatorId"));
+			} else if (profile.contentEquals("Student")) {
+				criteria.setProjection(Projections.property("appBean.enrollmentNumber"));
+
+			}
+			loginUserId =criteria.list().get(0);
+			log.info("Id got from Data BAse"+loginUserId);
+			return loginUserId;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public static OperatorBean getDetailsOfCollegeOperator(String operatorUserName) {

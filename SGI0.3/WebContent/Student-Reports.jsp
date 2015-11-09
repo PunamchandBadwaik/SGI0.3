@@ -180,29 +180,7 @@ try{
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-
-
-
-						<div class="nav-sm nav nav-stacked"></div>
-						<ul class="nav nav-pills nav-stacked main-menu">
-							<li class="nav-header">Main</li>
-							<li><a class="ajax-link"
-								href='<%=session.getAttribute("dashLink").toString()%>'><i
-									class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
-
-							<%
-								if (profile.contentEquals("CollegeOperator")) {
-							%><li><a class="ajax-link" href="StudentEnrollmentNo.jsp"><i
-									class="fa fa-list-alt"></i><span> Students Fee Payment</span></a></li>
-							<%
-								}
-							%>
-
-
-							<li><a class="ajax-link" href="Operator-Reports.jsp"><i
-									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-
-						</ul>
+						<jsp:include page="menu_Student.jsp"></jsp:include>
 					</div>
 				</div>
 			</div>

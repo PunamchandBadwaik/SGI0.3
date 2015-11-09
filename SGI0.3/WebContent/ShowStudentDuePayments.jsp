@@ -14,7 +14,7 @@
 <%
 	//checking session
 	LoginBean loginUser = new LoginBean();
-	loginUser = (LoginBean) session.getAttribute("loginUserBean");
+    loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	String profile = (String) session.getAttribute("sesProfile");
 
 	if (loginUser == null) {
@@ -89,9 +89,10 @@
 ValueStack vs =TagUtils.getStack(pageContext);
 AppBean appBean =(AppBean)vs.findValue("app1");
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
-Integer cId= appBean.getAffBeanStu().getInstId();
+//Integer cId= appBean.getAffBeanStu().getInstId();
 Double amountAfterDiscount=(Double)vs.findValue("amountAfterDiscount");
 double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
+ArrayList<PaymentDuesBean> duesBean=(ArrayList<PaymentDuesBean>)vs.findValue("paymentDuesBeans");
 %>
 
 
@@ -119,7 +120,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 				<button class="btn btn-default dropdown-toggle"
 					data-toggle="dropdown">
 					<i class="glyphicon glyphicon-user"></i><span
-						class="hidden-sm hidden-xs"> <%=loginUser.getUserName()%></span> <span
+						class="hidden-sm hidden-xs"><%=loginUser.getUserName()%></span> <span
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
@@ -171,7 +172,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 			<div class="col-sm-2 col-lg-2">
 				<div class="sidebar-nav">
 					<div class="nav-canvas">
-						<div class="nav-sm nav nav-stacked"></div>
+						<%-- <div class="nav-sm nav nav-stacked"></div>
 						<ul class="nav nav-pills nav-stacked main-menu">
 							<li class="nav-header">Main</li>
 							<li><a class="ajax-link"
@@ -184,7 +185,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 							<%
 								}
 							%>
-							<%-- <%
+							<%
 								if (!profile.contentEquals("Affiliated")){
 							%>
 							<li><a class="ajax-link" href="GetCollegeListOnUniversity"><i
@@ -213,10 +214,11 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 									class="fa fa-list-alt"></i><span> Fee Payment</span></a></li>
 							<%
 								}
-							%> --%>
+							%>
 							<li><a class="ajax-link" href="Operator-Reports.jsp"><i
 									class="fa fa-list-alt"></i><span> Reports</span></a></li>
-						</ul>
+						</ul> --%>
+					<jsp:include page="menu_Student.jsp"></jsp:include>	
 					</div>
 				</div>
 			</div>
@@ -265,7 +267,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 
 									<table class="table table-condensed"
 										style="font-weight: bold; font-size: large;">
-										<tr>
+										  <%-- <tr>
 
 											<td>School Name</td>
 											<td><s:property value="app1.affBeanStu.instName" /> <input
@@ -278,7 +280,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 											<td><s:property value="app1.enrollmentNumber" /> <input
 												type="hidden" id="collegeId" name="collegeId"
 												value="<%=cId%>"></td>
-										</tr>
+										</tr>   --%>
 										<tr>
 
 											<td>Student Name</td>
@@ -320,7 +322,7 @@ double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 											<th>Payable Amount</th>
 										</tr>
 
-										<%Iterator<PaymentDuesBean> itr=appBean.getPaymentDues().iterator(); 
+										<%Iterator<PaymentDuesBean> itr=duesBean.iterator(); 
                                            while(itr.hasNext()){
                                        PaymentDuesBean paymentDue=itr.next();
                                     	  %>

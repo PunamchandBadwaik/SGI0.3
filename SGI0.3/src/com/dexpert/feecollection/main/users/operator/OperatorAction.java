@@ -54,7 +54,7 @@ public class OperatorAction extends ActionSupport {
 			IllegalBlockSizeException, BadPaddingException {
 		HttpSession httpSession = request.getSession();
 		// AffDAO affDAO = new AffDAO();
-		loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		//loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		String username = new String();
 		// generate credentials for admin login
 		try {

@@ -29,9 +29,9 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 		try {
 			HttpSession httpSession = (HttpSession) request.getServletContext().getAttribute(txnId);
-			LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-
-			String dueStr = (String) httpSession.getAttribute("dueStr");
+			//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+			String profile=(String)httpSession.getAttribute("sesProfile");
+			String dueStr =(String) httpSession.getAttribute("dueStr");
 			HashMap hm = (HashMap) httpSession.getAttribute("hmap");
 			String studentEnrollmentNo = (String) hm.get("enrollId");
 			String sgiTxnId = hm.get("txnID").toString();
@@ -53,7 +53,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 
 				}
 
-				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
+				if (profile.contentEquals("CollegeOperator")) {
 
 					return "opHome";
 				} else {
@@ -70,7 +70,7 @@ public class RetrieveUserSessionAction extends ActionSupport {
 					dao.updateTransactionStatus(sgiTxnId, "Cancelled", paymentMode, RPS);
 				}
 
-				if (loginBean.getProfile().contentEquals("CollegeOperator")) {
+				if (profile.contentEquals("CollegeOperator")) {
 
 					return "opHome";
 				} else {

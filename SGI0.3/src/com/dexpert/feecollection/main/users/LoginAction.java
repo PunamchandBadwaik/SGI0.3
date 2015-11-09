@@ -20,9 +20,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
+import COM.rsa.asn1.be;
+
 import com.dexpert.feecollection.main.users.affiliated.AffAction;
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
+import com.dexpert.feecollection.main.users.applicant.AppBean;
 import com.dexpert.feecollection.main.users.operator.OperatorBean;
 import com.dexpert.feecollection.main.users.operator.OperatorDao;
 import com.dexpert.feecollection.main.users.parent.ParBean;
@@ -143,11 +146,11 @@ public class LoginAction extends ActionSupport {
 			InvalidKeySpecException
 
 	{
-		//LoginBean loginClone = new LoginBean();
+		// LoginBean loginClone = new LoginBean();
 		log.info("user Name is ::" + loginBean.getUserName());
 		log.info("Password is ::" + loginBean.getPassword());
 		String encryptedPwd = null;
-		LoginBean lgbean = new LoginBean();
+		// LoginBean lgbean = new LoginBean();
 		synchronized (this) {
 			// to Encrypt Password
 			PasswordEncryption.encrypt(String.valueOf(loginBean.getPassword()));
@@ -155,36 +158,42 @@ public class LoginAction extends ActionSupport {
 			loginBean.setPassword(encryptedPwd);
 
 		}
-		lgbean.setUserName(loginBean.getUserName());
-		lgbean.setPassword(loginBean.getPassword());
-		log.info("After Encryption ::" + lgbean.getPassword());
+		// lgbean.setUserName(loginBean.getUserName());
+		// lgbean.setPassword(loginBean.getPassword());
+		// log.info("After Encryption ::" + lgbean.getPassword());
 
-		LoginBean loginUser = loginDAO.getLoginDetails(lgbean);
+		String profile = loginDAO.getLoginDetails(loginBean);
 		// log.info("List Size ::" + loginUserList.size());
 		// log.info("List  ::" + loginUserList);
 
 		try {
-			if(loginUser.getUserName()==null){
+
+			if (profile == null) {
 				request.setAttribute("msg", "Invalid Username or Password");
-				return INPUT;	
+				return INPUT;
 			}
-			
-			if (null!=loginUser.getUserName()) {
-				 log.info("valid User name and Password");
+
+			if (null != profile) {
+				log.info("valid User name and Password");
 				Cookie usercookie = new Cookie("userName", loginBean.getUserName());
 				usercookie.setMaxAge(60 * 60);
 				response.addCookie(usercookie);
 				httpSession.setAttribute("cart_init", 0);
-				httpSession.setAttribute("loginUserBean", loginUser);
+				httpSession.setAttribute("loginUserBean", loginBean);
+				Object loginUserId = loginDAO.getIdOFLoginUser(profile, loginBean);
 
-				if (loginUser.getAffBean() != null) {
+				if (profile.contentEquals("Institute")) {
+
 					log.info("Valid College");
 					httpSession.setAttribute("sesProfile", "Affiliated");
 					httpSession.setAttribute("dashLink", "index-College.jsp");
-					httpSession.setAttribute("sesId", loginUser.getAffBean().getInstId());
-
-					httpSession.setAttribute("instId", loginUser.getAffBean().getInstId());
-					httpSession.setAttribute("parInstId", loginUser.getAffBean().getParBeanAff().getParInstId());
+					log.info("BEFORE GETTING BEAN ");
+					AffBean affBean = affDAO.viewInstDetail(Integer.parseInt(loginUserId.toString()));
+					log.info("AFTER GETTING BEAN ");
+					httpSession.setAttribute("instBean", affBean);
+					httpSession.setAttribute("sesId", affBean.getInstId());
+					httpSession.setAttribute("instId", affBean.getInstId());
+					httpSession.setAttribute("parInstId", affBean.getParBeanAff().getParInstId());
 
 					/*
 					 * List<Object[]> studentsDues =
@@ -193,11 +202,16 @@ public class LoginAction extends ActionSupport {
 					 * httpSession.setAttribute("duesArray", (Object[])
 					 * studentsDues.iterator().next());
 					 */return "college";
-				} else if (loginUser.getParBean() != null) {
+				} else if (profile.contentEquals("Admin")) {
 					log.info("Valid University");
-					httpSession.setAttribute("sesId", loginUser.getParBean().getParInstId());
+					log.info("login University Id is" + Integer.parseInt(loginUserId.toString()));
+					ParDAO dao=new ParDAO();
+					ParBean parInstBean=dao.viewUniversity( Integer.parseInt(loginUserId.toString()));
+					httpSession.setAttribute("sesId", Integer.parseInt(loginUserId.toString()));
+					httpSession.setAttribute("parentInstId", Integer.parseInt(loginUserId.toString()));
 					httpSession.setAttribute("sesProfile", "Parent");
 					httpSession.setAttribute("dashLink", "index-University.jsp");
+					httpSession.setAttribute("ParInsBean",parInstBean);
 					/*
 					 * List<Object[]> viewstudentDuesForPar =
 					 * parDAO.getTotDuesOFStudOFAllColl(lgbean.getParBean()
@@ -205,31 +219,34 @@ public class LoginAction extends ActionSupport {
 					 * httpSession.setAttribute("duesArrayForParent", (Object[])
 					 * viewstudentDuesForPar.iterator().next());
 					 */return "university";
-				} else if (loginUser.getSaBean() != null) {
+				} else if (profile.contentEquals("Super Admin")) {
 					log.info("Valid Super Admin");
+					SaDAO dao=new SaDAO();
+					SaBean saBean=dao.getSaDetail(Integer.parseInt(loginUserId.toString()));
 					httpSession.setAttribute("sesProfile", "SU");
+					httpSession.setAttribute("SaBean",saBean);
 					httpSession.setAttribute("dashLink", "index-Admin.jsp");
 					return "superAdmin";
 				}
 
-				else if (loginUser.getOperatorBean() != null) {
-					log.info("Valid College Operator");
+				else if (profile.contentEquals("CollegeOperator")) {
 
+					log.info("Valid College Operator");
+					log.info("login operator id is" + Integer.parseInt(loginUserId.toString()));
 					httpSession.setAttribute("sesProfile", "CollegeOperator");
 					httpSession.setAttribute("dashLink", "index-College-Operator.jsp");
-					httpSession.setAttribute("oprBean", loginUser.getOperatorBean());
+					OperatorDao dao = new OperatorDao();
+					OperatorBean bean = dao.getOperatorBean(Integer.parseInt(loginUserId.toString()));
+					httpSession.setAttribute("oprBean",bean);
 					return "collegeOperator";
 				}
 
-				else if (loginUser.getAppBean() != null) {
-
-					log.info("Enrollment Number is ::" + loginUser.getAppBean().getEnrollmentNumber());
-
+				else if (profile.contentEquals("Student")) {
 					log.info("Valid Student EnrollmentNumber");
-
+					log.info("Student EnrollMent Number is"+loginUserId.toString());
 					httpSession.setAttribute("sesProfile", "Student");
-					httpSession.setAttribute("StudentEnrollId", loginUser.getAppBean().getEnrollmentNumber());
-					httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
+					httpSession.setAttribute("StudentEnrollId", (String) loginUserId);
+					httpSession.setAttribute("dashLink", "index_Student.jsp");
 					return "student";
 				}
 

@@ -38,13 +38,15 @@ public class LoginBean implements Serializable {
 	private String userName;
 	private String password;
 	private String profile;
+	
+	private String identifierKey;
 
 	// one to one bidirectional relationship with super admin
 	// child
 	@OneToOne(cascade = CascadeType.ALL, targetEntity = OperatorBean.class)
 	@JoinColumn(name = "operatorId_Id_Fk", referencedColumnName = "operatorId")
 	private OperatorBean operatorBean;
-
+	
 	// one to one bidirectional relationship with super admin
 	// child
 	@OneToOne(cascade = CascadeType.ALL, targetEntity = SaBean.class)
