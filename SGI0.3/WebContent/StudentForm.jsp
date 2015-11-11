@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.operator.OperatorBean"%>
 <%@page import="com.dexpert.feecollection.main.users.affiliated.AffBean"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -11,7 +12,7 @@
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	AffBean affBean = (AffBean) session.getAttribute("instBean");
 	String profile = (String) session.getAttribute("sesProfile");
-	session.getAttribute("oprBean");
+	OperatorBean operatorBean=(OperatorBean)session.getAttribute("oprBean");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -166,7 +167,7 @@
 
  	{
  %> <input type="hidden" name="aplInstId"
-														value="<%=loginUser.getOperatorBean().getAffBean().getInstId()%>">
+														value="<%=operatorBean.getAffBean().getInstId()%>">
 														<%
 															}
 														%>
