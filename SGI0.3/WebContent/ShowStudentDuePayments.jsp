@@ -691,7 +691,9 @@ ArrayList<PaymentDuesBean> duesBean=(ArrayList<PaymentDuesBean>)vs.findValue("pa
 																}
 															}
 															*/
-															if(collegeId==2){if(totalBeingPaid<minimumAmountMustPaid){
+															if(collegeId==2){
+																var minimumAmountMustPaid='<s:property value="totalNetFees" />';
+																if(totalBeingPaid<minimumAmountMustPaid){
 																alert("Please pay the Total Fees : "+minimumAmountMustPaid);
 																return false;
 																}
