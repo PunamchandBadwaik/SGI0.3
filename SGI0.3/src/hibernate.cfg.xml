@@ -7,9 +7,9 @@
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sgi</property>
 		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">Dspl_2014</property>
+		<property name="hibernate.connection.password">root</property>
 		<property name="hibernate.c3p0.min_size">7</property>
-		<property name="hibernate.c3p0.max_size">10</property>
+		<property name="hibernate.c3p0.max_size">150</property>
 		<property name="hibernate.c3p0.timeout">1000</property>
 		<property name="hibernate.c3p0.max_statements">2000</property>
 		<property name="hibernate.c3p0.idle_test_period">100</property>
@@ -47,5 +47,8 @@
 		<mapping class="com.dexpert.feecollection.challan.TransactionBean" />
 		<mapping class="com.dexpert.feecollection.main.payment.studentPayment.BulkPaymentBean" />
         <mapping class="com.dexpert.feecollection.main.users.affiliated.CollegeCourses" />
+        <mapping class="com.dexpert.calendaryear.CalendarBean"/>
+        
 	</session-factory>
 </hibernate-configuration>
+
