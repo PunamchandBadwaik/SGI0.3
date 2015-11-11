@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.affiliated.AffBean"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html lang="en">
@@ -8,6 +9,7 @@
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	String profile = (String) session.getAttribute("sesProfile");
+	AffBean affBean=(AffBean)session.getAttribute("instBean");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -269,7 +271,7 @@
 
 													<td>Address</td>
 													<td colspan="2">
-													<input type="hidden" name="opInstId" value="<%=loginUser.getAffBean().getInstId() %>"/><div id="the-basics"
+													<input type="hidden" name="opInstId" value="<%=affBean.getInstId() %>"/><div id="the-basics"
 															class="has-success">
 															<textarea required="required" id="CollegeName"
 																name="operatorBean.operatorAddress"
