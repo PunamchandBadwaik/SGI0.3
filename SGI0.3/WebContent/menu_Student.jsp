@@ -4,7 +4,7 @@
 		href='<%=session.getAttribute("dashLink").toString()%>'><i
 			class="glyphicon glyphicon-home"></i><span> Dashboard</span></a></li>
     <li><a class="ajax-link"
-		href="getTheStudentFeeDetailsFromLoginPage"><i
+		href="WaitStudentDues.jsp"><i
 			class="glyphicon glyphicon-home"></i><span>Payment</span></a></li>			
 	<li><a class="ajax-link" href="Student-Reports.jsp"><i
 			class="fa fa-list-alt"></i><span> Reports</span></a></li>

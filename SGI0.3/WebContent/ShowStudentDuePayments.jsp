@@ -89,7 +89,7 @@
 ValueStack vs =TagUtils.getStack(pageContext);
 AppBean appBean =(AppBean)vs.findValue("app1");
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
-//Integer cId= appBean.getAffBeanStu().getInstId();
+Integer cId= appBean.getAffBeanStu().getInstId();
 Double amountAfterDiscount=(Double)vs.findValue("amountAfterDiscount");
 double finalAmountToBePaid=(Double)vs.findValue("finalAmountToBePaid");
 ArrayList<PaymentDuesBean> duesBean=(ArrayList<PaymentDuesBean>)vs.findValue("paymentDuesBeans");
@@ -267,7 +267,7 @@ ArrayList<PaymentDuesBean> duesBean=(ArrayList<PaymentDuesBean>)vs.findValue("pa
 
 									<table class="table table-condensed"
 										style="font-weight: bold; font-size: large;">
-										  <%-- <tr>
+										<tr>
 
 											<td>School Name</td>
 											<td><s:property value="app1.affBeanStu.instName" /> <input
@@ -280,8 +280,7 @@ ArrayList<PaymentDuesBean> duesBean=(ArrayList<PaymentDuesBean>)vs.findValue("pa
 											<td><s:property value="app1.enrollmentNumber" /> <input
 												type="hidden" id="collegeId" name="collegeId"
 												value="<%=cId%>"></td>
-										</tr>   --%>
-										<tr>
+										</tr>  
 
 											<td>Student Name</td>
 											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property

@@ -24,6 +24,7 @@ import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -675,9 +676,10 @@ public class AppDAO {
 	}
 
 	public void validateLookupValues(List<String> studentAllParamList) throws Exception {
-		//LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		// LoginBean lgBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
 		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
-		Integer instId =(Integer)httpSession.getAttribute("instId");
+		Integer instId = (Integer) httpSession.getAttribute("instId");
 
 		log.info("INFO:inside the validateLookupValues method() ");
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
@@ -753,10 +755,11 @@ public class AppDAO {
 	// --------VAlidate Values With Map-----------
 	public void validateLookupValues(List<String> studentAllParamList, Map<String, String> metaDataAndDataMap)
 			throws Exception {
-	//	LoginBean lgBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		// LoginBean lgBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
 		log.info("<<<<<<<<<<<<<<<<<<<<<<<  validateLookupValues method >>>>>>>>>>>>>>>>>>>>>>>");
-	//	Integer instId = lgBean.getAffBean().getInstId();
-		Integer instId=(Integer)httpSession.getAttribute("instId");
+		// Integer instId = lgBean.getAffBean().getInstId();
+		Integer instId = (Integer) httpSession.getAttribute("instId");
 		log.info("INFO:inside the validateLookupValues method() ");
 		List<Integer> str_ids = affDAO.getStrutureId(instId, null);
 		log.info("DATA::All Structure Ides Of Institute=" + str_ids);
@@ -1114,20 +1117,35 @@ public class AppDAO {
 
 	public List<PaymentDuesBean> getStudentDues(String enrollmentNumber) {
 		// sundays changes
+
+		Session session = factory.openSession();
+	
+
+			try {
+				String query = "select * from sgi.fee_dues_master where enrollmentNumber_Fk=:enrollMent";
+				SQLQuery sqlQuery = session.createSQLQuery(query);
+				sqlQuery.setParameter("enrollMent", enrollmentNumber);
+				sqlQuery.addEntity(PaymentDuesBean.class);
+				List<PaymentDuesBean> paymentDuesBeans = sqlQuery.list();
+				return paymentDuesBeans;
+			} finally {
+				session.close();
+			}
+		
+	}
+
+	public List<Object[]> getOriginalTotalPayToDateNetDueOfStudent(String enrollmentNumber) {
 		Session session = factory.openSession();
 		try {
-
-			Criteria criteria = session.createCriteria(PaymentDuesBean.class);
-			criteria.add(Restrictions.eq("appBean.enrollmentNumber", enrollmentNumber));
-			//criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			log.info("before fetching the list");
-			List<PaymentDuesBean> paymentDuesBean = criteria.list();
-			log.info("after fetching the list");
-			return paymentDuesBean;
+			String query = "SELECT Sum(total_fee_amount),Sum(payments_to_date),Sum(netDue)  FROM sgi.fee_dues_master where enrollmentNumber_Fk=:enrollmentNumber";
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			sqlQuery.setParameter("enrollmentNumber", enrollmentNumber);
+			List<Object[]> studentTotAmtPayToDateNetDue = sqlQuery.list();
+			return studentTotAmtPayToDateNetDue;
 		} finally {
 			session.close();
 		}
+
 	}
-  
 
 }

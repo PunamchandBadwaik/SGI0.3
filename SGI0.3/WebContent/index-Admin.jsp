@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.superadmin.SaBean"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html lang="en">
 <head>
 <%
 	//checking session
+	 SaBean saBean=(SaBean)session.getAttribute("SaBean");
 	LoginBean loginUser = new LoginBean();
      String profile=null;
 try{
@@ -223,9 +225,9 @@ try{
 										Welcome
 
 
-										<%=loginUser.getSaBean().getFirstName()%>
-										<%=loginUser.getSaBean().getMidName()%>
-										<%=loginUser.getSaBean().getLstName()%>
+										<%=saBean.getFirstName()%>
+										<%=saBean.getMidName()%>
+										<%=saBean.getLstName()%>
 										<br> <small>This is the online fee payment portal</small>
 									</h1>
 									<p>You can use the portal to monitor and manage the fee
@@ -356,7 +358,7 @@ try{
 	<script type="text/javascript">
 		function viewProfile() {
 			var id =
-	<%=loginUser.getSaBean().getSaId()%>
+	<%=saBean.getSaId()%>
 		var query = "?saId=" + id;
 
 			window.open("showSAdminProfile" + query);

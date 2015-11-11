@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.affiliated.AffBean"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -8,7 +9,9 @@
 	//checking session
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
+	AffBean affBean = (AffBean) session.getAttribute("instBean");
 	String profile = (String) session.getAttribute("sesProfile");
+	session.getAttribute("oprBean");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -156,7 +159,7 @@
 
 																System.out.print("Profile is ::" + profile);
 														%> <input type="hidden" name="aplInstId"
-														value="<%=loginUser.getAffBean().getInstId()%>"> <%
+														value="<%=affBean.getInstId()%>"> <%
  	}
  %> <%
  	if (profile.contentEquals("CollegeOperator"))
@@ -197,23 +200,22 @@
 
 												</s:iterator>
 												<tr>
-												<td>Courses</td>
-												<td colspan="2"><select data-rel="chosen"
-							                             name="appBean1.course"
-															style="width: 240px;"
-															required="required">
-																<option value="">--Select--</option>
-																<s:iterator value="allCourseOfInst">
-																	<option value='<s:property value="courseName"/>'><s:property
-																			value="courseName" /></option>
+													<td>Courses</td>
+													<td colspan="2"><select data-rel="chosen"
+														name="appBean1.course" style="width: 240px;"
+														required="required">
+															<option value="">--Select--</option>
+															<s:iterator value="allCourseOfInst">
+																<option value='<s:property value="courseName"/>'><s:property
+																		value="courseName" /></option>
 
-																</s:iterator>
-														</select></td>
-												
-												
+															</s:iterator>
+													</select></td>
+
+
 												</tr>
-												
-												
+
+
 												<tr>
 
 													<td>GR Number</td>
@@ -238,8 +240,7 @@
 													<td colspan="2">
 
 														<div id="the-basics" class="has-success">
-															<input required="required" 
-																name="appBean1.startYear"
+															<input required="required" name="appBean1.startYear"
 																value='<s:property value="appBean1.startYear"/>'
 																placeholder="Start Year(Ex. 2009)" type="text"
 																class="form-control">
