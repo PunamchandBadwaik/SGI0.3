@@ -67,7 +67,7 @@ public class AppBean implements Serializable {
 		this.course = course;
 	}
 
-	@ManyToOne(targetEntity = AffBean.class)
+	@ManyToOne(targetEntity = AffBean.class,cascade=CascadeType.ALL)
 	@JoinColumn(name = "College_Id_Fk", referencedColumnName = "instId")
 	AffBean affBeanStu;
 	
