@@ -389,9 +389,12 @@ public class AppAction extends ActionSupport {
 			List<Object[]> sumOfOriginalDuePayToDateAndNetDue = aplDAO
 					.getOriginalTotalPayToDateNetDueOfStudent(enrollMentNumber);
 			Object[] objects = sumOfOriginalDuePayToDateAndNetDue.get(0);
-			totalDueOFStudent = Double.parseDouble(objects[2].toString());
-			totalNetFees = Double.parseDouble(objects[0].toString());
-			paymentDone = Double.parseDouble(objects[1].toString());
+			String totalDueOfStd=objects[2]==null?"0.0":objects[2].toString();
+			totalDueOFStudent = Double.parseDouble(totalDueOfStd);
+			String totalNetDue=objects[0]==null?"0.0":objects[0].toString();
+			totalNetFees = Double.parseDouble(totalNetDue);
+			String paymentToDate=objects[1]==null?"0.0":objects[1].toString();
+			paymentDone = Double.parseDouble(paymentToDate);
 		}
 		/*
 		 * String discountType = app1.getDiscountType() == null ? "" :
