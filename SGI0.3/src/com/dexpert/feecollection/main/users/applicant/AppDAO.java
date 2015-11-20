@@ -573,6 +573,7 @@ public class AppDAO {
 				}
 				Transaction tx = session.beginTransaction();
 				insertParam = insertParam.substring(1, insertParam.length());
+				log.info("insert Param is"+insertParam);
 				String sql = "INSERT INTO " + tempTableName + " VALUES(null," + insertParam + ",'N',null )";
 				SQLQuery sqlQuery = session.createSQLQuery(sql);
 

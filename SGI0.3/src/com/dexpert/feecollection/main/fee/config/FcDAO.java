@@ -16,6 +16,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
+import COM.rsa.Intel.cr;
+
 import com.dexpert.feecollection.main.ConnectionClass;
 import com.dexpert.feecollection.main.fee.PaymentDuesBean;
 import com.dexpert.feecollection.main.fee.lookup.LookupDAO;
@@ -355,5 +357,36 @@ public class FcDAO {
 		}
 
 	}
+
+	public String getFeeNameAndAmountString(String duestring) {
+		String feeNameAndAmount = "";
+		Session session = factory.openSession();
+		if (duestring.contains("!")) {
+			String[] feeIdAndAmount = duestring.split("!");
+			for (int i = 0; i < feeIdAndAmount.length; i++) {
+				String oneFeeIdAndAmount[] = feeIdAndAmount[i].split("~");
+				Criteria criteria = session.createCriteria(FeeDetailsBean.class);
+				criteria.add(Restrictions.eq("feeId", Integer.parseInt(oneFeeIdAndAmount[0]))).setProjection(
+						Projections.property("feeName"));
+				String feeName = (String) criteria.list().get(0);
+				if (i == feeIdAndAmount.length - 1) {
+					feeNameAndAmount = feeNameAndAmount + feeName.concat("=").concat(oneFeeIdAndAmount[1]);
+				} else {
+					feeNameAndAmount = feeNameAndAmount + feeName.concat("=").concat(oneFeeIdAndAmount[1]).concat("|");
+				}
+			}
+		} else {
+			String oneFeeIdAndAmount[] = duestring.split("~");
+			Criteria criteria = session.createCriteria(FeeDetailsBean.class);
+			criteria.add(Restrictions.eq("feeId", Integer.parseInt(oneFeeIdAndAmount[0]))).setProjection(
+					Projections.property("feeName"));
+			String feeName = (String) criteria.list().get(0);
+			feeNameAndAmount = feeName.concat("=").concat(oneFeeIdAndAmount[1]);
+
+		}
+
+		return feeNameAndAmount;
+	}
+
 	// DAO Methods End
 }

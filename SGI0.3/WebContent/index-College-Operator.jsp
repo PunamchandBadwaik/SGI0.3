@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.dexpert.feecollection.main.users.operator.OperatorBean"%>
 <%@page import="com.dexpert.feecollection.main.users.LoginBean"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html lang="en">
@@ -8,6 +9,7 @@
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	String profile = (String) session.getAttribute("sesProfile");
+	OperatorBean operatorBean=(OperatorBean)session.getAttribute("oprBean");
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -259,7 +261,7 @@
 								<div class="col-lg-12 col-md-12 animated fadeIn">
 									<h1>
 										Welcome
-										<%=loginUser.getOperatorBean().getOperatorName()%><br> <small>This
+										<%=operatorBean.getOperatorName()%><br> <small>This
 											is the online fee payment portal</small>
 									</h1>
 									<p>You can use the portal to monitor and manage the fee

@@ -292,7 +292,7 @@
 											<%
 												int i = 1;
 											%>
-											 <s:iterator value="appBeansList"> 
+											 <s:iterator value="appBeansList" > 
 											<%-- <c:forEach items="${affBean.aplBeanSet}" var="optr"> --%>
 												<tr>
 													<td><%=i%></td>
@@ -305,7 +305,7 @@
 													
 												
 													<td class="center"><s:property
-															value="affBean.instName" /></td>
+															value="affBeanStu.instName" /></td>
 
 													<td class="center"><a class="btn btn-success btn-sm"
 														onclick="window.open('ViewApplicantDetail?applicantId=<s:property value="enrollmentNumber"  />','Applicant Detail','width=700 height=600')">

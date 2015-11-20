@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,8 @@ import org.apache.struts2.ServletActionContext;
 import com.dexpert.feecollection.challan.ChallanDAO;
 import com.dexpert.feecollection.challan.TransactionBean;
 import com.dexpert.feecollection.main.fee.CartDataBean;
+import com.dexpert.feecollection.main.fee.config.FcBean;
+import com.dexpert.feecollection.main.fee.config.FcDAO;
 import com.dexpert.feecollection.main.fee.lookup.LookupAction;
 import com.dexpert.feecollection.main.users.applicant.AppBean;
 import com.dexpert.feecollection.main.users.applicant.AppDAO;
@@ -28,7 +31,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 	/**
 	 * 
 	 */
-
+     FcDAO fcDAO=new FcDAO();
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
 	public String SabPaisaURL = "http://localhost:8085/SabPaisa/";
@@ -179,7 +182,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 					+ studentDetails.getAplLstName() + "&amt=" + fee + "&txnId=" + txnId + "&RollNo="
 					+ enrollmentNumber + "&client=" + clientName + "&ru=" + returnUrl + "&Contact="
 					+ studentDetails.getAplMobilePri() + "&failureURL=" + clientFailureUrl + "&Email="
-					+ studentDetails.getAplEmail() + "&Add=" + studentDetails.getAplAddress();
+					+ studentDetails.getAplEmail() + "&Add=" + studentDetails.getAplAddress()+ "&FeeCycle=November 2015"+ "&feeDueStr=" + dueString;
 
 			request.setAttribute("sabPaisaURL", url);
 			return SUCCESS;
@@ -410,6 +413,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 
 	// SGI Payment method
 	public String studentPayment() throws IOException {
+		
+		
+	
 		HttpSession httpSession = request.getSession();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		Date date = new Date(timestamp.getTime());
@@ -426,7 +432,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 		/* String user = request.getParameter("feeName"); */
 		Double fee = Double.parseDouble(request.getParameter("totalPaidAmount"));
 		String dueString = request.getParameter("dueString").trim();
-
+		String feeNameAndAmount=fcDAO.getFeeNameAndAmountString(dueString);
+		log.info("Fee Name And Amount"+feeNameAndAmount);
 		// try {
 		// insert details into transaction bean
 		TransactionBean tran = new TransactionBean();
@@ -481,7 +488,7 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 				+ studentDetails.getAplLstName() + "&amt=" + fee + "&txnId=" + txnId + "&RollNo=" + enrollmentId
 				+ "&client=" + clientName + "&ru=" + returnUrl + "&Contact=" + studentDetails.getAplMobilePri()
 				+ "&failureURL=" + clientFailureUrl + "&Email=" + studentDetails.getAplEmail() + "&Add="
-				+ studentDetails.getAplAddress();
+				+ studentDetails.getAplAddress()+"&feeNameAndAmountString="+feeNameAndAmount;
 
 		request.setAttribute("sabPaisaURL", url);
 
