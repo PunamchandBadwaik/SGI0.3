@@ -175,7 +175,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 				clientName = "SGI_RES";
 			} else if (instId == 9) {
 				clientName = "SGI_COE";
-
+			}else if (instId == 10) {
+				clientName = "SGI_KBP";
 			}
 
 			String url = SabPaisaURL + "?firstName=" + studentDetails.getAplFirstName() + "&lstName="
@@ -253,7 +254,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 				clientName = "SGI_RES";
 			} else if (instId == 9) {
 				clientName = "SGI_COE";
-
+			}else if (instId == 10) {
+				clientName = "SGI_KBP";
 			}
 			String url = SabPaisaURL + "?firstName=" + studentDetails.getAplFirstName() + "&lstName="
 					+ studentDetails.getAplLstName() + "&amt=" + fee + "&txnId=" + txnId + "&RollNo="
@@ -358,7 +360,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 				clientName = "SGI_RES";
 			} else if (instId == 9) {
 				clientName = "SGI_COE";
-
+			}else if (instId == 10) {
+				clientName = "SGI_KBP";
 			}
 
 			String url = SabPaisaURL + "?firstName=" + studentDetails.getAplFirstName() + "&lstName="
@@ -481,7 +484,8 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
 			clientName = "SGI_RES";
 		} else if (instId == 9) {
 			clientName = "SGI_COE";
-
+		}else if (instId == 10) {
+			clientName = "SGI_KBP";
 		}
 
 		String url = SabPaisaURL + "?firstName=" + studentDetails.getAplFirstName() + "&lstName="
