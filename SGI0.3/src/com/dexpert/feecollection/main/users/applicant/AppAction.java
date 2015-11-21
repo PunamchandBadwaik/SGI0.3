@@ -332,7 +332,13 @@ public class AppAction extends ActionSupport {
 			 * httpSession.setAttribute("loginUserBean",
 			 * appBean1.getLoginBean());
 			 */
+			
+			log.info("appBean1 testing..:"+appBean1);
 			getDuesOfStudent(enroll);
+			
+			
+			log.info("appBean1:"+appBean1);
+			
 			return SUCCESS;
 		} catch (Exception e) {
 			request.setAttribute("msg", "Please Enter Valid UIN");
@@ -351,6 +357,8 @@ public class AppAction extends ActionSupport {
 
 			httpSession.setAttribute("enroll", enroll);
 			appBean1 = aplDAO.getUserDetail(enroll);
+			
+			log.info("appBean1 testing.."+appBean1);
 
 			httpSession.setAttribute("sesProfile", "Student");
 			httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
@@ -391,10 +399,14 @@ public class AppAction extends ActionSupport {
 			Object[] objects = sumOfOriginalDuePayToDateAndNetDue.get(0);
 			String totalDueOfStd=objects[2]==null?"0.0":objects[2].toString();
 			totalDueOFStudent = Double.parseDouble(totalDueOfStd);
+			log.info("totalDueOfStd testing :"+totalDueOfStd);
 			String totalNetDue=objects[0]==null?"0.0":objects[0].toString();
 			totalNetFees = Double.parseDouble(totalNetDue);
+			log.info("totalNetFees:"+totalNetFees);
 			String paymentToDate=objects[1]==null?"0.0":objects[1].toString();
 			paymentDone = Double.parseDouble(paymentToDate);
+			
+			log.info("paymentDone testing:"+paymentDone);
 		}
 		/*
 		 * String discountType = app1.getDiscountType() == null ? "" :

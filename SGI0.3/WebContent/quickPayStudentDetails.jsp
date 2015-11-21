@@ -89,10 +89,12 @@
 	<%
 
 	ValueStack vs =TagUtils.getStack(pageContext);
-	AppBean appBean =(AppBean)vs.findValue("app1");
+	AppBean appBean =(AppBean)vs.findValue("appBean1");
 	Integer cId= appBean.getAffBeanStu().getInstId();
 
 HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
+
+System.out.print("cId testing :"+cId);
 
 	
 %>
@@ -227,30 +229,30 @@ HashMap<Integer,Integer> hm = new HashMap<Integer, Integer>();
 										<tr>
 
 											<td>School Name</td>
-											<td><s:property value="app1.affBeanStu.instName" /> <input
+											<td><s:property value="appBean1.affBeanStu.instName" /> <input
 												type="hidden" id="collegeId" name="collegeId"
 												value="<%=cId%>"></td>
 										</tr>
 										<tr>
 
 											<td>Student UIN Number</td>
-											<td><s:property value="app1.enrollmentNumber" /> <input
+											<td><s:property value="appBean1.enrollmentNumber" /> <input
 												type="hidden" id="collegeId" name="collegeId"
 												value="<%=cId%>"></td>
 											<input type="hidden" id="uin"
-												value='<s:property value="app1.enrollmentNumber" />' />
+												value='<s:property value="appBean1.enrollmentNumber" />' />
 											</td>
 										</tr>
 										<tr>
 
 											<td>Student Name</td>
-											<td><s:property value="app1.aplFirstName" />&nbsp;<s:property
-													value="app1.aplLstName" /></td>
+											<td><s:property value="appBean1.aplFirstName" />&nbsp;<s:property
+													value="appBean1.aplLstName" /></td>
 											<td><input type="hidden"
-												value='<s:property value="app1.isHostler" />'
+												value='<s:property value="appBean1.isHostler" />'
 												id="isHosteler" /></td>
 										</tr>
-										<s:iterator value="app1.applicantParamValues" var="x">
+										<s:iterator value="appBean1.applicantParamValues" var="x">
 											<tr>
 												<td><strong><s:property
 															value="#x.lookupname.lookupName" /></strong></td>
