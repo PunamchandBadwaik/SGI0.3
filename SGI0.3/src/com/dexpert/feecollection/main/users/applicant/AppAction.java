@@ -291,9 +291,8 @@ public class AppAction extends ActionSupport {
 
 	// it's from student login page
 
-	public synchronized  String getParticularFeeDetailsOfStudentFromloginPage() {
-		
-		
+	public synchronized String getParticularFeeDetailsOfStudentFromloginPage() {
+
 		HttpSession httpSession = request.getSession();
 		// LoginBean loginBean = (LoginBean)
 		// httpSession.getAttribute("loginUserBean");
@@ -324,23 +323,15 @@ public class AppAction extends ActionSupport {
 			httpSession.setAttribute("enroll", enroll);
 			appBean1 = aplDAO.getUserDetail(enroll);
 
-			/*
-			 * httpSession.setAttribute("sesProfile", "Student");
-			 * httpSession.setAttribute("dashLink",
-			 * "getTheStudentFeeDetailsFromLoginPage");
-			 * 
-			 * httpSession.setAttribute("loginUserBean",
-			 * appBean1.getLoginBean());
-			 */
-			
-			log.info("appBean1 testing..:"+appBean1);
+			// log.info("appBean1 testing..:" + appBean1);
+
 			getDuesOfStudent(enroll);
-			
-			
-			log.info("appBean1:"+appBean1);
-			
+
+			// log.info("appBean1:" + appBean1);
+
 			return SUCCESS;
 		} catch (Exception e) {
+
 			request.setAttribute("msg", "Please Enter Valid UIN");
 			return "failure";
 		}
@@ -349,30 +340,37 @@ public class AppAction extends ActionSupport {
 	public String StudentDuesDetail() {
 
 		HttpSession httpSession = request.getSession();
-		// LoginBean loginBean = (LoginBean)
-		// httpSession.getAttribute("loginUserBean");
+		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		String enroll = new String();
 		try {
 			enroll = appBean1.getEnrollmentNumber();
 
 			httpSession.setAttribute("enroll", enroll);
-			appBean1 = aplDAO.getUserDetail(enroll);
-			
-			log.info("appBean1 testing.."+appBean1);
+
+			try {
+				appBean1 = aplDAO.getUserDetail(enroll);
+
+			} catch (java.util.NoSuchElementException e) {
+				request.setAttribute("msg", "Please Enter Valid UIN");
+				return "failure";
+			}
+
+			log.info("appBean1 testing.." + appBean1);
 
 			httpSession.setAttribute("sesProfile", "Student");
 			httpSession.setAttribute("dashLink", "getTheStudentFeeDetailsFromLoginPage");
 
-			// httpSession.setAttribute("loginUserBean",
-			// appBean1.getLoginBean());
+			httpSession.setAttribute("loginUserBean", appBean1.getLoginBean());
 
 			getDuesOfStudent(enroll);
-			return SUCCESS;
+
 		} catch (Exception e) {
+
+			log.info("catch11");
 			request.setAttribute("msg", "Please Enter Valid UIN");
 			return "failure";
 		}
-
+		return SUCCESS;
 	}
 
 	public Set<PaymentDuesBean> addSeqOfFees(Set<PaymentDuesBean> paymentDues, Integer instId) {
@@ -386,27 +384,28 @@ public class AppAction extends ActionSupport {
 		}
 		return payDueSetWithSeqId;
 	}
-	//temporary code 
-	
+
+	// temporary code
 
 	public void getDuesOfStudent(String enrollMentNumber) {
 		log.info("inside getDuesOfStudent");
 		synchronized (this) {
 			paymentDuesBeans = aplDAO.getStudentDues(enrollMentNumber);
-			log.info("LIst size is" + paymentDuesBeans.size());
+			log.info("LIst size is :: " + paymentDuesBeans.size());
 			List<Object[]> sumOfOriginalDuePayToDateAndNetDue = aplDAO
 					.getOriginalTotalPayToDateNetDueOfStudent(enrollMentNumber);
 			Object[] objects = sumOfOriginalDuePayToDateAndNetDue.get(0);
-			String totalDueOfStd=objects[2]==null?"0.0":objects[2].toString();
+			String totalDueOfStd = objects[2] == null ? "0.0" : objects[2].toString();
 			totalDueOFStudent = Double.parseDouble(totalDueOfStd);
-			log.info("totalDueOfStd testing :"+totalDueOfStd);
-			String totalNetDue=objects[0]==null?"0.0":objects[0].toString();
+			log.info("totalDueOfStd testing :" + totalDueOfStd);
+			String totalNetDue = objects[0] == null ? "0.0" : objects[0].toString();
 			totalNetFees = Double.parseDouble(totalNetDue);
-			log.info("totalNetFees:"+totalNetFees);
-			String paymentToDate=objects[1]==null?"0.0":objects[1].toString();
+			log.info("totalNetFees:" + totalNetFees);
+			String paymentToDate = objects[1] == null ? "0.0" : objects[1].toString();
 			paymentDone = Double.parseDouble(paymentToDate);
-			
-			log.info("paymentDone testing:"+paymentDone);
+
+			log.info("paymentDone testing:" + paymentDone);
+
 		}
 		/*
 		 * String discountType = app1.getDiscountType() == null ? "" :

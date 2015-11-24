@@ -17,8 +17,9 @@
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
 	String profile = (String) session.getAttribute("sesProfile");
-
+System.out.print("Student");
 	if (loginUser == null) {
+		System.out.println("login Null");
 		response.sendRedirect("Login.jsp");
 
 		return;
@@ -85,7 +86,7 @@
 
 </head>
 
-<body onload="">
+<body>
 	<%
 
 	ValueStack vs =TagUtils.getStack(pageContext);
@@ -229,8 +230,8 @@ System.out.print("cId testing :"+cId);
 										<tr>
 
 											<td>School Name</td>
-											<td><s:property value="appBean1.affBeanStu.instName" /> <input
-												type="hidden" id="collegeId" name="collegeId"
+											<td><s:property value="appBean1.affBeanStu.instName" />
+												<input type="hidden" id="collegeId" name="collegeId"
 												value="<%=cId%>"></td>
 										</tr>
 										<tr>

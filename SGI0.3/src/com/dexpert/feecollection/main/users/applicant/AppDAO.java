@@ -223,7 +223,7 @@ public class AppDAO {
 		AffDAO affDao = new AffDAO();
 		// FvBean fvBean = new FvBean();
 		Integer instId = appBean.getAffBeanStu().getInstId();
-		log.info("inst id got from app bean"+instId);
+		log.info("inst id got from app bean" + instId);
 		Set<FvBean> appParamSet = appBean.getApplicantParamValues();
 		AffBean instbean = affDao.getOneCollegeRecord(instId);
 		LinkedHashSet<FeeDetailsBean> instfeeSet = new LinkedHashSet<FeeDetailsBean>(instbean.getFeeSet());
@@ -363,12 +363,7 @@ public class AppDAO {
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("enrollmentNumber", EnrId));
 
-			try {
-				appBean = (AppBean) criteria.list().iterator().next();
-
-			} catch (java.util.NoSuchElementException e) {
-
-			}
+			appBean = (AppBean) criteria.list().iterator().next();
 
 		} finally {
 			session.close();
@@ -459,12 +454,9 @@ public class AppDAO {
 					}
 
 				}
-				
-				
-				
 
 			}
-			log.info("size of columnlist is.. "+columnList.size());
+			log.info("size of columnlist is.. " + columnList.size());
 
 			List<String> useList = new ArrayList<String>();
 
@@ -493,11 +485,11 @@ public class AppDAO {
 			tempTableName = "temp_imported_data" + generateReturnRandomNumber();
 			log.info("Temp Table Name is " + tempTableName);
 			dynSQL = dynSQL.substring(1, dynSQL.length());
-			log.info("dynSQL is.."+dynSQL);
+			log.info("dynSQL is.." + dynSQL);
 			session.createSQLQuery(
 					"CREATE TABLE " + tempTableName + " (id int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT," + dynSQL
 							+ " )").executeUpdate();
-			
+
 			log.info("Table created");
 
 			importExcelFileToDatabase2(excelFile, useList);
@@ -573,7 +565,7 @@ public class AppDAO {
 				}
 				Transaction tx = session.beginTransaction();
 				insertParam = insertParam.substring(1, insertParam.length());
-				log.info("insert Param is"+insertParam);
+				log.info("insert Param is" + insertParam);
 				String sql = "INSERT INTO " + tempTableName + " VALUES(null," + insertParam + ",'N',null )";
 				SQLQuery sqlQuery = session.createSQLQuery(sql);
 
@@ -855,8 +847,8 @@ public class AppDAO {
 			InvalidKeySpecException, InvalidAlgorithmParameterException, UnsupportedEncodingException,
 			IllegalBlockSizeException, BadPaddingException {
 		String profile = (String) httpSession.getAttribute("sesProfile");
-		log.info("profile is:::::::::::"+profile);
-		AffBean affBeanSes = (AffBean)httpSession.getAttribute("instBean");
+		log.info("profile is:::::::::::" + profile);
+		AffBean affBeanSes = (AffBean) httpSession.getAttribute("instBean");
 		Integer instId = affBeanSes.getInstId();
 		// generating enrollment Number
 		GenerateEnrollmentNumber en = new GenerateEnrollmentNumber();
@@ -870,20 +862,20 @@ public class AppDAO {
 		Session session = factory.openSession();
 		// log.info("44");
 		AffBean affBean = new AffBean();
-	
+
 		if (profile.contentEquals("CollegeOperator")) {
 			// log.info("5");
-			OperatorBean bean=(OperatorBean)httpSession.getAttribute("oprBean");
-            affBean=aff.viewInstDetail(bean.getAffBean().getInstId());
+			OperatorBean bean = (OperatorBean) httpSession.getAttribute("oprBean");
+			affBean = aff.viewInstDetail(bean.getAffBean().getInstId());
 		} else if (profile.contentEquals("Affiliated")) {
 			log.info("Inside ins profile");
 			// log.info("66");
-			affBean=affBeanSes;
-			log.info("institute id is"+affBeanSes.getInstId());
+			affBean = affBeanSes;
+			log.info("institute id is" + affBeanSes.getInstId());
 		}
 
 		// to get college record based on id to create relationship
-		//affBean = aff.viewInstDetail(clgBean.getInstId());
+		// affBean = aff.viewInstDetail(clgBean.getInstId());
 
 		LoginBean loginBean = new LoginBean();
 		loginBean.setUserName(appBean.getEnrollmentNumber());
@@ -896,7 +888,7 @@ public class AppDAO {
 		loginBean.setProfile("Student");
 		appBean.setLoginBean(loginBean);
 		loginBean.setAppBean(appBean);
-		
+
 		// affBean.setAppBean(appBean);
 		appBean.setAffBeanStu(affBean);
 
@@ -1131,19 +1123,18 @@ public class AppDAO {
 		// sundays changes
 
 		Session session = factory.openSession();
-	
 
-			try {
-				String query = "select * from sgi.fee_dues_master where enrollmentNumber_Fk=:enrollMent";
-				SQLQuery sqlQuery = session.createSQLQuery(query);
-				sqlQuery.setParameter("enrollMent", enrollmentNumber);
-				sqlQuery.addEntity(PaymentDuesBean.class);
-				List<PaymentDuesBean> paymentDuesBeans = sqlQuery.list();
-				return paymentDuesBeans;
-			} finally {
-				session.close();
-			}
-		
+		try {
+			String query = "select * from sgi.fee_dues_master where enrollmentNumber_Fk=:enrollMent";
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			sqlQuery.setParameter("enrollMent", enrollmentNumber);
+			sqlQuery.addEntity(PaymentDuesBean.class);
+			List<PaymentDuesBean> paymentDuesBeans = sqlQuery.list();
+			return paymentDuesBeans;
+		} finally {
+			session.close();
+		}
+
 	}
 
 	public List<Object[]> getOriginalTotalPayToDateNetDueOfStudent(String enrollmentNumber) {
