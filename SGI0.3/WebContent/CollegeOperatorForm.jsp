@@ -8,8 +8,12 @@
 	//checking session
 	LoginBean loginUser = new LoginBean();
 	loginUser = (LoginBean) session.getAttribute("loginUserBean");
-	String profile = (String) session.getAttribute("sesProfile");
 	AffBean affBean=(AffBean)session.getAttribute("instBean");
+	
+	String profile=(String)session.getAttribute("sesProfile");
+	Integer instId=(Integer)session.getAttribute("sesId");
+	System.out.print(profile);
+	System.out.print(instId);
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -155,8 +159,7 @@
 															if (profile.contentEquals("Affiliated")) {
 
 																System.out.print("Profile is ::" + profile);
-														%> <%-- <input type="hidden" name="aplInstId"
-														value="<%=loginUser.getAffBean().getInstId()%>"> --%> <%
+														%> < <input type="hidden" name="oprInstId" value="<%=instId%>"><%
  	}
  %>
 													</th>

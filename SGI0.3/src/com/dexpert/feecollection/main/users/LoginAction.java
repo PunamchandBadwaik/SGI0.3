@@ -184,11 +184,11 @@ public class LoginAction extends ActionSupport {
 				if (profile.contentEquals("Institute")) {
 
 					log.info("Valid College");
-					httpSession.setAttribute("sesProfile", profile);
+					httpSession.setAttribute("sesProfile", "Affiliated");
 					httpSession.setAttribute("dashLink", "index-College.jsp");
-					log.info("BEFORE GETTING BEAN ");
+					//log.info("BEFORE GETTING BEAN ");
 					AffBean affBean = affDAO.viewInstDetail(Integer.parseInt(loginUserId.toString()));
-					log.info("AFTER GETTING BEAN ");
+					//log.info("AFTER GETTING BEAN ");
 					httpSession.setAttribute("instBean", affBean);
 					httpSession.setAttribute("sesId", affBean.getInstId());
 					httpSession.setAttribute("instId", affBean.getInstId());
@@ -203,7 +203,7 @@ public class LoginAction extends ActionSupport {
 					 */return "college";
 				} else if (profile.contentEquals("Admin")) {
 					log.info("Valid University");
-					log.info("login University Id is" + Integer.parseInt(loginUserId.toString()));
+					//log.info("login University Id is" + Integer.parseInt(loginUserId.toString()));
 					ParDAO dao=new ParDAO();
 					ParBean parInstBean=dao.viewUniversity( Integer.parseInt(loginUserId.toString()));
 					httpSession.setAttribute("sesId", Integer.parseInt(loginUserId.toString()));
@@ -234,7 +234,7 @@ public class LoginAction extends ActionSupport {
 				else if (profile.contentEquals("CollegeOperator")) {
 
 					log.info("Valid College Operator");
-					log.info("login operator id is" + Integer.parseInt(loginUserId.toString()));
+					//log.info("login operator id is" + Integer.parseInt(loginUserId.toString()));
 					httpSession.setAttribute("sesProfile", "CollegeOperator");
 					httpSession.setAttribute("dashLink", "index-College-Operator.jsp");
 					OperatorDao dao = new OperatorDao();
@@ -245,7 +245,7 @@ public class LoginAction extends ActionSupport {
 
 				else if (profile.contentEquals("Student")) {
 					log.info("Valid Student EnrollmentNumber");
-					log.info("Student EnrollMent Number is"+loginUserId.toString());
+					//log.info("Student EnrollMent Number is"+loginUserId.toString());
 					httpSession.setAttribute("sesProfile", "Student");
 					httpSession.setAttribute("StudentEnrollId", (String) loginUserId);
 					httpSession.setAttribute("dashLink", "index_Student.jsp");

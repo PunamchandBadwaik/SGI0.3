@@ -33,7 +33,7 @@ public class OperatorAction extends ActionSupport {
 	HttpServletRequest request = ServletActionContext.getRequest();
 	HttpServletResponse response = ServletActionContext.getResponse();
 	static Logger log = Logger.getLogger(OperatorAction.class.getName());
-	private String opInstId;
+	private Integer oprInstId;
 	private OperatorBean operatorBean = new OperatorBean();
 	AffBean affBean = new AffBean();
 	private List<OperatorBean> listOprtBean = new ArrayList<OperatorBean>();
@@ -54,7 +54,7 @@ public class OperatorAction extends ActionSupport {
 			IllegalBlockSizeException, BadPaddingException {
 		HttpSession httpSession = request.getSession();
 		// AffDAO affDAO = new AffDAO();
-		//loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		// loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
 		String username = new String();
 		// generate credentials for admin login
 		try {
@@ -85,7 +85,7 @@ public class OperatorAction extends ActionSupport {
 
 		operatorBean.setLoginBean(creds);
 
-		affBean = affDAO.viewInstDetail(loginBean.getAffBean().getInstId());
+		affBean = affDAO.viewInstDetail(oprInstId);
 
 		/*
 		 * log.info("Institutre Name is ::" + affBean.getInstName());
@@ -117,10 +117,11 @@ public class OperatorAction extends ActionSupport {
 		sms.sendSMS(operatorBean.getOperatorContact(), msg);
 
 		// -----Code for sending email//--------------------
-		String emailContent="Welcome to the FeeDesk portal of "+operatorBean.getOperatorName()+ ". You can log in with the below credentials. ";
+		String emailContent = "Welcome to the FeeDesk portal of " + operatorBean.getOperatorName()
+				+ ". You can log in with the below credentials. ";
 		EmailSessionBean email = new EmailSessionBean();
 		email.sendEmail(operatorBean.getOperatorEmail(), "Welcome To FeeDesk!", username, password,
-				operatorBean.getOperatorName(),emailContent);
+				operatorBean.getOperatorName(), emailContent);
 
 		request.setAttribute("msg", "Operator Added Successfully");
 		request.setAttribute("redirectLink", "Success.jsp");
@@ -133,10 +134,10 @@ public class OperatorAction extends ActionSupport {
 	// Getting All Records of College Operators
 	public String getListOfCollegeOperators() {
 		HttpSession httpSession = request.getSession();
-		loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		//listAffBean = affDAO.getCollegesList();
+		Integer instId = (Integer) httpSession.getAttribute("instId");
+		// listAffBean = affDAO.getCollegesList();
 		try {
-			Integer instId = loginBean.getAffBean().getInstId();
+
 			listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator(instId);
 		} catch (java.lang.NullPointerException e) {
 			listOprtBean = OperatorDao.getAllRecordsOfCollegeOperator(null);
@@ -158,14 +159,6 @@ public class OperatorAction extends ActionSupport {
 
 	public void setListOprtBean(List<OperatorBean> listOprtBean) {
 		this.listOprtBean = listOprtBean;
-	}
-
-	public String getOpInstId() {
-		return opInstId;
-	}
-
-	public void setOpInstId(String opInstId) {
-		this.opInstId = opInstId;
 	}
 
 	public AffBean getAffBean() {
@@ -190,6 +183,14 @@ public class OperatorAction extends ActionSupport {
 
 	public void setLoginBean(LoginBean loginBean) {
 		this.loginBean = loginBean;
+	}
+
+	public Integer getOprInstId() {
+		return oprInstId;
+	}
+
+	public void setOprInstId(Integer oprInstId) {
+		this.oprInstId = oprInstId;
 	}
 
 }

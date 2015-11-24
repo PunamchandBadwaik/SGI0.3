@@ -276,7 +276,7 @@
 
 												<th>Place</th>
 												<th>Operator Inst. Name</th>
-												<!-- <th>Action</th> -->
+												<!--  <th>Action</th>  -->
 
 											</tr>
 										</thead>
@@ -296,7 +296,9 @@
 													<td class="center"><c:out
 															value="${optr.operatorAddress}" /></td>
 													<td>< c:out value="${optr.affBean.instName}" /></td>
-													<!-- <td></td> -->
+													<!-- <td>
+													<input type="button" class="btn btn-success" value="View">
+													</td>  -->
 												</tr>
 
 												<%
