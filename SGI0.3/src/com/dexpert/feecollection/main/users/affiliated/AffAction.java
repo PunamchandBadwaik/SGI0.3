@@ -113,7 +113,7 @@ public class AffAction extends ActionSupport {
 
 	// Action Methods Here
 
-	// registerInstitute()
+	// registerInstitute
 	public String registerInstitute() throws Exception {
 
 		// log.info("paramset is "+affInstBean.getParamvalues().toString());
@@ -123,11 +123,13 @@ public class AffAction extends ActionSupport {
 		ParDAO parDao = new ParDAO();
 		HttpSession httpSession = request.getSession();
 		LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		System.out.println(parInstId);
 		if (instNameList.isEmpty()) {
 
 			if (parInstId == null) {
 
 				parBeansList = parDao.getUniversityList();
+				
 				request.setAttribute("msg", "Please Select University");
 				return "failure";
 
@@ -149,11 +151,12 @@ public class AffAction extends ActionSupport {
 
 				PasswordEncryption.encrypt(password);
 				String encryptedPwd = PasswordEncryption.encStr;
-
+				//affInstBean.getLoginBean().setProfile("Institute");
 				LoginBean creds = new LoginBean();
+
 				creds.setPassword(encryptedPwd);
 				creds.setUserName(username);
-
+				
 				creds.setProfile(affInstBean.getLoginBean().getProfile());
 				ParBean parBean1 = new ParBean();
 				parBean1 = parDAO.viewUniversity(parInstId);
@@ -162,7 +165,7 @@ public class AffAction extends ActionSupport {
 				parBean1.getAffBeanOneToManySet().add(affInstBean);
 				affInstBean.setParBeanAff(parBean1);
 
-				parDAO.saveOrUpdate(parBean1, null);
+				//parDAO.saveOrUpdate(parBean1, null);
 
 				// for bidirectional relationship ,set parent record to child
 				// record
@@ -254,7 +257,7 @@ public class AffAction extends ActionSupport {
 	// get institute Details list
 
 	public String getAllClgList() {
-		Integer parentInstId=(Integer)ses.getAttribute("parentInstId");
+		Integer parentInstId = (Integer) ses.getAttribute("parentInstId");
 		affInstList = affDao.getCollegesList(parentInstId);
 		return SUCCESS;
 	}
@@ -267,8 +270,9 @@ public class AffAction extends ActionSupport {
 
 	public String getCollegeList() {
 		HttpSession httpSession = request.getSession();
-		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		Integer instId=(Integer)httpSession.getAttribute("instId");
+		// LoginBean loginBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
+		Integer instId = (Integer) httpSession.getAttribute("instId");
 		List<Integer> structureIdes = affDao.getStrutureId(instId, null);
 		log.info("Struture id" + structureIdes);
 		try {
@@ -297,8 +301,9 @@ public class AffAction extends ActionSupport {
 	public String getUniversityCollegeList() {
 		try {
 			HttpSession httpSession = request.getSession();
-			//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-			Integer parentInstId=(Integer)httpSession.getAttribute("parentInstId");
+			// LoginBean loginBean = (LoginBean)
+			// httpSession.getAttribute("loginUserBean");
+			Integer parentInstId = (Integer) httpSession.getAttribute("parentInstId");
 			parBean = affDao.getUniversityCollegeList(parentInstId);
 			log.info("University Names ::" + parBean.getParInstName());
 			return SUCCESS;
@@ -705,8 +710,8 @@ public class AffAction extends ActionSupport {
 		// collegeDueReport = (ArrayList<PaymentDuesBean>)
 		// affDao.collegeDueReport();
 		// log.info("list size of college Due" + collegeDueReport.size());
-		
-		String forDownload=	request.getParameter("forDownload");
+
+		String forDownload = request.getParameter("forDownload");
 		popUp = request.getParameter("popUp") == null ? false : true;
 		Double totalNetDuesOFCollegeStudent = 0.0;
 		Double totalOriginalDues = 0.0;
@@ -741,8 +746,8 @@ public class AffAction extends ActionSupport {
 			this.totalOriginalDues = convertIntoOriginalAmount(totalOriginalDues);
 			this.totalPaymentToDate = convertIntoOriginalAmount(totalPaymentToDate);
 			String result = popUp == true ? "popUp" : "success";
-			result=forDownload!=null&&forDownload.contentEquals("true")?"forDownload":result;
-			
+			result = forDownload != null && forDownload.contentEquals("true") ? "forDownload" : result;
+
 			return result;
 
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Parent")
@@ -1391,24 +1396,24 @@ public class AffAction extends ActionSupport {
 	}
 
 	public String getInsTransactionDetails() {
-		
-		String forDownload=request.getParameter("forDownload");
+
+		String forDownload = request.getParameter("forDownload");
 		if (ses.getAttribute("sesProfile").toString().contentEquals("SU")) {
 			transactionDetailsForReport = affDao.getAllTransactionDetail();
-			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			String result = forDownload != null && forDownload.contentEquals("true") ? "forDowload" : "success";
 			return result;
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
 			Integer operatorId = (Integer) ses.getAttribute("opratorId");
 			Integer instituteId = opratorDAO.getCollegeIdOfOperator(operatorId);
 			log.info("insitute id is" + instituteId);
 			transactionDetailsForReport = affDao.getAllTransactionDetail(instituteId);
-			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			String result = forDownload != null && forDownload.contentEquals("true") ? "forDowload" : "success";
 			return result;
-			
+
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("Student")) {
 			String enrollmentNumber = (String) ses.getAttribute("StudentEnrollId");
 			transactionDetailsForReport = affDao.getStudentTransactionDetails(enrollmentNumber);
-			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			String result = forDownload != null && forDownload.contentEquals("true") ? "forDowload" : "success";
 			return result;
 		}
 
@@ -1419,7 +1424,7 @@ public class AffAction extends ActionSupport {
 			transactionDetailsForReport = affDao.getTransactionOfColleges(allCollegeId);
 			log.info("Number of Transaction Done by Colleges Belongs to That University"
 					+ transactionDetailsForReport.size());
-			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			String result = forDownload != null && forDownload.contentEquals("true") ? "forDowload" : "success";
 			return result;
 		}
 
@@ -1427,7 +1432,7 @@ public class AffAction extends ActionSupport {
 			Integer insId = (Integer) ses.getAttribute("sesId");
 			log.info("ins id is=" + insId);
 			transactionDetailsForReport = affDao.getAllTransactionDetail(insId);
-			String result=forDownload!=null&&forDownload.contentEquals("true")?"forDowload":"success";
+			String result = forDownload != null && forDownload.contentEquals("true") ? "forDowload" : "success";
 			return result;
 		}
 	}

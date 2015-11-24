@@ -6,8 +6,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Iterator;
-import java.util.List;
+
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -20,12 +19,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
-import COM.rsa.asn1.be;
 
-import com.dexpert.feecollection.main.users.affiliated.AffAction;
+
+
 import com.dexpert.feecollection.main.users.affiliated.AffBean;
 import com.dexpert.feecollection.main.users.affiliated.AffDAO;
-import com.dexpert.feecollection.main.users.applicant.AppBean;
+
 import com.dexpert.feecollection.main.users.operator.OperatorBean;
 import com.dexpert.feecollection.main.users.operator.OperatorDao;
 import com.dexpert.feecollection.main.users.parent.ParBean;
@@ -185,7 +184,7 @@ public class LoginAction extends ActionSupport {
 				if (profile.contentEquals("Institute")) {
 
 					log.info("Valid College");
-					httpSession.setAttribute("sesProfile", "Affiliated");
+					httpSession.setAttribute("sesProfile", profile);
 					httpSession.setAttribute("dashLink", "index-College.jsp");
 					log.info("BEFORE GETTING BEAN ");
 					AffBean affBean = affDAO.viewInstDetail(Integer.parseInt(loginUserId.toString()));
@@ -211,6 +210,9 @@ public class LoginAction extends ActionSupport {
 					httpSession.setAttribute("parentInstId", Integer.parseInt(loginUserId.toString()));
 					httpSession.setAttribute("sesProfile", "Parent");
 					httpSession.setAttribute("dashLink", "index-University.jsp");
+					
+					//System.out.println("Login ID ::"+loginBean.getParBean().getParInstId());
+					
 					httpSession.setAttribute("ParInsBean",parInstBean);
 					/*
 					 * List<Object[]> viewstudentDuesForPar =

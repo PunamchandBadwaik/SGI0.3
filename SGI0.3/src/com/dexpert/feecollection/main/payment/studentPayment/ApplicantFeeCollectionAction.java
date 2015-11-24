@@ -34,9 +34,9 @@ public class ApplicantFeeCollectionAction extends ActionSupport {
      FcDAO fcDAO=new FcDAO();
 	// public String SabPaisaURL = "https://payonline.sabpaisa.in";
 
-	public String SabPaisaURL = "http://localhost:8085/SabPaisa/";
-	public String returnUrl = "http://localhost:8084/SGI0.3/ReturnPage.jsp";
-	String clientFailureUrl = "http://localhost:8084/SGI0.3/Login.jsp";
+	public String SabPaisaURL = "http://localhost:8085/SabPaisa1.1/";
+	public String returnUrl = "http://localhost:8080/SGI0.3/ReturnPage.jsp";
+	String clientFailureUrl = "http://localhost:8080/SGI0.3/Login.jsp";
 
 	
 	/*  public String SabPaisaURL = "http://49.50.72.228:8080/SabPaisa/"; 

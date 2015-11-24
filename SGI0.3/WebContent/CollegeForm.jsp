@@ -9,6 +9,9 @@
 	loginUser = (LoginBean) session.getAttribute("loginUserBean"); 
 	
 	String profile=(String)session.getAttribute("sesProfile");
+	Integer parentId=(Integer)session.getAttribute("sesId");
+	System.out.print(profile);
+	System.out.print(parentId);
 
 	if (loginUser == null) {
 		response.sendRedirect("Login.jsp");
@@ -191,20 +194,19 @@
 											<thead>
 
 												<tr>
-													<th><input type="hidden"
+													 <th><input type="hidden"
 														name="affInstBean.loginBean.profile" value="Institute">
-													</th>
-													<th>
+													</th> 
+													 <th>
 														<%
 															if (profile.contentEquals("Parent")){
 																																																																																																																																																																						System.out.println("profile is :"+profile);
 																																																																																																																																																																																																																																														System.out.println("Parent Class Table");
-														%> <input type="hidden" name="parInstId"
-														value="<%=loginUser.getParBean().getParInstId()%>">
+														%> <input type="hidden" name="parInstId"  value="<%=parentId%>">
 														<%
 															}
 														%>
-													</th>
+													</th> 
 													<th></th>
 
 												</tr>

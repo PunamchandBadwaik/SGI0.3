@@ -22,14 +22,14 @@ import javax.crypto.spec.PBEParameterSpec;
 
 public class PasswordEncryption {
 
-	/*public static void main(String[] args) throws InvalidKeyException, NoSuchPaddingException,
+/*public static void main(String[] args) throws InvalidKeyException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, IOException {
-		String pwd = "BsGiHbHZqChZWH7hrWGy9A==";
+		String pwd = "6+4TjtUCa1erXJMtMiYWiw==";
 		plainStr = PasswordEncryption.decrypt(pwd);
 
 		System.out.println(plainStr);
-	}
-*/
+	}*/
+
 	// for password encryption and decryption
 	static Cipher ecipher;
 	static Cipher dcipher;
