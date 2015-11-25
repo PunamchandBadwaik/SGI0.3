@@ -204,7 +204,6 @@ public class AffDAO {
 		}
 
 	}
-
 	public List<AffBean> getAllCollegeList() {
 
 		Session session = factory.openSession();
