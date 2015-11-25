@@ -175,17 +175,28 @@ public class AffDAO {
 	// delete()
 	// getList()
 
-	public Integer getRowCount() {
+	public  Integer getRowCount() {
 		// Declarations
 
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
+			List<Integer> instList = new ArrayList<Integer>();
+
 			Criteria c = session.createCriteria(AffBean.class);
-			c.addOrder(Order.desc("instId"));
-			c.setMaxResults(1);
-			AffBean temp = (AffBean) c.uniqueResult();
-			return temp.getInstId() + 1;
+			c.setProjection(Projections.property("instId"));
+			instList = c.list();
+
+			//System.out.println(instList.size());
+			//System.out.println(instList.size() + 1);
+
+			return instList.size() + 1;
+
+			/*
+			 * Criteria c = session.createCriteria(AffBean.class);
+			 * c.addOrder(Order.desc("instId")); c.setMaxResults(1); AffBean
+			 * temp = (AffBean) c.uniqueResult(); return temp.getInstId() + 1;
+			 */
 
 		} finally {
 			// close session
@@ -193,7 +204,6 @@ public class AffDAO {
 		}
 
 	}
-
 	public List<AffBean> getAllCollegeList() {
 
 		Session session = factory.openSession();
