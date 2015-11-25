@@ -175,17 +175,28 @@ public class AffDAO {
 	// delete()
 	// getList()
 
-	public Integer getRowCount() {
+	public  Integer getRowCount() {
 		// Declarations
 
 		// Open session from session factory
 		Session session = factory.openSession();
 		try {
+			List<Integer> instList = new ArrayList<Integer>();
+
 			Criteria c = session.createCriteria(AffBean.class);
-			c.addOrder(Order.desc("instId"));
-			c.setMaxResults(1);
-			AffBean temp = (AffBean) c.uniqueResult();
-			return temp.getInstId() + 1;
+			c.setProjection(Projections.property("instId"));
+			instList = c.list();
+
+			//System.out.println(instList.size());
+			//System.out.println(instList.size() + 1);
+
+			return instList.size() + 1;
+
+			/*
+			 * Criteria c = session.createCriteria(AffBean.class);
+			 * c.addOrder(Order.desc("instId")); c.setMaxResults(1); AffBean
+			 * temp = (AffBean) c.uniqueResult(); return temp.getInstId() + 1;
+			 */
 
 		} finally {
 			// close session
@@ -213,9 +224,10 @@ public class AffDAO {
 		Session session = factory.openSession();
 		List<AffBean> affBeansList = new ArrayList<AffBean>();
 
-		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
+		// LoginBean loginBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
 		Criteria criteria = session.createCriteria(AffBean.class);
-		criteria.add(Restrictions.eq("parBeanAff.parInstId",parentInsId));
+		criteria.add(Restrictions.eq("parBeanAff.parInstId", parentInsId));
 
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
@@ -243,7 +255,7 @@ public class AffDAO {
 		Session session = factory.openSession();
 
 		Criteria criteria = session.createCriteria(ParBean.class);
-		criteria.add(Restrictions.eq("parInstId",parentInsId));
+		criteria.add(Restrictions.eq("parInstId", parentInsId));
 
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		ParBean parBean = (ParBean) criteria.list().iterator().next();
@@ -269,8 +281,8 @@ public class AffDAO {
 		log.info("before creating session");
 		Session session = factory.openSession();
 		log.info("after creating session");
-		AffBean affBean  = (AffBean)session.get(AffBean.class,instId);
-	    log.info("after fetching bean");
+		AffBean affBean = (AffBean) session.get(AffBean.class, instId);
+		log.info("after fetching bean");
 		session.close();
 		return affBean;
 	}
@@ -474,9 +486,10 @@ public class AffDAO {
 		ArrayList<AffBean> notAddedCollegeList = new ArrayList<AffBean>();
 		collegeListFromDB = getCollegesListByInstName(affBean);
 		HttpSession httpSession = request.getSession();
-		Integer parentInsId=(Integer)httpSession.getAttribute("parentInstId");
-		//LoginBean loginBean = (LoginBean) httpSession.getAttribute("loginUserBean");
-		
+		Integer parentInsId = (Integer) httpSession.getAttribute("parentInstId");
+		// LoginBean loginBean = (LoginBean)
+		// httpSession.getAttribute("loginUserBean");
+
 		String userprofile = httpSession.getAttribute("sesProfile").toString();
 		log.info("CHild " + affBean.getInstName());
 		if (collegeListFromDB.isEmpty()) {
@@ -704,8 +717,9 @@ public class AffDAO {
 
 	public List<Object[]> findTotalDuesOFFee(String feeName, List<String> enrollmentNumber) {
 		Session session = factory.openSession();
-		//String query = "SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
-		String query="SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date),ad.grNumber FROM sgi.fee_dues_master fdm left join sgi.applicant_details ad on fdm.enrollmentNumber_Fk=ad.enrollmentNumber where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
+		// String query =
+		// "SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date) FROM sgi.fee_dues_master where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
+		String query = "SELECT enrollmentNumber_Fk,sum(netDue),sum(total_fee_amount),sum(payments_to_date),ad.grNumber FROM sgi.fee_dues_master fdm left join sgi.applicant_details ad on fdm.enrollmentNumber_Fk=ad.enrollmentNumber where  enrollmentNumber_Fk in (:enrollmentNumber)  group by enrollmentNumber_Fk";
 		SQLQuery sqlQuery = session.createSQLQuery(query);
 		sqlQuery.setParameterList("enrollmentNumber", enrollmentNumber);
 		List<Object[]> totalDueOfStudent = sqlQuery.list();
