@@ -1404,6 +1404,12 @@ public class AffAction extends ActionSupport {
 			return result;
 		} else if (ses.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
 			Integer operatorId = (Integer) ses.getAttribute("opratorId");
+			
+			/*if(operatorId==null){
+				ses.getAttribute("loginUserBean");
+				operatorId=6;
+			}*/
+			log.info("testing college operator is :"+operatorId);
 			Integer instituteId = opratorDAO.getCollegeIdOfOperator(operatorId);
 			log.info("insitute id is" + instituteId);
 			transactionDetailsForReport = affDao.getAllTransactionDetail(instituteId);

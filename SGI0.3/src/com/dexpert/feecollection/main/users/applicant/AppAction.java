@@ -435,7 +435,9 @@ public class AppAction extends ActionSupport {
 			OperatorBean bean = (OperatorBean) httpSession.getAttribute("oprBean");
 
 			if (session.getAttribute("sesProfile").toString().contentEquals("CollegeOperator")) {
-				Integer operatorId = (Integer) session.getAttribute("opratorId");
+				/*Integer operatorId = (Integer) session.getAttribute("opratorId");*/
+				session.setAttribute("opratorId", bean.getOperatorId());
+				/*log.info("testing the reports in view:"+operatorId+" "+bean.getOperatorId());*/
 
 				Integer instituteId = opratorDAO.getCollegeIdOfOperator(bean.getOperatorId());
 

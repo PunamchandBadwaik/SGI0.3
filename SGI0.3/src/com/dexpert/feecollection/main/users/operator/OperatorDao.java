@@ -149,12 +149,12 @@ public class OperatorDao {
 
 	public Integer getCollegeIdOfOperator(Integer operatorId) {
 		Session session = factory.openSession();
-
+		
 		Criteria criteria = session.createCriteria(OperatorBean.class);
 		criteria.add(Restrictions.eq("operatorId", operatorId));
 		criteria.setProjection(Projections.property("affBean.instId"));
 		Integer collegeId = (Integer) criteria.list().iterator().next();
-
+		
 		/*
 		 * SQLQuery sqlQuery = session .createSQLQuery(
 		 * "SELECT InsId_Fk FROM sgi.operator_table where operatorId=:operatorId"
