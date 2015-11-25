@@ -366,7 +366,7 @@ public class AppAction extends ActionSupport {
 
 		} catch (Exception e) {
 
-			log.info("catch11");
+			//log.info("catch11");
 			request.setAttribute("msg", "Please Enter Valid UIN");
 			return "failure";
 		}

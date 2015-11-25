@@ -363,7 +363,10 @@ public class AppDAO {
 			Criteria criteria = session.createCriteria(AppBean.class);
 			criteria.add(Restrictions.eq("enrollmentNumber", EnrId));
 
-			appBean = (AppBean) criteria.list().iterator().next();
+			
+				appBean = (AppBean) criteria.list().iterator().next();
+
+			
 
 		} finally {
 			session.close();
@@ -565,7 +568,6 @@ public class AppDAO {
 				}
 				Transaction tx = session.beginTransaction();
 				insertParam = insertParam.substring(1, insertParam.length());
-				log.info("insert Param is" + insertParam);
 				String sql = "INSERT INTO " + tempTableName + " VALUES(null," + insertParam + ",'N',null )";
 				SQLQuery sqlQuery = session.createSQLQuery(sql);
 
@@ -578,14 +580,13 @@ public class AppDAO {
 			ResultSet rs = null;
 			Connection conn;
 			// SessionImpl sessionImpl = (SessionImpl) session;
-
 			Class.forName("com.mysql.jdbc.Driver");
 			// String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-			String DB_URL = "jdbc:mysql://localhost/sgi";
+			String DB_URL = "jdbc:mysql://localhost:3307/sgi";
 
 			// Database credentials
-			String USER = "root";
-			String PASS = "root";
+			String USER = "dexpertuser";
+			String PASS = "Dspl_2014";
 			conn = (Connection) DriverManager.getConnection(DB_URL, USER, PASS);
 
 			boolean areMoreRecords = true;
