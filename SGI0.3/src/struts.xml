@@ -949,5 +949,22 @@
 			<result name="success" type="redirect">getCart</result>
 		</action>
 	</package>
+	<package name="Calendar" extends="struts-default">
+		<action name="saveCalendarYear" class="com.dexpert.calendaryear.CalendarAction"
+			method="saveCalendarYear">
+			<result name="success">/Calendar_Saved_Successfully.jsp</result>
+		</action>
+		
+		<action name="createPayMentCycle" class="com.dexpert.calendaryear.CalendarAction"
+			method="getCalInfMaForPayMentCycle">
+			<result name="success">/CreatePaymentCycle.jsp</result>
+		</action>
+		<action name="savePaymentCycles" class="com.dexpert.calendaryear.CalendarAction"
+			method="savePaymentCycles">
+			<result name="success">/</result>
+		</action>
+		
+
+	</package>
 
 </struts>
