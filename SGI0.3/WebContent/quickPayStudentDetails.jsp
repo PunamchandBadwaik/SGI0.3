@@ -568,12 +568,15 @@ System.out.print("cId testing :"+cId);
 															 var tuitionFeePending=parseFloat(document.getElementById("payableamount[1]").value);
 															 var lmtFee=document.getElementById("lmtFeesForLPS").value;
 															 var collegeId=document.getElementById("collegeId").value;
-															
-															 
-														if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
+
+	 
+														/* if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
 														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
-														
-															 
+														 */
+															 if(collegeId==1){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
+																}else{
+																var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;}
+																
 															 
 															/*  var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?100:100; */
 															 var uinId =document.getElementById("uin").value;

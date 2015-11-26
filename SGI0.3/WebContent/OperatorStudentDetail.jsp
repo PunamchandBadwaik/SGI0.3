@@ -664,10 +664,13 @@ Integer cId= appBean.getAffBeanStu().getInstId();
 															var collegeId=document.getElementById("collegeId").value;
 															
 															 
-															if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
+															/* if(collegeId==2){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
 															}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;}
-															
+															 */
 																 
+															 if(collegeId==1){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
+																}else{
+																var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;}
 															/*  var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000; */
 															
 															//alert("tuitionFeePending is"+tuitionFeePending);

@@ -643,8 +643,12 @@ ArrayList<PaymentDuesBean> duesBean=(ArrayList<PaymentDuesBean>)vs.findValue("pa
 															 var collegeId=document.getElementById("collegeId").value;
 															
 													
-															 if(collegeId==7){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
-														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:100;}
+															 /* if(collegeId==7){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;
+														}else{var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:100;} */
+														
+															 if(collegeId==1){ var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?29000:10000;
+																}else{
+																var minimumAmountMustPaid=document.getElementById("isHosteler").value=="Yes"?lmtFee:lmtFee;}
 														  
 															
 															//alert("tuitionFeePending is"+tuitionFeePending);
