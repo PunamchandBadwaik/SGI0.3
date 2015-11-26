@@ -185,7 +185,7 @@
 
 													<td><input type="submit" class="btn btn-info"
 														value="Change Password"></td>
-													<td><input type="button" class="btn btn-default"
+													<td><input type="button" onclick="window.location='EditUserDetail.jsp'"; class="btn btn-default"
 														value="Cancel"></td>
 
 												</tr>

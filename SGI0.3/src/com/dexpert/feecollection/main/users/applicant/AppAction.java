@@ -442,6 +442,12 @@ public class AppAction extends ActionSupport {
 				Integer instituteId = opratorDAO.getCollegeIdOfOperator(bean.getOperatorId());
 
 				transactionDetailsForReport = affDao.getAllTransactionDetail(instituteId);
+				
+			/*	if(transactionDetailsForReport==null){
+					
+				}*/
+				
+				
 				return SUCCESS;
 			}
 
