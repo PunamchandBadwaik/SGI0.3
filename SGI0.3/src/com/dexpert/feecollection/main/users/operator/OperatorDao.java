@@ -150,6 +150,7 @@ public class OperatorDao {
 	public Integer getCollegeIdOfOperator(Integer operatorId) {
 		Session session = factory.openSession();
 		
+		try{
 		Criteria criteria = session.createCriteria(OperatorBean.class);
 		criteria.add(Restrictions.eq("operatorId", operatorId));
 		criteria.setProjection(Projections.property("affBean.instId"));
@@ -160,8 +161,18 @@ public class OperatorDao {
 		 * "SELECT InsId_Fk FROM sgi.operator_table where operatorId=:operatorId"
 		 * ); sqlQuery.setParameter("operatorId", operatorId); Integer collegeId
 		 * = (Integer) sqlQuery.list().iterator().next();
-		 */session.close();
+		 *//*session.close();*/
 		return collegeId;
+		} catch (NoSuchElementException ex) {
+			return null;
+
+		}
+
+		finally {
+			// close session
+			session.close();
+		}
+		
 
 	}
 

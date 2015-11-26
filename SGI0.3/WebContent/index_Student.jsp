@@ -102,10 +102,10 @@
 						class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a id="saveProfileTagId" onclick=""
+					<!-- <li><a id="saveProfileTagId" onclick=""
 						href="EditUserDetail.jsp">Settings</a></li>
-					<li class="divider"></li>
-					<li><a href="logOutUser">Logout</a></li>
+					--><li class="divider"></li>
+					 <li><a href="logOutUser">Logout</a></li>
 				</ul>
 			</div>
 			<!-- user dropdown ends -->
